@@ -1,3 +1,4 @@
+var path = require('path');
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
@@ -11,7 +12,7 @@ module.exports = (app) => {
   //   );
   // });
   app.get("/api/homework/all", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year
+    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -25,7 +26,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/all/date", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year
+    var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -40,7 +41,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/all/filter", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year
+    var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -55,7 +56,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/teacher/individual", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year
+    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -81,13 +82,28 @@ module.exports = (app) => {
     var details = req.body.details;
     var issue_date = req.body.issue_date;
     var due_date = req.body.due_date;
+    var attachment_link = req.body.fileName;
+    console.log(req.body);
+    console.log(req.files);
+    
+    const file = req.files.file
+    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    console.log(uploadPath);
+    file.mv(`${uploadPath}/${file.name}`, err => {
+      if (err) {
+        return res.status(500).send(err)
+      }
+    })
+    if (class_id !== '' || section_id !== '' || teacher_id !== '' || subject_id !== '' || session_id !== '' || topic !== '' || issue_date !== '' || due_date !== '') {
+      var sql = `INSERT INTO home_work (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}", "${attachment_link}" )`;
 
-    var sql = `INSERT INTO home_work (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}" )`;
-
-    con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      res.json({ status: "success" });
-    });
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.json({ status: "success" });
+      });
+    } else {
+      res.status(500).json({ msg: "Please fill any field" })
+    }
   });
 
   //Home Mark Submission
@@ -106,7 +122,7 @@ module.exports = (app) => {
   });
 
   app.get("/api/homework/student/", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year
+    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -121,7 +137,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/student/id", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year
+    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id

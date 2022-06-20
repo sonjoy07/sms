@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import "./HomeWork.css";
@@ -38,6 +38,7 @@ const TeacherHomework = (props) => {
   const [session_id, setSession_id] = useState("");
   const [topic, setTopic] = useState("");
   const [details, setDetails] = useState("");
+  const [attachment, setAttachment] = useState("");
   const [issue_date, setIssue_date] = useState("");
   const [due_date, setDue_date] = useState("");
   const [access_token, setAccess_token] = useState(
@@ -160,6 +161,9 @@ const TeacherHomework = (props) => {
   let handleDetailsChange = (e) => {
     setDetails(e.target.value);
   };
+  const handleAttachment = (e) => {
+    setAttachment(e.target.files[0]);
+  };
   let handleIssueDateChange = (e) => {
     setIssue_date(e.target.value);
   };
@@ -168,24 +172,27 @@ const TeacherHomework = (props) => {
   };
 
   const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append("file", attachment);
+    formData.append("fileName", attachment.name);
+    formData.append("school_info_id", school_info_id);
+    formData.append("class_id", class_id);
+    formData.append("section_id", section_id);
+    formData.append("subject_id", subject_id);
+    formData.append("teacher_id", teacher_id);
+    formData.append("session_id", session_id);
+    formData.append("topic", topic);
+    formData.append("details", details);
+    formData.append("issue_date", issue_date);
+    formData.append("due_date", due_date);
+    formData.name = 
     fetch(`${process.env.REACT_APP_NODE_API}/api/homework/teacher`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
         authorization: "bearer " + localStorage.getItem("access_token"),
       },
-      body: JSON.stringify({
-        school_info_id: school_info_id,
-        class_id: class_id,
-        section_id: section_id,
-        subject_id: subject_id,
-        teacher_id: teacher_id,
-        session_id: session_id,
-        topic: topic,
-        details: details,
-        issue_date: issue_date,
-        due_date: due_date,
-      }),
+      body: formData,
     })
       .then((res) => res.json())
       .then((json) => {
@@ -356,6 +363,7 @@ const TeacherHomework = (props) => {
                         class="form-control"
                         id="avatar"
                         name="avatar"
+                        onChange={handleAttachment}
                       />
                     </div>
                   </div>
@@ -540,7 +548,7 @@ const TeacherHomework = (props) => {
                 return (
                   <tr>
                     <td>
-                      <a style={{ color: "blue" }}>Download Attachment</a>
+                      <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
                     <td style={{ color: "blue" }}>{homeworkJSON.details}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.class_name}</td>

@@ -1,11 +1,6 @@
 
-const fileUpload = require('express-fileupload');
 var path = require('path');
 module.exports = (app) => {
-  app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: '/tmp/'
-  }));
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
   app.get("/api/student/profile", (req, res) => {
