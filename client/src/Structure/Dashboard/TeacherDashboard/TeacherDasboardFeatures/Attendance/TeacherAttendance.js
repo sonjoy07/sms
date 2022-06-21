@@ -222,7 +222,7 @@ const TeacherAttendance = (props) => {
   return (
     <>
       <TeacherHeader />
-      <ScrollToTop showUnder={160}>
+      <ScrollToTop showUnder={1600}>
         <i className="fa-solid fa-arrow-up"></i>
       </ScrollToTop>
       {sms&&<CreateSms latestStudent={latestStudent}/>}

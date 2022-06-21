@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 const CreateSms = (props) => {
     debugger;
+    const absentList = props.latest_attendance.filter(res => res.attendance === 'A')
     return (
         <div className='container pt-4'>
 
@@ -22,18 +23,20 @@ const CreateSms = (props) => {
                     </thead>
                     <tbody>
 
-                        <tr>
-                            <td>
-                                <th scope="col">
-                                    <label class="custom-control custom-switch mt-3">
-                                        <input type="checkbox" />
-                                        <span class=""></span>
-                                    </label>
-                                </th>
-                            </td>
-                            <td>68686765</td>
-                            <td>shfgakjashkj</td>
-                        </tr>
+                        {absentList.map(res => {
+                            <tr>
+                                <td>
+                                    <th scope="col">
+                                        <label class="custom-control custom-switch mt-3">
+                                            <input type="checkbox" />
+                                            <span class=""></span>
+                                        </label>
+                                    </th>
+                                </td>
+                                <td>68686765</td>
+                                <td>shfgakjashkj</td>
+                            </tr>
+                        })}
                         <tr>
                             <td>
                                 <th scope="col">
