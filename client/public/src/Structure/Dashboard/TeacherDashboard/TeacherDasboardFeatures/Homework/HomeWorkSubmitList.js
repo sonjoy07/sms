@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 
@@ -60,7 +60,7 @@ const HomeWorkSubmitList = (props) => {
                 <td>
                   {moment(homeworkJSON.submission_time).format("YYYY-MM-DD")}
                 </td>
-                <td style={{ color: "blue" }}>Open File</td>
+                <td style={{ color: "blue" }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link></td>
               </tr>
             );
           })}

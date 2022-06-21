@@ -56,7 +56,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/teacher/individual", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link
+    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link,home_work.class_id,home_work.section_id,home_work.subject_id,home_work.session_id
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -72,6 +72,7 @@ module.exports = (app) => {
   });
 
   app.post("/api/homework/teacher", authenticateToken, (req, res) => {
+    var id = req.body.id;
     var school_info_id = req.body.school_info_id;
     var class_id = req.body.class_id;
     var section_id = req.body.section_id;
@@ -83,17 +84,27 @@ module.exports = (app) => {
     var issue_date = req.body.issue_date;
     var due_date = req.body.due_date;
     var attachment_link = req.body.fileName;
-    
-    const file = req.files.file
-    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
-    console.log(uploadPath);
-    file.mv(`${uploadPath}/${file.name}`, err => {
-      if (err) {
-        return res.status(500).send(err)
-      }
-    })
+    if (req.files !== null) {
+      const file = req.files.file
+      var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+      console.log(uploadPath);
+      file.mv(`${uploadPath}/${file.name}`, err => {
+        if (err) {
+          return res.status(500).send(err)
+        }
+      })
+    }
     if (class_id !== '' || section_id !== '' || teacher_id !== '' || subject_id !== '' || session_id !== '' || topic !== '' || issue_date !== '' || due_date !== '') {
-      var sql = `INSERT INTO home_work (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}", "${attachment_link}" )`;
+      var sql = ''
+      if (id) {
+        const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}` : ``
+        sql = `UPDATE home_work
+        SET school_info_id="${school_info_id}", class_id="${class_id}",section_id="${section_id}",teacher_id="${teacher_id}",subject_id="${subject_id}",session_id="${session_id}",topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date}"${attachment}
+        WHERE id=${id}`
+      } else {
+        const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
+        sql = `INSERT INTO home_work (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}",${attachment} )`;
+      }
 
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
@@ -162,6 +173,13 @@ module.exports = (app) => {
 
   app.get("/api/homework/student/submit/all", authenticateToken, (req, res) => {
     var sql = `select * from home_work_submission;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.delete("/api/homework/student/delete", authenticateToken, (req, res) => {
+    var sql = `delete from home_work where id = ${req.query.id};`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

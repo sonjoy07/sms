@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./HomeWork.css";
 import profile from '../../../../images/profile/profile.png';
+
 
 const TeacherHomework = (props) => {
   let navigate = useNavigate();
@@ -14,6 +17,7 @@ const TeacherHomework = (props) => {
 
   const [clses, setClses] = useState([]);
   const [cls, setCls] = useState("");
+  const [id, setId] = useState("");
 
   const [sections, setSections] = useState([]);
   const [section, setSection] = useState("");
@@ -185,29 +189,59 @@ const TeacherHomework = (props) => {
     formData.append("details", details);
     formData.append("issue_date", issue_date);
     formData.append("due_date", due_date);
-    formData.name = 
-    fetch(`${process.env.REACT_APP_NODE_API}/api/homework/teacher`, {
-      method: "POST",
-      headers: {
-        // "Content-Type": "application/json",
-        authorization: "bearer " + localStorage.getItem("access_token"),
-      },
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log("ok");
-        setClass_id("");
-        setSection_id("");
-        setSubject_id("");
-        setSession_id("");
-        setIssue_date("");
-        setDue_date("");
-        setTopic("");
-        setDetails("");
+    formData.append("id", id);
+    formData.name =
+      fetch(`${process.env.REACT_APP_NODE_API}/api/homework/teacher`, {
+        method: "POST",
+        headers: {
+          // "Content-Type": "application/json",
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+        body: formData,
       })
-      .then(() => getHWList());
+        .then((res) => res.json())
+        .then((json) => {
+          if(id){
+             toast("Home work updated successfully");
+          }else{
+            toast("Home work submited successfully");
+          }
+          setId("");
+          setClass_id("");
+          setSection_id("");
+          setSubject_id("");
+          setSession_id("");
+          setIssue_date("");
+          setDue_date("");
+          setTopic("");
+          setDetails("");
+        })
+        .then(() => getHWList());
   };
+
+  const editHomeWork = (data) => {
+    setId(data.id);
+    setClass_id(data.class_id);
+    setSection_id(data.section_id);
+    setSubject_id(data.subject_id);
+    setSession_id(data.session_id);
+    setIssue_date(moment(data.issue_date).format("YYYY-MM-DD"));
+    setDue_date(moment(data.due_date).format("YYYY-MM-DD"));
+    setTopic(data.topic);
+    setDetails(data.details);
+  }
+  const deleteHomework =async(id)=>{
+    const check = window.confirm('Are you sure to delete?');
+    if(check){
+      axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/homework/student/delete?id=${id}`)
+      if(result){
+        toast("Home work deleted successfully");
+        getHWList()
+      }
+    }
+
+  }
   //get homework
   useEffect(() => {
     axios
@@ -238,9 +272,9 @@ const TeacherHomework = (props) => {
         setHomework(response.data);
       });
   };
-
   return (
     <>
+    <ToastContainer />
       <div style={{ height: "80px" }} className="bg-info">
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -568,7 +602,7 @@ const TeacherHomework = (props) => {
                       <a
                         onClick={() => {
                           localStorage.setItem("homeworkid", homeworkJSON.id);
-                          navigate("/homeworksubmitlist");
+                          navigate("/homeworkshow");
                         }}
                         style={{ textDecoration: "none", color: "blue" }}
                       >
@@ -582,6 +616,7 @@ const TeacherHomework = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-success"
+                            onClick={() => editHomeWork(homeworkJSON)}
                           >
                             Edit
                           </button>
@@ -590,6 +625,7 @@ const TeacherHomework = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-danger"
+                            onClick={()=>deleteHomework(homeworkJSON.id)}
                           >
                             Delete
                           </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import moment from "moment";
@@ -20,6 +20,7 @@ const StudentHomeWorkSubmit = (props) => {
   const [submission_time, setSubmission_time] = useState(moment().format());
 
   const [attachment_link, setAttachment_link] = useState("");
+  const [preview, setPreview] = useState()
 
   const [hw, setHw] = useState({});
 
@@ -39,19 +40,38 @@ const StudentHomeWorkSubmit = (props) => {
       });
   }, []);
 
+  const fileUpload = (e) => {
+    setAttachment_link(e.target.files[0])
+  }
+
+  useEffect(() => {
+    if (!attachment_link) {
+      setPreview(undefined)
+      return
+    }
+
+    const objectUrl = attachment_link.name
+    setPreview(objectUrl)
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [attachment_link])
+
+
   const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append("file", attachment_link);
+    formData.append("fileName", attachment_link.name);
+    formData.append("student_id", student_id);
+    formData.append("homework_id", homework_id);
+    formData.append("submission_time", submission_time);
     fetch(`${process.env.REACT_APP_NODE_API}/api/homework/submit`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
         authorization: "bearer " + localStorage.getItem("access_token"),
       },
-      body: JSON.stringify({
-        student_id: student_id,
-        homework_id: homework_id,
-        submission_time: submission_time,
-        attachment_link: attachment_link,
-      }),
+      body: formData,
     })
       .then((res) => res.json())
       .then((json) => {
@@ -107,7 +127,7 @@ const StudentHomeWorkSubmit = (props) => {
                               style={{ textAlign: "left", color: "black" }}
                               className="py-3"
                             >
-                              <a href={hw.attachment_link}>Attachment</a>
+                              <Link target="_blank" to={`../uploads/${hw.attachment_link}`} download>{hw.attachment_link}</Link>
                             </p>
                           </div>
                           <div style={{ display: "flex", alignItem: "center" }}>
@@ -165,6 +185,13 @@ const StudentHomeWorkSubmit = (props) => {
                               >
                                 Assignment Attachment :{" "}
                               </label>
+                              {preview &&
+                                <p>{preview}
+                                  <i
+                                    style={{ color: "black", marginLeft: "5px", cursor: "pointer" }}
+                                    class="fa-solid fa-times  pt-1"
+                                    onClick={() => {setPreview(undefined);setAttachment_link("")}}
+                                  ></i></p>}
                               <input
                                 style={{
                                   border: "1px solid blue",
@@ -172,10 +199,7 @@ const StudentHomeWorkSubmit = (props) => {
                                 }}
                                 type="file"
                                 class="form-control"
-                                value={attachment_link}
-                                onChange={(e) =>
-                                  setAttachment_link(e.target.value)
-                                }
+                                onChange={fileUpload}
                                 id="avatar"
                                 name="avatar"
                                 required

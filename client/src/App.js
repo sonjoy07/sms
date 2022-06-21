@@ -48,6 +48,7 @@ import StudentHomeWork from "./Structure/Dashboard/StudentDashboard/StudentDashb
 import StudentHomeWorkSubmit from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentHomeWork/StudentHomeWorkSubmit";
 import StudentNoticeList from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentNotice.js/StudentNoticeList";
 
+import HomeWorkShow from './Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Homework/HomeWorkShow';
 import AcademicCalender from "./Structure/Dashboard/AcademicCalender/AcademicCalender";
 import StudentAcademicCalender from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/AcademicCalender/StudentAcademicCalender";
 import TeacherProfile from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfile";
@@ -213,6 +214,14 @@ function App(props) {
               <HomeWorkSubmitList
                 user={[user_code, user_type]}
                 selectedhw={homeworkid}
+              />
+            }
+          />
+
+          <Route
+            path="/homeworkshow"
+            element={
+              <HomeWorkShow
               />
             }
           />
