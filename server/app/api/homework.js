@@ -97,7 +97,7 @@ module.exports = (app) => {
     if (class_id !== '' || section_id !== '' || teacher_id !== '' || subject_id !== '' || session_id !== '' || topic !== '' || issue_date !== '' || due_date !== '') {
       var sql = ''
       if (id) {
-        const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}` : ``
+        const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}"` : ``
         sql = `UPDATE home_work
         SET school_info_id="${school_info_id}", class_id="${class_id}",section_id="${section_id}",teacher_id="${teacher_id}",subject_id="${subject_id}",session_id="${session_id}",topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date}"${attachment}
         WHERE id=${id}`
@@ -179,10 +179,14 @@ module.exports = (app) => {
     });
   });
   app.delete("/api/homework/student/delete", authenticateToken, (req, res) => {
-    var sql = `delete from home_work where id = ${req.query.id};`;
+    var sql = `delete from home_work_submission where home_work_id = ${req.query.id};`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
-      res.send(result);
+      var sql = `delete from home_work where id = ${req.query.id};`;
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+      });
     });
   });
   app.get("/api/homework/teacher/submitlist", authenticateToken, (req, res) => {

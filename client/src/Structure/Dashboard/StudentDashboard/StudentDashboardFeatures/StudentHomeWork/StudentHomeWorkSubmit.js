@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import moment from "moment";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StudentHomeWorkSubmit = (props) => {
   let navigate = useNavigate();
@@ -24,6 +26,8 @@ const StudentHomeWorkSubmit = (props) => {
 
   const [hw, setHw] = useState({});
 
+  const [submissionList, setSubmissionList] = useState([])
+
   useEffect(() => {
     axios
       .get(
@@ -37,6 +41,19 @@ const StudentHomeWorkSubmit = (props) => {
       .then((response) => {
         setHw(response.data);
         console.log(response.data);
+      });
+    axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/homework/teacher/submitlist?home_work_id=${homework_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        setSubmissionList(response.data.filter(res=>res.student_code === localStorage.getItem('u_id')));
+        console.log(student_id);
       });
   }, []);
 
@@ -58,7 +75,8 @@ const StudentHomeWorkSubmit = (props) => {
   }, [attachment_link])
 
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const formData = new FormData();
     formData.append("file", attachment_link);
     formData.append("fileName", attachment_link.name);
@@ -75,13 +93,15 @@ const StudentHomeWorkSubmit = (props) => {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log("ok");
-        navigate("/studenthomework");
+        toast("Home work submitted successfully");
+        console.log("ok",json);
+        // navigate("/studenthomework");
       });
   };
-
+  console.log(submissionList);
   return (
     <div className="container">
+    <ToastContainer />
       <div className="row mt-4">
         <div className="-md-12">
           <div className="">
@@ -190,7 +210,7 @@ const StudentHomeWorkSubmit = (props) => {
                                   <i
                                     style={{ color: "black", marginLeft: "5px", cursor: "pointer" }}
                                     class="fa-solid fa-times  pt-1"
-                                    onClick={() => {setPreview(undefined);setAttachment_link("")}}
+                                    onClick={() => { setPreview(undefined); setAttachment_link("") }}
                                   ></i></p>}
                               <input
                                 style={{
@@ -222,6 +242,30 @@ const StudentHomeWorkSubmit = (props) => {
                             </button>
                           </div>
                         </div>
+                      </div>
+                      <div className="row">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Student Code</th>
+                              <th scope="col">Submission Time</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Attachment</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {submissionList.map(res => {
+                              return (<tr>
+                                <td>{res.full_name}</td>
+                                <td>{res.student_code}</td>
+                                <td>{moment(res.submission_time).format("Do MMM  YYYY")}</td>
+                                <td>Submit</td>
+                                <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
+                              </tr>)
+                            })}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
