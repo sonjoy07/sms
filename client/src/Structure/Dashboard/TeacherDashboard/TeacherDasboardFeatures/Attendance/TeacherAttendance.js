@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import ScrollToTop from 'react-scroll-up'
 
 import axios from "axios";
 
@@ -7,6 +8,7 @@ import moment from "moment";
 
 import profile from "../../../../images/profile/profile.png";
 import TeacherHeader from "../../TeacherHeader/TeacherHeader";
+import CreateSms from "./CreateSms";
 
 const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
 
@@ -19,6 +21,7 @@ const TeacherAttendance = (props) => {
   const [student, setStudent] = useState([]);
 
   const [routine, setRoutine] = useState([]);
+  const [all, setAll] = useState(0);
 
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [time, setTime] = useState(moment().format("hh:mm:ss"));
@@ -28,6 +31,9 @@ const TeacherAttendance = (props) => {
   const [attendance, setAttendance] = useState([]);
 
   const [summary, setSummary] = useState([]);
+
+  const [sms, setSms] = useState(false);
+  const [latestStudent, setLatestStudent] = useState([]);
 
   const [latest_summary, setLatest_summary] = useState({});
   const [totalpresent, setTotalpresent] = useState(0);
@@ -114,6 +120,10 @@ const TeacherAttendance = (props) => {
     setDate(e.target.value);
   };
 
+  const showSmsList=()=>{
+    setSms(true)
+  }
+
   //Get Student Data
   const getStudentList = (sec_id, rt_id, class_id) => {
     axios
@@ -151,6 +161,24 @@ const TeacherAttendance = (props) => {
     console.log(att_list);
     setAttendance(att_list);
   };
+  const handleAttendanceAll = () => {
+    if (all == 0) {
+      setAll(1)
+    } else {
+      setAll(0)
+    }
+    let att_list = attendance;
+    Promise.all(att_list.forEach(list => {
+      if (all == 0) {
+        list.attendance_status = 1;
+        setTotalpresent(totalpresent + 1);
+      } else {
+        list.attendance_status = 0;
+        setTotalpresent(totalpresent - 1);
+      }
+    }))
+    setAttendance(att_list);
+  };
 
   const handleSubmit = () => {
     if (date == null || routine_id == null) {
@@ -175,6 +203,7 @@ const TeacherAttendance = (props) => {
       .then(() => {
         getAttendanceSummary();
         var st_list = [];
+        setLatestStudent(student)
         student.map((studentJSON, index) => {
           var st = {
             name: studentJSON.full_name,
@@ -193,8 +222,11 @@ const TeacherAttendance = (props) => {
   return (
     <>
       <TeacherHeader />
-
-      <section>
+      <ScrollToTop showUnder={160}>
+        <i className="fa-solid fa-arrow-up"></i>
+      </ScrollToTop>
+      {sms&&<CreateSms latestStudent={latestStudent}/>}
+      {sms === false &&<section>
         <div className="content">
           <div className="row">
             <div className="col-md-12">
@@ -236,7 +268,7 @@ const TeacherAttendance = (props) => {
                       borderRadius: "5px",
                     }}
                   >
-                    {routine.map((routineJSON) => {
+                    {student.length == 0 && routine.map((routineJSON) => {
                       return (
                         <div className="col-12 p-4 border">
                           <div style={{ display: "flex" }}>
@@ -372,10 +404,21 @@ const TeacherAttendance = (props) => {
                   </h3>
                 </div>
               </div>
+
+              <div className="col-sm-6 form-check form-switch ">
+                <input
+                  className="form-check-input"
+                  style={{ 'float': 'right' }}
+                  type="checkbox"
+                  onChange={() => handleAttendanceAll()}
+                />
+              </div>
             </div>
 
             <div className="row table-responsive">
               {student.map((studentJSON, index) => {
+                const checked = attendance.find(res => res.student_id === studentJSON.id)
+                console.log(checked.attendance_status);
                 return (
                   <div className="col-12 text-center">
                     <div
@@ -408,6 +451,7 @@ const TeacherAttendance = (props) => {
                         <input
                           className="form-check-input"
                           type="checkbox"
+                          checked={checked.attendance_status === 1 ? true : false}
                           onChange={() => handleAttendance(index)}
                         />
                       </div>
@@ -423,14 +467,14 @@ const TeacherAttendance = (props) => {
             </div>
           </div>
         </div>
-        <div style={{ width: "700px" }} className="m-auto mt-5">
+        {latest_summary && <div style={{ width: "700px" }} className="m-auto mt-5">
           <table class="table table-bordered text-center">
             <thead>
               <tr>
                 <th>Total Attendance Taken</th>
                 <th>Present</th>
                 <th>Absent</th>
-                <th><button class="btn btn-primary" type="submit">Sent SMS</button></th>
+                <th><button class="btn btn-primary" onClick={()=>showSmsList()} type="submit">Sent SMS</button></th>
               </tr>
             </thead>
             <tbody>
@@ -461,8 +505,8 @@ const TeacherAttendance = (props) => {
               })}
             </tbody>
           </table>
-        </div>
-      </section>
+        </div>}
+      </section>}
     </>
   );
 };
