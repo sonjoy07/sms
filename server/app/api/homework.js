@@ -83,8 +83,6 @@ module.exports = (app) => {
     var issue_date = req.body.issue_date;
     var due_date = req.body.due_date;
     var attachment_link = req.body.fileName;
-    console.log(req.body);
-    console.log(req.files);
     
     const file = req.files.file
     var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
@@ -111,7 +109,16 @@ module.exports = (app) => {
     var student_id = req.body.student_id;
     var homework_id = req.body.homework_id;
     var submission_time = req.body.submission_time;
-    var attachment_link = req.body.attachment_link;
+    var attachment_link = req.body.fileName;
+
+    const file = req.files.file
+    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    console.log(uploadPath);
+    file.mv(`${uploadPath}/${file.name}`, err => {
+      if (err) {
+        return res.status(500).send(err)
+      }
+    })
 
     var sql = `INSERT INTO home_work_submission (student_present_status_id, home_work_id, submission_time, attachment_link) VALUES ("${student_id}", "${homework_id}", "${submission_time}", "${attachment_link}" )`;
 
