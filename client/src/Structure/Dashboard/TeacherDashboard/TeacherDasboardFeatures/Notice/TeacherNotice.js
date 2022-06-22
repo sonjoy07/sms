@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import profile from '../../../../images/profile/profile.png';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const TeacherNotice = (props) => {
   let navigate = useNavigate();
   /*
@@ -202,6 +204,7 @@ const TeacherNotice = (props) => {
     })
       .then((res) => res.json())
       .then((json) => {
+        toast("Notice saved successfully");
         console.log("ok");
         setClass_id("");
         setSection_id("");
@@ -238,8 +241,22 @@ const TeacherNotice = (props) => {
       });
   };
 
+  const deleteNotice = async (id) => {
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+      axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/notice/delete?id=${id}`)
+      if (result) {
+        toast("Notice deleted successfully");
+        getHWList()
+      }
+    }
+
+  }
+
   return (
     <>
+    <ToastContainer/>
       <div style={{ height: "80px" }} className="bg-info">
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -534,6 +551,7 @@ const TeacherNotice = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-danger"
+                            onClick={()=>deleteNotice(noticeJSON.id)}
                           >
                             Delete
                           </button>

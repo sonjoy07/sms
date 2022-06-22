@@ -201,9 +201,9 @@ const TeacherHomework = (props) => {
       })
         .then((res) => res.json())
         .then((json) => {
-          if(id){
-             toast("Home work updated successfully");
-          }else{
+          if (id) {
+            toast("Home work updated successfully");
+          } else {
             toast("Home work submited successfully");
           }
           setId("");
@@ -219,6 +219,18 @@ const TeacherHomework = (props) => {
         .then(() => getHWList());
   };
 
+  const resetForm = () => {
+    setId("");
+    setClass_id("");
+    setSection_id("");
+    setSubject_id("");
+    setSession_id("");
+    setIssue_date("");
+    setDue_date("");
+    setTopic("");
+    setDetails("");
+  }
+
   const editHomeWork = (data) => {
     setId(data.id);
     setClass_id(data.class_id);
@@ -230,12 +242,12 @@ const TeacherHomework = (props) => {
     setTopic(data.topic);
     setDetails(data.details);
   }
-  const deleteHomework =async(id)=>{
+  const deleteHomework = async (id) => {
     const check = window.confirm('Are you sure to delete?');
-    if(check){
+    if (check) {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/homework/student/delete?id=${id}`)
-      if(result){
+      if (result) {
         toast("Home work deleted successfully");
         getHWList()
       }
@@ -272,9 +284,10 @@ const TeacherHomework = (props) => {
         setHomework(response.data);
       });
   };
+  console.log(homework);
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div style={{ height: "80px" }} className="bg-info">
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -344,6 +357,7 @@ const TeacherHomework = (props) => {
                       type="button"
                       className="btn btn-tool"
                       data-card-widget="collapse"
+                      onClick={resetForm}
                     >
                       <i className="fas fa-plus icons" />
                     </button>
@@ -566,6 +580,7 @@ const TeacherHomework = (props) => {
             <thead>
               <tr>
                 <th scope="col">Home Work Meterial</th>
+                <th scope="col">Topic</th>
                 <th scope="col">Assignment Details</th>
                 <th scope="col">Class</th>
                 <th scope="col">Section</th>
@@ -584,10 +599,11 @@ const TeacherHomework = (props) => {
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
+                    <td style={{ color: "blue" }}>{homeworkJSON.topic}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.details}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.class_name}</td>
                     <td style={{ color: "blue" }}>
-                      {homeworkJSON.section_local_name}
+                      {homeworkJSON.section_default_name}
                     </td>
                     <td style={{ color: "blue" }}>{homeworkJSON.session_year}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.subject_name}</td>
@@ -625,7 +641,7 @@ const TeacherHomework = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-danger"
-                            onClick={()=>deleteHomework(homeworkJSON.id)}
+                            onClick={() => deleteHomework(homeworkJSON.id)}
                           >
                             Delete
                           </button>

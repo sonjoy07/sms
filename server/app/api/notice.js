@@ -1,3 +1,4 @@
+const moment = require('moment')
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
@@ -17,6 +18,14 @@ module.exports = (app) => {
     join section on notice.section_id=section.id
     join session on notice.session_id=session.id
     order by notice.id
+    ;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/notice/delete", authenticateToken, (req, res) => {
+    var sql = `delete from  notice where id = ${req.query.id}
     ;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -150,7 +159,7 @@ module.exports = (app) => {
     var session_id = req.body.session_id;
     var headline = req.body.headline;
     var description = req.body.description;
-    var date = req.body.date;
+    var date = moment().format("YYYY-MM-DD");
     var uid = req.body.uid;
 
     var sql =

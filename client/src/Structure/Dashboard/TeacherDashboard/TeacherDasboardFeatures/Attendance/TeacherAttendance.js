@@ -203,16 +203,22 @@ const TeacherAttendance = (props) => {
       .then(() => {
         getAttendanceSummary();
         var st_list = [];
-        setLatestStudent(student)
+        var st_list_latest = [];
         student.map((studentJSON, index) => {
           var st = {
             name: studentJSON.full_name,
             roll: studentJSON.class_roll_no,
             attendance: attendance[index].attendance_status == 1 ? "P" : "A",
           };
+          var latestSt ={
+            ...studentJSON,          
+            attendance: attendance[index].attendance_status == 1 ? "P" : "A",
+          }
           st_list.push(st);
+          st_list_latest.push(latestSt);
         });
-        setLatest_attendance(st_list);
+        setLatest_attendance(st_list);        
+        setLatestStudent(st_list_latest)
       })
       .catch((error) => {
         console.log(error);
@@ -418,7 +424,6 @@ const TeacherAttendance = (props) => {
             <div className="row table-responsive">
               {student.map((studentJSON, index) => {
                 const checked = attendance.find(res => res.student_id === studentJSON.id)
-                console.log(checked.attendance_status);
                 return (
                   <div className="col-12 text-center">
                     <div
