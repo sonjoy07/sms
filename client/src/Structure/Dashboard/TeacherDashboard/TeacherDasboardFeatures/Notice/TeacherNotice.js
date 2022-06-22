@@ -14,6 +14,7 @@ const TeacherNotice = (props) => {
   const [school_type, setSchoolType] = useState(localStorage.getItem("school_type"))
   const [clses, setClses] = useState([]);
   const [cls, setCls] = useState("");
+  const [id, setId] = useState("");
 
   const [sections, setSections] = useState([]);
   const [section, setSection] = useState("");
@@ -213,6 +214,7 @@ const TeacherNotice = (props) => {
         setHeadline("");
         setDescription("");
         setDate("");
+        setId("");
       })
       .then(() => getHWList());
   };
@@ -252,6 +254,17 @@ const TeacherNotice = (props) => {
       }
     }
 
+  }
+  const editNotice = (data) => {
+    debugger
+    setDescription(data.notice_description);
+    setHeadline(data.notice_headline);
+    setSection_id(data.section_id);
+    setStudent_id(data.student_id);
+    setSession_id(data.session_id);
+    setClass_id(data.class_id);
+    setId(data.id);
+    setDate(moment(data.publishing_date).format("YYYY-MM-DD"));
   }
 
   return (
@@ -543,6 +556,7 @@ const TeacherNotice = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-success"
+                            onClick={() => editNotice(noticeJSON)}
                           >
                             Edit
                           </button>
