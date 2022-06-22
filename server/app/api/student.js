@@ -5,7 +5,7 @@ module.exports = (app) => {
   const authenticateToken = require("../middleware/middleware");
   app.get("/api/student/profile", (req, res) => {
     con.query(
-      `SELECT student_present_status.id, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code 
+      `SELECT student_present_status.id, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code,student.school_info_id,session_id,class_id 
       FROM student_present_status 
       join student on student_present_status.student_id=student.id 
       where student_present_status.id="${req.query.student_id}";`,
@@ -62,14 +62,11 @@ module.exports = (app) => {
     });
   });
   app.post("/api/student/profile_photo_update", authenticateToken, (req, res) => {
-    console.log(req.body)
-    console.log(req.files)
     if (req.files === null) {
       return res.status(400).json({ msg: 'No file uploaded' })
     }
     const file = req.files.file
     var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
-    console.log(uploadPath);
     file.mv(`${uploadPath}/${file.name}`, err => {
       if (err) {
         return res.status(500).send(err)

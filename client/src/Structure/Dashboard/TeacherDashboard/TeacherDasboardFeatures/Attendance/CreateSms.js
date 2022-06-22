@@ -1,7 +1,44 @@
 import React, { useState, useEffect, useRef } from "react";
 const CreateSms = (props) => {
-    debugger;
-    const absentList = props.latest_attendance.filter(res => res.attendance === 'A')
+    const [absentList, setAbsentList] = useState([])
+    const [attendance, setAttendance] = useState([]);
+    const [all, setAll] = useState(0);
+    useEffect(() => {
+        setAbsentList(props.latestStudent.filter(res => res.attendance === 'A'))
+        let at_list = [];
+        props.latestStudent.filter(res => res.attendance === 'A').map((stu) => {
+            at_list.push({ student_id: stu.id, attendance_status: 0 });
+        });
+        setAttendance(at_list);
+    }, [])
+
+    const handleAttendance = (index) => {
+        let att_list = attendance;
+        if (att_list[index].attendance_status == 0) {
+            att_list[index].attendance_status = 1;
+        } else {
+            att_list[index].attendance_status = 0;
+        }
+        console.log(att_list);
+        setAttendance(att_list);
+    };
+    const handleAttendanceAll = () => {
+        if (all == 0) {
+            setAll(1)
+        } else {
+            setAll(0)
+        }
+        let att_list = attendance;
+        Promise.all(att_list.forEach(list => {
+            if (all == 0) {
+                list.attendance_status = 1;
+            } else {
+                list.attendance_status = 0;
+            }
+        }))
+        setAttendance(att_list);
+    };
+    console.log(attendance)
     return (
         <div className='container pt-4'>
 
@@ -13,54 +50,42 @@ const CreateSms = (props) => {
                         <tr>
                             <th scope="col">
                                 <label class="custom-control custom-switch mt-3">
-                                    <input type="checkbox" />
+                                    <input onChange={() => handleAttendanceAll()} className="form-check-input" type="checkbox" />
                                     <span class="px-2">Select All</span>
                                 </label>
                             </th>
                             <th scope="col">Student ID</th>
                             <th scope="col">Student Name</th>
+                            <th scope="col">Student Mobile</th>
+                            <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        {absentList.map(res => {
-                            <tr>
+                        {absentList.map((res, index) => {
+                            const checked = attendance.find(att => att.student_id === res.id)
+                            console.log(checked.attendance_status === 1)
+                            return <tr key={index}>
                                 <td>
                                     <th scope="col">
                                         <label class="custom-control custom-switch mt-3">
-                                            <input type="checkbox" />
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                checked={ true }
+                                                onChange={() => handleAttendance(index)}
+                                            />
                                             <span class=""></span>
                                         </label>
                                     </th>
                                 </td>
-                                <td>68686765</td>
-                                <td>shfgakjashkj</td>
+                                <td>{res.student_code}</td>
+                                <td>{res.full_name}</td>
+                                <td>{res.mobile_no}</td>
+                                <td>pending</td>
                             </tr>
                         })}
-                        <tr>
-                            <td>
-                                <th scope="col">
-                                    <label class="custom-control custom-switch mt-3">
-                                        <input type="checkbox" />
-                                        <span class=""></span>
-                                    </label>
-                                </th>
-                            </td>
-                            <td>68686765</td>
-                            <td>shfgakjashkj</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <th scope="col">
-                                    <label class="custom-control custom-switch mt-3">
-                                        <input type="checkbox" />
-                                        <span class=""></span>
-                                    </label>
-                                </th>
-                            </td>
-                            <td>68686765</td>
-                            <td>shfgakjashkj</td>
-                        </tr>
+
 
 
 

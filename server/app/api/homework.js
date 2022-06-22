@@ -1,4 +1,5 @@
 var path = require('path');
+var moment = require('moment');
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
@@ -56,7 +57,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/teacher/individual", authenticateToken, (req, res) => {
-    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link,home_work.class_id,home_work.section_id,home_work.subject_id,home_work.session_id
+    var sql = `select home_work.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link,home_work.class_id,home_work.section_id,home_work.subject_id,home_work.session_id,section_default_name
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -87,7 +88,6 @@ module.exports = (app) => {
     if (req.files !== null) {
       const file = req.files.file
       var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
-      console.log(uploadPath);
       file.mv(`${uploadPath}/${file.name}`, err => {
         if (err) {
           return res.status(500).send(err)
@@ -124,7 +124,6 @@ module.exports = (app) => {
 
     const file = req.files.file
     var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
-    console.log(uploadPath);
     file.mv(`${uploadPath}/${file.name}`, err => {
       if (err) {
         return res.status(500).send(err)
@@ -148,6 +147,35 @@ module.exports = (app) => {
     join teacher on home_work.teacher_id=teacher.id
     join session on home_work.session_id=session.id
     where home_work.section_id="${req.query.section_id}"
+    and home_work.school_info_id = "${req.query.school_info_id}"
+    and home_work.class_id = "${req.query.class_id}"
+    and home_work.session_id = "${req.query.session_id}"
+    order by home_work.due_date;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/homework/student/filter", authenticateToken, (req, res) => {
+    const secton_id = req.query.section_id
+    const class_id = req.query.class_id
+    const subject_id = req.query.subject_id
+    const issue_date = moment(req.query.issue_date).format("YYYY-MM-DD")
+    const due_date = moment(req.query.due_date).format("YYYY-MM-DD")
+    const teacher_id = req.query.teacher_id
+    let condition = secton_id!== ''?` and home_work.section_id="${secton_id}"`:``
+    condition+= class_id!== ''?` and home_work.class_id="${class_id}"`:``
+    condition+= subject_id!== ''?` and home_work.subject_id="${subject_id}"`:``
+    condition+= teacher_id!== ''?` and home_work.teacher_id="${teacher_id}"`:``
+    condition+= teacher_id!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission
+    from home_work
+    join class on home_work.class_id=class.id 
+    join section on home_work.section_id=section.id
+    join subject on home_work.subject_id=subject.id
+    join teacher on home_work.teacher_id=teacher.id
+    join session on home_work.session_id=session.id
+    where 1=1 ${condition}
     order by home_work.due_date;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

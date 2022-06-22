@@ -272,6 +272,7 @@ const TeacherHomework = (props) => {
         setHomework(response.data);
       });
   };
+  console.log(homework);
   return (
     <>
     <ToastContainer />
@@ -566,6 +567,7 @@ const TeacherHomework = (props) => {
             <thead>
               <tr>
                 <th scope="col">Home Work Meterial</th>
+                <th scope="col">Topic</th>
                 <th scope="col">Assignment Details</th>
                 <th scope="col">Class</th>
                 <th scope="col">Section</th>
@@ -584,10 +586,11 @@ const TeacherHomework = (props) => {
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
+                    <td style={{ color: "blue" }}>{homeworkJSON.topic}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.details}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.class_name}</td>
                     <td style={{ color: "blue" }}>
-                      {homeworkJSON.section_local_name}
+                      {homeworkJSON.section_default_name}
                     </td>
                     <td style={{ color: "blue" }}>{homeworkJSON.session_year}</td>
                     <td style={{ color: "blue" }}>{homeworkJSON.subject_name}</td>
