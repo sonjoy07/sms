@@ -4,7 +4,7 @@ import calendar from "../../images/icons/calendar.png";
 import organization from "../../images/icons/organization.png";
 import class1 from "../../images/icons/class.png";
 import section from "../../images/icons/section.png";
-import period from "../../images/icons/clock.png";
+import notices from "../../images/icons/notices.png";
 import subject from "../../images/icons/subject.png";
 import routine from "../../images/icons/routine.png";
 import student from "../../images/icons/student.png";
@@ -144,7 +144,35 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div>
-
+          <a
+            onClick={() => {
+              navigate("/admin-notices");
+            }} style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
+            <div class="card bg-light shadow-sm">
+              <div class="card-body py-4">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className=""
+                >
+                  <div className="px-3">
+                    <img
+                      style={{ width: "64px", height: "64px" }}
+                      src={notices}
+                      alt=""
+                    />
+                  </div>
+                  <div className="px-3">
+                    <h4 class="card-title">Notices</h4>
+                    <p class="card-text">Add Notices/Events</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
 
           <div class="col-sm-6 my-4 col1">
             <div onClick={() => {

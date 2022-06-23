@@ -65,7 +65,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/notice/creator", authenticateToken, (req, res) => {
-    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,section_default_name as section_local_name,
     notice.session_id
     from notice
     join class on notice.class_id=class.id 
