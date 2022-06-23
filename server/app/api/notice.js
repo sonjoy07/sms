@@ -1,3 +1,4 @@
+const moment = require('moment')
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
@@ -11,12 +12,21 @@ module.exports = (app) => {
   //   );
   // });
   app.get("/api/notice/all", authenticateToken, (req, res) => {
-    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name,notice.student_id,notice.class_id,
+    notice.session_id
     from notice
     join class on notice.class_id=class.id 
     join section on notice.section_id=section.id
     join session on notice.session_id=session.id
     order by notice.id
+    ;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.delete("/api/notice/delete", authenticateToken, (req, res) => {
+    var sql = `delete from  notice where id = ${req.query.id}
     ;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -38,7 +48,8 @@ module.exports = (app) => {
     });
   });
   app.get("/api/notice/creator", authenticateToken, (req, res) => {
-    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.student_id,notice.class_id,
+    notice.session_id
     from notice
     join class on notice.class_id=class.id 
     join section on notice.section_id=section.id
@@ -150,7 +161,7 @@ module.exports = (app) => {
     var session_id = req.body.session_id;
     var headline = req.body.headline;
     var description = req.body.description;
-    var date = req.body.date;
+    var date = moment().format("YYYY-MM-DD");
     var uid = req.body.uid;
 
     var sql =

@@ -20,7 +20,9 @@ const TeacherHomework = (props) => {
   const [id, setId] = useState("");
 
   const [sections, setSections] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [section, setSection] = useState("");
+  const [status, setStatus] = useState("")
 
   const [subjects, setSubjects] = useState([]);
   const [subject, setSubject] = useState("");
@@ -201,9 +203,9 @@ const TeacherHomework = (props) => {
       })
         .then((res) => res.json())
         .then((json) => {
-          if(id){
-             toast("Home work updated successfully");
-          }else{
+          if (id) {
+            toast("Home work updated successfully");
+          } else {
             toast("Home work submited successfully");
           }
           setId("");
@@ -219,6 +221,18 @@ const TeacherHomework = (props) => {
         .then(() => getHWList());
   };
 
+  const resetForm = () => {
+    setId("");
+    setClass_id("");
+    setSection_id("");
+    setSubject_id("");
+    setSession_id("");
+    setIssue_date("");
+    setDue_date("");
+    setTopic("");
+    setDetails("");
+  }
+
   const editHomeWork = (data) => {
     setId(data.id);
     setClass_id(data.class_id);
@@ -230,12 +244,13 @@ const TeacherHomework = (props) => {
     setTopic(data.topic);
     setDetails(data.details);
   }
-  const deleteHomework =async(id)=>{
+
+  const deleteHomework = async (id) => {
     const check = window.confirm('Are you sure to delete?');
-    if(check){
+    if (check) {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/homework/student/delete?id=${id}`)
-      if(result){
+      if (result) {
         toast("Home work deleted successfully");
         getHWList()
       }
@@ -272,10 +287,24 @@ const TeacherHomework = (props) => {
         setHomework(response.data);
       });
   };
-  console.log(homework);
+
+  let handleTeacherChange = (e) => {
+    setTeacher_id(e.target.value);
+  };
+
+  let handleSubjectSearchChange = (e) => {
+    setSubject_id(e.target.value);
+  };
+
+  let handleDueDateSearchChange = (e) => {
+    setDue_date(e.target.value);
+  };
+  let handleIssueDateSearchChange = (e) => {
+    setIssue_date(e.target.value);
+  };
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div style={{ height: "80px" }} className="bg-info">
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -345,6 +374,7 @@ const TeacherHomework = (props) => {
                       type="button"
                       className="btn btn-tool"
                       data-card-widget="collapse"
+                      onClick={resetForm}
                     >
                       <i className="fas fa-plus icons" />
                     </button>
@@ -563,6 +593,112 @@ const TeacherHomework = (props) => {
             School Information :{" "}
           </h2>
 
+          <div className='row'>
+            <div className='col-md-12'>
+              <div className="card card-dark collapsed-card">
+                <div className='card-body' >
+                  <div className='row'>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          Subject :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={subject_id}
+                          onChange={handleSubjectSearchChange}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select Subject</option>
+                          {subjects.map((subjectJSON) => {
+                            return (
+                              <option value={subjectJSON.id}>
+                                {subjectJSON.subject_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2 mx-auto"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleInputEmail1">
+                          Start Date :{" "}
+                        </label>
+                        <input
+                          style={{ border: "1px solid blue" }}
+                          type="date"
+                          class="form-control"
+                          value={issue_date}
+                          onChange={handleIssueDateSearchChange}
+                        />
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2 mx-auto"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleInputEmail1">
+                          End Date :{" "}
+                        </label>
+                        <input
+                          style={{ border: "1px solid blue" }}
+                          type="date"
+                          class="form-control"
+                          value={due_date}
+                          onChange={handleDueDateSearchChange}
+                        />
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          Teacher :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={teacher_id}
+                          onChange={handleTeacherChange}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select Teacher</option>
+                          {teachers.map((sectionJSON) => {
+                            return (
+                              <option value={sectionJSON.id}>
+                                {sectionJSON.full_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2"}>
+                      <div class="form-group">
+                        <label className='pb-2' for="exampleSelect">Status: </label>
+                        <select style={{ border: '1px solid blue' }} value={status} onChange={(e) => setStatus(e.target.value)} class="form-control" id="class" name="class">
+
+                          <option>Select Status</option>
+                          <option>Submitted</option>
+                          <option>Not Submitted</option>
+                        </select>
+
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2"}>
+                      <div className='pt-2 mx-auto'>
+                        <button style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5" onClick={handleSearch}>Search</button>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <table class="table table-striped">
             <thead>
               <tr>
@@ -628,7 +764,7 @@ const TeacherHomework = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-danger"
-                            onClick={()=>deleteHomework(homeworkJSON.id)}
+                            onClick={() => deleteHomework(homeworkJSON.id)}
                           >
                             Delete
                           </button>
