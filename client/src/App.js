@@ -87,6 +87,7 @@ import Addteacher from "./Structure/Dashboard/SchoolDashboard/Addteacher";
 import Payment from "./Structure/Dashboard/SchoolDashboard/Payment";
 import TeacherFeatures from "./Structure/Dashboard/SchoolDashboard/Teacher/teacher";
 import RoutineOption from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/RoutineOption/RoutineOption";
+import StudentNotices from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentNotice.js/StudentNotices";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -274,6 +275,10 @@ function App(props) {
           <Route
             path="/student-notice-list"
             element={<StudentNoticeList user={[user_code, user_type]} />}
+          />          
+          <Route
+            path="/student-notices"
+            element={<StudentNotices user={[user_code, user_type]} />}
           />
         </Routes>
 

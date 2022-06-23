@@ -24,7 +24,6 @@ const TeacherAttendance = (props) => {
   const [all, setAll] = useState(0);
 
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
-  const [time, setTime] = useState(moment().format("hh:mm:ss"));
   const [day, setDay] = useState(moment().format("dddd"));
 
   const [routine_id, setRoutine_id] = useState(null);
@@ -68,7 +67,6 @@ const TeacherAttendance = (props) => {
       )
       .then((response) => {
         setTeacher(response.data);
-        console.log(response.data);
       });
   }, [teacher_id, access_token]);
   //Get Routine Data
@@ -83,7 +81,6 @@ const TeacherAttendance = (props) => {
         }
       )
       .then((response) => {
-        console.log(response.data)
         setRoutine(response.data);
       });
   }, [day]);
@@ -144,44 +141,42 @@ const TeacherAttendance = (props) => {
         response.data.map((stu) => {
           at_list.push({ student_id: stu.id, attendance_status: 0 });
         });
-        console.log(at_list);
         setAttendance(at_list);
       });
   };
 
   const handleAttendance = (index) => {
     let att_list = attendance;
-    if (att_list[index].attendance_status == 0) {
+    if (att_list[index].attendance_status === 0) {
       att_list[index].attendance_status = 1;
       setTotalpresent(totalpresent + 1);
     } else {
       att_list[index].attendance_status = 0;
       setTotalpresent(totalpresent - 1);
     }
-    console.log(att_list);
     setAttendance(att_list);
   };
   const handleAttendanceAll = () => {
-    if (all == 0) {
+    if (all === 0) {
       setAll(1)
     } else {
       setAll(0)
     }
     let att_list = attendance;
-    Promise.all(att_list.forEach(list => {
-      if (all == 0) {
+    att_list.forEach(list => {
+      if (all === 0) {
         list.attendance_status = 1;
-        setTotalpresent(totalpresent + 1);
+        setTotalpresent(totalpresent + att_list.length);
       } else {
         list.attendance_status = 0;
-        setTotalpresent(totalpresent - 1);
+        setTotalpresent(0);
       }
-    }))
+    })
     setAttendance(att_list);
   };
 
   const handleSubmit = () => {
-    if (date == null || routine_id == null) {
+    if (date === null || routine_id === null) {
       return;
     }
 
@@ -208,11 +203,11 @@ const TeacherAttendance = (props) => {
           var st = {
             name: studentJSON.full_name,
             roll: studentJSON.class_roll_no,
-            attendance: attendance[index].attendance_status == 1 ? "P" : "A",
+            attendance: attendance[index].attendance_status === 1 ? "P" : "A",
           };
           var latestSt ={
             ...studentJSON,          
-            attendance: attendance[index].attendance_status == 1 ? "P" : "A",
+            attendance: attendance[index].attendance_status === 1 ? "P" : "A",
           }
           st_list.push(st);
           st_list_latest.push(latestSt);
@@ -224,7 +219,7 @@ const TeacherAttendance = (props) => {
         console.log(error);
       });
   };
-
+  console.log(totalpresent);
   return (
     <>
       <TeacherHeader />
@@ -274,7 +269,7 @@ const TeacherAttendance = (props) => {
                       borderRadius: "5px",
                     }}
                   >
-                    {student.length == 0 && routine.map((routineJSON) => {
+                    {student.length === 0 && routine.map((routineJSON) => {
                       return (
                         <div className="col-12 p-4 border">
                           <div style={{ display: "flex" }}>

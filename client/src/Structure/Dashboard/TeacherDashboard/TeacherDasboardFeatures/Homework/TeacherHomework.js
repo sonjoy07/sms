@@ -25,6 +25,7 @@ const TeacherHomework = (props) => {
   const [status, setStatus] = useState("")
 
   const [subjects, setSubjects] = useState([]);
+  const [search_subjects, setSearch_Subjects] = useState([]);
   const [subject, setSubject] = useState("");
 
   const [sessions, setSessions] = useState([]);
@@ -39,14 +40,20 @@ const TeacherHomework = (props) => {
 
 
   const [class_id, setClass_id] = useState("");
+  const [search_class_id, setSearchClass_id] = useState("");
   const [section_id, setSection_id] = useState("");
+  const [search_section_id, setSearchSection_id] = useState("");
   const [subject_id, setSubject_id] = useState("");
+  const [search_subject_id, setSearchSubject_id] = useState("");
   const [session_id, setSession_id] = useState("");
+  const [search_session_id, setSearchSession_id] = useState("");
   const [topic, setTopic] = useState("");
   const [details, setDetails] = useState("");
   const [attachment, setAttachment] = useState("");
   const [issue_date, setIssue_date] = useState("");
   const [due_date, setDue_date] = useState("");
+  const [search_issue_date, setSearch_Issue_date] = useState("");
+  const [search_due_date, setSearch_Due_date] = useState("");
   const [access_token, setAccess_token] = useState(
     localStorage.getItem("access_token")
   );
@@ -87,6 +94,21 @@ const TeacherHomework = (props) => {
         setSchool_info_id(response.data.school_info_id);
       });
   }, [teacher_id]);
+
+  const handleSearch = () => {
+    axios
+    .get(
+      `${process.env.REACT_APP_NODE_API}/api/homework/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}`,
+      {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((response) => {
+        setHomework(response.data);
+    });
+  }
 
   useEffect(() => {
     checkLoggedIn();
@@ -133,6 +155,22 @@ const TeacherHomework = (props) => {
 
   useEffect(() => {
     axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/subjects?class_id=${search_class_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        setSearch_Subjects(response.data);
+        console.log(response.data)
+      });
+  }, [search_class_id]);
+
+  useEffect(() => {
+    axios
       .get(`${process.env.REACT_APP_NODE_API}/api/session`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -147,19 +185,31 @@ const TeacherHomework = (props) => {
     setCls(e.target.value);
     setClass_id(e.target.value);
   };
+  let handleClassSearchChange = (e) => {
+    setSearchClass_id(e.target.value);
+  };
   let handleSectionChange = (e) => {
     setSection(e.target.value);
     setSection_id(e.target.value);
+  };
+  let handleSectionSearchChange = (e) => {
+    setSearchSection_id(e.target.value);
   };
 
   let handleSubjectChange = (e) => {
     setSubject(e.target.value);
     setSubject_id(e.target.value);
   };
+  let handleSubjectSearchChange = (e) => {
+    setSearchSubject_id(e.target.value);
+  };
 
   let handleSessionChange = (e) => {
     setSession(e.target.value);
     setSession_id(e.target.value);
+  };
+  let handleSessionSearchChange = (e) => {
+    setSearchSession_id(e.target.value);
   };
   let handleTopicChange = (e) => {
     setTopic(e.target.value);
@@ -292,15 +342,12 @@ const TeacherHomework = (props) => {
     setTeacher_id(e.target.value);
   };
 
-  let handleSubjectSearchChange = (e) => {
-    setSubject_id(e.target.value);
-  };
 
   let handleDueDateSearchChange = (e) => {
-    setDue_date(e.target.value);
+    setSearch_Due_date(e.target.value);
   };
   let handleIssueDateSearchChange = (e) => {
-    setIssue_date(e.target.value);
+    setSearch_Issue_date(e.target.value);
   };
   return (
     <>
@@ -601,18 +648,90 @@ const TeacherHomework = (props) => {
                     <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
+                          Class :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={search_class_id}
+                          onChange={handleClassSearchChange}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select Class</option>
+                          {clses.map((classJSON) => {
+                            return (
+                              <option value={classJSON.id}>
+                                {classJSON.class_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          Section :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={search_section_id}
+                          onChange={handleSectionSearchChange}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select Section</option>
+                          {sections.map((sectionJSON) => {
+                            return (
+                              <option value={sectionJSON.id}>
+                                {sectionJSON.section_default_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          Academic Session :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={search_session_id}
+                          onChange={handleSessionSearchChange}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select Session</option>
+                          {sessions.map((sessionJSON) => {
+                            return (
+                              <option value={sessionJSON.id}>
+                                {sessionJSON.session_year}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
                           Subject :{" "}
                         </label>
                         <select
                           style={{ border: "1px solid blue" }}
                           class="form-control"
-                          value={subject_id}
+                          value={search_subject_id}
                           onChange={handleSubjectSearchChange}
                           id="class"
                           name="class"
                         >
                           <option value="">Select Subject</option>
-                          {subjects.map((subjectJSON) => {
+                          {search_subjects.map((subjectJSON) => {
                             return (
                               <option value={subjectJSON.id}>
                                 {subjectJSON.subject_name}
@@ -631,7 +750,7 @@ const TeacherHomework = (props) => {
                           style={{ border: "1px solid blue" }}
                           type="date"
                           class="form-control"
-                          value={issue_date}
+                          value={search_issue_date}
                           onChange={handleIssueDateSearchChange}
                         />
                       </div>
@@ -645,45 +764,9 @@ const TeacherHomework = (props) => {
                           style={{ border: "1px solid blue" }}
                           type="date"
                           class="form-control"
-                          value={due_date}
+                          value={search_due_date}
                           onChange={handleDueDateSearchChange}
                         />
-                      </div>
-                    </div>
-                    <div class={"col-sm-2 p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
-                          Teacher :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={teacher_id}
-                          onChange={handleTeacherChange}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select Teacher</option>
-                          {teachers.map((sectionJSON) => {
-                            return (
-                              <option value={sectionJSON.id}>
-                                {sectionJSON.full_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                    <div class={"col-sm-2 p-2"}>
-                      <div class="form-group">
-                        <label className='pb-2' for="exampleSelect">Status: </label>
-                        <select style={{ border: '1px solid blue' }} value={status} onChange={(e) => setStatus(e.target.value)} class="form-control" id="class" name="class">
-
-                          <option>Select Status</option>
-                          <option>Submitted</option>
-                          <option>Not Submitted</option>
-                        </select>
-
                       </div>
                     </div>
                     <div class={"col-sm-2 p-2"}>

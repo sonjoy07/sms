@@ -167,7 +167,7 @@ module.exports = (app) => {
     condition+= class_id!== ''?` and home_work.class_id="${class_id}"`:``
     condition+= subject_id!== ''?` and home_work.subject_id="${subject_id}"`:``
     condition+= teacher_id!== ''?` and home_work.teacher_id="${teacher_id}"`:``
-    condition+= teacher_id!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    condition+= issue_date!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
     var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission
     from home_work
     join class on home_work.class_id=class.id 
@@ -177,6 +177,33 @@ module.exports = (app) => {
     join session on home_work.session_id=session.id
     where 1=1 ${condition}
     order by home_work.due_date;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/homework/teacher/filter", authenticateToken, (req, res) => {
+    const secton_id = req.query.section_id
+    const session_id = req.query.session_id
+    const class_id = req.query.class_id
+    const subject_id = req.query.subject_id
+    const issue_date = req.query.issue_date !== ""?moment(req.query.issue_date).format("YYYY-MM-DD"):""
+    const due_date = req.query.due_date !== ""?moment(req.query.due_date).format("YYYY-MM-DD"):""
+    let condition = secton_id!== ''?` and home_work.section_id="${secton_id}"`:``
+    condition+= class_id!== ''?` and home_work.class_id="${class_id}"`:``
+    condition+= subject_id!== ''?` and home_work.subject_id="${subject_id}"`:``
+    condition+= session_id!== ''?` and home_work.session_id="${session_id}"`:``
+    condition+= issue_date!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission
+    from home_work
+    join class on home_work.class_id=class.id 
+    join section on home_work.section_id=section.id
+    join subject on home_work.subject_id=subject.id
+    join teacher on home_work.teacher_id=teacher.id
+    join session on home_work.session_id=session.id
+    where 1=1 ${condition}
+    order by home_work.due_date;`;
+    console.log(req.query.issue_date === "")
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

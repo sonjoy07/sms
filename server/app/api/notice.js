@@ -12,7 +12,7 @@ module.exports = (app) => {
   //   );
   // });
   app.get("/api/notice/all", authenticateToken, (req, res) => {
-    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name,notice.student_id,notice.class_id,
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name,notice.class_id,
     notice.session_id
     from notice
     join class on notice.class_id=class.id 
@@ -25,7 +25,24 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/notice/edit", authenticateToken, (req, res) => {
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name,notice.class_id,
+    notice.session_id,GROUP_CONCAT(notice_user.student_id) notice_users
+    from notice
+    join notice_user on notice_user.notice_id = notice.id
+    join class on notice.class_id=class.id 
+    join section on notice.section_id=section.id
+    join session on notice.session_id=session.id
+    where notice.id = ${req.query.id}
+    group by notice.id
+    ;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
   app.delete("/api/notice/delete", authenticateToken, (req, res) => {
+    con.query(`delete from  notice_user where notice_id = ${req.query.id}`)
     var sql = `delete from  notice where id = ${req.query.id}
     ;`;
     con.query(sql, function (err, result, fields) {
@@ -34,7 +51,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/notice/school", authenticateToken, (req, res) => {
-    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,notice.student_id,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name
     from notice
     join class on notice.class_id=class.id 
     join section on notice.section_id=section.id
@@ -48,7 +65,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/notice/creator", authenticateToken, (req, res) => {
-    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.student_id,notice.class_id,
+    var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,
     notice.session_id
     from notice
     join class on notice.class_id=class.id 
@@ -65,10 +82,12 @@ module.exports = (app) => {
   app.get("/api/notice/student", authenticateToken, (req, res) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date
     from notice
+    join notice_user on notice_user.notice_id = notice.id
     join class on notice.class_id=class.id 
     join section on notice.section_id=section.id
     join session on notice.session_id=session.id
-    where notice.student_id="${req.query.student_id}"
+    where notice_user.student_id="${req.query.student_id}"
+    and type = ${req.query.type === 'teacher' ? 1 : 2}
     order by notice.id
     ;`;
     con.query(sql, function (err, result, fields) {
@@ -163,17 +182,34 @@ module.exports = (app) => {
     var description = req.body.description;
     var date = moment().format("YYYY-MM-DD");
     var uid = req.body.uid;
+    var type = req.body.type;
+    var id = req.body.id;
 
-    var sql =
-      "INSERT INTO `notice` (`session_id`, `school_info_id`, `class_id`, `section_id`, `student_id`, `notice_headline`, `notice_description`, `publishing_date`, `user_code`) VALUES ";
-    students.map((st_id) => {
-      sql += `("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${st_id}", "${headline}", "${description}", "${date}", "${uid}"),`;
-    });
-    sql = sql.slice(0, -1);
+    var sql = ""
+    if (id === '') {
+      sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+    } else {
+      sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
+    }
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
-      res.json({ status: "success" });
+      if (id) {
+        con.query(`delete from notice_user where notice_id = ${id}`)
+      }
+      var sql2 = "insert into notice_user (notice_id,student_id) values "
+      if (students.length > 0) {
+        students.map((st_id) => {
+          sql2 += `("${id ? id : result.insertId}","${st_id}"),`;
+        });
+        sql2 = sql2.slice(0, -1);
+        con.query(sql2, function (err, result, fields) {
+          if (err) throw err;
+          res.json({ status: "success" });
+        });
+      }else{
+        res.status(400).json({msg: 'select users'})
+      }
     });
   });
 };

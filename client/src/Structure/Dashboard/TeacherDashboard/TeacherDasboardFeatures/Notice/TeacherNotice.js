@@ -5,6 +5,8 @@ import moment from "moment";
 import profile from '../../../../images/profile/profile.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
 const TeacherNotice = (props) => {
   let navigate = useNavigate();
   /*
@@ -46,6 +48,7 @@ const TeacherNotice = (props) => {
   const [notice, setNotice] = useState([]);
   const [teacher, setTeacher] = useState({});
   const [checkedStudents, setCheckedStudents] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [isCheck, setIsCheck] = useState([]);
   const [list, setList] = useState([]);
@@ -106,6 +109,7 @@ const TeacherNotice = (props) => {
       });
   }, []);
   useEffect(() => {
+    debugger;
     axios
       .get(
         `${process.env.REACT_APP_NODE_API}/api/section/all`,
@@ -134,7 +138,12 @@ const TeacherNotice = (props) => {
         let tempList = [];
 
         response.data.map((stu) => {
-          tempList.push(0);
+          const check = selectedStudents.find(res => res == stu.id)
+          if (check) {
+            tempList.push(1);
+          } else {
+            tempList.push(0);
+          }
         });
         setCheckedStudents(tempList);
       });
@@ -161,11 +170,6 @@ const TeacherNotice = (props) => {
     setSection_id(e.target.value);
   };
 
-  let handleStudentChange = (e) => {
-    setStudent(e.target.value);
-    setStudent_id(e.target.value);
-  };
-
   let handleSessionChange = (e) => {
     setSession(e.target.value);
     setSession_id(e.target.value);
@@ -177,10 +181,29 @@ const TeacherNotice = (props) => {
     setDescription(e.target.value);
   };
 
+  const changeChecked = (index) => {
+    let tempList = checkedStudents;
+    tempList[index] =
+      tempList[index] === 0 ? 1 : 0;
+    setCheckedStudents([]);
+    console.log(tempList)
+    setCheckedStudents(tempList);
+  }
+  const resetForm = () => {
+    setClass_id("");
+    setSection_id("");
+    setStudent_id("");
+    setSession_id("");
+    setHeadline("");
+    setDescription("");
+    setDate("");
+    setId("");
+    setStudents([])
+  }
   const handleSubmit = () => {
     let finalStudents = [];
     checkedStudents.map((stu, index) => {
-      if (stu == 1) {
+      if (stu === 1) {
         finalStudents.push(students[index].id);
       }
     });
@@ -201,11 +224,18 @@ const TeacherNotice = (props) => {
         description: description,
         date: date,
         uid: uid,
+        type: 1,
+        id: id
       }),
     })
       .then((res) => res.json())
       .then((json) => {
-        toast("Notice saved successfully");
+        if (id) {
+          toast("Notice updated successfully");
+
+        } else {
+          toast("Notice saved successfully");
+        }
         console.log("ok");
         setClass_id("");
         setSection_id("");
@@ -255,21 +285,25 @@ const TeacherNotice = (props) => {
     }
 
   }
-  const editNotice = (data) => {
-    debugger
-    setDescription(data.notice_description);
-    setHeadline(data.notice_headline);
-    setSection_id(data.section_id);
-    setStudent_id(data.student_id);
-    setSession_id(data.session_id);
-    setClass_id(data.class_id);
-    setId(data.id);
-    setDate(moment(data.publishing_date).format("YYYY-MM-DD"));
+  const editNotice = async (id) => {
+    // setSection_id("");
+    // setClass_id("");
+    const result = await axios.get(`${process.env.REACT_APP_NODE_API}/api/notice/edit?id=${id}`)
+    setDescription(result.data[0].notice_description);
+    setHeadline(result.data[0].notice_headline);
+    setSection_id(result.data[0].section_id);
+    setStudent_id(result.data[0].student_id);
+    setSession_id(result.data[0].session_id);
+    setClass_id(result.data[0].class_id);
+    setId(result.data[0].id);
+    setDate(moment(result.data[0].publishing_date).format("YYYY-MM-DD"));
+    const users = result.data[0].notice_users.split(',')
+    setSelectedStudents(users)
   }
-
+  console.log(checkedStudents);
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <div style={{ height: "80px" }} className="bg-info">
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -338,6 +372,7 @@ const TeacherNotice = (props) => {
                       type="button"
                       className="btn btn-tool"
                       data-card-widget="collapse"
+                      onClick={resetForm}
                     >
                       <i className="fas fa-plus icons" />
                     </button>
@@ -463,6 +498,7 @@ const TeacherNotice = (props) => {
                         <tbody>
 
                           {students.map((studentJSON, index) => {
+                            console.log(checkedStudents[index] === 1 ? true : false);
                             return (
                               <tr>
                                 <td>{studentJSON.full_name}</td>
@@ -470,11 +506,9 @@ const TeacherNotice = (props) => {
                                   <input
                                     className="form-check-input"
                                     type="checkbox"
+                                    defaultChecked={checkedStudents[index] === 1 ? true : false}
                                     onChange={() => {
-                                      let tempList = checkedStudents;
-                                      tempList[index] =
-                                        tempList[index] == 0 ? 1 : 0;
-                                      setCheckedStudents(tempList);
+                                      changeChecked(index)
                                     }}
                                   />
                                 </td>
@@ -556,7 +590,7 @@ const TeacherNotice = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-success"
-                            onClick={() => editNotice(noticeJSON)}
+                            onClick={() => editNotice(noticeJSON.id)}
                           >
                             Edit
                           </button>
@@ -565,7 +599,7 @@ const TeacherNotice = (props) => {
                           <button
                             style={{ color: "white" }}
                             className="bg-danger"
-                            onClick={()=>deleteNotice(noticeJSON.id)}
+                            onClick={() => deleteNotice(noticeJSON.id)}
                           >
                             Delete
                           </button>

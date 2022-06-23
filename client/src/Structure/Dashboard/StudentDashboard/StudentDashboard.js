@@ -191,7 +191,7 @@ const StudentDashboard = (props) => {
           </a>
           <a
             onClick={() => {
-              navigate("/student-notice-list");
+              navigate("/student-notices");
             }} style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
             <div class="card bg-light shadow-sm">
               <div class="card-body py-4">

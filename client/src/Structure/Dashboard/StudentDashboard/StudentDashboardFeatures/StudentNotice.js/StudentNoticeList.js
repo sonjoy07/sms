@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import profile from '../../../../images/profile/profile.png';
 const StudentNoticeList = (props) => {
   let navigate = useNavigate();
+  let params = useParams();
+  let [searchParams, setSearchParams] = useSearchParams();
   const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
   const [student, setStudent] = useState([]);
   const [notice, setNotice] = useState([]);
 
-  console.log(user_code);
+  const type = searchParams.get('type')
+
   const checkLoggedIn = () => {
     if (user_type != 1) {
       navigate('/login')
@@ -38,7 +41,7 @@ const StudentNoticeList = (props) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/notice/student?student_id=${user_code}`,
+        `${process.env.REACT_APP_NODE_API}/api/notice/student?student_id=${user_code}&&type=${type}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
