@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import logo from "./logo.svg";
 import "./App.css";
+import { ToastContainer } from 'react-toastify';
 
 import TeacherDashboard from "./Structure/Dashboard/TeacherDashboard/TeacherDashboard";
 import StudentDashboard from "./Structure/Dashboard/StudentDashboard/StudentDashboard";
@@ -89,6 +90,9 @@ import TeacherFeatures from "./Structure/Dashboard/SchoolDashboard/Teacher/teach
 import RoutineOption from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/RoutineOption/RoutineOption";
 import StudentNotices from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentNotice.js/StudentNotices";
 import AdminNotice from "./Structure/Dashboard/SchoolDashboard/Notice/AdminNotice";
+import Notices from "./Structure/Dashboard/SchoolDashboard/Notice/Notices";
+import SMSsent from "./Structure/Dashboard/SchoolDashboard/Notice/SMSsent";
+import SubjectRegistration from "./Structure/Dashboard/SchoolDashboard/StudentRegistration/SubjectRegistration";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -97,6 +101,7 @@ function App(props) {
 
   return (
     <div className="App">
+      <ToastContainer/>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -285,6 +290,18 @@ function App(props) {
             path="/admin-notices"
             element={<AdminNotice user={[user_code, user_type]} />}
           />
+          <Route
+            path="/admin-notice-sms"
+            element={<Notices user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/admin-sms-sent"
+            element={<SMSsent user={[user_code, user_type]} />}
+          />          
+          <Route
+            path="/subjectregistration"
+            element={<SubjectRegistration user={[user_code, user_type]} />}
+          />     
         </Routes>
 
       </BrowserRouter>

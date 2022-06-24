@@ -79,6 +79,30 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+    app.get("/api/school-admin/profile", (req, res) => {
+        con.query(
+          `SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, admin_code, mobile_number, email_address, school_info_id FROM school_admin where id="${req.query.teacher_id}"`,
+          function (err, result, fields) {
+            if (err) throw err;
+            res.send(result[0]);
+          }
+        );
+      });
+    app.get("/api/student/filter", (req, res) => {
+        const secton_id = req.query.section_id
+        const class_id = req.query.class_id
+        const session_id = req.query.session_id
+        let condition = secton_id!== ''?` and student_present_status.section_id="${secton_id}"`:``
+        condition+= class_id!== ''?` and student_present_status.class_id="${class_id}"`:``
+        condition+= session_id!== ''?` and student_present_status.session_id="${session_id}"`:``
+        con.query(
+          `SELECT student.student_code, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, mobile_no FROM student left join student_present_status on student_present_status.student_id = student.id where 1=1 ${condition}`,
+          function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+          }
+        );
+      });
     app.post("/api/add_student", (req, res) => {
         var student_code = req.body.student_code;
         var first_name = req.body.first_name;

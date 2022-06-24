@@ -409,7 +409,7 @@ const TeacherAttendance = (props) => {
               <div className="col-sm-6 form-check form-switch ">
                 <input
                   className="form-check-input"
-                  style={{ 'float': 'right' }}
+                  style={{ 'float': 'right',marginRight:'32%' }}
                   type="checkbox"
                   onChange={() => handleAttendanceAll()}
                 />
@@ -437,15 +437,15 @@ const TeacherAttendance = (props) => {
                         <h5 className="ml-3" style={{ textAlign: "left" }}>
                           {studentJSON.full_name}
                         </h5>
-                        <p className="ml-3" style={{ textAlign: "left" }}>
+                        {/* <p className="ml-3" style={{ textAlign: "left" }}>
                           Roll: {studentJSON.class_roll_no}
-                        </p>
+                        </p> */}
                         <p className="ml-3" style={{ textAlign: "left" }}>
                           ID: {studentJSON.student_code}
                         </p>
-                        <p className="ml-3" style={{ textAlign: "left" }}>
+                        {/* <p className="ml-3" style={{ textAlign: "left" }}>
                           Phone: {studentJSON.mobile_no}
-                        </p>
+                        </p> */}
                       </div>
                       <div className="col-2 form-check form-switch">
                         <input
@@ -489,7 +489,6 @@ const TeacherAttendance = (props) => {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Roll</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -498,7 +497,6 @@ const TeacherAttendance = (props) => {
                 return (
                   <tr>
                     <td>{studentJSON.name}</td>
-                    <td>{studentJSON.roll}</td>
                     <td>{studentJSON.attendance}</td>
                   </tr>
                 );

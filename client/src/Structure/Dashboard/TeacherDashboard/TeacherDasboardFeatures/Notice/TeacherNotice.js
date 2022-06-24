@@ -52,18 +52,32 @@ const TeacherNotice = (props) => {
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [isCheck, setIsCheck] = useState([]);
   const [list, setList] = useState([]);
+
+  const [checkedAll, setCheckedAll] = useState(false);
+  const [checked, setChecked] = useState([]);
   const checkLoggedIn = () => {
     if (user_type != 2) {
       navigate("/login");
     }
   };
 
-  const handleSelectAll = e => {
-    setIsCheckAll(!isCheckAll);
-    setIsCheck(list.map(li => li.id));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
+  const toggleCheck = (inputName) => {
+    setChecked((prevState) => {
+      const newState = { ...prevState };
+      newState[inputName] = !prevState[inputName];
+      return newState;
+    });
+  };
+
+  const selectAll = (value) => {
+    setCheckedAll(value);
+    setChecked((prevState) => {
+      const newState = { ...prevState };
+      for (const inputName in newState) {
+        newState[inputName] = value;
+      }
+      return newState;
+    });
   };
   //get teacher data
   useEffect(() => {
@@ -146,6 +160,11 @@ const TeacherNotice = (props) => {
           }
         });
         setCheckedStudents(tempList);
+        let list = []
+        for (const inputName in response.data) {
+          list[inputName] = false;
+        }
+        setChecked(list)
       });
   }, [section_id, class_id]);
 
@@ -493,12 +512,22 @@ const TeacherNotice = (props) => {
                   <div class={"col-sm-8 mx-auto p-2"}>
 
                     <div class="form-group">
-                      <table class="table table-striped">
-                        <thead></thead>
+                      {students.length > 0 && <table class="table table-striped">
+
+                        <thead>
+                          <tr>
+                            <td></td>
+                            <td><input
+                              className="form-check-input"
+                              type="checkbox"
+                              onChange={(event) => selectAll(event.target.checked)}
+                              checked={checkedAll}
+                            /></td>
+                          </tr>
+                        </thead>
                         <tbody>
 
                           {students.map((studentJSON, index) => {
-                            console.log(checkedStudents[index] === 1 ? true : false);
                             return (
                               <tr>
                                 <td>{studentJSON.full_name}</td>
@@ -506,17 +535,15 @@ const TeacherNotice = (props) => {
                                   <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    defaultChecked={checkedStudents[index] === 1 ? true : false}
-                                    onChange={() => {
-                                      changeChecked(index)
-                                    }}
+                                    onChange={() => toggleCheck(index)}
+                                    checked={checked[index]}
                                   />
                                 </td>
                               </tr>
                             );
                           })}
                         </tbody>
-                      </table>
+                      </table>}
                     </div>
                   </div>
 

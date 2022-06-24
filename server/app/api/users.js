@@ -74,7 +74,7 @@ module.exports = (app) => {
         sql = `select id from Super_admin where super_admin_code="${user_code}"`;
         break;
       case "school_admin":
-        sql = `select school_admin.id,admin_code,school_info.id as school_id,school_info.school_name,school_info.type_id as school_type,first_name,last_name from school_admin 
+        sql = `select school_admin.id,admin_code,school_info.id as school_id,school_info.school_name,school_info.type_id as school_type,first_name,last_name,school_info_id from school_admin 
         join school_info on school_admin.school_info_id=school_info.id
         where admin_code="${user_code}"`;
         break;

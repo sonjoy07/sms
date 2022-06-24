@@ -1,44 +1,51 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";import {  toast } from 'react-toastify';
 const CreateSms = (props) => {
     const [absentList, setAbsentList] = useState([])
-    const [attendance, setAttendance] = useState([]);
-    const [all, setAll] = useState(0);
+    const [checkedAll, setCheckedAll] = useState(false);
+    const [checked, setChecked] = useState([]);
+    const [smsText, setSmsText] = useState("প্রিয় অভিভাবক, আপনার সন্তান আজ স্কুলে অনুপস্থিত। দয়া করে স্কুল/কলেজ কর্তৃপক্ষের সাথে যোগাযোগ করুন - অধ্যক্ষ/প্রধান শিক্ষক");
     useEffect(() => {
         setAbsentList(props.latestStudent.filter(res => res.attendance === 'A'))
-        let at_list = [];
-        props.latestStudent.filter(res => res.attendance === 'A').map((stu) => {
-            at_list.push({ student_id: stu.id, attendance_status: 0 });
-        });
-        setAttendance(at_list);
+        let list = []
+        for (const inputName in props.latestStudent.filter(res => res.attendance === 'A')) {
+            list[inputName] = false;
+        }
+        setChecked(list)
     }, [])
 
-    const handleAttendance = (index) => {
-        let att_list = attendance;
-        if (att_list[index].attendance_status == 0) {
-            att_list[index].attendance_status = 1;
-        } else {
-            att_list[index].attendance_status = 0;
-        }
-        console.log(att_list);
-        setAttendance(att_list);
+    const toggleCheck = (inputName) => {
+        setChecked((prevState) => {
+            const newState = { ...prevState };
+            newState[inputName] = !prevState[inputName];
+            return newState;
+        });
     };
-    const handleAttendanceAll = () => {
-        if (all == 0) {
-            setAll(1)
-        } else {
-            setAll(0)
-        }
-        let att_list = attendance;
-        Promise.all(att_list.forEach(list => {
-            if (all == 0) {
-                list.attendance_status = 1;
-            } else {
-                list.attendance_status = 0;
+
+    const selectAll = (value) => {
+        setCheckedAll(value);
+        setChecked((prevState) => {
+            const newState = { ...prevState };
+            for (const inputName in newState) {
+                newState[inputName] = value;
             }
-        }))
-        setAttendance(att_list);
+            return newState;
+        });
     };
-    console.log(attendance)
+    const handleSmsSend = () => {
+       
+        absentList.forEach((res, index) => {
+            if (checked[index] === true) {
+                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=0${res.mobile_no}&senderid=8809612441008&msg=${smsText}`)
+            }
+            
+        })
+        
+        toast("SMS Sent successfully");
+        setAbsentList([]);
+        setSmsText("")
+        setChecked([])
+        setCheckedAll(false)
+    }
     return (
         <div className='container pt-4'>
 
@@ -50,21 +57,20 @@ const CreateSms = (props) => {
                         <tr>
                             <th scope="col">
                                 <label class="custom-control custom-switch mt-3">
-                                    <input onChange={() => handleAttendanceAll()} className="form-check-input" type="checkbox" />
+                                    <input onChange={(event) => selectAll(event.target.checked)}
+                                        checked={checkedAll} className="form-check-input" type="checkbox" />
                                     <span class="px-2">Select All</span>
                                 </label>
                             </th>
                             <th scope="col">Student ID</th>
                             <th scope="col">Student Name</th>
                             <th scope="col">Student Mobile</th>
-                            <th scope="col">Status</th>
+                            {/* <th scope="col">Status</th> */}
                         </tr>
                     </thead>
                     <tbody>
 
                         {absentList.map((res, index) => {
-                            const checked = attendance.find(att => att.student_id === res.id)
-                            console.log(checked.attendance_status === 1)
                             return <tr key={index}>
                                 <td>
                                     <th scope="col">
@@ -72,8 +78,8 @@ const CreateSms = (props) => {
                                             <input
                                                 className="form-check-input"
                                                 type="checkbox"
-                                                checked={ true }
-                                                onChange={() => handleAttendance(index)}
+                                                onChange={() => toggleCheck(index)}
+                                                checked={checked[index]}
                                             />
                                             <span class=""></span>
                                         </label>
@@ -82,14 +88,9 @@ const CreateSms = (props) => {
                                 <td>{res.student_code}</td>
                                 <td>{res.full_name}</td>
                                 <td>{res.mobile_no}</td>
-                                <td>pending</td>
+                                {/* <td>pending</td> */}
                             </tr>
                         })}
-
-
-
-
-
                     </tbody>
                 </table>
             </section>
@@ -116,14 +117,17 @@ const CreateSms = (props) => {
                                 <div class={"col-sm-12 p-2 mx-auto"}>
                                     <div class="form-group">
                                         <label className='pb-2' for="exampleSelect">SMS Text : </label>
-                                        <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class">
+                                        <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class"
+                                        value={smsText}
+                                        onChange={(e) => setSmsText(e.target.value)}
+                                        >
                                         </textarea>
 
                                     </div>
                                 </div>
                                 <div class={"col-sm-2 p-2 mx-auto"}>
                                     <div className='pt-2 mx-auto'>
-                                        <button style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>
+                                        <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
                                     </div>
                                 </div>
 

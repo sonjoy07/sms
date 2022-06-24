@@ -76,7 +76,6 @@ const TeacherHomework = (props) => {
       )
       .then((response) => {
         setTeacher(response.data);
-        console.log(response.data);
       });
   }, [teacher_id, access_token]);
 
@@ -106,7 +105,14 @@ const TeacherHomework = (props) => {
       }
     )
     .then((response) => {
+      if (status === 'Submitted') {
+        setHomework(response.data.filter(res => res.submission > 0));
+
+      } else if(status === 'Not Submitted'){
+        setHomework(response.data.filter(res => res.submission === 0));
+      }else{
         setHomework(response.data);
+      }
     });
   }
 
