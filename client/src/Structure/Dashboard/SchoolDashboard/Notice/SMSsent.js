@@ -117,7 +117,7 @@ const SMSsent = (props) => {
         let items = [...absentList];
         absentList.forEach((res, index) => {
             if (checked[index] === true) {
-                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=88809612441008&msg=${smsText}`)
+                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg=${smsText}`)
 
                 fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
                     method: "POST",
@@ -241,6 +241,43 @@ const SMSsent = (props) => {
                             </div>
                         </div>
                     </div>
+                    
+                <div className='row'>
+                    <div className='col-md-12'>
+                        <div className="card card-dark collapsed-card">
+                            <div className="card-header">
+                                <div className='d-flex justify-content-between px-1'>
+                                    <div>
+                                        <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2">Create SMS</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='card-body' >
+
+
+                                <div className='row'>
+                                    <div class={"col-sm-12 p-2 mx-auto"}>
+                                        <div class="form-group">
+                                            <label className='pb-2' for="exampleSelect">SMS Text : </label>
+                                            <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class" value={smsText} onChange={(e) => setSmsText(e.target.value)}>
+                                            </textarea>
+
+                                        </div>
+                                    </div>
+                                    <div class={"col-sm-2 p-2 mx-auto"}>
+                                        <div className='pt-2 mx-auto'>
+                                            <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -285,42 +322,6 @@ const SMSsent = (props) => {
                     </table>
                 </section>
 
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <div className="card card-dark collapsed-card">
-                            <div className="card-header">
-                                <div className='d-flex justify-content-between px-1'>
-                                    <div>
-                                        <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2">Create SMS</h3>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className='card-body' >
-
-
-                                <div className='row'>
-                                    <div class={"col-sm-12 p-2 mx-auto"}>
-                                        <div class="form-group">
-                                            <label className='pb-2' for="exampleSelect">SMS Text : </label>
-                                            <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class" value={smsText} onChange={(e) => setSmsText(e.target.value)}>
-                                            </textarea>
-
-                                        </div>
-                                    </div>
-                                    <div class={"col-sm-2 p-2 mx-auto"}>
-                                        <div className='pt-2 mx-auto'>
-                                            <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </>

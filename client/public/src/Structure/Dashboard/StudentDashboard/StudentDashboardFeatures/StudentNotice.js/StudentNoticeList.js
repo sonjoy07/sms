@@ -35,10 +35,11 @@ const StudentNoticeList = (props) => {
       })
       .catch((e) => console.log(e));
   }, []);
+  console.log(student);
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/notice/student?student_id=${user_code}`,
+        `${process.env.REACT_APP_NODE_API}/api/notice/student?student_id=${student.id}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),

@@ -219,10 +219,11 @@ const TeacherNotice = (props) => {
     setId("");
     setStudents([])
   }
+  console.log(checkedStudents);
   const handleSubmit = () => {
     let finalStudents = [];
-    checkedStudents.map((stu, index) => {
-      if (stu === 1) {
+    checked.map((stu, index) => {
+      if (stu === true) {
         finalStudents.push(students[index].id);
       }
     });
