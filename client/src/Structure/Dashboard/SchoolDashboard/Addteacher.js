@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 import profile from '../../images/profile/profile.png'
 import SchoolHeader from './schoolHeader/SchoolHeader';
 
@@ -22,6 +23,8 @@ const Addteacher = () => {
     const [dob, setDob] = useState('')
     const [blood, setBlood] = useState('')
     const [mobile_no, setMobile] = useState('')
+    const [reset, setReset] = useState(0)
+    const [id, setId] = useState('')
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}`, {
@@ -31,7 +34,7 @@ const Addteacher = () => {
         }).then((response) => {
             setTeachers(response.data);
         });
-    }, [teacher_id]);
+    }, [teacher_id, reset]);
     const TeacherID = e => {
         setteacher_id(e.target.value)
     }
@@ -103,12 +106,18 @@ const Addteacher = () => {
                 email: email,
                 dob: dob,
                 subject_code: subject_code,
-                school_info_id: school_id
+                school_info_id: school_id,
+                id: id
             }),
         })
             .then((res) => res.json())
             .then((json) => {
-                alert('New Teacher Added Successfully!!')
+                setReset(reset + 1)
+                if (id === '') {
+                    toast('New Teacher saved successfully')
+                } else {
+                    toast('Teacher updated successfully')
+                }
             });
         setteacher_id('')
         setFname('')
@@ -122,9 +131,34 @@ const Addteacher = () => {
         setInitial('')
         setMpo('')
         setIndex('')
-
-
-
+        settitle('')
+    }
+    const editRoutine = (info) => {
+        setteacher_id(info.teacher_code)
+        setFname(info.first_name)
+        setMiddle(info.middle_name)
+        setLLname(info.last_name)
+        setMobile(info.mobile)
+        setDob(info.dob)
+        setBlood(info.blood_group)
+        setDesignation(info.designation)
+        setsubject(info.subject_code)
+        setInitial(info.initial)
+        setMpo(info.mpo_status)
+        setIndex(info.index_no)
+        setId(info.id)
+        settitle(info.title)
+    }
+    const deleteRoutine = async (id) => {
+        const check = window.confirm('Are you sure to delete?');
+        if (check) {
+            axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+            const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/teacher/delete?id=${id}`)
+            if (result) {
+                setReset(reset + 1)
+                toast("Teacher deleted successfully");
+            }
+        }
     }
 
     return (
@@ -135,13 +169,17 @@ const Addteacher = () => {
                     <div className='col-md-12'>
                         <div className="card card-dark collapsed-card">
                             <div className="card-header">
-                                <div className='d-flex justify-content-between px-1'>
+                                <div className='d-flex float-left justify-content-between px-1'>
                                     <div>
                                         <h3 style={{ color: '#008B8B', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2"> Add Teacher</h3>
                                     </div>
                                 </div>
+                                <div className='float-right'>
+                                    <i className='fa fa-plus'></i>
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
 
@@ -276,6 +314,7 @@ const Addteacher = () => {
                             <th scope="col">mobile number</th>
                             <th scope="col">Designation</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Action</th>
 
                         </tr>
                     </thead>
@@ -293,6 +332,14 @@ const Addteacher = () => {
                                         <td style={{ textAlign: 'center' }}>{student.mobile}</td>
                                         <td style={{ textAlign: 'center' }}>{student.designation}</td>
                                         <td style={{ textAlign: 'center' }}>{student.email}</td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <button type='button' className="btn btn-success mr-3" onClick={() => editRoutine(student)}>
+                                                Edit
+                                            </button>
+                                            <button className="btn btn-danger" onClick={() => deleteRoutine(student.id)}>
+                                                Delete
+                                            </button>
+                                        </td>
 
 
 

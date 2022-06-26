@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import calendar from "../../images/icons/calendar.png";
 import organization from "../../images/icons/organization.png";
-import class1 from "../../images/icons/class.png";
+import ebook from "../../images/icons/ebook.png";
 import section from "../../images/icons/section.png";
 import notices from "../../images/icons/notices.png";
 import subject from "../../images/icons/subject.png";
@@ -115,35 +115,6 @@ const SchoolDashboard = () => {
             </div>
           </div>
 
-          <div class="col-sm-6 my-4 col1">
-            <div
-              onClick={() => {
-                navigate("/class-create");
-              }} class="card bg-light shadow-sm">
-              <div class="card-body py-4">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  className=""
-                >
-                  <div className="px-3">
-                    <img
-                      style={{ width: "64px", height: "64px" }}
-                      src={class1}
-                      alt=""
-                    />
-                  </div>
-                  <div className="px-3">
-                    <h4 class="card-title">Class</h4>
-                    <p class="card-text">Create Class</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <a
             onClick={() => {
               navigate("/admin-notice-sms");
@@ -174,34 +145,7 @@ const SchoolDashboard = () => {
             </div>
           </a>
 
-          <div class="col-sm-6 my-4 col1">
-            <div onClick={() => {
-              navigate("/subject-create");
-            }} class="card bg-light shadow-sm">
-              <div class="card-body py-4">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  className=""
-                >
-                  <div className="px-3">
-                    <img
-                      style={{ width: "64px", height: "64px" }}
-                      src={subject}
-                      alt=""
-                    />
-                  </div>
-                  <div className="px-3">
-                    <h4 class="card-title">Subject</h4>
-                    <p class="card-text">Add Subject</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+         
           <a onClick={() => {
             navigate('/create-exam')
           }
@@ -357,6 +301,22 @@ const SchoolDashboard = () => {
                        <div className='px-3'>
                          <h4 class="card-title">Student Registration</h4>
                          <p class="card-text">Add Student Subject</p>
+                       </div>
+                   </div>
+                 
+               </div>
+            </div>
+        </a>
+          <a href='/sms-report' style={{textDecoration: 'none'}} class="col-sm-6 my-4 col1">
+            <div class="card bg-light shadow-sm">
+               <div class="card-body py-4">
+               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
+                       <div className='px-3'>
+                          <img style={{width:'64px', height:'64px'}} src={ebook} alt=""/>
+                       </div>
+                       <div className='px-3'>
+                         <h4 class="card-title">SMS Report</h4>
+                         <p class="card-text">SMS details</p>
                        </div>
                    </div>
                  

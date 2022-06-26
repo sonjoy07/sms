@@ -35,7 +35,22 @@ const CreateSms = (props) => {
        
         absentList.forEach((res, index) => {
             if (checked[index] === true) {
-                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=0${res.mobile_no}&senderid=8809612441008&msg=${smsText}`)
+                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg=${smsText}`)
+
+                fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+                    body: JSON.stringify({
+                        smsText: smsText,
+                        user_id: localStorage.getItem('u_id'),
+                        purpose: 2,
+                        school_info_id: localStorage.getItem('school_info_id')
+                    }),
+                  })
+                    .then((res) => res.json())
             }
             
         })

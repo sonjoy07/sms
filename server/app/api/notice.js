@@ -172,7 +172,14 @@ module.exports = (app) => {
       res.json({ status: "success" });
     });
   });
-  app.post("/api/notice", authenticateToken, (req, res) => {
+  const getSection = () => {
+    con.query(`select * from section`, function (err, result, fields) {
+      if (err) throw err;
+      console.log(err);
+      return result
+    })
+  }
+  app.post("/api/notice", authenticateToken, async (req, res) => {
     var school_info_id = req.body.school_info_id;
     var class_id = req.body.class_id;
     var section_id = req.body.section_id;
@@ -187,7 +194,31 @@ module.exports = (app) => {
 
     var sql = ""
     if (id === '') {
-      sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+      if (class_id === 0 && section_id === 0) {
+        let classes = []
+        let sections = []
+        const test = await getSection()
+        console.log(test);
+        con.query(`select * from class`, function (err, result, fields) {
+          if (err) throw err;
+          
+          // result.forEach(res => {
+          //   con.query("select * from `section`", function (err, result, fields) {
+          //     if (err) throw err;
+          //     console.log('asdf',result);
+          //     result.forEach(resSec => {
+          //       sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+
+          //     })
+          //   })
+          // })
+
+        })
+
+
+      } else {
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+      }
     } else {
       sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
     }
@@ -207,8 +238,8 @@ module.exports = (app) => {
           if (err) throw err;
           res.json({ status: "success" });
         });
-      }else{
-        res.status(400).json({msg: 'select users'})
+      } else {
+        res.status(400).json({ msg: 'select users' })
       }
     });
   });

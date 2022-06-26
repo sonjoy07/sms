@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import profile from '../../images/profile/profile.png'
 import StudentHeader from '../StudentDashboard/StudentHeader'
 
@@ -22,9 +23,11 @@ const AddStudent = () => {
     const [dob, setDob] = useState('')
     const [blood, setBlood] = useState('')
     const [photo, setphoto] = useState('')
+    const [id, setId] = useState('')
     const [students, setStudents] = useState([])
     const [genders, setGenders] = useState([])
     const [divisions, setDivisions] = useState([])
+    const [reset,setReset] = useState(0)
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/student/all?school_info_id=${school_id}`, {
@@ -34,7 +37,7 @@ const AddStudent = () => {
         }).then((response) => {
             setStudents(response.data);
         });
-    }, [student_id]);
+    }, [student_id,reset]);
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/gender`, {
@@ -130,13 +133,19 @@ const AddStudent = () => {
                 dob: dob,
                 blood_group: blood,
                 photo_id: photo,
-                school_info_id: school_id
+                school_info_id: school_id,
+                id: id
 
             }),
         })
             .then((res) => res.json())
             .then((json) => {
-                alert('New Student Added Successfully!!')
+                setReset(reset+1)
+                if (id === '') {
+                  toast('New Student saved successfully')
+                } else {
+                  toast('New Student updated successfully')
+                }
             });
         setStudent_id('')
         setFname('')
@@ -154,7 +163,41 @@ const AddStudent = () => {
         setDob('')
         setBlood('')
         setphoto('')
+        setEmail('')
+        setId('')
 
+    }
+
+    const editRoutine = (info) => {
+        setStudent_id(info.student_code)
+        setFname(info.first_name)
+        setmiddle(info.middle_name)
+        setLLname(info.last_name)
+        setMobile(info.mobile_no)
+        setGender(info.gender_id)
+        setDivision(info.division)
+        setEmail(info.email)
+        setPresent(info.present_address)
+        setPermanent(info.Permanant_address)
+        setFatherno(info.father_phone_number)
+        setMother(info.mother_name)
+        setFather(info.father_name)
+        setMotherNo(info.mother_phone_number)
+        setDob(info.dob)
+        setBlood(info.blood_group)
+        setphoto(info.photo_id)
+        setId(info.id)
+    }
+    const deleteRoutine = async (id) => {
+        const check = window.confirm('Are you sure to delete?');
+        if (check) {
+               axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+               const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/student/delete?id=${id}`)
+               if (result) {
+                setReset(reset+1)
+                  toast("Student deleted successfully");
+               }
+        }
     }
 
     return (
@@ -222,7 +265,7 @@ const AddStudent = () => {
 
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
+                                        {/* <div class={"col-sm-3 p-2 mx-auto"}>
                                             <div class="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Division Id : </label>
                                                 <select
@@ -240,7 +283,7 @@ const AddStudent = () => {
                                                     })}
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div class={"col-sm-3 p-2 mx-auto"}>
                                             <div class="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Email : </label>
@@ -253,9 +296,6 @@ const AddStudent = () => {
                                                 <input onChange={Present} style={{ border: '1px solid blue' }} type="text" class="form-control" value={present} />
                                             </div>
                                         </div>
-
-                                    </div>
-                                    <div className='row'>
                                         <div class={"col-sm-3 mx-auto p-2"}>
                                             <div class="form-group">
                                                 <label className='pb-2' for="exampleSelect">permanent Address : </label>
@@ -263,6 +303,10 @@ const AddStudent = () => {
 
                                             </div>
                                         </div>
+
+                                    </div>
+                                    <div className='row'>
+                                        
                                         <div class={"col-sm-3 p-2 mx-auto"}>
                                             <div class="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Father Name : </label>
@@ -281,14 +325,20 @@ const AddStudent = () => {
                                                 <input onChange={Mother} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mother} />
                                             </div>
                                         </div>
-
-                                    </div>
-                                    <div className='row'>
                                         <div class={"col-sm-3 mx-auto p-2"}>
                                             <div class="form-group">
                                                 <label className='pb-2' for="exampleSelect">Mother Phone Number : </label>
                                                 <input onChange={MotherNo} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mother_no} />
 
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className='row'>
+                                        <div class={"col-sm-3 p-2 mx-auto"}>
+                                            <div class="form-group">
+                                                <label className='pb-2' for="exampleInputEmail1">Mobile No : </label>
+                                                <input onChange={Mobile} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mobile} />
                                             </div>
                                         </div>
                                         <div class={"col-sm-3 p-2 mx-auto"}>
@@ -342,6 +392,7 @@ const AddStudent = () => {
                                 <th scope="col">Student Name</th>
                                 <th scope="col">mobile number</th>
                                 <th scope="col">Email</th>
+                                <th scope="col">Action</th>
 
                             </tr>
                         </thead>
@@ -358,6 +409,14 @@ const AddStudent = () => {
                                             <td style={{ textAlign: 'center' }}>{student.first_name}</td>
                                             <td style={{ textAlign: 'center' }}>{student.mobile_no}</td>
                                             <td style={{ textAlign: 'center' }}>{student.email}</td>
+                                            <td style={{ textAlign: 'center' }}>
+                                                <button type='button' className="btn btn-success mr-3" onClick={() => editRoutine(student)}>
+                                                    Edit
+                                                </button>
+                                                <button className="btn btn-danger" onClick={() => deleteRoutine(student.id)}>
+                                                    Delete
+                                                </button>
+                                            </td>
 
 
 

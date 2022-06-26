@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 const SMSsent = (props) => {
-    const [absentList, setAbsentList] = useState([])    
+    const [absentList, setAbsentList] = useState([])
     const [search_class_id, setSearchClass_id] = useState("");
     const [search_section_id, setSearchSection_id] = useState("");
     const [search_session_id, setSearchSession_id] = useState("");
@@ -12,7 +12,7 @@ const SMSsent = (props) => {
     const [checkedAll, setCheckedAll] = useState(false);
     const [checked, setChecked] = useState([]);
     const [smsText, setSmsText] = useState("");
-     
+
 
     const toggleCheck = (inputName) => {
         setChecked((prevState) => {
@@ -113,21 +113,39 @@ const SMSsent = (props) => {
         });
     };
     const handleSmsSend = () => {
-       
+
+        let items = [...absentList];
         absentList.forEach((res, index) => {
             if (checked[index] === true) {
-                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=0${res.mobile_no}&senderid=8809612441008&msg=${smsText}`)
+                fetch(`http://isms.zaman-it.com/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=88809612441008&msg=${smsText}`)
+
+                fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+                    body: JSON.stringify({
+                        smsText: smsText,
+                        user_id: localStorage.getItem('u_id'),
+                        purpose: 1,
+                        school_info_id: localStorage.getItem('school_info_id')
+                    }),
+                  })
+                    .then((res) => res.json())
+                let item = { ...items[index] };
+                item.status = 1
+                items[index] = item
             }
-            absentList[index].status = 1;
-            
+
         })
-        
+
+        setAbsentList(items);
+
         toast("SMS Sent successfully");
-        setAbsentList([]);
         setSmsText("")
         setChecked([])
         setCheckedAll(false)
-        setAbsentList(absentList);
     }
     return (
         <>
@@ -236,7 +254,7 @@ const SMSsent = (props) => {
                                 <th scope="col">Student ID</th>
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Student Mobile</th>
-                                {/* <th scope="col">Status</th> */}
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -259,7 +277,7 @@ const SMSsent = (props) => {
                                     <td>{res.student_code}</td>
                                     <td>{res.full_name}</td>
                                     <td>{res.mobile_no}</td>
-                                    {/* <td>{res.status === 0 ? 'pending' : 'sent'}</td> */}
+                                    <td>{res.status === 0 ? 'pending' : 'send'}</td>
                                 </tr>
                             })}
 

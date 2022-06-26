@@ -28,6 +28,18 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.delete("/api/routine/delete", authenticateToken, (req, res) => {
+    var id = req.query.id;
+    var sql = `delete from attendance where routine_id = "${id}"`
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      var sql2 = `delete from routine where id ="${id}"`
+      con.query(sql2, function (err, result, fields) {
+        if (err) throw err;
+        res.json({ status: "success" });
+      });
+    });
+  });
   app.get("/api/routine/admin-search", (req, res) => {
     var sql = `select routine.id, routine.section_id,section.section_default_name, routine.teacher_id,end_time,start_time, class.class_name,day.day, period.period_code, routine.start_time, routine.end_time, routine.subject_id, subject.subject_name, teacher.first_name, room, session.session_year, shift.shift_name,teacher.initial
     from routine
@@ -121,7 +133,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/routine/school/filter", authenticateToken, (req, res) => {
-    var sql = `select routine.id, routine.section_id,section.section_default_name, class.class_name,day.day, period.period_code, routine.start_time, routine.end_time, routine.subject_id, subject.subject_name, teacher.initial, room, session.session_year, shift.shift_name
+    var sql = `select routine.session_id, routine.class_id,routine.id, routine.section_id,section.section_default_name, class.class_name,day.day, period.period_code, routine.period_id, routine.start_time, routine.end_time, routine.subject_id, subject.subject_name, teacher.initial, room, session.session_year, shift.shift_name,routine.shift_id,routine.teacher_id,routine.day_id,start_time,end_time
     from routine
     join class on routine.class_id=class.id 
     join section on routine.section_id=section.id
@@ -175,8 +187,14 @@ module.exports = (app) => {
     var shift_id = req.body.shift_id;
     var start = req.body.start;
     var end = req.body.end;
+    var id = req.body.id;
 
-    var sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${class_id}", "${section_id}", "${day_id}", "${period_id}","${start}","${end}", "${subject_id}", "${teacher_id}", "${room}", "${school_info_id}", "${session_id}", "${shift_id}" )`;
+    var sql
+    if (id === '') {
+      sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${class_id}", "${section_id}", "${day_id}", "${period_id}","${start}","${end}", "${subject_id}", "${teacher_id}", "${room}", "${school_info_id}", "${session_id}", "${shift_id}" )`;
+    } else {
+      sql = `update routine set class_id="${class_id}",section_id="${section_id}",day_id="${day_id}",period_id="${period_id}",start_time="${start}",end_time="${end}",subject_id="${subject_id}",teacher_id="${teacher_id}",room="${room}",school_info_id="${school_info_id}",session_id="${session_id}",shift_id="${shift_id}" where id="${id}"`
+    }
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

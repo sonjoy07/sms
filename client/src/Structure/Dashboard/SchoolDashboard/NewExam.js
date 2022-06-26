@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 
 const CreateNewExam = () => {
     const [schools, setSchools] = useState([]);
@@ -18,6 +19,7 @@ const CreateNewExam = () => {
 
     const [sessions, setSessions] = useState([]);
     const [session, setSession] = useState("");
+    const [id, setId] = useState('')
 
     const [date, setDate] = useState('')
     const [class_id, setClass_id] = useState("");
@@ -29,6 +31,7 @@ const CreateNewExam = () => {
     const [converted, SetConverted] = useState('');
     const [exam_info, SetExam] = useState([])
     const [exam, setExam] = useState([])
+    const [reset, setReset] = useState(0)
     const [school_type, setSchool_type] = useState(localStorage.getItem("school_type"));
     const [school_id, setSchool_id] = useState(localStorage.getItem("school_id"));
 
@@ -102,7 +105,7 @@ const CreateNewExam = () => {
         }).then((response) => {
             SetExam(response.data);
         });
-    }, [class_id, teacher]);
+    }, [class_id, teacher,reset]);
 
     let handleTeacher = e => {
         setTeacher(e.target.value)
@@ -166,23 +169,55 @@ const CreateNewExam = () => {
                 converted_marks: converted,
                 exam_date: date,
                 teacher_id: teacher,
+                id:id
             }),
         })
             .then((res) => res.json())
             .then((json) => {
-                alert('New exam Created Successfully!!')
+                setReset(reset+1)
+                if (id === '') {
+                  toast('New exam saved successfully')
+                } else {
+                  toast('exam updated successfully')
+                }
             });
         setClass_id('')
         setTeacher('')
         setDate('')
         setExam_id('')
-        setSchool_id('')
+        // setSchool_id('')
         setSection_id('')
         setSession_id('')
         SetFullmark('')
         SetConverted('')
         setSubject_id('')
     };
+    const editRoutine = (info) => {
+        setClass_id(info.class_id)
+        setTeacher(info.teacher_id)
+        setDate(info.exam_date)
+        setExam_id(info.exam_name_id)
+        setSchool_id(info.school_id)
+        setSection_id(info.section_id)
+        setSession_id(info.session_id)
+        SetFullmark(info.full_marks)
+        SetConverted(info.converted_marks)
+        setSubject_id(info.subject_id)
+        setId(info.id)
+    }
+
+    const deleteRoutine = async (id) => {
+        const check = window.confirm('Are you sure to delete?');
+        if (check) {
+               axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+               const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/exam/delete?id=${id}`)
+               if (result) {
+                setReset(reset+1)
+                  toast("Exam deleted successfully");
+               }
+        }
+    }
+    console.log(class_id,teacher);
     return (
         <section className='container'>
             <div className='row mt-4'>
@@ -391,6 +426,13 @@ const CreateNewExam = () => {
                                         <td style={{ textAlign: 'center' }}>{student.full_marks}</td>
                                         <td style={{ textAlign: 'center' }}>{student.converted_marks}</td>
                                         <td style={{ textAlign: 'center' }}>{student.exam_date}</td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <button type='button' className="btn btn-success mr-3" onClick={() => editRoutine(student)}>
+                                                Edit
+                                            </button>
+                                            <button className="btn btn-danger" onClick={() => deleteRoutine(student.id)}>
+                                                Delete
+                                            </button></td>
 
 
 

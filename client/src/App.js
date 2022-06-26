@@ -93,6 +93,7 @@ import AdminNotice from "./Structure/Dashboard/SchoolDashboard/Notice/AdminNotic
 import Notices from "./Structure/Dashboard/SchoolDashboard/Notice/Notices";
 import SMSsent from "./Structure/Dashboard/SchoolDashboard/Notice/SMSsent";
 import SubjectRegistration from "./Structure/Dashboard/SchoolDashboard/StudentRegistration/SubjectRegistration";
+import SMSreport from "./Structure/Dashboard/SchoolDashboard/Notice/SMSreport";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -299,9 +300,15 @@ function App(props) {
             element={<SMSsent user={[user_code, user_type]} />}
           />          
           <Route
+            path="/sms-report"
+            element={<SMSreport user={[user_code, user_type]} />}
+          />   
+          <Route
             path="/subjectregistration"
             element={<SubjectRegistration user={[user_code, user_type]} />}
-          />     
+          />        
+              
+              
         </Routes>
 
       </BrowserRouter>

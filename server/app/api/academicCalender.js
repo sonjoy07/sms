@@ -35,7 +35,37 @@ module.exports = (app) => {
         var date = req.body.date;
         var topics = req.body.topics;
         var school_info_id = req.body.school_info_id;
-        var sql = `INSERT INTO academic_calendar (school_info_id,date,topics) VALUES ("${school_info_id}", "${date}", "${topics}")`;
+        var id = req.body.id;
+        var sql
+        if (id === '') {
+            sql = `INSERT INTO academic_calendar (school_info_id,date,topics) VALUES ("${school_info_id}", "${date}", "${topics}")`;
+        } else {
+            sql = `update academic_calendar set school_info_id = "${school_info_id}", date="${date}", topics = "${topics}" where id ="${id}"`
+        }
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+    app.delete("/api/calender/delete", authenticateToken, (req, res) => {
+        var id = req.query.id;
+        var sql = `delete from academic_calendar where id ="${id}"`
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+    app.post("/api/calender", authenticateToken, (req, res) => {
+        var date = req.body.date;
+        var topics = req.body.topics;
+        var school_info_id = req.body.school_info_id;
+        var id = req.body.id;
+        var sql
+        if (id === '') {
+            sql = `INSERT INTO academic_calendar (school_info_id,date,topics) VALUES ("${school_info_id}", "${date}", "${topics}")`;
+        } else {
+            sql = `update academic_calendar set school_info_id = "${school_info_id}", date="${date}", topics = "${topics}" where id ="${id}"`
+        }
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.json({ status: "success" });

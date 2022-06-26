@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import SchoolHeader from "./schoolHeader/SchoolHeader";
+import { toast } from "react-toastify";
 
 const SchoolAdminRoutine = () => {
   const [schools, setSchools] = useState([]);
   const [school, setSchool] = useState("");
+  const [id, setId] = useState("");
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
   const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
   const [school_id, setSchool_id] = useState(localStorage.getItem("school_id"));
@@ -59,6 +61,7 @@ const SchoolAdminRoutine = () => {
   const [searchShift, setSearchshift] = useState('')
   const [start_time, setStart] = useState('0:00:00')
   const [end_time, setend] = useState("0:00:00")
+  const [reset,setReset] = useState(0)
 
   const handleStart = (event) => {
     setStart(event.target.value)
@@ -153,7 +156,7 @@ const SchoolAdminRoutine = () => {
       .then((response) => {
         setTeachers(response.data);
       });
-  }, [school_id]);
+  }, [school_id,reset]);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/day`, {
@@ -201,10 +204,6 @@ const SchoolAdminRoutine = () => {
       });
   }, [school_id]);
 
-  let handleSchoolChange = (e) => {
-    setSchool(e.target.value);
-    setSchool_info_id(e.target.value);
-  };
   let handleClassChange = (e) => {
     setCls(e.target.value);
     setClass_id(e.target.value);
@@ -262,13 +261,63 @@ const SchoolAdminRoutine = () => {
         shift_id: shift_id,
         start: start_time,
         end: end_time,
+        id: id
       }),
     })
       .then((res) => res.json())
       .then((json) => {
-        alert('routine added successfully!!')
+        resetForm()
+        setReset(reset+1)
+        if (id === '') {
+          toast('Routine saved successfully')
+        } else {
+          toast('Routine updated successfully')
+        }
       });
   };
+
+  const editRoutine = (info) => {
+    setClass_id(info.class_id)
+    setSection_id(info.section_id)
+    setShift(info.shift_name)
+    setSession_id(info.session_id)
+    setDay_id(info.day_id)
+    setPeriod_id(info.period_id)
+    setSubject_id(info.subject_id)
+    setRoom(info.room)
+    setShift_id(info.shift_id)
+    setTeacher_id(info.teacher_id)
+    setStart(info.start_time)
+    setend(info.end_time)
+    setId(info.id)
+  }
+  
+  const resetForm = ()=>{
+    setClass_id("")
+    setSection_id("")
+    setShift("")
+    setSession_id("")
+    setDay_id("")
+    setPeriod_id("")
+    setSubject_id("")
+    setRoom("")
+    setShift_id("")
+    setTeacher_id("")
+    setStart("")
+    setend("")
+    setId("")
+  }
+  const deleteRoutine = async (id) => {
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/routine/delete?id=${id}`)
+       if (result) {
+        setReset(reset+1)
+          toast("Routine deleted successfully");
+       }
+    }
+  }
 
   return (
     <div>
@@ -289,6 +338,7 @@ const SchoolAdminRoutine = () => {
                 data-bs-target="#collapseExample"
                 aria-expanded="false"
                 aria-controls="collapseExample"
+                onClick={resetForm}
               >
                 <i className="fas fa-plus icons" />
               </button>
@@ -494,7 +544,7 @@ const SchoolAdminRoutine = () => {
 
               </div>
               <div className="row float-right">
-                <button onClick={handleSubmit} className="btn btn-primary">
+                <button type="button" onClick={handleSubmit} className="btn btn-primary">
                   Submit
                 </button>
 
@@ -547,10 +597,14 @@ const SchoolAdminRoutine = () => {
                         <td>{routineJSON.session_year}</td>
                         <td>{routineJSON.shift_name}</td>
                         <td>
-                          <a href="" className="btn btn-success mr-3">
+                          <a href="" className="btn btn-success mr-3"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseExample"
+                            aria-expanded="false"
+                            aria-controls="collapseExample" onClick={() => editRoutine(routineJSON)}>
                             Edit
                           </a>
-                          <a href="" className="btn btn-danger">
+                          <a href="" className="btn btn-danger" onClick={() => deleteRoutine(routineJSON.id)}>
                             Delete
                           </a>
                         </td>

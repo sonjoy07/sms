@@ -3,7 +3,7 @@ module.exports = (app) => {
     const con = require('../models/db')
     const authenticateToken = require("../middleware/middleware");
     app.get("/api/exam_info", (req, res) => {
-        var sql = `select exam_info.id, session.session_year,exam_name.exam_name, class.class_name,section.section_default_name,subject.subject_name, teacher.teacher_code,converted_marks,full_marks,exam_date
+        var sql = `select exam_info.id,exam_info.class_id,exam_info.school_info_id as school_id,exam_info.section_id,exam_info.session_id,exam_info.exam_name_id,exam_info.subject_id, session.session_year,exam_name.exam_name, class.class_name,section.section_default_name,subject.subject_name, teacher.teacher_code,converted_marks,full_marks,exam_date,exam_info.teacher_id
         from exam_info
         join class on exam_info.class_id=class.id 
         join section on exam_info.section_id=section.id
@@ -54,9 +54,23 @@ module.exports = (app) => {
         var teacher = req.body.teacher_id;
         var converted_marks = req.body.converted_marks;
         var school_info = req.body.school_info_id
+        var id = req.body.id
 
-        var sql = `INSERT INTO exam_info (class_id, section_id, subject_id, session_id,exam_name_id,converted_marks,school_info_id,full_marks,teacher_id,exam_date) VALUES ("${class_id}", "${section_id}", "${subject_id}", "${session_id}", "${exam_name_id}","${converted_marks}","${teacher}","${full_marks}","${school_info}","${exam_date}")`;
+        var sql
+        if (id === '') {
+            sql = `INSERT INTO exam_info (class_id, section_id, subject_id, session_id,exam_name_id,converted_marks,school_info_id,full_marks,teacher_id,exam_date) VALUES ("${class_id}", "${section_id}", "${subject_id}", "${session_id}", "${exam_name_id}","${converted_marks}","${teacher}","${full_marks}","${school_info}","${exam_date}")`;
+        } else {
+            sql=   `update exam_info set class_id = "${class_id}",section_id = "${section_id}",subject_id = "${subject_id}",session_id = "${session_id}",exam_name_id = "${exam_name_id}",converted_marks = "${converted_marks}",school_info_id = "${school_info}",full_marks = "${full_marks}",teacher_id = "${teacher}",exam_date = "${exam_date}" where id = "${id}"`
+        }
 
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+    app.delete("/api/exam/delete", authenticateToken, (req, res) => {
+        var id = req.query.id;
+        var sql = `delete from exam_info where id ="${id}"`
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.json({ status: "success" });

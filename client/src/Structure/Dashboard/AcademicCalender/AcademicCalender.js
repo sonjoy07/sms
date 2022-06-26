@@ -1,10 +1,12 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import profile from "../../images/profile/profile.png";
 const AcademicCalender = () => {
    const [inputDate, setInputDate] = useState('')
    const [topic, setTopic] = useState('')
+   const [id, setId] = useState('')
    const [calender, setcalender] = useState([])
    const [show, setShow] = useState(true)
    const [add, setAdd] = useState(false)
@@ -26,7 +28,6 @@ const AcademicCalender = () => {
 
    const handleDate = e => {
       setInputDate(e.target.value)
-      console.log(e.target.value)
       e.preventDefault()
    }
 
@@ -59,12 +60,17 @@ const AcademicCalender = () => {
             body: JSON.stringify({
                school_info_id: school_id,
                date: inputDate,
-               topics: topic
+               topics: topic,
+               id: id
             }),
          })
          .then((res) => res.json())
          .then((json) => {
-            alert('New Schedule Added')
+            if (id === '') {
+               toast('Academic Calendar saved successfully')
+            } else {
+               toast('Academic Calendar updated successfully')
+            }
             console.log("ok");
          });
 
@@ -72,6 +78,26 @@ const AcademicCalender = () => {
       setTopic('')
 
    };
+
+
+   const deleteCalender = async (id) => {
+      const check = window.confirm('Are you sure to delete?');
+      if (check) {
+         axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+         const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/calender/delete?id=${id}`)
+         if (result) {
+            toast("Academic Calendar deleted successfully");
+            setTopic(' ')
+         }
+      }
+   }
+   const editAcademic = (info) => {
+      setAdd(true);
+      setInputDate(info.date)
+      setTopic(info.topics)
+      setId(info.id)
+
+   }
    return (
       <>
          <div style={{ height: "80px" }} className="bg-primary">
@@ -179,6 +205,7 @@ const AcademicCalender = () => {
                            <tr>
                               <th scope="col">Schedule Type</th>
                               <th scope="col">Schedule Date</th>
+                              <th scope="col">Action</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -192,49 +219,32 @@ const AcademicCalender = () => {
                                     <tr key={info.id}>
                                        <td style={{ textAlign: 'center' }}>{info.topics}</td>
                                        <td style={{ textAlign: 'center' }}>{info.date}</td>
+                                       <td style={{ textAlign: 'center' }}>
+                                          <button
+                                             style={{ color: "white" }}
+                                             className="bg-success"
+                                             onClick={() => editAcademic(info)}
+                                          >
+                                             Edit
+                                          </button>
+
+
+                                          <button
+                                             style={{ color: "white" }}
+                                             className="bg-danger"
+                                             onClick={() => deleteCalender(info.id)}
+                                          >
+                                             Delete
+                                          </button>
+                                       </td>
 
                                     </tr>
 
-                              
+
                                  )
 
                               })
                            }
-
-                   <td>
-                      <div className=".d-flex">
-                        <div>
-                          <button
-                            style={{ color: "white" }}
-                            className="bg-success"
-                          >
-                            Edit
-                          </button> 
-                  
-
-                          <button
-                            style={{ color: "white" }}
-                            className="bg-danger"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                        
-                      </div>
-                    </td>
-                    
-                    <td>
-                    <div class="d-flex flex-row-reverse bd-highlight">
-                    <button
-                            style={{ color: "white" }}
-                            className="bg-success"
-                          >
-                            Save
-                          </button> 
-                     </div>
-
-
-                    </td>
                         </tbody>
                      </table>
                   </section>
