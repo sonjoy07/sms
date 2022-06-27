@@ -220,8 +220,8 @@ module.exports = (app) => {
         })
       }if(section_id === 0){
         
-        con.query('select * from class', function (err, result, fields) {
-          setClasses(result)
+        con.query('select * from section', function (err, result, fields) {
+          setSections(result)
         })
         
         sections.forEach(res => {
@@ -231,7 +231,40 @@ module.exports = (app) => {
         sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
       }
     } else {
+      if (class_id === 0 && section_id === 0) {
+        con.query(`delete from notice where notice_id = ${id}`)
+        con.query('select * from section', function (err, result, fields) {
+          setSections(result)
+        })
+        con.query('select * from class', function (err, result, fields) {
+          setClasses(result)
+        })
+        classes.forEach(res => {
+          sections.forEach(resSec => {
+            sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+          })
+        })
+      }if(class_id === 0){        
+        con.query(`delete from notice where notice_id = ${id}`)
+        con.query('select * from class', function (err, result, fields) {
+          setClasses(result)
+        })
+        
+        classes.forEach(res => {
+          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        })
+      }if(section_id === 0){        
+        con.query(`delete from notice where notice_id = ${id}`)
+        con.query('select * from section', function (err, result, fields) {
+          setSections(result)
+        })
+        
+        sections.forEach(res => {
+          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${res.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        })
+      } else {
       sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
+      }
     }
 
     con.query(sql, function (err, result, fields) {

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import profile from '../../../images/profile/profile.png';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
@@ -128,6 +128,7 @@ const AdminNotice = (props) => {
                 }
             )
             .then((response) => {
+                debugger;
                 setStudents(response.data);
                 let tempList = [];
 
@@ -142,7 +143,13 @@ const AdminNotice = (props) => {
                 setCheckedStudents(tempList);
                 let list = []
                 for (const inputName in response.data) {
-                    list[inputName] = false;
+                    const check = selectedStudents.find(res => res == response.data[inputName].student_id)
+                    if (check) {
+                        list[inputName] = true;
+                    } else {
+                        list[inputName] = false;
+
+                    }
                 }
                 setChecked(list)
             });
@@ -218,7 +225,7 @@ const AdminNotice = (props) => {
                 finalStudentsmobile.push(res.mobile_no);
             }
         })
-        
+
 
         fetch(`${process.env.REACT_APP_NODE_API}/api/notice`, {
             method: "POST",
@@ -309,6 +316,15 @@ const AdminNotice = (props) => {
         setId(result.data[0].id);
         setDate(moment(result.data[0].publishing_date).format("YYYY-MM-DD"));
         const users = result.data[0].notice_users.split(',')
+        // let list = []
+        // for (const inputName in response.data) {
+        //     console.log()
+        //     list[inputName] = false;
+        // }
+        // setChecked(list)
+        // users.map(res=>{
+
+        // })
         setSelectedStudents(users)
     }
     return (

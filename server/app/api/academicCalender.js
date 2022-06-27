@@ -22,8 +22,12 @@ module.exports = (app) => {
         );
     });
     app.get("/api/calender/teacher", authenticateToken, (req, res) => {
+        const start_date = req.query.start_date
+        const end_date = req.query.end_date
+        let condition = start_date !== "null"|"" ? ` and academic_calendar.date BETWEEN "${start_date}" AND "${end_date}"` : ``
+        console.log(`SELECT id,date,topics FROM academic_calendar where school_info_id="${req.query.school_info_id}"${condition}`);
         con.query(
-            `SELECT id,date,topics FROM academic_calendar where school_info_id="${req.query.school_info_id}"`,
+            `SELECT id,date,topics FROM academic_calendar where school_info_id="${req.query.school_info_id}"${condition}`,
             function (err, result, fields) {
                 if (err) throw err;
                 res.send(result);

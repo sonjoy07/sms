@@ -15,6 +15,9 @@ const AcademicCalender = () => {
    const [first_name, setFirst_code] = useState(localStorage.getItem("first_name"));
    const [school_id, setschool_code] = useState(localStorage.getItem("school_id"));
    const [last_name, setLast_code] = useState(localStorage.getItem("last_name"));
+   const [start_date, setStart_date] = useState(null);
+   const [end_date, setEnd_date] = useState(null);
+   const [reset,setReset] = useState(0)
    const [access_token, setAccess_token] = useState(
       localStorage.getItem("access_token"));
    const checkLoggedIn = () => {
@@ -33,11 +36,10 @@ const AcademicCalender = () => {
 
    const handleTopic = e => {
       setTopic(e.target.value)
-      console.log(e.target.value)
-   }
+   } 
 
    useEffect(() => {
-      axios.get(`${process.env.REACT_APP_NODE_API}/api/calender/teacher?school_info_id=${school_id}`,
+      axios.get(`${process.env.REACT_APP_NODE_API}/api/calender/teacher?school_info_id=${school_id}&&start_date=${start_date}&&end_date=${end_date}`,
          {
             headers: {
                authorization: "bearer " + localStorage.getItem("access_token"),
@@ -46,7 +48,7 @@ const AcademicCalender = () => {
       ).then((response) => {
          setcalender(response.data);
       });
-   }, [topic]);
+   }, [topic,reset]);
 
    const handleSubmit = () => {
       fetch(`${process.env.REACT_APP_NODE_API}/api/calender`,
@@ -66,6 +68,7 @@ const AcademicCalender = () => {
          })
          .then((res) => res.json())
          .then((json) => {
+            setReset(reset+1)
             if (id === '') {
                toast('Academic Calendar saved successfully')
             } else {
@@ -88,6 +91,7 @@ const AcademicCalender = () => {
          if (result) {
             toast("Academic Calendar deleted successfully");
             setTopic(' ')
+            setReset(reset+1)
          }
       }
    }
@@ -172,7 +176,7 @@ const AcademicCalender = () => {
                               <div class={"col-sm-4 p-2 mx-auto"}>
                                  <div class="form-group">
                                     <label className='pb-2' for="exampleInputEmail1">Schedule Date : </label>
-                                    <input onChange={handleDate} type="text" value={inputDate} class="form-control" />
+                                    <input onChange={handleDate} type="date" value={inputDate} class="form-control" />
                                  </div>
                               </div>
                               <div class={"col-sm-2 p-2 mx-auto"}>
@@ -182,12 +186,6 @@ const AcademicCalender = () => {
                               </div>
                            </div>) : null
                         }
-
-
-
-
-
-
                      </div>
 
                   </div>
@@ -200,6 +198,33 @@ const AcademicCalender = () => {
                   <section className='py-5'>
                      <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Academic Calender Information</h2>
 
+                     <div className='row'>
+                           <div class={"col-sm-4 p-2 mx-auto"}>
+                              <div class="form-group">
+                                 <input
+                                    placeholder='Start Date'
+                                    onChange={(e) => setStart_date(e.target.value)}
+                                    type="date"
+                                    value={start_date}
+                                    class="form-control" />
+                              </div>
+                           </div>
+                           <div class={"col-sm-4 p-2 mx-auto"}>
+                              <div class="form-group">
+                                 <input
+                                    placeholder='End Date'
+                                    onChange={(e) => setEnd_date(e.target.value)}
+                                    value={end_date}
+                                    type="date"
+                                    class="form-control" />
+                              </div>
+                           </div>
+                           <div class={"col-sm-4"}>
+                              <div class="form-group">
+                                 <button className='btn btn-success mt-2' onClick={()=>setReset(reset+1)}>Search</button>
+                              </div>
+                           </div>
+                        </div>
                      <table class="table table-striped">
                         <thead>
                            <tr>

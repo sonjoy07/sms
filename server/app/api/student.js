@@ -17,7 +17,7 @@ module.exports = (app) => {
   });
   app.get("/api/student/section", authenticateToken, (req, res) => {
     con.query(
-      `SELECT student_present_status.id,mobile_no, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code 
+      `SELECT student_present_status.id,mobile_no,student.id as student_id, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code 
       FROM student_present_status 
       join student on student_present_status.student_id=student.id 
       where student_present_status.section_id="${req.query.section_id}"and student_present_status.class_id="${req.query.class_id}" and student_present_status.school_info_id="${req.query.school_info_id}";`,

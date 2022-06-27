@@ -151,19 +151,25 @@ const TeacherNotice = (props) => {
         setStudents(response.data);
         let tempList = [];
 
-        response.data.map((stu) => {
-          const check = selectedStudents.find(res => res == stu.id)
-          if (check) {
-            tempList.push(1);
-          } else {
-            tempList.push(0);
-          }
-        });
+        // response.data.map((stu) => {
+        //   const check = selectedStudents.find(res => res == stu.id)
+        //   if (check) {
+        //     tempList.push(1);
+        //   } else {
+        //     tempList.push(0);
+        //   }
+        // });
         setCheckedStudents(tempList);
         let list = []
         for (const inputName in response.data) {
-          list[inputName] = false;
-        }
+          const check = selectedStudents.find(res => res == response.data[inputName].student_id)
+          if (check) {
+              list[inputName] = true;
+          } else {
+              list[inputName] = false;
+
+          }
+      }
         setChecked(list)
       });
   }, [section_id, class_id]);

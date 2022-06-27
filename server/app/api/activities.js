@@ -138,7 +138,6 @@ module.exports = (app) => {
     join teacher on activities.teacher_id=teacher.id
     join session on activities.session_id=session.id
     where activities.section_id="${req.query.section_id}"
-    and activities.school_info_id = "${req.query.school_info_id}"
     and activities.class_id = "${req.query.class_id}"
     and activities.session_id = "${req.query.session_id}"
     order by activities.due_date;`;
