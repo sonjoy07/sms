@@ -222,11 +222,16 @@ const TeacherNotice = (props) => {
   console.log(checkedStudents);
   const handleSubmit = () => {
     let finalStudents = [];
-    checked.map((stu, index) => {
-      if (stu === true) {
-        finalStudents.push(students[index].id);
+    // checked.map((stu, index) => {
+    //   if (stu === true) {
+    //     finalStudents.push(students[index].id);
+    //   }
+    // });
+    students.map((stu,index)=>{
+      if(checked[index] === true){
+        finalStudents.push(stu.id)
       }
-    });
+    })
 
     fetch(`${process.env.REACT_APP_NODE_API}/api/notice`, {
       method: "POST",
