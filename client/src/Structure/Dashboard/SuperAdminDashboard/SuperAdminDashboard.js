@@ -5,6 +5,7 @@ import class1 from '../../images/icons/class.png';
 import section from '../../images/icons/section.png';
 import period from '../../images/icons/clock.png';
 import subject from '../../images/icons/subject.png';
+import inventory from '../../images/icons/inventory.png';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -118,6 +119,22 @@ const SuperAdminDashboard = () => {
                                 </div>
                                 <div className='px-3'>
                                     <h4 class="card-title">Create New Subject</h4>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
+                <a style={{ textDecoration: 'none' }} href='/admin-activities' class="col-sm-12 col-md-6 my-4 col1">
+                    <div class="card bg-light shadow-sm">
+                        <div class="card-body py-4">
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                                <div className='px-3'>
+                                    <img style={{ width: '64px', height: '64px' }} src={inventory} alt="" />
+                                </div>
+                                <div className='px-3'>
+                                    <h4 class="card-title">Activities</h4>
 
                                 </div>
                             </div>

@@ -64,6 +64,14 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  var classes = [];
+  var sections = [];
+  function setClasses(value) {
+    classes = value;
+  }
+  function setSections(value) {
+    sections = value;
+  }
   app.get("/api/notice/creator", authenticateToken, (req, res) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,section_default_name as section_local_name,
     notice.session_id
@@ -74,9 +82,11 @@ module.exports = (app) => {
     where notice.user_code="${req.query.uid}"
     order by notice.id
     ;`;
+
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
+
     });
   });
   app.get("/api/notice/student", authenticateToken, (req, res) => {
@@ -187,7 +197,39 @@ module.exports = (app) => {
 
     var sql = ""
     if (id === '') {
-      sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+      if (class_id === 0 && section_id === 0) {
+        con.query('select * from section', function (err, result, fields) {
+          setSections(result)
+        })
+        con.query('select * from class', function (err, result, fields) {
+          setClasses(result)
+        })
+        classes.forEach(res => {
+          sections.forEach(resSec => {
+            sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+          })
+        })
+      }if(class_id === 0){
+        
+        con.query('select * from class', function (err, result, fields) {
+          setClasses(result)
+        })
+        
+        classes.forEach(res => {
+          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        })
+      }if(section_id === 0){
+        
+        con.query('select * from class', function (err, result, fields) {
+          setClasses(result)
+        })
+        
+        sections.forEach(res => {
+          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${res.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        })
+      } else {
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+      }
     } else {
       sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
     }
@@ -207,8 +249,8 @@ module.exports = (app) => {
           if (err) throw err;
           res.json({ status: "success" });
         });
-      }else{
-        res.status(400).json({msg: 'select users'})
+      } else {
+        res.status(400).json({ msg: 'select users' })
       }
     });
   });

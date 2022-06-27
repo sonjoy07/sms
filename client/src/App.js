@@ -94,6 +94,9 @@ import Notices from "./Structure/Dashboard/SchoolDashboard/Notice/Notices";
 import SMSsent from "./Structure/Dashboard/SchoolDashboard/Notice/SMSsent";
 import SubjectRegistration from "./Structure/Dashboard/SchoolDashboard/StudentRegistration/SubjectRegistration";
 import SMSreport from "./Structure/Dashboard/SchoolDashboard/Notice/SMSreport";
+import AdminActivites from "./Structure/Dashboard/SuperAdminDashboard/Activities/AdminActivities";
+import StudentActivities from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivities";
+import StudentActivitiesSubmit from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivitiesSubmit";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -139,7 +142,8 @@ function App(props) {
             path="/viewershowattendanceview"
             element={<ViewerShowAttendanceView />}
           />
-          <Route path="/student-activity" element={<ViewActivities />} />
+          <Route path="/student-activity" element={<StudentActivities />} />
+          <Route path="/studentActivitiesSubmit" element={<StudentActivitiesSubmit />} />
           <Route
             path="/classbasedstudentabsence"
             element={<ClassBasedStudentAbsence />}
@@ -306,6 +310,10 @@ function App(props) {
           <Route
             path="/subjectregistration"
             element={<SubjectRegistration user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/admin-activities"
+            element={<AdminActivites user={[user_code, user_type]} />}
           />        
               
               

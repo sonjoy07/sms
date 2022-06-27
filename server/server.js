@@ -38,6 +38,7 @@ require("./app/api/homework.js")(app);
 require("./app/api/users.js")(app);
 require("./app/api/student.js")(app);
 require("./app/api/notice.js")(app);
+require("./app/api/activities.js")(app);
 require("./app/api/student_present_status")(app);
 require("./app/api/exam_info")(app);
 require("./app/api/admin")(app);

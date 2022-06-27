@@ -298,7 +298,7 @@ module.exports = (app) => {
 
     app.get('/api/sms/count', async(req,res)=>{
         const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
-        var sql = `select * from smsReport where user_id = ${req.query.user_id}`
+        var sql = `select smsReport.*,CONCAT( teacher.first_name, ' ', teacher.middle_name, ' ', teacher.last_name ) AS teacher_full_name,CONCAT( school_admin.first_name, ' ', school_admin.middle_name, ' ', school_admin.last_name ) AS school_admin_full_name from smsReport left join teacher on teacher.teacher_code = smsReport.user_id left join school_admin on school_admin.admin_code = smsReport.user_id where smsReport.school_info_id = ${req.query.school_info_id}`
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.send({result:result,data:test.data} );

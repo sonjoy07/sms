@@ -7,7 +7,7 @@ const SMSreport = () => {
     const [totalUsed, setTotalUsed] = useState([])
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/sms/count?user_id=${localStorage.getItem('u_id')}`,
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/sms/count?school_info_id=${localStorage.getItem('school_info_id')}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
@@ -46,6 +46,7 @@ const SMSreport = () => {
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th scope="col">Sender Name</th>
                                 <th scope="col">Date Time</th>
                                 <th scope="col">Text</th>
                                 <th scope="col">Purpose</th>
@@ -55,6 +56,7 @@ const SMSreport = () => {
 
                             {totalUsed.map(res => {
                                 return <tr>
+                                    <td>{res.purpose === 1?res.school_admin_full_name:res.teacher_full_name}</td>
                                     <td>{moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a')}</td>
                                     <td>{res.text}</td>
                                     <td>{res.purpose === 1?'notice':'absent'}</td>

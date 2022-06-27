@@ -47,7 +47,7 @@ const CreateSms = (props) => {
                         smsText: smsText,
                         user_id: localStorage.getItem('u_id'),
                         purpose: 2,
-                        school_info_id: localStorage.getItem('school_info_id')
+                        school_info_id: localStorage.getItem('school_id')
                     }),
                   })
                     .then((res) => res.json())
