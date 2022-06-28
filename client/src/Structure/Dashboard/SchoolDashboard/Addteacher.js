@@ -25,6 +25,17 @@ const Addteacher = () => {
     const [mobile_no, setMobile] = useState('')
     const [reset, setReset] = useState(0)
     const [id, setId] = useState('')
+    const [filter, setFilter] = useState('')
+
+    const searchTeacher =()=>{
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}&&teacher_id=${filter}`, {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }).then((response) => {
+            setTeachers(response.data);
+        });
+    }
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}`, {
@@ -87,6 +98,7 @@ const Addteacher = () => {
         settitle(e.target.value)
     }
     const handleSubmit = () => {
+        if(teacher_id !== '' && subject_code !== ''&& mpo !== "" && index !== "" && mobile_no !== "") {
         fetch(`${process.env.REACT_APP_NODE_API}/api/add_teacher`, {
             method: "POST",
             headers: { "Content-Type": "application/json", authorization: "bearer " + localStorage.getItem("access_token"), },
@@ -132,6 +144,9 @@ const Addteacher = () => {
         setMpo('')
         setIndex('')
         settitle('')
+        }else{
+            toast("Please fill up the required field!!")
+        }
     }
     const editRoutine = (info) => {
         setteacher_id(info.teacher_code)
@@ -305,7 +320,24 @@ const Addteacher = () => {
 
             <section className='py-5'>
                 <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Teacher List</h2>
-
+<div className='row'>
+            <div class={"col-sm-4 p-2 mx-auto"}>
+              <div class="form-group">
+                <input
+                  placeholder='Teacher ID'
+                  onChange={(e) => setFilter(e.target.value)}
+                  type="text"
+                  value={filter}
+                  class="form-control" />
+              </div>
+            </div>
+           
+            <div class={"col-sm-4"}>
+              <div class="form-group">
+                <button className='btn btn-success mt-2' onClick={searchTeacher}>Search</button>
+              </div>
+            </div>
+          </div>
                 <table class="table table-striped">
                     <thead>
                         <tr style={{ textAlign: 'center' }}>

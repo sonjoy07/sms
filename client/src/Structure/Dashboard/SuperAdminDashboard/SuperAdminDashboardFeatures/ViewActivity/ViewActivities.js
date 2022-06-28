@@ -1,39 +1,25 @@
 import axios from 'axios';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const ViewActivities = () => {
-    const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
-    const [student, setStudent] = useState([]);
-    const [teachers, setTeachers] = useState([]);
     const [homework, setHomework] = useState([]);
-    const [class_id, setClass_id] = useState("");
-    const [section_id, setSection_id] = useState("");
     useEffect(() => {
-        axios
-            .get(
-                `${process.env.REACT_APP_NODE_API}/api/student/profile?student_id=${user_code}`,
-                {
-                    headers: {
-                        authorization: "bearer " + localStorage.getItem("access_token"),
-                    },
-                }
-            )
-            .then((response) => {
-                setClass_id(response.data[0].class_id)
-                setSection_id(response.data[0].section_id)
-                axios
-                    .get(
-                        `${process.env.REACT_APP_NODE_API}/api/activities/student?section_id=${response.data[0].section_id}&&school_info_id=${response.data[0].school_info_id}&&session_id=${response.data[0].session_id}&&class_id=${response.data[0].class_id}`,
-                        {
-                            headers: {
-                                authorization: "bearer " + localStorage.getItem("access_token"),
-                            },
-                        }
-                    )
-                    .then((response) => {
-                        setHomework(response.data);
-                    });
-            });
+      const home_work_id = localStorage.getItem("homeworkid")
+      axios
+        .get(
+          `${process.env.REACT_APP_NODE_API}/api/activities/teacher/submitlist?home_work_id=${home_work_id}`,
+          {
+            headers: {
+              authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .then((response) => {
+            debugger;
+          setHomework(response.data);
+        });
     }, []);
     return (
         <section className='py-3 container'>
@@ -42,11 +28,11 @@ const ViewActivities = () => {
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">School Code</th>
+                        {/* <th scope="col">School Code</th> */}
                         <th scope="col">Student ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Class</th>
-                        <th scope="col">Section</th>
+                        {/* <th scope="col">Class</th> */}
+                        {/* <th scope="col">Section</th> */}
                         <th scope="col">Status</th>
                         <th scope="col">Submission Date</th>
                         <th scope="col">Activities File</th>
@@ -55,14 +41,14 @@ const ViewActivities = () => {
                 <tbody>
                     {homework.map(res => {
                         return <tr>
-                            <td>{res.school_code}</td>
-                            <td>{'0132874777'}</td>
-                            <td>Tasmi Jahan</td>
-                            <td>{res.class_name}</td>
-                            <td>{res.section_default_name}</td>
+                            {/* <td>{res.school_code}</td> */}
+                            <td>{res.student_code}</td>
+                            <td>{res.full_name}</td>
+                            {/* <td>{res.class_name}</td>
+                            <td>{res.section_default_name}</td> */}
                             <td>Submit</td>
-                            <td>10 Feb 2022 </td>
-                            <td style={{ color: 'blue' }}>Open File</td>
+                            <td> {moment(res.submission_time).format("Do MMM  YYYY")}</td>
+                            <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
                         </tr>
                     })}
 

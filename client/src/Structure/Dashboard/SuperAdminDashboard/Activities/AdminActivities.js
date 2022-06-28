@@ -811,26 +811,26 @@ const AdminActivities = (props) => {
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
-                    <td style={{ color: "blue" }}>{homeworkJSON.topic}</td>
-                    <td style={{ color: "blue" }}>{homeworkJSON.details}</td>
-                    <td style={{ color: "blue" }}>{homeworkJSON.class_name}</td>
-                    <td style={{ color: "blue" }}>
+                    <td>{homeworkJSON.topic}</td>
+                    <td>{homeworkJSON.details}</td>
+                    <td>{homeworkJSON.class_name}</td>
+                    <td>
                       {homeworkJSON.section_default_name}
                     </td>
-                    <td style={{ color: "blue" }}>{homeworkJSON.session_year}</td>
-                    <td style={{ color: "blue" }}>{homeworkJSON.subject_name}</td>
-                    <td style={{ color: "blue" }}>
+                    <td>{homeworkJSON.session_year}</td>
+                    <td>{homeworkJSON.subject_name}</td>
+                    <td>
                       {moment(homeworkJSON.issue_date).format("YYYY-MM-DD")}
                     </td>
-                    <td style={{ color: "blue" }}>
+                    <td>
                       {moment(homeworkJSON.due_date).format("YYYY-MM-DD")}
                     </td>
                     <td>
                       {" "}
                       <a
                         onClick={() => {
-                          localStorage.setItem("homeworkid", homeworkJSON.id);
-                          navigate("/homeworkshow");
+                          localStorage.setItem("activityid", homeworkJSON.id);
+                          navigate("/activityshow");
                         }}
                         style={{ textDecoration: "none", color: "blue" }}
                       >

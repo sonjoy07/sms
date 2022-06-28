@@ -215,8 +215,8 @@ const TeacherNotice = (props) => {
     setCheckedStudents(tempList);
   }
   const resetForm = () => {
-    setClass_id("");
-    setSection_id("");
+    setClass_id(0);
+    setSection_id(0);
     setStudent_id("");
     setSession_id("");
     setHeadline("");
@@ -268,8 +268,8 @@ const TeacherNotice = (props) => {
           toast("Notice saved successfully");
         }
         console.log("ok");
-        setClass_id("");
-        setSection_id("");
+        setClass_id(0);
+        setSection_id(0);
         setStudent_id("");
         setSession_id("");
         setHeadline("");

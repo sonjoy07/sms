@@ -23,9 +23,9 @@ const SchoolDashboard = () => {
     localStorage.getItem("access_token")
   );
   const checkLoggedIn = () => {
-    if (localStorage.getItem("user_type") != 4) {
-      navigate("/login");
-    }
+    // if (localStorage.getItem("user_type") != 4) {
+    //   navigate("/login");
+    // }
   };
   useEffect(() => {
     checkLoggedIn();
@@ -235,7 +235,7 @@ const SchoolDashboard = () => {
             </div>
           </div>
           <div onClick={() => {
-            navigate("/teacher-feature")
+            navigate("/add-teacher")
           }} class="col-sm-6 my-4 col1">
             <div class="card bg-light shadow-sm">
               <div class="card-body py-4">

@@ -176,7 +176,7 @@ const AcademicCalender = () => {
                               <div class={"col-sm-4 p-2 mx-auto"}>
                                  <div class="form-group">
                                     <label className='pb-2' for="exampleInputEmail1">Schedule Date : </label>
-                                    <input onChange={handleDate} type="date" value={inputDate} class="form-control" />
+                                    <input onChange={handleDate} type="text" value={inputDate} class="form-control" />
                                  </div>
                               </div>
                               <div class={"col-sm-2 p-2 mx-auto"}>
@@ -198,33 +198,6 @@ const AcademicCalender = () => {
                   <section className='py-5'>
                      <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Academic Calender Information</h2>
 
-                     <div className='row'>
-                           <div class={"col-sm-4 p-2 mx-auto"}>
-                              <div class="form-group">
-                                 <input
-                                    placeholder='Start Date'
-                                    onChange={(e) => setStart_date(e.target.value)}
-                                    type="date"
-                                    value={start_date}
-                                    class="form-control" />
-                              </div>
-                           </div>
-                           <div class={"col-sm-4 p-2 mx-auto"}>
-                              <div class="form-group">
-                                 <input
-                                    placeholder='End Date'
-                                    onChange={(e) => setEnd_date(e.target.value)}
-                                    value={end_date}
-                                    type="date"
-                                    class="form-control" />
-                              </div>
-                           </div>
-                           <div class={"col-sm-4"}>
-                              <div class="form-group">
-                                 <button className='btn btn-success mt-2' onClick={()=>setReset(reset+1)}>Search</button>
-                              </div>
-                           </div>
-                        </div>
                      <table class="table table-striped">
                         <thead>
                            <tr>

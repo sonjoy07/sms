@@ -1,7 +1,10 @@
 const moment = require('moment')
+const util = require('util');
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
+
+  const query = util.promisify(con.query).bind(con);
   // app.get("/api/routine", (req, res) => {
   //   con.query(
   //     "SELECT id, routine_default_name FROM routine",
@@ -64,14 +67,14 @@ module.exports = (app) => {
       res.send(result);
     });
   });
-  var classes = [];
-  var sections = [];
-  function setClasses(value) {
-    classes = value;
-  }
-  function setSections(value) {
-    sections = value;
-  }
+  // var classes = [];
+  // var sections = [];
+  // function setClasses(value) {
+  //   classes = value;
+  // }
+  // function setSections(value) {
+  //   sections = value;
+  // }
   app.get("/api/notice/creator", authenticateToken, (req, res) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,section_default_name as section_local_name,
     notice.session_id
@@ -182,7 +185,7 @@ module.exports = (app) => {
       res.json({ status: "success" });
     });
   });
-  app.post("/api/notice", authenticateToken, (req, res) => {
+  app.post("/api/notice", authenticateToken, async (req, res) => {
     var school_info_id = req.body.school_info_id;
     var class_id = req.body.class_id;
     var section_id = req.body.section_id;
@@ -195,39 +198,47 @@ module.exports = (app) => {
     var type = req.body.type;
     var id = req.body.id;
 
-    var sql = ""
+    var sql = "Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values "
     if (id === '') {
       if (class_id === 0 && section_id === 0) {
-        con.query('select * from section', function (err, result, fields) {
-          setSections(result)
-        })
-        con.query('select * from class', function (err, result, fields) {
-          setClasses(result)
-        })
+        const sections = await query('select * from section');
+        const classes = await query('select * from class');
+        // console.log('async',sect);
+        // setSections()
+        // con.query('select * from section', function (err, result, fields) {
+        //   setSections(result)
+        // })
+        // con.query('select * from class', function (err, result, fields) {
+        //   setClasses(result)
+        //   console.log(result);
+        // })
         classes.forEach(res => {
           sections.forEach(resSec => {
-            sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+            sql += ` ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}"),`
           })
+
         })
-      }if(class_id === 0){
-        
+        sql = sql.slice(0, -1);
+      } else if (class_id === 0 && section_id !== 0) {
+
         con.query('select * from class', function (err, result, fields) {
           setClasses(result)
         })
-        
+
         classes.forEach(res => {
           sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
         })
-      }if(section_id === 0){
-        
+      } else if (section_id === 0 && class_id !== 0) {
+
         con.query('select * from section', function (err, result, fields) {
           setSections(result)
         })
-        
+
         sections.forEach(res => {
           sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${res.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
         })
       } else {
+        console.log('sonjoy');
         sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
       }
     } else {
@@ -244,33 +255,44 @@ module.exports = (app) => {
             sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
           })
         })
-      }if(class_id === 0){        
+      } if (class_id === 0) {
         con.query(`delete from notice where notice_id = ${id}`)
         con.query('select * from class', function (err, result, fields) {
           setClasses(result)
         })
-        
+
         classes.forEach(res => {
           sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
         })
-      }if(section_id === 0){        
+      } if (section_id === 0) {
         con.query(`delete from notice where notice_id = ${id}`)
         con.query('select * from section', function (err, result, fields) {
           setSections(result)
         })
-        
+
         sections.forEach(res => {
           sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${res.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
         })
       } else {
-      sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
+        sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
       }
     }
 
-    con.query(sql, function (err, result, fields) {
+    // console.log(sql)
+    con.query(sql, async function (err, result, fields) {
       if (err) throw err;
       if (id) {
         con.query(`delete from notice_user where notice_id = ${id}`)
+      }
+      if (class_id === 0 && section_id === 0 ) {
+        let stu = await query(`select student.* from student join student_present_status sps on sps.student_id = student.id where session_id = ${session_id}`)
+        students = stu.map(res=> {return res.id})
+      }else if (class_id !== 0 && section_id === 0){
+        let stu = await query(`select student.* from student join student_present_status sps on sps.student_id = student.id where session_id = ${session_id} and class_id = ${class_id}`)
+        students = stu.map(res=> {return res.id})
+      }else if (class_id === 0 && section_id !== 0){
+        let stu = await query(`select student.* from student join student_present_status sps on sps.student_id = student.id where session_id = ${session_id} and section_id = ${section_id}`)
+        students = stu.map(res=> {return res.id})
       }
       var sql2 = "insert into notice_user (notice_id,student_id) values "
       if (students.length > 0) {

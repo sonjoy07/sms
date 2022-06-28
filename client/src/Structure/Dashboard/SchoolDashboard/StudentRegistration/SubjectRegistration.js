@@ -27,8 +27,8 @@ const SubjectRegistration = () => {
   const [end_date, setEnd_date] = useState(null);
   const [reset, setReset] = useState(0)
   const [id, setId] = useState(0)
-  const [start_forth_date, setStart_forth_date] = useState(null);
-  const [end_forth_date, setEnd_forth_date] = useState(null);
+  const [start_forth_date, setStart_forth_date] = useState("");
+  // const [end_forth_date, setEnd_forth_date] = useState(null);
 
   const toggleCheckStudent = (inputName) => {
     setCheckedStudent((prevState) => {
@@ -255,7 +255,7 @@ const SubjectRegistration = () => {
   };
   const searchSubject = () => {
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/subjectList?start_date=${start_date}&&end_date=${end_date}`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/subjectList?student_id=${start_date}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
@@ -266,7 +266,7 @@ const SubjectRegistration = () => {
   }
   const searchForthSubject = () => {
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/forthSubjectList?start_date=${start_date}&&end_date=${end_date}`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/forthSubjectList?student_id=${start_forth_date}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
@@ -615,23 +615,14 @@ const SubjectRegistration = () => {
             <div class={"col-sm-4 p-2 mx-auto"}>
               <div class="form-group">
                 <input
-                  placeholder='Start Date'
+                  placeholder='Student ID'
                   onChange={(e) => setStart_date(e.target.value)}
-                  type="date"
+                  type="text"
                   value={start_date}
                   class="form-control" />
               </div>
             </div>
-            <div class={"col-sm-4 p-2 mx-auto"}>
-              <div class="form-group">
-                <input
-                  placeholder='End Date'
-                  onChange={(e) => setEnd_date(e.target.value)}
-                  value={end_date}
-                  type="date"
-                  class="form-control" />
-              </div>
-            </div>
+            
             <div class={"col-sm-4"}>
               <div class="form-group">
                 <button className='btn btn-success mt-2' onClick={searchSubject}>Search</button>
@@ -675,14 +666,14 @@ const SubjectRegistration = () => {
             <div class={"col-sm-4 p-2 mx-auto"}>
               <div class="form-group">
                 <input
-                  placeholder='Start Date'
+                  placeholder='Student ID'
                   onChange={(e) => setStart_forth_date(e.target.value)}
-                  type="date"
+                  type="text"
                   value={start_forth_date}
                   class="form-control" />
               </div>
             </div>
-            <div class={"col-sm-4 p-2 mx-auto"}>
+            {/* <div class={"col-sm-4 p-2 mx-auto"}>
               <div class="form-group">
                 <input
                   placeholder='End Date'
@@ -691,7 +682,7 @@ const SubjectRegistration = () => {
                   type="date"
                   class="form-control" />
               </div>
-            </div>
+            </div> */}
             <div class={"col-sm-4"}>
               <div class="form-group">
                 <button className='btn btn-success mt-2' onClick={searchForthSubject}>Search</button>

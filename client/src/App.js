@@ -210,11 +210,20 @@ function App(props) {
           <Route path="/add-student" element={<AddStudent />} />
           <Route path="/add-teacher" element={<Addteacher />} />
           <Route path="/payment" element={<Payment />} />
-          <Route path="/teacher-feature" element={<TeacherFeatures />} />
+          <Route path="/add-teacher" element={<TeacherFeatures />} />
           <Route
             path="/teacherhomework"
             element={
               <TeacherHomework
+                user={[user_code, user_type]}
+                selecthw={setHomeworkid}
+              />
+            }
+          />
+          <Route
+            path="/activityshow"
+            element={
+              <ViewActivities
                 user={[user_code, user_type]}
                 selecthw={setHomeworkid}
               />
