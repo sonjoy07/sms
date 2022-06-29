@@ -97,6 +97,7 @@ import SMSreport from "./Structure/Dashboard/SchoolDashboard/Notice/SMSreport";
 import AdminActivites from "./Structure/Dashboard/SuperAdminDashboard/Activities/AdminActivities";
 import StudentActivities from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivities";
 import StudentActivitiesSubmit from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivitiesSubmit";
+import ListNotice from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Viewer Notice/ListNotice";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -130,7 +131,8 @@ function App(props) {
           <Route path="/viewer-school" element={<ViewerSchoolViewList />} />
           <Route path="/viewer-admin" element={<ViewerDashboard />} />
           <Route path="/viewer-calender" element={<ViewerCalender />} />
-          <Route path="/viewer-notice" element={<VierNotice />} />
+          <Route path="/viewer-notice" element={<ListNotice />} />
+          <Route path="/show-notice" element={<VierNotice />} />
           <Route path="/viewerRoutine" element={<RoutineOption
           />} />
           <Route

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import moment from "moment";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ViewerHeader from '../../ViewerHeader';
 const VierNotice = () => {
 
     let navigate = useNavigate();
+    let [searchParams, setSearchParams] = useSearchParams();
     const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
     const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
     const [student, setStudent] = useState([]);
     const [notice, setNotice] = useState([]);
     const [newNotice, setNew] = useState([])
+    const type = searchParams.get('type')
 
     console.log(user_code);
     const checkLoggedIn = () => {
@@ -25,7 +27,7 @@ const VierNotice = () => {
     useEffect(() => {
         axios
             .get(
-                `${process.env.REACT_APP_NODE_API}/api/notice/school?school_info_id=${localStorage.getItem("school_id")}`,
+                `${process.env.REACT_APP_NODE_API}/api/notice/school?school_info_id=${localStorage.getItem("school_id")}&&type=${type}`,
                 {
                     headers: {
                         authorization: "bearer " + localStorage.getItem("access_token"),
@@ -60,7 +62,7 @@ const VierNotice = () => {
         <div>
             <ViewerHeader />
             <div className="container">
-                <h3 className='text-center py-2 '>School Notice List</h3>
+                <h3 className='text-center py-2 '>Notice List</h3>
                 {notice.map((noticeJSON) => {
 
                     return (

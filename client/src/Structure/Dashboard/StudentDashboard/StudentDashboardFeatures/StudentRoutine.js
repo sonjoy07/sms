@@ -9,10 +9,13 @@ const StudentRoutine = (props) => {
   const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
   const [school_id, setSchoolName] = useState(localStorage.getItem("school_id"));
+  const [searchDay, setSearchDay] = useState('')
 
   const [input, setInput] = useState(localStorage.getItem("class"));
+  const [section, setSection] = useState("");
   const [routine, setRoutine] = useState([]);
   const [student, setStudent] = useState([]);
+  const [days, setDays] = useState([]);
 
   //Get Routine Data
   const checkLoggedIn = () => {
@@ -22,6 +25,16 @@ const StudentRoutine = (props) => {
   };
   useEffect(() => {
     checkLoggedIn();
+    
+    axios
+      .get(`${process.env.REACT_APP_NODE_API}/api/day`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setDays(response.data);
+      });
   }, []);
   useEffect(() => {
     axios
@@ -35,7 +48,7 @@ const StudentRoutine = (props) => {
       )
       .then((response) => {
         setStudent(response.data);
-        console.log(response);
+        setSection(response.data[0].section_id)
         axios
           .get(
             `${process.env.REACT_APP_NODE_API}/api/routine/student?section_id=${response.data[0].section_id}&class_id=${input}&school_info_id=${school_id}`,
@@ -46,12 +59,26 @@ const StudentRoutine = (props) => {
             }
           )
           .then((response) => {
-            console.log(response.data)
             setRoutine(response.data);
           });
       })
       .catch((e) => console.log(e));
   }, [user_code]);
+  
+  const handleSearch = () => {
+    axios
+    .get(
+      `${process.env.REACT_APP_NODE_API}/api/routine/student?section_id=${section}&class_id=${input}&school_info_id=${school_id}&&day=${searchDay}`,
+      {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((response) => {
+      setRoutine(response.data);
+    });
+  }
 
   return (
     <div>
@@ -111,7 +138,20 @@ const StudentRoutine = (props) => {
               className="card-body"
               style={{ background: "#EFEFEF", height: "", padding: "0" }}
             >
-              <div className="row">
+            <div className="row mt-2">
+              <div className="col-sm-4">
+                <select onChange={(e) => setSearchDay(e.target.value)} className="form-control">
+                  <option value={""}>Select Days</option>
+                  {days.map(res => {
+                    return <option value={res.id}>{res.day}</option>
+                  })}
+                </select>
+              </div>
+              <div className="col-sm-4">
+                <button type="button" onClick={handleSearch} className="btn btn-primary mt-1">Search</button>
+              </div>
+            </div>
+              <div className="row mt-3">
                 <div className="col-12 text-center">
                   {routine.map((routineJSON) => {
                     return (

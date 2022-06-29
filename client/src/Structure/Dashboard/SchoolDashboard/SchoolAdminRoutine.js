@@ -61,7 +61,7 @@ const SchoolAdminRoutine = () => {
   const [searchShift, setSearchshift] = useState('')
   const [start_time, setStart] = useState('0:00:00')
   const [end_time, setend] = useState("0:00:00")
-  const [reset,setReset] = useState(0)
+  const [reset, setReset] = useState(0)
 
   const handleStart = (event) => {
     setStart(event.target.value)
@@ -81,7 +81,15 @@ const SchoolAdminRoutine = () => {
   }
   useEffect(() => {
     checkLoggedIn()
-
+    axios
+      .get(`${process.env.REACT_APP_NODE_API}/api/day/all`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setSchools(response.data);
+      });
   }, [])
   useEffect(() => {
     axios
@@ -156,7 +164,7 @@ const SchoolAdminRoutine = () => {
       .then((response) => {
         setTeachers(response.data);
       });
-  }, [school_id,reset]);
+  }, [school_id, reset]);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/day`, {
@@ -203,6 +211,18 @@ const SchoolAdminRoutine = () => {
         setRoutine(response.data);
       });
   }, [school_id]);
+
+  const handleSearch =()=>{
+    axios
+    .get(`${process.env.REACT_APP_NODE_API}/api/routine/school/filter?school_info_id=${school_id}&&day=${searchDay}`, {
+      headers: {
+        authorization: "bearer " + localStorage.getItem("access_token"),
+      },
+    })
+    .then((response) => {
+      setRoutine(response.data);
+    });
+  }
 
   let handleClassChange = (e) => {
     setCls(e.target.value);
@@ -267,7 +287,7 @@ const SchoolAdminRoutine = () => {
       .then((res) => res.json())
       .then((json) => {
         resetForm()
-        setReset(reset+1)
+        setReset(reset + 1)
         if (id === '') {
           toast('Routine saved successfully')
         } else {
@@ -291,8 +311,8 @@ const SchoolAdminRoutine = () => {
     setend(info.end_time)
     setId(info.id)
   }
-  
-  const resetForm = ()=>{
+
+  const resetForm = () => {
     setClass_id("")
     setSection_id("")
     setShift("")
@@ -310,12 +330,12 @@ const SchoolAdminRoutine = () => {
   const deleteRoutine = async (id) => {
     const check = window.confirm('Are you sure to delete?');
     if (check) {
-       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
-       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/routine/delete?id=${id}`)
-       if (result) {
-        setReset(reset+1)
-          toast("Routine deleted successfully");
-       }
+      axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/routine/delete?id=${id}`)
+      if (result) {
+        setReset(reset + 1)
+        toast("Routine deleted successfully");
+      }
     }
   }
 
@@ -561,6 +581,20 @@ const SchoolAdminRoutine = () => {
           <div className="card card-primary">
             <div className="card-header">
               <h3 className="card-title">All Class Routines</h3>
+              <div className="row mt-2">
+                <div className="col-sm-4">
+                  <select onChange={(e)=>setSearchDay(e.target.value)} className="form-control">
+                    <option value={""}>Select Days</option>
+                    {days.map(res => {
+                      return <option value={res.id}>{res.day}</option>
+                    })}
+                  </select>
+                </div>
+                <div className="col-sm-4">
+                  <button type="button" onClick={handleSearch} className="btn btn-primary mt-1">Search</button>
+                </div>
+              </div>
+
             </div>
             {/* /.card-header */}
             <div className="card-body table-responsive p-0">

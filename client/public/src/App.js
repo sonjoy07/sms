@@ -68,6 +68,7 @@ import ChangePassword from "./Structure/Dashboard/StudentDashboard/StudentProfil
 import ViewerCalender from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/AcademicCalender/ViewerCalender";
 import VierNotice from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Viewer Notice/VierNotice";
 import Teacherpassword from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/Teacherpassword";
+import TeacherHeader from "./Structure/Dashboard/TeacherDashboard/TeacherHeader/TeacherHeader";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -76,6 +77,7 @@ function App(props) {
 
   return (
     <div className="App">
+      <TeacherHeader/>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />} />

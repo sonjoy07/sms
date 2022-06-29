@@ -62,6 +62,7 @@ module.exports = (app) => {
 
 
   app.get("/api/routine/teacher", authenticateToken, (req, res) => {
+    let condition = req.query.day !== undefined && req.query.day !== ""?` and day_id= ${req.query.day}`:``
     var sql = `select routine.id,section.section_default_name, routine.section_id, class.class_name,day.day, period.period_code, routine.start_time as start_time,routine.end_time as end_time, routine.subject_id, subject.subject_name, teacher.first_name, room, session.session_year, shift.shift_name
     from routine
     join class on routine.class_id=class.id 
@@ -72,7 +73,7 @@ module.exports = (app) => {
     join teacher on routine.teacher_id=teacher.id
     join session on routine.session_id=session.id
     join shift on routine.shift_id=shift.id
-    where routine.teacher_id="${req.query.teacher_id}"
+    where routine.teacher_id="${req.query.teacher_id}"${condition}
     order by routine.day_id
     ;`;
     con.query(sql, function (err, result, fields) {
@@ -133,6 +134,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/routine/school/filter", authenticateToken, (req, res) => {
+    let condition = req.query.day !== undefined && req.query.day !== ""?` and day_id= ${req.query.day}`:``
     var sql = `select routine.session_id, routine.class_id,routine.id, routine.section_id,section.section_default_name, class.class_name,day.day, period.period_code, routine.period_id, routine.start_time, routine.end_time, routine.subject_id, subject.subject_name, teacher.initial, room, session.session_year, shift.shift_name,routine.shift_id,routine.teacher_id,routine.day_id,start_time,end_time
     from routine
     join class on routine.class_id=class.id 
@@ -143,9 +145,10 @@ module.exports = (app) => {
     join teacher on routine.teacher_id=teacher.id
     join session on routine.session_id=session.id
     join shift on routine.shift_id=shift.id
-    where routine.school_info_id="${req.query.school_info_id}"
+    where routine.school_info_id="${req.query.school_info_id}"${condition}
    
     ;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
@@ -153,6 +156,7 @@ module.exports = (app) => {
   });
 
   app.get("/api/routine/student", authenticateToken, (req, res) => {
+    let condition = req.query.day !== undefined && req.query.day !== ""?` and day_id= ${req.query.day}`:``
     var sql = `select routine.id, routine.section_id,section.section_default_name,teacher.initial, class.class_name, day.day, period.period_code,routine.start_time,routine.end_time,  routine.subject_id, subject.subject_name, teacher.first_name, room, session.session_year, shift.shift_name
     from routine
     join class on routine.class_id=class.id
@@ -164,7 +168,7 @@ module.exports = (app) => {
     join teacher on routine.teacher_id=teacher.id
     join session on routine.session_id=session.id
     join shift on routine.shift_id=shift.id
-    where routine.section_id="${req.query.section_id}" and class.id="${req.query.class_id}" and school_info.id="${req.query.school_info_id}"
+    where routine.section_id="${req.query.section_id}" and class.id="${req.query.class_id}" and school_info.id="${req.query.school_info_id}"${condition}
     order by routine.day_id
     ;`;
 

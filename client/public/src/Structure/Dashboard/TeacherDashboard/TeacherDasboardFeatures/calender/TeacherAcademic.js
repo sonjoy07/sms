@@ -100,23 +100,47 @@ const TeacherAcademic = () => {
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Schedule Type</th>
-                                <th scope="col">Schedule Date</th>
+                                <th style={{ textAlign: 'center' }} scope="col">Schedule Type</th>
+                                <th style={{ textAlign: 'center' }} scope="col">Schedule Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {calender.map((info) => {
+                           {
+                              calender.sort((a, b) => {
+                                 return b.id - a.id;
+                              }).map((info) => {
 
 
-                                return (
+                                 return (
                                     <tr key={info.id}>
-                                        <td style={{ textAlign: 'center' }}>{info.topics}</td>
-                                        <td style={{ textAlign: 'center' }}>{info.date}</td>
+                                       <td style={{ textAlign: 'center' }}>{info.topics}</td>
+                                       <td style={{ textAlign: 'center' }}>{info.date}</td>
+                                       <td style={{ textAlign: 'center' }}>
+                                          <button
+                                             style={{ color: "white" }}
+                                             className="bg-success"
+                                             onClick={() => editAcademic(info)}
+                                          >
+                                             Edit
+                                          </button>
+
+
+                                          <button
+                                             style={{ color: "white" }}
+                                             className="bg-danger"
+                                             onClick={() => deleteCalender(info.id)}
+                                          >
+                                             Delete
+                                          </button>
+                                       </td>
 
                                     </tr>
-                                )
-                            })
-                            }
+
+
+                                 )
+
+                              })
+                           }
                         </tbody>
                     </table>
                 </section>

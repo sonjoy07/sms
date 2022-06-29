@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import CommonHeader from '../../CommonHeader';
 import profile from "../../images/profile/profile.png";
 const AcademicCalender = () => {
    const [inputDate, setInputDate] = useState('')
@@ -104,7 +105,7 @@ const AcademicCalender = () => {
    }
    return (
       <>
-         <div style={{ height: "80px" }} className="bg-primary">
+         {/* <div style={{ height: "80px" }} className="bg-primary">
             <div
                style={{ display: "flex", justifyContent: "space-between" }}
                className="container"
@@ -141,7 +142,8 @@ const AcademicCalender = () => {
                   </h4>
                </div>
             </div>
-         </div>
+         </div> */}
+         <CommonHeader/>
          <div className='container pt-4'>
             <div className='row'>
                <div className='col-md-12'>
