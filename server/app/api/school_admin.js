@@ -123,12 +123,15 @@ module.exports = (app) => {
         const secton_id = req.query.section_id
         const class_id = req.query.class_id
         const session_id = req.query.session_id
+        const school_info_id = req.query.school_info_id
         const group_id = req.query.group_id
         let condition = secton_id !== '0' ? ` and student_present_status.section_id="${secton_id}"` : ``
         condition += class_id !== '0' ? ` and student_present_status.class_id="${class_id}"` : ``
         condition += session_id !== '0' ? ` and student_present_status.session_id="${session_id}"` : ``
         condition += group_id !== '0' ? ` and student.group_id="${group_id}"` : ``
+        condition += school_info_id !== '0' ? ` and student.school_info_id="${school_info_id}"` : ``
 
+        console.log(`SELECT student.student_code, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, mobile_no,class_id,session_id,section_id,group_id,student_id  FROM student left join student_present_status on student_present_status.student_id = student.id where 1=1 ${condition}`)
         con.query(
             `SELECT student.student_code, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, mobile_no,class_id,session_id,section_id,group_id,student_id  FROM student left join student_present_status on student_present_status.student_id = student.id where 1=1 ${condition}`,
             function (err, result, fields) {

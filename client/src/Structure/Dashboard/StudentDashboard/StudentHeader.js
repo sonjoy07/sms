@@ -45,7 +45,11 @@ const StudentHeader = () => {
                                 class="dropdown-item" href="#">Log out</a></li>
                             <li><a onClick={() => {
                                 Navigate('/studentprofile')
-                            }} class="dropdown-item" href="#">profile</a></li>
+                            }} class="dropdown-item" href="#">Profile</a></li>
+                            <li><a onClick={(e) => {
+                                e.preventDefault()
+                                Navigate('/student-admin')
+                            }} class="dropdown-item" href="">Home</a></li>
 
                         </ul>
                     </div>

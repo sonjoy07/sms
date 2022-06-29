@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import profile from '../../../../images/profile/profile.png';
+import StudentHeader from '../../StudentHeader';
 const GradeSheet = () => {
     const [info, setInfo] = useState([])
 
@@ -85,49 +86,7 @@ const GradeSheet = () => {
 
     return (
         <div>
-            <div style={{ height: '80px', backgroundColor: '' }} className='bg-info'>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }} className='container'>
-                    {/* <div>
-     <img style={{ width: "50px" }} className='pt-3' src={profile} alt=""/>
-   </div> */}
-                    <div className="dropdown">
-                        <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
-                        </button>
-                        <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Log out</a></li>
-                            <li><a class="dropdown-item" href="#">profile</a></li>
-
-                        </ul>
-                    </div>
-                    {students.map((studentJSON) => {
-                        return (
-                            <div>
-                                <h3
-                                    className=""
-                                    style={{
-                                        color: "white",
-                                        fontSize: "25px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    Name: {studentJSON.full_name}
-                                </h3>
-                                <h4
-                                    className=""
-                                    style={{
-                                        color: "white",
-                                        fontSize: "25px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    Id : {studentJSON.student_code}
-                                </h4>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+            <StudentHeader/>
             <section className='container'>
                 <div className='row mt-4'>
                     <div className=' col-md-12'>
@@ -308,26 +267,6 @@ const GradeSheet = () => {
                         </div>
                     ) : null
                 }
-                <div className="container my-2">
-                    <div style={{ display: "flex", justifyContent: "end", cursor: 'pointer' }}>
-                        <i
-                            style={{ fontSize: "30px", color: "blue" }}
-                            class="fa-solid fa-angle-left"
-                        ></i>
-                        <h5 style={{ color: "blue" }} className="px-2">
-                            <a
-                                onClick={() => {
-                                    localStorage.setItem("user_code", "");
-                                    localStorage.setItem("user_type", "");
-                                    Navigate("/login");
-                                }}
-                            >
-                                {" "}
-                                LogOut
-                            </a>
-                        </h5>
-                    </div>
-                </div>
             </section>
         </div>
     )

@@ -173,16 +173,18 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/teacher/filter", authenticateToken, (req, res) => {
-    const secton_id = req.query.section_id
+    const section_id = req.query.section_id
     const session_id = req.query.session_id
     const class_id = req.query.class_id
     const subject_id = req.query.subject_id
+    const school_info_id = req.query.school_info_id
     const issue_date = req.query.issue_date !== ""?moment(req.query.issue_date).format("YYYY-MM-DD"):""
     const due_date = req.query.due_date !== ""?moment(req.query.due_date).format("YYYY-MM-DD"):""
-    let condition = secton_id!== ''?` and activities.section_id="${secton_id}"`:``
+    let condition = section_id!== ''?` and activities.section_id="${section_id}"`:``
     condition+= class_id!== ''?` and activities.class_id="${class_id}"`:``
     condition+= subject_id!== ''?` and activities.subject_id="${subject_id}"`:``
     condition+= session_id!== ''?` and activities.session_id="${session_id}"`:``
+    condition+= school_info_id!== ''?` and activities.school_info_id="${school_info_id}"`:``
     condition+= issue_date!== ''?` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
     var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission
     from activities

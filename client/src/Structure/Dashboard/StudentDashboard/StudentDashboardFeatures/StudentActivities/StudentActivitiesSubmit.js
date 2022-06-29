@@ -5,6 +5,7 @@ import axios from "axios";
 import moment from "moment";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import StudentHeader from "../../StudentHeader";
 
 const StudentActivitiesSubmit = (props) => {
   let navigate = useNavigate();
@@ -100,6 +101,8 @@ const StudentActivitiesSubmit = (props) => {
   };
   console.log(submissionList);
   return (
+    <>
+    <StudentHeader/>
     <div className="container">
       <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Activities : </h2>
     <ToastContainer />
@@ -279,6 +282,7 @@ const StudentActivitiesSubmit = (props) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

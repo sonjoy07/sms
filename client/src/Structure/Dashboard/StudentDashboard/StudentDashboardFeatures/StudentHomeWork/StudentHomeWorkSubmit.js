@@ -5,6 +5,7 @@ import axios from "axios";
 import moment from "moment";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import StudentHeader from "../../StudentHeader";
 
 const StudentHomeWorkSubmit = (props) => {
   let navigate = useNavigate();
@@ -94,12 +95,12 @@ const StudentHomeWorkSubmit = (props) => {
       .then((res) => res.json())
       .then((json) => {
         toast("Home work submitted successfully");
-        console.log("ok",json);
         // navigate("/studenthomework");
       });
   };
-  console.log(submissionList);
   return (
+    <>
+    <StudentHeader/>
     <div className="container">
     <ToastContainer />
       <div className="row mt-4">
@@ -276,6 +277,7 @@ const StudentHomeWorkSubmit = (props) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

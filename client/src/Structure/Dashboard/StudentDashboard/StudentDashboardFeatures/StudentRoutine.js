@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import profile from "../../../images/profile/profile.png";
+import StudentHeader from "../StudentHeader";
 
 const StudentRoutine = (props) => {
   let navigate = useNavigate();
@@ -82,55 +83,8 @@ const StudentRoutine = (props) => {
 
   return (
     <div>
-
+      <StudentHeader/>
       <section>
-        <div style={{ height: "80px" }} className="bg-info">
-          <div
-            style={{ display: "flex", justifyContent: "space-between" }}
-            className="container"
-          >
-            <div className="dropdown">
-              <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
-              </button>
-              <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-                <li><a onClick={() => {
-                  localStorage.setItem("user_code", "");
-                  localStorage.setItem("user_type", "");
-                  navigate("/login");
-                }} class="dropdown-item" href="#">Log out</a></li>
-                <li><a class="dropdown-item" href="#">profile</a></li>
-
-              </ul>
-            </div>
-            {student.map((studentJSON) => {
-              return (
-                <div>
-                  <h3
-                    className=""
-                    style={{
-                      color: "white",
-                      fontSize: "25px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Name: {studentJSON.full_name}
-                  </h3>
-                  <h5
-                    className=""
-                    style={{
-                      color: "white",
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Id : {studentJSON.student_code}
-                  </h5>
-                </div>
-              );
-            })}
-          </div>
-        </div>
 
         <div className="container">
           <div className="card card-primary mt-2">

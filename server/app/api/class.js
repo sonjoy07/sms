@@ -6,6 +6,7 @@ module.exports = (app) => {
       `SELECT id, class_name,class_code FROM class where school_type_id="${req.query.school_type_id}"`,
       function (err, result, fields) {
         if (err) throw err;
+        console.log(`SELECT id, class_name,class_code FROM class where school_type_id="${req.query.school_type_id}"`);
         res.send(result);
       }
     );

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import StudentHeader from './../StudentHeader';
 
 const ChangePassword = () => {
     let navigate = useNavigate();
@@ -61,6 +62,8 @@ const ChangePassword = () => {
         checkLoggedIn()
     }, [])
     return (
+        <>
+        <StudentHeader />
         <section className='container'>
             <div className='row mt-4'>
                 <div className=' col-md-12'>
@@ -108,6 +111,7 @@ const ChangePassword = () => {
 
 
         </section>
+        </>
     );
 };
 

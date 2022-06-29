@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import evaluation from "../../../../images/icons/evaluation.png";
 import profile from '../../../../images/profile/profile.png';
+import StudentHeader from '../../StudentHeader';
 const StudentView = () => {
     let navigate = useNavigate();
     const [student, setStudent] = useState([]);
@@ -34,53 +35,7 @@ const StudentView = () => {
     }, []);
     return (
         <div>
-            <div style={{ height: '80px', backgroundColor: '' }} className='bg-info'>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }} className='container'>
-                    {/* <div>
-     <img style={{ width: "50px" }} className='pt-3' src={profile} alt=""/>
-   </div> */}
-                    <div className="dropdown">
-                        <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
-                        </button>
-                        <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-                            <li><a onClick={() => {
-                                localStorage.setItem("user_code", "");
-                                localStorage.setItem("user_type", "");
-                                navigate("/login");
-                            }} class="dropdown-item" href="#">Log out</a></li>
-                            <li><a class="dropdown-item" href="#">profile</a></li>
-
-                        </ul>
-                    </div>
-                    {student.map((studentJSON) => {
-                        return (
-                            <div>
-                                <h3
-                                    className=""
-                                    style={{
-                                        color: "white",
-                                        fontSize: "25px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    Name: {studentJSON.full_name}
-                                </h3>
-                                <h4
-                                    className=""
-                                    style={{
-                                        color: "white",
-                                        fontSize: "25px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    Id : {studentJSON.student_code}
-                                </h4>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+            <StudentHeader/>
             <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1"
                 onClick={() => {
                     navigate("/marksheet");

@@ -16,14 +16,16 @@ const AdminActivities = (props) => {
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
 
   const [clses, setClses] = useState([]);
+  const [searchClses, setSearchClses] = useState([]);
   const [cls, setCls] = useState("");
   const [id, setId] = useState("");
 
   const [sections, setSections] = useState([]);
-  const [teachers, setTeachers] = useState([]);
+  const [schoolTypes, setSchoolTypes] = useState([]);
   const [section, setSection] = useState("");
   const [status, setStatus] = useState("")
 
+  const [schools, setSchools] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [search_subjects, setSearch_Subjects] = useState([]);
   const [subject, setSubject] = useState("");
@@ -35,7 +37,8 @@ const AdminActivities = (props) => {
   const [teacher_id, setTeacher_id] = useState(
     localStorage.getItem("user_code")
   );
-  const [school_type, setSchoolType] = useState(localStorage.getItem("school_type"))
+  const [school_type, setSchoolType] = useState("")
+  const [school_type_search, setSchoolTypeSearch] = useState("")
 
 
 
@@ -54,6 +57,7 @@ const AdminActivities = (props) => {
   const [due_date, setDue_date] = useState("");
   const [search_issue_date, setSearch_Issue_date] = useState("");
   const [search_due_date, setSearch_Due_date] = useState("");
+  const [search_school_id, setSearchShool_id] = useState("");
   const [access_token, setAccess_token] = useState(
     localStorage.getItem("access_token")
   );
@@ -90,14 +94,14 @@ const AdminActivities = (props) => {
         }
       )
       .then((response) => {
-        setSchool_info_id(response.data.school_info_id);
+        // setSchool_info_id(response.data.school_info_id);
       });
   }, [teacher_id]);
 
   const handleSearch = () => {
     axios
     .get(
-      `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}`,
+      `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -119,7 +123,40 @@ const AdminActivities = (props) => {
   useEffect(() => {
     checkLoggedIn();
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/class/all`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/school_info/all`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setSchools(response.data);
+      });
+     
+      axios
+      .get(`${process.env.REACT_APP_NODE_API}/api/school_type/all`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setSchoolTypes(response.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${school_type_search}`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setSearchClses(response.data);
+      });
+  }, [school_type_search]);
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${school_type}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
@@ -127,7 +164,7 @@ const AdminActivities = (props) => {
       .then((response) => {
         setClses(response.data);
       });
-  }, []);
+  }, [school_type]);
   useEffect(() => {
     axios
       .get(
@@ -378,28 +415,7 @@ const AdminActivities = (props) => {
             </ul>
           </div>
 
-          <div>
-            <h3
-              className=""
-              style={{
-                color: "white",
-                fontSize: "25px",
-                fontWeight: "bold",
-              }}
-            >
-              Name: {teacher.full_name}
-            </h3>
-            <h4
-              className=""
-              style={{
-                color: "white",
-                fontSize: "25px",
-                fontWeight: "bold",
-              }}
-            >
-              Id : {teacher.teacher_code}
-            </h4>
-          </div>
+         
         </div>
       </div>
 
@@ -485,6 +501,55 @@ const AdminActivities = (props) => {
                       />
                     </div>
                   </div>
+                  
+                  <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          School :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={school_info_id}
+                          onChange={(e)=>setSchool_info_id(e.target.value)}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select School</option>
+                          {schools.map((classJSON) => {
+                            return (
+                              <option value={classJSON.id}>
+                                {classJSON.school_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          School :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={school_type}
+                          onChange={(e)=>setSchoolType(e.target.value)}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select School Type</option>
+                          {schoolTypes.map((classJSON) => {
+                            return (
+                              <option value={classJSON.id}>
+                                {classJSON.type_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
 
                   <div class={"col-sm-2 mx-auto p-2"}>
                     <div class="form-group">
@@ -654,6 +719,54 @@ const AdminActivities = (props) => {
                     <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
+                          School :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={search_school_id}
+                          onChange={(e)=>setSearchShool_id(e.target.value)}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select School</option>
+                          {schools.map((classJSON) => {
+                            return (
+                              <option value={classJSON.id}>
+                                {classJSON.school_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          School Type :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={school_type_search}
+                          onChange={(e)=>setSchoolTypeSearch(e.target.value)}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select School Type</option>
+                          {schoolTypes.map((classJSON) => {
+                            return (
+                              <option value={classJSON.id}>
+                                {classJSON.type_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
                           Class :{" "}
                         </label>
                         <select
@@ -665,7 +778,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Class</option>
-                          {clses.map((classJSON) => {
+                          {searchClses.map((classJSON) => {
                             return (
                               <option value={classJSON.id}>
                                 {classJSON.class_name}

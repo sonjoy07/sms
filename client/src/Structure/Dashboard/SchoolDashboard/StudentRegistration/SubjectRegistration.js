@@ -172,7 +172,7 @@ const SubjectRegistration = () => {
       });
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/student/admin-search?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&group_id=${group_id}`,
+        `${process.env.REACT_APP_NODE_API}/api/student/admin-search?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&group_id=${group_id}&&school_info_id= ${localStorage.getItem('school_info_id')}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
