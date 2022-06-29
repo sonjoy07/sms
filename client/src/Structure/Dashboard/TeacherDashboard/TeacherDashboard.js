@@ -12,7 +12,7 @@ import inventory from "../../images/icons/inventory.png";
 import calendar from "../../images/icons/calendar.png";
 import eSchool from "../../images/icons/onlineclass.png";
 import student from "../../images/icons/student.png";
-import profile from "../../images/profile/profile.png";
+import TeacherHeader from "./TeacherHeader/TeacherHeader";
 
 const TeacherDashboard = (props) => {
   let navigate = useNavigate();
@@ -51,66 +51,23 @@ const TeacherDashboard = (props) => {
   // if(teacher.length == 0) return <></>
   return (
     <div>
-      <div style={{ height: "80px" }} className="bg-primary">
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-          className="container"
-        >
-          <div className="dropdown">
-            <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
-            </button>
-            <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-              <li><a onClick={() => {
-                localStorage.setItem("user_code", "");
-                localStorage.setItem("user_type", "");
-                navigate("/login");
-              }} class="dropdown-item">Log out</a></li>
-              <li><a class="dropdown-item" href="/teacherprofile">profile</a></li>
+      <TeacherHeader/>
 
-            </ul>
-          </div>
-
-          <div>
-            <h3
-              className=""
-              style={{
-                color: "white",
-                fontSize: "25px",
-                fontWeight: "bold",
-              }}
-            >
-              Name: {teacher.full_name}
-            </h3>
-            <h4
-              className=""
-              style={{
-                color: "white",
-                fontSize: "25px",
-                fontWeight: "bold",
-              }}
-            >
-              Id : {teacher.teacher_code}
-            </h4>
-          </div>
-        </div>
-      </div>
-
-      <section class="container">
+      <section className="container">
         <h2 style={{ textAlign: 'center', color: 'blue' }} className='mt-4'>{school_name}</h2>
         <h1 style={{ textAlign: "center", color: "blue" }} className="mt-4">
           Teacher Dashboard
         </h1>
-        <div class="row mx-auto mt-3">
+        <div className="row mx-auto mt-3">
           <a
             onClick={() => {
               navigate("/teacher-calender");
             }}
             style={{ textDecoration: "none" }}
-            class="col-sm-6 my-4 col1"
+            className="col-sm-6 my-4 col1"
           >
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -127,8 +84,8 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Academic Calendar</h4>
-                    <p class="card-text">Add Academic Calendar</p>
+                    <h4 className="card-title">Academic Calendar</h4>
+                    <p className="card-text">Add Academic Calendar</p>
                   </div>
                 </div>
               </div>
@@ -140,10 +97,10 @@ const TeacherDashboard = (props) => {
             onClick={() => {
               navigate("/routine");
             }}
-            class="col-sm-6 my-4 col1"
+            className="col-sm-6 my-4 col1"
           >
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -160,8 +117,8 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Routine</h4>
-                    <p class="card-text">Make All Students Class Routine</p>
+                    <h4 className="card-title">Routine</h4>
+                    <p className="card-text">Make All Students Class Routine</p>
                   </div>
                 </div>
               </div>
@@ -173,10 +130,10 @@ const TeacherDashboard = (props) => {
             onClick={() => {
               navigate("/teacherattendance");
             }}
-            class="col-sm-6 my-4 col1"
+            className="col-sm-6 my-4 col1"
           >
-            <div class="card  bg-light shadow-sm">
-              <div class="card-body py-4">
+            <div className="card  bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -194,8 +151,8 @@ const TeacherDashboard = (props) => {
                   </div>
 
                   <div className="px-3">
-                    <h4 class="card-title">Attendance</h4>
-                    <p class="card-text">Make All Students Attendance</p>
+                    <h4 className="card-title">Attendance</h4>
+                    <p className="card-text">Make All Students Attendance</p>
                   </div>
                 </div>
               </div>
@@ -206,10 +163,10 @@ const TeacherDashboard = (props) => {
               navigate("/teacherhomework");
             }}
             style={{ textDecoration: "none" }}
-            class="col-sm-6 my-4 col1 "
+            className="col-sm-6 my-4 col1 "
           >
-            <div class="card  bg-light shadow-sm ">
-              <div class="card-body py-4">
+            <div className="card  bg-light shadow-sm ">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -226,8 +183,8 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Home Work</h4>
-                    <p class="card-text">Give HomeWork To All Students</p>
+                    <h4 className="card-title">Home Work</h4>
+                    <p className="card-text">Give HomeWork To All Students</p>
                   </div>
                 </div>
               </div>
@@ -238,10 +195,10 @@ const TeacherDashboard = (props) => {
               navigate("/teachernotice");
             }}
             style={{ textDecoration: "none" }}
-            class="col-sm-6 my-4 col1"
+            className="col-sm-6 my-4 col1"
           >
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -258,8 +215,8 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Notices</h4>
-                    <p class="card-text">Add Notices/Events</p>
+                    <h4 className="card-title">Notices</h4>
+                    <p className="card-text">Add Notices/Events</p>
                   </div>
                 </div>
               </div>
@@ -268,9 +225,9 @@ const TeacherDashboard = (props) => {
           <a onClick={() => {
             navigate('/markentry')
           }
-          } style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+          } style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -287,16 +244,16 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Evaluation</h4>
-                    <p class="card-text">Make Students Evaluation</p>
+                    <h4 className="card-title">Evaluation</h4>
+                    <p className="card-text">Make Students Evaluation</p>
                   </div>
                 </div>
               </div>
             </div>
           </a>
-          <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+          <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -313,16 +270,16 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Resources</h4>
-                    <p class="card-text">Add Resources</p>
+                    <h4 className="card-title">Resources</h4>
+                    <p className="card-text">Add Resources</p>
                   </div>
                 </div>
               </div>
             </div>
           </a>
-          <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+          <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -339,17 +296,17 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Students</h4>
-                    <p class="card-text">All Students Portal</p>
+                    <h4 className="card-title">Students</h4>
+                    <p className="card-text">All Students Portal</p>
                   </div>
                 </div>
               </div>
             </div>
           </a>
 
-          <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+          <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -366,16 +323,16 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">eSchool</h4>
-                    <p class="card-text">Start Online Class</p>
+                    <h4 className="card-title">eSchool</h4>
+                    <p className="card-text">Start Online Class</p>
                   </div>
                 </div>
               </div>
             </div>
           </a>
-          <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
-            <div class="card bg-light shadow-sm">
-              <div class="card-body py-4">
+          <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
                 <div
                   style={{
                     display: "flex",
@@ -392,8 +349,8 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Activity</h4>
-                    <p class="card-text">Student Activities</p>
+                    <h4 className="card-title">Activity</h4>
+                    <p className="card-text">Student Activities</p>
                   </div>
                 </div>
               </div>

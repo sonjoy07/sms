@@ -1,7 +1,8 @@
 import React from 'react';
+import SuperAdminHeader from '../../SuperAdminHeader';
 
 const CreateNewSubject = () => {
-    return (
+    return (<><SuperAdminHeader/>
         <div className='container mt-4'>
             <div className='row'>
                <div className='col-md-12'>
@@ -175,6 +176,7 @@ const CreateNewSubject = () => {
 </table>
            </section>
         </div>
+        </>
     );
 };
 

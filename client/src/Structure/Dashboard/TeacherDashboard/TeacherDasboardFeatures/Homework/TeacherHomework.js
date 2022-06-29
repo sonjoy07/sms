@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./HomeWork.css";
 import profile from '../../../../images/profile/profile.png';
+import TeacherHeader from "../../TeacherHeader/TeacherHeader";
 
 
 const TeacherHomework = (props) => {
@@ -358,50 +359,7 @@ const TeacherHomework = (props) => {
   return (
     <>
       <ToastContainer />
-      <div style={{ height: "80px" }} className="bg-info">
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-          className="container"
-        >
-          <div className="dropdown">
-            <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
-            </button>
-            <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-              <li><a onClick={() => {
-                localStorage.setItem("user_code", "");
-                localStorage.setItem("user_type", "");
-                navigate("/login");
-              }} class="dropdown-item">Log out</a></li>
-              <li><a class="dropdown-item" href="#">profile</a></li>
-
-            </ul>
-          </div>
-
-          <div>
-            <h3
-              className=""
-              style={{
-                color: "white",
-                fontSize: "25px",
-                fontWeight: "bold",
-              }}
-            >
-              Name: {teacher.full_name}
-            </h3>
-            <h4
-              className=""
-              style={{
-                color: "white",
-                fontSize: "25px",
-                fontWeight: "bold",
-              }}
-            >
-              Id : {teacher.teacher_code}
-            </h4>
-          </div>
-        </div>
-      </div>
+      <TeacherHeader/>
 
       <div className="container ">
         <div className="row mt-4">

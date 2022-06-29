@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import profile from '../../../images/profile/profile.png'
+import SchoolHeader from '../schoolHeader/SchoolHeader';
 
 const SubjectRegistration = () => {
   const [clses, setClses] = useState([]);
@@ -351,27 +352,8 @@ const SubjectRegistration = () => {
   // const edit
 
   return (
-    <>
-      <div style={{ height: '80px', backgroundColor: '' }} className='bg-info'>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }} className='container'>
-          {/* <div>
-             <img style={{ width: "50px" }} className='pt-3' src={profile} alt=""/>
-           </div> */}
-          <div class="dropdown">
-            <button style={{ padding: '0px' }} class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img style={{ width: "50px" }} className='' src={profile} alt="logo" />
-            </button>
-            <div class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton">
-              <a style={{ color: 'tomato' }} class="dropdown-item " href="">Profile</a>
-              <a style={{ color: 'tomato' }} class="dropdown-item" href="#">LogOut</a>
-            </div>
-          </div>
-          <div>
-            <h3 className='pt-1' style={{ color: 'white', fontSize: '25px', fontWeight: 'bold' }}>School Name</h3>
-            <h4 className='' style={{ color: 'white', fontSize: '25px', fontWeight: 'bold' }}>School Id</h4>
-          </div>
-        </div>
-      </div>
+    <>      
+    <SchoolHeader/>
 
       <div className='container pt-4'>
         <div className='row'>
@@ -380,7 +362,7 @@ const SubjectRegistration = () => {
               <div className="card-header">
                 <div className='d-flex justify-content-between px-1'>
                   <div>
-                    <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2">Subject Registration</h3>
+                    <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} className="card-title py-2">Subject Registration</h3>
                   </div>
                   <div className="card-tools">
 
@@ -395,10 +377,10 @@ const SubjectRegistration = () => {
                 <div className='row'>
 
 
-                  <div class={"col-sm-6 mx-auto p-2"}>
-                    <div class="form-group">
+                  <div className={"col-sm-6 mx-auto p-2"}>
+                    <div className="form-group">
                       <label className='pb-2' for="exampleSelect">Session :</label>
-                      <select style={{ border: '1px solid blue' }} class="form-control"
+                      <select style={{ border: '1px solid blue' }} className="form-control"
                         value={session_id}
                         onChange={handleSessionChange} id="class" name="class">
 
@@ -414,10 +396,10 @@ const SubjectRegistration = () => {
 
                     </div>
                   </div>
-                  <div class={"col-sm-6 p-2 mx-auto"}>
-                    <div class="form-group">
+                  <div className={"col-sm-6 p-2 mx-auto"}>
+                    <div className="form-group">
                       <label className='pb-2' for="exampleSelect">Class: </label>
-                      <select style={{ border: '1px solid blue' }} class="form-control"
+                      <select style={{ border: '1px solid blue' }} className="form-control"
                         value={class_id}
                         onChange={handleClassChange} id="class" name="class">
 
@@ -433,10 +415,10 @@ const SubjectRegistration = () => {
 
                     </div>
                   </div>
-                  <div class={"col-sm-6 p-2 mx-auto"}>
-                    <div class="form-group">
+                  <div className={"col-sm-6 p-2 mx-auto"}>
+                    <div className="form-group">
                       <label className='pb-2' for="exampleSelect">Group : </label>
-                      <select style={{ border: '1px solid blue' }} class="form-control"
+                      <select style={{ border: '1px solid blue' }} className="form-control"
                         value={group_id}
                         onChange={handleGroupChange} id="class" name="class">
 
@@ -452,10 +434,10 @@ const SubjectRegistration = () => {
 
                     </div>
                   </div>
-                  <div class={"col-sm-6 p-2 mx-auto"}>
-                    <div class="form-group">
+                  <div className={"col-sm-6 p-2 mx-auto"}>
+                    <div className="form-group">
                       <label className='pb-2' for="exampleSelect">Section: </label>
-                      <select style={{ border: '1px solid blue' }} class="form-control"
+                      <select style={{ border: '1px solid blue' }} className="form-control"
                         value={section_id}
                         onChange={handleSectionChange} id="class" name="class">
 
@@ -471,9 +453,9 @@ const SubjectRegistration = () => {
 
                     </div>
                   </div>
-                  <div class={"col-sm-2 p-2 mx-auto"}>
+                  <div className={"col-sm-2 p-2 mx-auto"}>
                     <div className='pt-2 mx-auto'>
-                      <button style={{ color: 'white', fontSize: '20px', backgroundColor: 'LightSeaGreen' }} type="button" onClick={handleSearch} class="btn bg-gradient px-5">Search</button>
+                      <button style={{ color: 'white', fontSize: '20px', backgroundColor: 'LightSeaGreen' }} type="button" onClick={handleSearch} className="btn bg-gradient px-5">Search</button>
                     </div>
                   </div>
 
@@ -488,14 +470,14 @@ const SubjectRegistration = () => {
         <section className='py-5'>
           <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Student Details</h2>
 
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">
-                  <label class="custom-control custom-switch mt-3">
+                  <label className="custom-control custom-switch mt-3">
                     <input type="checkbox" onChange={(event) => selectStudentAll(event.target.checked)}
                       checked={checkedStudentAll} />
-                    <span class="px-2">Select All</span>
+                    <span className="px-2">Select All</span>
                   </label>
                 </th>
                 <th scope="col">Student ID</th>
@@ -507,11 +489,11 @@ const SubjectRegistration = () => {
               {students.map((res, index) => {
                 return <tr>
                   <th scope="col">
-                    <label class="custom-control custom-switch mt-3">
+                    <label className="custom-control custom-switch mt-3">
                       <input type="checkbox"
                         onChange={() => toggleCheckStudent(index)}
                         checked={checkedStudent[index]} />
-                      <span class=""></span>
+                      <span className=""></span>
                     </label>
                   </th>
                   <td>{res.student_code}</td>
@@ -526,14 +508,14 @@ const SubjectRegistration = () => {
         <section className='py-5'>
           <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Subject</h2>
 
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">
-                  <label class="custom-control custom-switch mt-3">
+                  <label className="custom-control custom-switch mt-3">
                     <input type="checkbox" onChange={(event) => selectSubjectAll(event.target.checked)}
                       checked={checkedSubjectAll} />
-                    <span class="px-2">Select All</span>
+                    <span className="px-2">Select All</span>
                   </label>
                 </th>
                 <th scope="col">Subject Code</th>
@@ -545,10 +527,10 @@ const SubjectRegistration = () => {
                 return <tr>
                   <td>
                     <th scope="col">
-                      <label class="custom-control custom-switch mt-3">
+                      <label className="custom-control custom-switch mt-3">
                         <input type="checkbox" onChange={() => toggleCheckSubject(index)}
                           checked={checkedSubject[index]} />
-                        <span class=""></span>
+                        <span className=""></span>
                       </label>
                     </th>
                   </td>
@@ -564,14 +546,14 @@ const SubjectRegistration = () => {
         <section className='pt-5'>
           <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>4th Subject</h2>
 
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">
-                  <label class="custom-control custom-switch mt-3">
+                  <label className="custom-control custom-switch mt-3">
                     <input type="checkbox" onChange={(event) => selectForthAll(event.target.checked)}
                       checked={checkedForthAll} />
-                    <span class="px-2">Select All</span>
+                    <span className="px-2">Select All</span>
                   </label>
                 </th>
                 <th scope="col">Subject Code</th>
@@ -584,11 +566,11 @@ const SubjectRegistration = () => {
                 return <tr>
                   <td>
                     <th scope="col">
-                      <label class="custom-control custom-switch mt-3">
+                      <label className="custom-control custom-switch mt-3">
                         <input type="checkbox"
                           onChange={() => toggleCheckForth(index)}
                           checked={checkedForth[index]} />
-                        <span class=""></span>
+                        <span className=""></span>
                       </label>
                     </th>
                   </td>
@@ -601,9 +583,9 @@ const SubjectRegistration = () => {
           </table>
         </section>
 
-        <div class={"col-sm-2 p-2 mx-auto"}>
+        <div className={"col-sm-2 p-2 mx-auto"}>
           <div className='pt-2 mx-auto'>
-            <button style={{ color: 'white', fontSize: '20px', backgroundColor: 'LightSeaGreen' }} type="button" class="btn bg-gradient px-5" onClick={handleSubmit}>Submit</button>
+            <button style={{ color: 'white', fontSize: '20px', backgroundColor: 'LightSeaGreen' }} type="button" className="btn bg-gradient px-5" onClick={handleSubmit}>Submit</button>
           </div>
         </div>
 
@@ -612,24 +594,24 @@ const SubjectRegistration = () => {
         <div className='pt-5'>
           <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info '>Subject Registration Details</h2>
           <div className='row'>
-            <div class={"col-sm-4 p-2 mx-auto"}>
-              <div class="form-group">
+            <div className={"col-sm-4 p-2 mx-auto"}>
+              <div className="form-group">
                 <input
                   placeholder='Student ID'
                   onChange={(e) => setStart_date(e.target.value)}
                   type="text"
                   value={start_date}
-                  class="form-control" />
+                  className="form-control" />
               </div>
             </div>
             
-            <div class={"col-sm-4"}>
-              <div class="form-group">
+            <div className={"col-sm-4"}>
+              <div className="form-group">
                 <button className='btn btn-success mt-2' onClick={searchSubject}>Search</button>
               </div>
             </div>
           </div>
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">ID</th>
@@ -663,33 +645,33 @@ const SubjectRegistration = () => {
         <div className='py-5'>
           <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info '>4th Subject Registration Details</h2>
           <div className='row'>
-            <div class={"col-sm-4 p-2 mx-auto"}>
-              <div class="form-group">
+            <div className={"col-sm-4 p-2 mx-auto"}>
+              <div className="form-group">
                 <input
                   placeholder='Student ID'
                   onChange={(e) => setStart_forth_date(e.target.value)}
                   type="text"
                   value={start_forth_date}
-                  class="form-control" />
+                  className="form-control" />
               </div>
             </div>
-            {/* <div class={"col-sm-4 p-2 mx-auto"}>
-              <div class="form-group">
+            {/* <div className={"col-sm-4 p-2 mx-auto"}>
+              <div className="form-group">
                 <input
                   placeholder='End Date'
                   onChange={(e) => setEnd_forth_date(e.target.value)}
                   value={end_forth_date}
                   type="date"
-                  class="form-control" />
+                  className="form-control" />
               </div>
             </div> */}
-            <div class={"col-sm-4"}>
-              <div class="form-group">
+            <div className={"col-sm-4"}>
+              <div className="form-group">
                 <button className='btn btn-success mt-2' onClick={searchForthSubject}>Search</button>
               </div>
             </div>
           </div>
-          <table class="table table-striped">
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th scope="col">ID</th>

@@ -1,7 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import profile from '../../../../images/profile/profile.png';
 import TeacherHeader from '../../TeacherHeader/TeacherHeader';
 const TeacherAcademic = () => {
     const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));

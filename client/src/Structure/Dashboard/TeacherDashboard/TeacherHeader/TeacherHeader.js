@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import profile from "../../../images/profile/profile.png";
+import Library from './../../StudentDashboard/StudentDashboardFeatures/Resources/Library';
+import { Link } from 'react-router-dom';
 const TeacherHeader = () => {
     let navigate = useNavigate();
     const [teacher, setTeacher] = useState({});
@@ -31,17 +33,18 @@ const TeacherHeader = () => {
                     className="container"
                 >
                     <div className="dropdown">
-                        <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button style={{ padding: '0px' }} className="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
                         </button>
-                        <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                        <ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
                             <li><a onClick={() => {
                                 localStorage.setItem("user_code", "");
                                 localStorage.setItem("user_type", "");
                                 navigate("/login");
-                            }} class="dropdown-item">Log out</a></li>
-                            <li><a class="dropdown-item" href="/teacherprofile">profile</a></li>
-
+                            }} className="dropdown-item">Log out</a></li>
+                            <li><a className="dropdown-item" href="/teacherprofile">profile</a></li>
+                            <li><Link className='dropdown-item' to="/teacher-admin">Home</Link></li>
+                           
                         </ul>
                     </div>
 

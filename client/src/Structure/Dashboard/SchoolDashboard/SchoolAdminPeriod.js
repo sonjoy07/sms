@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import SuperAdminHeader from './../SuperAdminDashboard/SuperAdminHeader';
 
 const SchoolAdminPeriod = () => {
     const [shift, setShift] = useState('')
@@ -84,6 +85,7 @@ const SchoolAdminPeriod = () => {
 
     return (
         <div>
+            <SuperAdminHeader/>
             <section className='container'>
                 <div className='row mt-4'>
                     <div className=' col-md-12'>

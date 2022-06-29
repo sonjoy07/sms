@@ -2,6 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import SuperAdminHeader from '../../SuperAdminHeader';
 
 const ViewActivities = () => {
     const [homework, setHomework] = useState([]);
@@ -21,7 +22,7 @@ const ViewActivities = () => {
           setHomework(response.data);
         });
     }, []);
-    return (
+    return (<><SuperAdminHeader/>
         <section className='py-3 container'>
             <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Activities : </h2>
 
@@ -58,6 +59,7 @@ const ViewActivities = () => {
                 </tbody>
             </table>
         </section>
+        </>
     )
 }
 

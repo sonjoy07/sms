@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CommonHeader from '../../CommonHeader';
 import profile from "../../images/profile/profile.png";
+import SchoolHeader from './../SchoolDashboard/schoolHeader/SchoolHeader';
 const AcademicCalender = () => {
    const [inputDate, setInputDate] = useState('')
    const [topic, setTopic] = useState('')
@@ -143,7 +144,7 @@ const AcademicCalender = () => {
                </div>
             </div>
          </div> */}
-         <CommonHeader/>
+         <SchoolHeader/>
          <div className='container pt-4'>
             <div className='row'>
                <div className='col-md-12'>
@@ -151,7 +152,7 @@ const AcademicCalender = () => {
                      <div className="card-header">
                         <div className='d-flex justify-content-between px-4'>
                            <div>
-                              <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Academic Calender</h3>
+                              <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} className="card-title pt-2">Academic Calender</h3>
                            </div>
                            <div className="card-tools">
                               <button onClick={() => {
@@ -169,21 +170,21 @@ const AcademicCalender = () => {
 
                         {add ? (
                            <div className='row'>
-                              <div class={"col-sm-4 p-2 mx-auto"}>
-                                 <div class="form-group">
+                              <div className={"col-sm-4 p-2 mx-auto"}>
+                                 <div className="form-group">
                                     <label className='pb-2' for="exampleInputEmail1">Schedule Type : </label>
-                                    <input onChange={handleTopic} type="text" class="form-control" value={topic} />
+                                    <input onChange={handleTopic} type="text" className="form-control" value={topic} />
                                  </div>
                               </div>
-                              <div class={"col-sm-4 p-2 mx-auto"}>
-                                 <div class="form-group">
+                              <div className={"col-sm-4 p-2 mx-auto"}>
+                                 <div className="form-group">
                                     <label className='pb-2' for="exampleInputEmail1">Schedule Date : </label>
-                                    <input onChange={handleDate} type="text" value={inputDate} class="form-control" />
+                                    <input onChange={handleDate} type="text" value={inputDate} className="form-control" />
                                  </div>
                               </div>
-                              <div class={"col-sm-2 p-2 mx-auto"}>
+                              <div className={"col-sm-2 p-2 mx-auto"}>
                                  <div className='pt-2 mx-auto'>
-                                    <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>
+                                    <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" className="btn bg-secondary bg-gradient px-5">Submit</button>
                                  </div>
                               </div>
                            </div>) : null
@@ -200,7 +201,7 @@ const AcademicCalender = () => {
                   <section className='py-5'>
                      <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Academic Calender Information</h2>
 
-                     <table class="table table-striped">
+                     <table className="table table-striped">
                         <thead>
                            <tr>
                               <th scope="col">Schedule Type</th>

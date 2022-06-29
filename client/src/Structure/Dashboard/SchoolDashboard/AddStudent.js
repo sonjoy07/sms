@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import profile from '../../images/profile/profile.png'
 import StudentHeader from '../StudentDashboard/StudentHeader'
+import SchoolHeader from './schoolHeader/SchoolHeader'
 
 const AddStudent = () => {
     const [school_id, setSchool_id] = useState(localStorage.getItem("school_id"))
@@ -202,7 +203,7 @@ const AddStudent = () => {
 
     return (
         <>
-            <StudentHeader />
+        <SchoolHeader/>
 
             <div className='container pt-4'>
                 <div className='row'>
@@ -211,7 +212,7 @@ const AddStudent = () => {
                             <div className="card-header">
                                 <div className='d-flex justify-content-between px-1'>
                                     <div>
-                                        <h3 style={{ color: '#008B8B', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2"> Add Student</h3>
+                                        <h3 style={{ color: '#008B8B', fontSize: '25px', fontWeight: 'bold' }} className="card-title py-2"> Add Student</h3>
                                     </div>
                                 </div>
                             </div>
@@ -219,34 +220,34 @@ const AddStudent = () => {
                             <div className='card-body' >
 
                                 <div className='row'>
-                                    <div class={"col-sm-3 p-2 mx-auto"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-3 p-2 mx-auto"}>
+                                        <div className="form-group">
                                             <label className='pb-2' for="exampleInputEmail1">Student Id : </label>
-                                            <input onChange={studentID} style={{ border: '1px solid blue', color: '' }} type="text" placeholder='<<<...Student Id...>>>' value={student_id} class="form-control" />
+                                            <input onChange={studentID} style={{ border: '1px solid blue', color: '' }} type="text" placeholder='<<<...Student Id...>>>' value={student_id} className="form-control" />
                                         </div>
                                     </div>
-                                    <div class={"col-sm-3 p-2 mx-auto"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-3 p-2 mx-auto"}>
+                                        <div className="form-group">
                                             <label className='pb-2' for="exampleInputEmail1">first Name : </label>
-                                            <input onChange={Fname} style={{ border: '1px solid blue' }} type="text" class="form-control" value={fname} />
+                                            <input onChange={Fname} style={{ border: '1px solid blue' }} type="text" className="form-control" value={fname} />
                                         </div>
                                     </div>
-                                    <div class={"col-sm-3 mx-auto p-2"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-3 mx-auto p-2"}>
+                                        <div className="form-group">
                                             <label className='pb-2' for="exampleSelect">Middle Name : </label>
-                                            <input onChange={Middle} style={{ border: '1px solid blue' }} type="text" class="form-control" value={middle} />
+                                            <input onChange={Middle} style={{ border: '1px solid blue' }} type="text" className="form-control" value={middle} />
                                         </div>
                                     </div>
-                                    <div class={"col-sm-3 mx-auto p-2"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-3 mx-auto p-2"}>
+                                        <div className="form-group">
                                             <label className='pb-2' for="exampleSelect">Last Name : </label>
-                                            <input onChange={Last} style={{ border: '1px solid blue' }} type="text" class="form-control" value={lname} />
+                                            <input onChange={Last} style={{ border: '1px solid blue' }} type="text" className="form-control" value={lname} />
 
                                         </div>
                                     </div>
                                     <div className='row'>
-                                        <div class={"col-sm-3 mx-auto p-2"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 mx-auto p-2"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleSelect">Gender Id : </label>
                                                 <select
                                                     className="form-control"
@@ -265,8 +266,8 @@ const AddStudent = () => {
 
                                             </div>
                                         </div>
-                                        {/* <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        {/* <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Division Id : </label>
                                                 <select
                                                     className="form-control"
@@ -284,22 +285,22 @@ const AddStudent = () => {
                                                 </select>
                                             </div>
                                         </div> */}
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Email : </label>
-                                                <input onChange={Email} style={{ border: '1px solid blue' }} type="text" class="form-control" value={email} />
+                                                <input onChange={Email} style={{ border: '1px solid blue' }} type="text" className="form-control" value={email} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Present Address : </label>
-                                                <input onChange={Present} style={{ border: '1px solid blue' }} type="text" class="form-control" value={present} />
+                                                <input onChange={Present} style={{ border: '1px solid blue' }} type="text" className="form-control" value={present} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 mx-auto p-2"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 mx-auto p-2"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleSelect">permanent Address : </label>
-                                                <input onChange={Parmanent} style={{ border: '1px solid blue' }} type="text" class="form-control" value={Permanant} />
+                                                <input onChange={Parmanent} style={{ border: '1px solid blue' }} type="text" className="form-control" value={Permanant} />
 
                                             </div>
                                         </div>
@@ -307,56 +308,56 @@ const AddStudent = () => {
                                     </div>
                                     <div className='row'>
                                         
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Father Name : </label>
-                                                <input onChange={Father} style={{ border: '1px solid blue' }} type="text" class="form-control" value={father} />
+                                                <input onChange={Father} style={{ border: '1px solid blue' }} type="text" className="form-control" value={father} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Father phone number : </label>
-                                                <input onChange={FatherNo} style={{ border: '1px solid blue' }} type="text" class="form-control" value={father_no} />
+                                                <input onChange={FatherNo} style={{ border: '1px solid blue' }} type="text" className="form-control" value={father_no} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Mother name : </label>
-                                                <input onChange={Mother} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mother} />
+                                                <input onChange={Mother} style={{ border: '1px solid blue' }} type="text" className="form-control" value={mother} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 mx-auto p-2"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 mx-auto p-2"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleSelect">Mother Phone Number : </label>
-                                                <input onChange={MotherNo} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mother_no} />
+                                                <input onChange={MotherNo} style={{ border: '1px solid blue' }} type="text" className="form-control" value={mother_no} />
 
                                             </div>
                                         </div>
 
                                     </div>
                                     <div className='row'>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Mobile No : </label>
-                                                <input onChange={Mobile} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mobile} />
+                                                <input onChange={Mobile} style={{ border: '1px solid blue' }} type="text" className="form-control" value={mobile} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Date of Birth : </label>
-                                                <input onChange={Dob} style={{ border: '1px solid blue' }} type="text" class="form-control" value={dob} />
+                                                <input onChange={Dob} style={{ border: '1px solid blue' }} type="text" className="form-control" value={dob} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Blood Group : </label>
-                                                <input onChange={Blood} style={{ border: '1px solid blue' }} type="text" class="form-control" value={blood} />
+                                                <input onChange={Blood} style={{ border: '1px solid blue' }} type="text" className="form-control" value={blood} />
                                             </div>
                                         </div>
-                                        <div class={"col-sm-3 p-2 mx-auto"}>
-                                            <div class="form-group">
+                                        <div className={"col-sm-3 p-2 mx-auto"}>
+                                            <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Photo Id : </label>
-                                                <input onChange={Photo} style={{ border: '1px solid blue' }} type="text" class="form-control" value={photo} />
+                                                <input onChange={Photo} style={{ border: '1px solid blue' }} type="text" className="form-control" value={photo} />
                                             </div>
                                         </div>
 
@@ -364,9 +365,9 @@ const AddStudent = () => {
 
 
 
-                                    <div class={"col-sm-6 "}>
+                                    <div className={"col-sm-6 "}>
                                         <div className='pt-2 mx-auto'>
-                                            <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px', backgroundColor: '#008B8B' }} type="button" class="btn  bg-gradient px-5">Add Student</button>
+                                            <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px', backgroundColor: '#008B8B' }} type="button" className="btn  bg-gradient px-5">Add Student</button>
                                         </div>
                                     </div>
 
@@ -385,7 +386,7 @@ const AddStudent = () => {
                 <section className='py-5'>
                     <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Student List</h2>
 
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr style={{ textAlign: 'center' }}>
                                 <th scope="col">Student Id</th>

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
+import SchoolHeader from '../schoolHeader/SchoolHeader'
 
 const SMSreport = () => {
     const [total, setTotal] = useState("")
@@ -27,6 +28,7 @@ const SMSreport = () => {
     }, [])
     return (
         <>
+        <SchoolHeader/>
             <div className='container'>
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>

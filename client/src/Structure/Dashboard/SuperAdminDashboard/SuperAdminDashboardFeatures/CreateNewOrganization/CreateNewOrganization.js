@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SuperAdminHeader from '../../SuperAdminHeader';
 
 const CreateNewOrganization = () => {
   const [organization_type, setOrganization_type] = useState('')
@@ -33,7 +34,7 @@ const CreateNewOrganization = () => {
 
   }
 
-  return (
+  return (<><SuperAdminHeader/>
     <div className='container pt-4'>
       <div className='row'>
         <div className='col-md-12'>
@@ -152,7 +153,7 @@ const CreateNewOrganization = () => {
           </tbody>
         </table>
       </section>
-    </div>
+    </div></>
   );
 };
 

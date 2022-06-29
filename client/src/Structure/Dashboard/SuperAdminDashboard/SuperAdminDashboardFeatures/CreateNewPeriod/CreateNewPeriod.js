@@ -1,7 +1,8 @@
 import React from 'react';
+import SuperAdminHeader from '../../SuperAdminHeader';
 
 const CreateNewPeriod = () => {
-    return (
+    return (<><SuperAdminHeader/>
         <div className='container mt-4'>
             <div className='row'>
                <div className='col-md-12'>
@@ -125,7 +126,7 @@ const CreateNewPeriod = () => {
   </tbody>
 </table>
            </section>
-        </div>
+        </div></>
     );
 };
 

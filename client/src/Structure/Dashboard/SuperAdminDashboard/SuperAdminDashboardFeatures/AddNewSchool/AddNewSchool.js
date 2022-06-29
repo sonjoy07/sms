@@ -1,4 +1,5 @@
 import React from 'react';
+import SuperAdminHeader from '../../SuperAdminHeader';
 import './AddNewSchool.css'
 
 const AddNewSchool = () => {
@@ -11,6 +12,8 @@ const AddNewSchool = () => {
     // }
 
     return (
+       <>
+       <SuperAdminHeader/>
         <div className='container '>
 
             <div className='row mt-4'>
@@ -19,7 +22,7 @@ const AddNewSchool = () => {
                    <div className="card-header">
                      <div className='d-flex justify-content-between px-4'>
                      <div>
-                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} class="card-title pt-2">School-Type : </h3>
+                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} className="card-title pt-2">School-Type : </h3>
                       </div>
                    <div className="card-tools">
                     <button  id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i  className="fas fa-plus icons" />
@@ -36,10 +39,10 @@ const AddNewSchool = () => {
                     <div className='row'>
 
                        
-                       <div class={"col-sm-2 mx-auto p-2"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 mx-auto p-2"}>
+                            <div className="form-group">
                                 <label className='pb-2' for="exampleSelect">School Type : </label>
-                                <select class="form-control" id="class" name="class">
+                                <select className="form-control" id="class" name="class">
 
                                     <option>Select Class</option>
                                     <option>K.G</option>
@@ -61,26 +64,26 @@ const AddNewSchool = () => {
 
                             </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">EIIN No. : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">School Name : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">School Short Name : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                        {/* <div style={{paddingTop: '20px'}} class={"col-sm-2 mx-auto"}>
-                           <button  type="button" class="btn btn-primary">Primary</button>
+                        {/* <div style={{paddingTop: '20px'}} className={"col-sm-2 mx-auto"}>
+                           <button  type="button" className="btn btn-primary">Primary</button>
                         </div> */}
 
                    </div>
@@ -96,7 +99,7 @@ const AddNewSchool = () => {
                    <div className="card-header">
                      <div className='d-flex justify-content-between px-4'>
                      <div>
-                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} class="card-title pt-2">Address : </h3>
+                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} className="card-title pt-2">Address : </h3>
                       </div>
                    <div className="card-tools">
                     <button  id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i  className="fas fa-plus icons" />
@@ -113,10 +116,10 @@ const AddNewSchool = () => {
                     <div className='row'>
 
                        
-                       <div class={"col-sm-2 mx-auto p-2"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 mx-auto p-2"}>
+                            <div className="form-group">
                                 <label className='pb-2' for="exampleSelect">Division : </label>
-                                <select class="form-control" id="class" name="class">
+                                <select className="form-control" id="class" name="class">
 
                                     <option>Select Class</option>
                                     <option>K.G</option>
@@ -138,10 +141,10 @@ const AddNewSchool = () => {
 
                             </div>
                         </div>
-                       <div class={"col-sm-2 mx-auto p-2"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 mx-auto p-2"}>
+                            <div className="form-group">
                                 <label className='pb-2' for="exampleSelect">District : </label>
-                                <select class="form-control" id="class" name="class">
+                                <select className="form-control" id="class" name="class">
 
                                     <option>Select Class</option>
                                     <option>K.G</option>
@@ -163,10 +166,10 @@ const AddNewSchool = () => {
 
                             </div>
                         </div>
-                       <div class={"col-sm-2 mx-auto p-2"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 mx-auto p-2"}>
+                            <div className="form-group">
                                 <label className='pb-2' for="exampleSelect">Upazilla : </label>
-                                <select class="form-control" id="class" name="class">
+                                <select className="form-control" id="class" name="class">
 
                                     <option>Select Class</option>
                                     <option>K.G</option>
@@ -188,26 +191,26 @@ const AddNewSchool = () => {
 
                             </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Street/Village : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Phone No. : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Email : </label>
-                                <input type="email" class="form-control"/>
+                                <input type="email" className="form-control"/>
                              </div>
                         </div>
-                        {/* <div style={{paddingTop: '20px'}} class={"col-sm-2 mx-auto"}>
-                           <button  type="button" class="btn btn-primary">Primary</button>
+                        {/* <div style={{paddingTop: '20px'}} className={"col-sm-2 mx-auto"}>
+                           <button  type="button" className="btn btn-primary">Primary</button>
                         </div> */}
 
                    </div>
@@ -222,7 +225,7 @@ const AddNewSchool = () => {
                    <div className="card-header">
                      <div className='d-flex justify-content-between px-4'>
                      <div>
-                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} class="card-title pt-2">School Head Details : </h3>
+                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} className="card-title pt-2">School Head Details : </h3>
                       </div>
                    <div className="card-tools">
                     <button  id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i  className="fas fa-plus icons" />
@@ -237,26 +240,26 @@ const AddNewSchool = () => {
                 {/* id='list' */}
 
                     <div className='row'>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">School Head Name: </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Phone No : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Email : </label>
-                                <input type="email" class="form-control"/>
+                                <input type="email" className="form-control"/>
                              </div>
                         </div>
-                        {/* <div style={{paddingTop: '20px'}} class={"col-sm-2 mx-auto"}>
-                           <button  type="button" class="btn btn-primary">Primary</button>
+                        {/* <div style={{paddingTop: '20px'}} className={"col-sm-2 mx-auto"}>
+                           <button  type="button" className="btn btn-primary">Primary</button>
                         </div> */}
 
                    </div>
@@ -271,7 +274,7 @@ const AddNewSchool = () => {
                    <div className="card-header">
                      <div className='d-flex justify-content-between px-4'>
                      <div>
-                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} class="card-title pt-2">School Admin Details : </h3>
+                         <h3 style={{color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold'}} className="card-title pt-2">School Admin Details : </h3>
                       </div>
                    <div className="card-tools">
                     <button  id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i  className="fas fa-plus icons" />
@@ -286,26 +289,26 @@ const AddNewSchool = () => {
                 {/* id='list' */}
 
                     <div className='row'>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">School Admin Name : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Phone No : </label>
-                                <input type="text" class="form-control"/>
+                                <input type="text" className="form-control"/>
                              </div>
                         </div>
-                       <div class={"col-sm-2 p-2 mx-auto"}>
-                            <div class="form-group">
+                       <div className={"col-sm-2 p-2 mx-auto"}>
+                            <div className="form-group">
                                <label className='pb-2' for="exampleInputEmail1">Email</label>
-                                <input type="email" class="form-control"/>
+                                <input type="email" className="form-control"/>
                              </div>
                         </div>
-                        {/* <div style={{paddingTop: '20px'}} class={"col-sm-2 mx-auto"}>
-                           <button  type="button" class="btn btn-primary">Primary</button>
+                        {/* <div style={{paddingTop: '20px'}} className={"col-sm-2 mx-auto"}>
+                           <button  type="button" className="btn btn-primary">Primary</button>
                         </div> */}
 
                    </div>
@@ -316,14 +319,14 @@ const AddNewSchool = () => {
            </div>
 
            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} className='pt-2 mx-auto'>
-             <button style={{color: 'white', fontSize: '25px' }} type="button" class="btn bg-secondary bg-gradient py-2 px-5">Submit</button>
+             <button style={{color: 'white', fontSize: '25px' }} type="button" className="btn bg-secondary bg-gradient py-2 px-5">Submit</button>
            </div>
 
 
            <section className='py-5'>
              <h2 style={{color: 'white'}} className='px-5 py-2 bg-info bg-gradient'>School Information : </h2>
 
-          <table class="table table-striped">
+          <table className="table table-striped">
   <thead>
     <tr>
       <th scope="col">School Type</th>
@@ -445,6 +448,7 @@ const AddNewSchool = () => {
 
 
          </div>
+         </>
     );
 };
 

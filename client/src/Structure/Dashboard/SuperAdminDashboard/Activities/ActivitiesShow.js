@@ -3,6 +3,7 @@ import axios from "axios";
 import moment from "moment";
 import profile from '../../../../images/profile/profile.png'
 import { Link } from "react-router-dom";
+import SuperAdminHeader from "../SuperAdminHeader";
 
 const HomeWorkShow = () => {
   const [homework, setHomework] = useState([]);
@@ -24,6 +25,7 @@ const HomeWorkShow = () => {
   console.log(homework);
   return (
     <>
+    <SuperAdminHeader/>
       <div style={{ height: '80px', backgroundColor: '' }} className='bg-info'>
         <div style={{ display: 'flex', justifyContent: 'space-between' }} className='container'>
           {/* <div>

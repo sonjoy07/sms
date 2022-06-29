@@ -5,6 +5,7 @@ import moment from "moment";
 import profile from '../../../images/profile/profile.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SchoolHeader from "../schoolHeader/SchoolHeader";
 
 axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
 const AdminNotice = (props) => {
@@ -329,50 +330,7 @@ const AdminNotice = (props) => {
     }
     return (
         <>
-            <div style={{ height: "80px" }} className="bg-info">
-                <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                    className="container"
-                >
-                    <div className="dropdown">
-                        <button style={{ padding: '0px' }} class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img style={{ width: "50px", height: "50px" }} src={profile} alt="profile" />
-                        </button>
-                        <ul class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-                            <li><a onClick={() => {
-                                localStorage.setItem("user_code", "");
-                                localStorage.setItem("user_type", "");
-                                navigate("/login");
-                            }} class="dropdown-item">Log out</a></li>
-                            <li><a class="dropdown-item" href="#">profile</a></li>
-
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3
-                            className=""
-                            style={{
-                                color: "white",
-                                fontSize: "25px",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            Name: {teacher.full_name}
-                        </h3>
-                        <h4
-                            className=""
-                            style={{
-                                color: "white",
-                                fontSize: "25px",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            Id : {teacher.teacher_code}
-                        </h4>
-                    </div>
-                </div>
-            </div>
+        <SchoolHeader/>
             <div className="container ">
                 <div className="row mt-4">
                     <div className=" col-md-12">
@@ -386,7 +344,7 @@ const AdminNotice = (props) => {
                                                 fontSize: "25px",
                                                 fontWeight: "bold",
                                             }}
-                                            class="card-title pt-2"
+                                            className="card-title pt-2"
                                         >
                                             Create Notice{" "}
                                         </h3>
@@ -411,28 +369,28 @@ const AdminNotice = (props) => {
                                 {/* id='list' */}
 
                                 <div className="row">
-                                    <div class={"col-sm-4 p-2 mx-auto"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-4 p-2 mx-auto"}>
+                                        <div className="form-group">
                                             <label className="pb-2" for="exampleInputEmail1">
                                                 Headline :{" "}
                                             </label>
                                             <input
                                                 style={{ border: "1px solid blue" }}
                                                 type="text"
-                                                class="form-control"
+                                                className="form-control"
                                                 value={headline}
                                                 onChange={handleTopicChange}
                                             />
                                         </div>
                                     </div>
-                                    <div class={"col-sm-8 p-2 mx-auto"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-8 p-2 mx-auto"}>
+                                        <div className="form-group">
                                             <label className="pb-2" for="exampleInputEmail1">
                                                 Description :{" "}
                                             </label>
                                             <textarea
                                                 style={{ width: "100%", border: "1px solid blue" }}
-                                                class="form-control"
+                                                className="form-control"
                                                 value={description}
                                                 onChange={handleDetailsChange}
                                                 rows="4"
@@ -441,14 +399,14 @@ const AdminNotice = (props) => {
                                         </div>
                                     </div>
 
-                                    <div class={"col-sm-4 mx-auto p-2"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-4 mx-auto p-2"}>
+                                        <div className="form-group">
                                             <label className="pb-2" for="exampleSelect">
                                                 Academic Session :{" "}
                                             </label>
                                             <select
                                                 style={{ border: "1px solid blue" }}
-                                                class="form-control"
+                                                className="form-control"
                                                 value={session_id}
                                                 onChange={handleSessionChange}
                                                 id="class"
@@ -466,14 +424,14 @@ const AdminNotice = (props) => {
                                         </div>
                                     </div>
 
-                                    <div class={"col-sm-4 mx-auto p-2"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-4 mx-auto p-2"}>
+                                        <div className="form-group">
                                             <label className="pb-2" for="exampleSelect">
                                                 Class :{" "}
                                             </label>
                                             <select
                                                 style={{ border: "1px solid blue" }}
-                                                class="form-control"
+                                                className="form-control"
                                                 value={class_id}
                                                 onChange={handleClassChange}
                                                 id="class"
@@ -490,14 +448,14 @@ const AdminNotice = (props) => {
                                             </select>
                                         </div>
                                     </div>
-                                    <div class={"col-sm-4 mx-auto p-2"}>
-                                        <div class="form-group">
+                                    <div className={"col-sm-4 mx-auto p-2"}>
+                                        <div className="form-group">
                                             <label className="pb-2" for="exampleSelect">
                                                 Section :{" "}
                                             </label>
                                             <select
                                                 style={{ border: "1px solid blue" }}
-                                                class="form-control"
+                                                className="form-control"
                                                 value={section_id}
                                                 onChange={handleSectionChange}
                                                 id="class"
@@ -515,10 +473,10 @@ const AdminNotice = (props) => {
                                         </div>
                                     </div>
 
-                                    <div class={"col-sm-8 mx-auto p-2"}>
+                                    <div className={"col-sm-8 mx-auto p-2"}>
 
-                                        <div class="form-group">
-                                            {students.length > 0 && <table class="table table-striped">
+                                        <div className="form-group">
+                                            {students.length > 0 && <table className="table table-striped">
                                                 <thead>
                                                     <tr>
                                                         <td></td>
@@ -552,8 +510,8 @@ const AdminNotice = (props) => {
                                         </div>
                                     </div>
 
-                                    {/* <div style={{paddingTop: '20px'}} class={"col-sm-2 mx-auto"}>
-                   <button  type="button" class="btn btn-primary">Primary</button>
+                                    {/* <div style={{paddingTop: '20px'}} className={"col-sm-2 mx-auto"}>
+                   <button  type="button" className="btn btn-primary">Primary</button>
                 </div> */}
                                 </div>
                             </div>
@@ -572,7 +530,7 @@ const AdminNotice = (props) => {
                     <button
                         style={{ color: "white", fontSize: "25px" }}
                         type="button"
-                        class="btn bg-secondary bg-gradient py-2 px-5"
+                        className="btn bg-secondary bg-gradient py-2 px-5"
                         onClick={handleSubmit}
                     >
                         Submit
@@ -587,7 +545,7 @@ const AdminNotice = (props) => {
                         Information :{" "}
                     </h2>
 
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Publishing Date</th>

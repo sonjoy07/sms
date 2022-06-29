@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import TeacherHeader from "../../TeacherHeader/TeacherHeader";
 
 const HomeWorkSubmitList = (props) => {
   const navigate = useNavigate();
@@ -34,13 +35,15 @@ const HomeWorkSubmitList = (props) => {
       });
   }, []);
 
-  return (
+  return (    
+    <>
+    <TeacherHeader/>
     <section className="py-5 container">
       <h2 style={{ color: "white" }} className="px-2 py-2 bg-info bg-gradient">
         Home Work :{" "}
       </h2>
 
-      <table class="table table-striped">
+      <table className="table table-striped">
         <thead>
           <tr>
             <th scope="col">Student ID</th>
@@ -67,6 +70,7 @@ const HomeWorkSubmitList = (props) => {
         </tbody>
       </table>
     </section>
+    </>
   );
 };
 

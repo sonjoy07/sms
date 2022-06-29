@@ -1,7 +1,10 @@
 import React from 'react';
+import SuperAdminHeader from '../../SuperAdminHeader';
 
 const CreateNewClass = () => {
     return (
+      <>
+      <SuperAdminHeader/>
         <div className='container pt-4'>
             <div className='row'>
                <div className='col-md-12'>
@@ -149,7 +152,7 @@ const CreateNewClass = () => {
   </tbody>
 </table>
            </section>
-        </div>
+        </div></>
     );
 };
 

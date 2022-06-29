@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import SuperAdminHeader from "../SuperAdminHeader";
 
 const HomeWorkSubmitList = (props) => {
   const navigate = useNavigate();
@@ -34,7 +35,8 @@ const HomeWorkSubmitList = (props) => {
       });
   }, []);
 
-  return (
+  return (<>
+    <SuperAdminHeader/>
     <section className="py-5 container">
       <h2 style={{ color: "white" }} className="px-2 py-2 bg-info bg-gradient">
         Home Work :{" "}
@@ -67,6 +69,7 @@ const HomeWorkSubmitList = (props) => {
         </tbody>
       </table>
     </section>
+    </>
   );
 };
 

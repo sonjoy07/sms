@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from 'react-toastify';
+import SchoolHeader from "../schoolHeader/SchoolHeader";
 const SMSsent = (props) => {
     const [absentList, setAbsentList] = useState([])
     const [search_class_id, setSearchClass_id] = useState("");
@@ -149,6 +150,7 @@ const SMSsent = (props) => {
     }
     return (
         <>
+        <SchoolHeader/>
 
             <div className='container pt-4'>
 
