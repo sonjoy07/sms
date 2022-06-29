@@ -26,8 +26,8 @@ const ViewerCalender = () => {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Schedule Type</th>
-                            <th scope="col">Schedule Date</th>
+                            <th style={{ textAlign: 'center' }} scope="col">Schedule Type</th>
+                            <th style={{ textAlign: 'center' }} scope="col">Schedule Date</th>
                         </tr>
                     </thead>
                     <tbody>

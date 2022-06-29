@@ -99,6 +99,7 @@ const Addteacher = () => {
     }
     const handleSubmit = () => {
         if(teacher_id !== '' && subject_code !== ''&& mpo !== "" && index !== "" && mobile_no !== "") {
+            console.log('asdfas',index);
         fetch(`${process.env.REACT_APP_NODE_API}/api/add_teacher`, {
             method: "POST",
             headers: { "Content-Type": "application/json", authorization: "bearer " + localStorage.getItem("access_token"), },
@@ -144,11 +145,13 @@ const Addteacher = () => {
         setMpo('')
         setIndex('')
         settitle('')
+        setId('')
         }else{
             toast("Please fill up the required field!!")
         }
     }
     const editRoutine = (info) => {
+        debugger;
         setteacher_id(info.teacher_code)
         setFname(info.first_name)
         setMiddle(info.middle_name)
@@ -209,7 +212,7 @@ const Addteacher = () => {
                         </div>
                         <div class={"col-sm-3 p-2 mx-auto"}>
                             <div class="form-group">
-                                <label className='pb-2' for="exampleInputEmail1">first Name : </label>
+                                <label className='pb-2' for="exampleInputEmail1">First Name : </label>
                                 <input onChange={Fname} style={{ border: '1px solid blue' }} type="text" class="form-control" value={fname} />
                             </div>
                         </div>
@@ -288,7 +291,7 @@ const Addteacher = () => {
 
                         <div class={"col-sm-3 p-2 mx-auto"}>
                             <div class="form-group">
-                                <label className='pb-2' for="exampleInputEmail1">mobile : </label>
+                                <label className='pb-2' for="exampleInputEmail1">Mobile : </label>
                                 <input onChange={Mobile} style={{ border: '1px solid blue' }} type="text" class="form-control" value={mobile_no} placeholder='required' />
                             </div>
                         </div>
@@ -343,7 +346,7 @@ const Addteacher = () => {
                         <tr style={{ textAlign: 'center' }}>
                             <th scope="col">Teacher Id</th>
                             <th scope="col">Teacher Name</th>
-                            <th scope="col">mobile number</th>
+                            <th scope="col">Mobile number</th>
                             <th scope="col">Designation</th>
                             <th scope="col">Email</th>
                             <th scope="col">Action</th>

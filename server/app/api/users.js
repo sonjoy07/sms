@@ -90,12 +90,14 @@ module.exports = (app) => {
 
     //var sql = `select id from ${table_name} where ${table_name}_code = "${user_code}"`;
     console.log(sql);
+    if(sql){
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       else {
         res.json(result[0]);
       }
     });
+  }
     //console.log(attendance);
   });
 

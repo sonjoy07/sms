@@ -26,6 +26,7 @@ const StudentHomeWorkSubmit = (props) => {
   const [preview, setPreview] = useState()
 
   const [hw, setHw] = useState({});
+  const [reset,setReset] = useState(0)
 
   const [submissionList, setSubmissionList] = useState([])
 
@@ -43,20 +44,22 @@ const StudentHomeWorkSubmit = (props) => {
         setHw(response.data);
         console.log(response.data);
       });
-    axios
-      .get(
-        `${process.env.REACT_APP_NODE_API}/api/homework/teacher/submitlist?home_work_id=${homework_id}`,
-        {
-          headers: {
-            authorization: "bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .then((response) => {
-        setSubmissionList(response.data.filter(res=>res.student_code === localStorage.getItem('u_id')));
-        console.log(student_id);
-      });
+   
   }, []);
+  useEffect(()=>{
+    axios
+    .get(
+      `${process.env.REACT_APP_NODE_API}/api/homework/teacher/submitlist?home_work_id=${homework_id}`,
+      {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((response) => {
+      setSubmissionList(response.data.filter(res=>res.student_code == localStorage.getItem('u_id')));
+    });
+  },[reset])
 
   const fileUpload = (e) => {
     setAttachment_link(e.target.files[0])
@@ -95,6 +98,7 @@ const StudentHomeWorkSubmit = (props) => {
       .then((res) => res.json())
       .then((json) => {
         toast("Home work submitted successfully");
+        setReset(reset+1)
         // navigate("/studenthomework");
       });
   };

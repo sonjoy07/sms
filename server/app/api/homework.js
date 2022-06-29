@@ -42,6 +42,11 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/all/filter", authenticateToken, (req, res) => {
+    let condition = req.query.school_info_id !== undefined && req.query.school_info_id !== ""?` and home_work.school_info_id= "${req.query.school_info_id}"`:``
+    condition += req.query.class_id !== undefined && req.query.class_id !== ""?` and home_work.class_id= "${req.query.class_id}"`:``
+    condition += req.query.section_id !== undefined && req.query.section_id !== ""?` and home_work.section_id= "${req.query.section_id}"`:``
+    condition += req.query.subject_id !== undefined && req.query.subject_id !== ""?` and home_work.subject_id= "${req.query.subject_id}"`:``
+    condition += req.query.date !== undefined && req.query.date !== ""?` and home_work.date= "${req.query.date}"`:``
     var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link
     from home_work
     join class on home_work.class_id=class.id 
@@ -49,7 +54,7 @@ module.exports = (app) => {
     join subject on home_work.subject_id=subject.id
     join teacher on home_work.teacher_id=teacher.id
     join session on home_work.session_id=session.id
-    where home_work.school_info_id="${req.query.school_info_id}" and home_work.class_id="${req.query.class_id}" and home_work.section_id="${req.query.section_id}" and home_work.subject_id="${req.query.subject_id}" and home_work.issue_date="${req.query.date}"
+    where 1=1${condition}
     order by home_work.id;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -187,12 +192,14 @@ module.exports = (app) => {
     const session_id = req.query.session_id
     const class_id = req.query.class_id
     const subject_id = req.query.subject_id
+    const teacher_id = req.query.teacher_id
     const issue_date = req.query.issue_date !== ""?moment(req.query.issue_date).format("YYYY-MM-DD"):""
     const due_date = req.query.due_date !== ""?moment(req.query.due_date).format("YYYY-MM-DD"):""
     let condition = secton_id!== ''?` and home_work.section_id="${secton_id}"`:``
     condition+= class_id!== ''?` and home_work.class_id="${class_id}"`:``
     condition+= subject_id!== ''?` and home_work.subject_id="${subject_id}"`:``
     condition+= session_id!== ''?` and home_work.session_id="${session_id}"`:``
+    condition+= teacher_id!== ''?` and home_work.teacher_id="${teacher_id}"`:``
     condition+= issue_date!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
     var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission
     from home_work
@@ -249,7 +256,7 @@ module.exports = (app) => {
     from home_work_submission 
     join student_present_status on home_work_submission.student_present_status_id=student_present_status.id
     join student on student_present_status.student_id=student.id
-    where home_work_id="${req.query.home_work_id}";`;
+    where home_work_id="${req.query.home_work_id}"`
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

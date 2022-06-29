@@ -98,7 +98,7 @@ const TeacherHomework = (props) => {
   const handleSearch = () => {
     axios
     .get(
-      `${process.env.REACT_APP_NODE_API}/api/homework/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}`,
+      `${process.env.REACT_APP_NODE_API}/api/homework/teacher/filter?teacher_id=${teacher_id}&&section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -128,6 +128,7 @@ const TeacherHomework = (props) => {
       .then((response) => {
         setClses(response.data);
       });
+      handleSearch()
   }, []);
   useEffect(() => {
     axios
@@ -315,20 +316,20 @@ const TeacherHomework = (props) => {
 
   }
   //get homework
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_NODE_API}/api/homework/teacher/individual?teacher_id=${teacher_id}`,
-        {
-          headers: {
-            authorization: "bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .then((response) => {
-        setHomework(response.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${process.env.REACT_APP_NODE_API}/api/homework/teacher/individual?teacher_id=${teacher_id}`,
+  //       {
+  //         headers: {
+  //           authorization: "bearer " + localStorage.getItem("access_token"),
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       setHomework(response.data);
+  //     });
+  // }, []);
 
   const getHWList = () => {
     axios

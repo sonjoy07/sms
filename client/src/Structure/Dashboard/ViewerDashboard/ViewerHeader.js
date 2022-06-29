@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import profile from "../../images/profile/profile.png";
 const ViewerHeader = () => {
     const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
@@ -22,6 +22,8 @@ const ViewerHeader = () => {
                                 localStorage.setItem("user_type", "");
                                 navigate("/login");
                             }} class="dropdown-item">Log out</a></li>
+                            {/* <li><a className="dropdown-item" href="/teacherprofile">Profile</a></li> */}
+                            <li><Link className='dropdown-item' to="/viewer-school">Home</Link></li>
 
 
                         </ul>

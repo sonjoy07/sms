@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
+import ViewerHeader from "../../ViewerHeader";
 
 const ClassBasedStudentAbsence = () => {
   let navigate = useNavigate();
@@ -29,7 +30,7 @@ const ClassBasedStudentAbsence = () => {
       });
   }, [section_id, date]);
 
-  return (
+  return (<><ViewerHeader/>
     <section className="container">
       <h2 style={{ color: "white" }} className="px-2 py-2 bg-info bg-gradient">
         Student Attendance Information :{" "}
@@ -128,6 +129,7 @@ const ClassBasedStudentAbsence = () => {
         </tbody>
       </table>
     </section>
+    </>
   );
 };
 

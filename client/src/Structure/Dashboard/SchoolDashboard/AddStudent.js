@@ -21,6 +21,7 @@ const AddStudent = () => {
     const [father_no, setFatherno] = useState('')
     const [mother, setMother] = useState('')
     const [mother_no, setMotherNo] = useState('')
+    const [searchStudentID, setSearchStudentID] = useState('')
     const [dob, setDob] = useState('')
     const [blood, setBlood] = useState('')
     const [photo, setphoto] = useState('')
@@ -39,6 +40,16 @@ const AddStudent = () => {
             setStudents(response.data);
         });
     }, [student_id,reset]);
+
+    const handleSearch= ()=>{
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/student/all?school_info_id=${school_id}&&student_id=${searchStudentID}`, {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }).then((response) => {
+            setStudents(response.data);
+        });
+    }
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/gender`, {
@@ -228,7 +239,7 @@ const AddStudent = () => {
                                     </div>
                                     <div className={"col-sm-3 p-2 mx-auto"}>
                                         <div className="form-group">
-                                            <label className='pb-2' for="exampleInputEmail1">first Name : </label>
+                                            <label className='pb-2' for="exampleInputEmail1">First Name : </label>
                                             <input onChange={Fname} style={{ border: '1px solid blue' }} type="text" className="form-control" value={fname} />
                                         </div>
                                     </div>
@@ -299,7 +310,7 @@ const AddStudent = () => {
                                         </div>
                                         <div className={"col-sm-3 mx-auto p-2"}>
                                             <div className="form-group">
-                                                <label className='pb-2' for="exampleSelect">permanent Address : </label>
+                                                <label className='pb-2' for="exampleSelect">Permanent Address : </label>
                                                 <input onChange={Parmanent} style={{ border: '1px solid blue' }} type="text" className="form-control" value={Permanant} />
 
                                             </div>
@@ -385,13 +396,20 @@ const AddStudent = () => {
 
                 <section className='py-5'>
                     <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Student List</h2>
-
+                    <div className='row'>
+                        <div className='col-sm-6'>
+                            <input onChange={(e)=>setSearchStudentID(e.target.value)} className='form-control' placeholder='Student ID'/>
+                        </div>
+                        <div className='col-sm-6 '>
+                            <button onClick={handleSearch} className='btn btn-success mt-1'>Search</button>
+                        </div>
+                    </div>
                     <table className="table table-striped">
                         <thead>
                             <tr style={{ textAlign: 'center' }}>
                                 <th scope="col">Student Id</th>
                                 <th scope="col">Student Name</th>
-                                <th scope="col">mobile number</th>
+                                <th scope="col">Mobile number</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Action</th>
 

@@ -36,7 +36,7 @@ const SchoolHeader = () => {
                             localStorage.setItem("user_type", "");
                             navigate("/login");
                         }} className="dropdown-item">Log out</a></li>
-                        <li><a className="dropdown-item" href="#">profile</a></li>
+                        <li><a className="dropdown-item" href="#">Profile</a></li>
                         <li><Link className='dropdown-item' to="/school-admin">Home</Link></li>
 
                     </ul>

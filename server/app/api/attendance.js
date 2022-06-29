@@ -99,6 +99,9 @@ module.exports = (app) => {
     "/api/attendance/summary/section/today",
     authenticateToken,
     (req, res) => {
+      let condition = req.query.section_id !== undefined && req.query.section_id !== ""?` and student_present_status.section_id= "${req.query.section_id}"`:``
+      condition += req.query.date !== undefined && req.query.date !== ""?` and attendance.date= "${req.query.date}"`:``
+      condition += req.query.class_id !== undefined && req.query.class_id !== ""?` and class.id= "${req.query.class_id}"`:``
       var sql = `SELECT
     subject.subject_name, routine.subject_id, period.period_code, routine.start_time, attendance.time, teacher.id as t_id, teacher.initial,routine.id as r_id,
     COUNT(*) as 'all', 
@@ -115,7 +118,7 @@ module.exports = (app) => {
     join teacher on routine.teacher_id=teacher.id
     join class on routine.class_id=class.id
     
-    where section.id="${req.query.section_id}" and attendance.date="${req.query.date}" and class.id="${req.query.class_id}"
+    where 1=1 ${condition}
     group by routine.subject_id, routine.period_id, teacher.id, routine.id, attendance.time,class.id
     order by routine.period_id;`;
       con.query(sql, function (err, result, fields) {
@@ -158,6 +161,9 @@ module.exports = (app) => {
     }
   );
   app.get("/api/attendance/section/absent", authenticateToken, (req, res) => {
+    let condition = req.query.section_id !== undefined && req.query.section_id !== ""?` and section_id= "${req.query.section_id}"`:``
+    condition += req.query.routine_id !== undefined && req.query.routine_id !== ""?` and attendance.routine_id= "${req.query.routine_id}"`:``
+    condition += req.query.date !== undefined && req.query.date !== ""?` and attendance.date= "${req.query.date}"`:``
     var sql = `SELECT
     CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, class.class_name, section.section_default_name, student.mobile_no, attendance.attendance
     FROM
@@ -170,7 +176,7 @@ module.exports = (app) => {
     join subject on routine.subject_id=subject.id
     join period on routine.period_id=period.id
     
-    where section.id="${req.query.section_id}" and attendance.routine_id="${req.query.routine_id}" and attendance.date="${req.query.date}" and attendance.attendance=0;`;
+    where 1=1 ${condition} and attendance.attendance=0;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

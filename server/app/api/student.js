@@ -42,7 +42,8 @@ module.exports = (app) => {
     );
   });
   app.get("/api/student/all", authenticateToken, (req, res) => {
-    con.query(`SELECT * FROM student where student.school_info_id="${req.query.school_info_id}"`, function (err, result, fields) {
+    let condition = req.query.student_id !== undefined && req.query.student_id !== ""?` and student.student_code= "${req.query.student_id}"`:``
+    con.query(`SELECT * FROM student where student.school_info_id="${req.query.school_info_id}"${condition}`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

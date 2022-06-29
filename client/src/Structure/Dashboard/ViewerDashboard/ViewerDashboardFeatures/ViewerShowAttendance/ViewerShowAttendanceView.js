@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
+import ViewerHeader from "../../ViewerHeader";
 
 const ViewerShowAttendanceView = () => {
   let navigate = useNavigate();
@@ -111,6 +112,7 @@ const ViewerShowAttendanceView = () => {
 
   return (
     <>
+    <ViewerHeader/>
       <div>
         <div className="container py-5 col-sm-12">
           <div

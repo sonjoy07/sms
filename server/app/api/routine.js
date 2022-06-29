@@ -41,6 +41,12 @@ module.exports = (app) => {
     });
   });
   app.get("/api/routine/admin-search", (req, res) => {
+    let condition = req.query.school_info_id !== undefined && req.query.school_info_id !== ""?` and routine.school_info_id= "${req.query.school_info_id}"`:``
+    condition += req.query.teacher_id !== undefined && req.query.teacher_id !== ""?` and routine.teacher_id= "${req.query.teacher_id}"`:``
+    condition += req.query.class_id !== undefined && req.query.class_id !== ""?` and routine.class_id= "${req.query.class_id}"`:``
+    condition += req.query.section_id !== undefined && req.query.section_id !== ""?` and routine.section_id= "${req.query.section_id}"`:``
+    condition += req.query.day_id !== undefined && req.query.day_id !== ""?` and routine.day_id= "${req.query.day_id}"`:``
+    condition += req.query.session_id !== undefined && req.query.session_id !== ""?` and routine.session_id= "${req.query.session_id}"`:``
     var sql = `select routine.id, routine.section_id,section.section_default_name, routine.teacher_id,end_time,start_time, class.class_name,day.day, period.period_code, routine.start_time, routine.end_time, routine.subject_id, subject.subject_name, teacher.first_name, room, session.session_year, shift.shift_name,teacher.initial
     from routine
     join class on routine.class_id=class.id 
@@ -51,7 +57,7 @@ module.exports = (app) => {
     join teacher on routine.teacher_id=teacher.id
     join session on routine.session_id=session.id
     join shift on routine.shift_id=shift.id
-    where routine.school_info_id="${req.query.school_info_id}" and routine.teacher_id="${req.query.teacher_id}" and routine.class_id="${req.query.class_id}" and routine.section_id="${req.query.section_id}" and routine.day_id="${req.query.day_id}" and routine.session_id="${req.query.session_id}"
+    where 1=1 ${condition}
     order by routine.id
     ;`;
     con.query(sql, function (err, result, fields) {

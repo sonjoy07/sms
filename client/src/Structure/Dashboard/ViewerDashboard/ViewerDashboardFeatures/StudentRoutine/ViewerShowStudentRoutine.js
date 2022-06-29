@@ -13,7 +13,7 @@ const ViewerShowStudentRoutine = () => {
   const [routine, setRoutine] = useState([]);
   const [day, setDay] = useState('')
   const [days, setDays] = useState([]);
-  const [teacher_id, setTeacherId] = useState()
+  const [teacher_id, setTeacherId] = useState("")
   const [teachers, setTeachers] = useState([])
   const [clses, setClses] = useState([]);
   const [sections, setSections] = useState([]);
@@ -25,23 +25,23 @@ const ViewerShowStudentRoutine = () => {
   const [show, setShow] = useState(true)
   const [section_id, setSection_id] = useState("");
 
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_NODE_API}/api/routine/admin-search?school_info_id=${school_id}&teacher_id=${teacher_id}&class_id=${class_id}&section_id=${section_id}&day_id=${day}&session_id=${session_id}`,
-        {
-          headers: {
-            authorization: "bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data)
-        setRoutine(response.data);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${process.env.REACT_APP_NODE_API}/api/routine/admin-search?school_info_id=${school_id}&teacher_id=${teacher_id}&class_id=${class_id}&section_id=${section_id}&day_id=${day}&session_id=${session_id}`,
+  //       {
+  //         headers: {
+  //           authorization: "bearer " + localStorage.getItem("access_token"),
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response.data)
+  //       setRoutine(response.data);
 
-      });
+  //     });
 
-  }, [class_id, school_id, session_id, section_id, day, teacher_id])
+  // }, [class_id, school_id, session_id, section_id, day, teacher_id])
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/session`, {
@@ -125,12 +125,26 @@ const ViewerShowStudentRoutine = () => {
 
 
   const handleSearch = () => {
-    setClass_id('')
-    setTeacherId('')
-    setSession('')
-    setDay('')
-    setSection_id('')
-    setShow(true)
+    axios
+    .get(
+      `${process.env.REACT_APP_NODE_API}/api/routine/admin-search?school_info_id=${school_id}&teacher_id=${teacher_id}&class_id=${class_id}&section_id=${section_id}&day_id=${day}&session_id=${session_id}`,
+      {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data)
+      setRoutine(response.data);
+      // setClass_id('')
+      // setTeacherId('')
+      // setSession('')
+      // setDay('')
+      // setSection_id('')
+      setShow(true)
+
+    });
 
   }
   return (

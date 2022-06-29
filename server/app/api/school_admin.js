@@ -157,8 +157,9 @@ module.exports = (app) => {
     });
     app.get('/api/subjectList', (req, res) => {
         const student_id = req.query.student_id
-        let condition = student_id!== undefined && student_id!=="" ? ` and sr.student_id="${student_id}"` : ``
+        let condition = student_id!== undefined && student_id!=="" ? ` and student.student_code="${student_id}"` : ``
         var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 "+condition
+        console.log(sql);
         con.query(sql,
         function (err, result, fields) {
             if (err) throw err;
@@ -167,7 +168,7 @@ module.exports = (app) => {
     })
     app.get('/api/forthSubjectList', (req, res) => {
         const student_id = req.query.student_id
-        let condition = student_id!== undefined && student_id!=="" ? ` and sr.student_id="${student_id}"` : ``
+        let condition = student_id!== undefined && student_id!=="" ? ` and student.student_code="${student_id}"` : ``
         var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_4th_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_4th_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 "+condition
         con.query(sql,
         function (err, result, fields) {
