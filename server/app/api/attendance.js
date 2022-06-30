@@ -76,7 +76,7 @@ module.exports = (app) => {
 
   app.get("/api/attendance/summary/school", (req, res) => {
     var sql = `SELECT
-    school_info.id, school_info.school_name,section.section_default_name,class.class_name,
+    school_info.id, school_info.school_name,section.section_default_name,class.class_name,student_present_status.section_id,
       COUNT(*) as 'all', 
       COUNT(IF(attendance.attendance = 1, 1, NULL)) as 'present',
       COUNT(IF(attendance.attendance = 0, 1, NULL)) as 'absent',
@@ -161,7 +161,7 @@ module.exports = (app) => {
     }
   );
   app.get("/api/attendance/section/absent", authenticateToken, (req, res) => {
-    let condition = req.query.section_id !== undefined && req.query.section_id !== ""?` and section_id= "${req.query.section_id}"`:``
+    let condition = req.query.section_id !== undefined && req.query.section_id !== ""?` and student_present_status.section_id= "${req.query.section_id}"`:``
     condition += req.query.routine_id !== undefined && req.query.routine_id !== ""?` and attendance.routine_id= "${req.query.routine_id}"`:``
     condition += req.query.date !== undefined && req.query.date !== ""?` and attendance.date= "${req.query.date}"`:``
     var sql = `SELECT

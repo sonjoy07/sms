@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import moment from "moment";
 import profile from "../../../../images/profile/profile.png";
 import TeacherHeader from "../../TeacherHeader/TeacherHeader";
 
 const Routine = (props) => {
   const navigate = useNavigate();
+  const date = moment().utcOffset("+6"); // Thursday Feb 2015
+  const dow = date.day();
 
   const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
-  const [searchDay, setSearchDay] = useState('')
+  const [searchDay, setSearchDay] = useState(dow+1)
   const [routine, setRoutine] = useState([]);
   const [days, setDays] = useState([]);
   const [teacher, setTeacher] = useState({});
@@ -20,15 +23,15 @@ const Routine = (props) => {
     }
   };
   //Get Routine Data
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_NODE_API}/api/routine/teacher?teacher_id=${props.user[0]}`
-      )
-      .then((response) => {
-        setRoutine(response.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${process.env.REACT_APP_NODE_API}/api/routine/teacher?teacher_id=${props.user[0]}`
+  //     )
+  //     .then((response) => {
+  //       setRoutine(response.data);
+  //     });
+  // }, []);
   useEffect(() => {
     axios
       .get(
@@ -66,7 +69,7 @@ const Routine = (props) => {
 
         axios
           .get(
-            `${process.env.REACT_APP_NODE_API}/api/routine/teacher?teacher_id=${teacher.id}`,
+            `${process.env.REACT_APP_NODE_API}/api/routine/teacher?teacher_id=${response.data.id}&&day=${searchDay}`,
             {
               headers: {
                 authorization: "bearer " + localStorage.getItem("access_token"),

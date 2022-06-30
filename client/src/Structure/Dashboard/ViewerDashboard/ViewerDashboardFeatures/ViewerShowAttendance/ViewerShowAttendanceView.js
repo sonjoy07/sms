@@ -165,6 +165,7 @@ const ViewerShowAttendanceView = () => {
               </thead>
               <tbody>
                 {per.map((summaryJSON) => {
+                  console.log(summaryJSON);
                   return (
                     <tr>
                       <td>
