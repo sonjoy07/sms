@@ -219,6 +219,40 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+    app.post("/api/csvUpload", (req, res) => {
+        var student_code = req.body.student_code;
+        var first_name = req.body.first_name;
+        var middle_name = req.body.middle_name;
+        var last_name = req.body.last_name;
+        var gender_id = req.body.gender_id;
+        var present_address = req.body.present_address;
+        var permanent_address = req.body.permanent_address;
+        var father_phone_number = req.body.father_phone_number;
+        var mother_name = req.body.mother_name;
+        var mother_phone_number = req.body.mother_phone_number;
+        var photo_id = req.body.photo_id;
+        var dob = req.body.dob;
+        var blood_group = req.body.blood_group;
+        var father_name = req.body.father_name;
+        var mobile_no = req.body.mobile_no;
+        var email = req.body.email;
+        var school_info_id = req.body.school_info_id;
+        var division_id = req.body.division_id;
+        var id = req.body.id;
+
+
+        var sql
+        if (id === '') {
+            sql = `INSERT INTO student (student_code,first_name,middle_name,last_name,mobile_no,gender_id,email,present_address,permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id) VALUES ("${student_code}","${first_name}","${middle_name}","${last_name}","${mobile_no}","${gender_id}","${email}","${present_address}","${permanent_address}","${father_name}","${father_phone_number}","${mother_name}","${mother_phone_number}","${dob}","${blood_group}","${photo_id}","${school_info_id}")`;
+        } else {
+            sql = `update student set student_code = "${student_code}",first_name = "${first_name}",middle_name = "${middle_name}",last_name = "${last_name}",mobile_no = "${mobile_no}",gender_id = "${gender_id}",email = "${email}",present_address = "${present_address}",father_name = "${father_name}",father_phone_number = "${father_phone_number}",mother_name = "${mother_name}",mother_phone_number = "${mother_phone_number}",dob = "${dob}",blood_group = "${blood_group}",photo_id = "${photo_id}",school_info_id = "${school_info_id}" where id = ${id}`
+        }
+
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
     app.post("/api/save/subjectRegistration", async (req, res) => {
         var studentChecked = req.body.studentChecked;
         var subjectChecked = req.body.subjectChecked;

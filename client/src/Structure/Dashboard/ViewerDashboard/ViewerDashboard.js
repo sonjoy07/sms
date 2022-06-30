@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 
@@ -287,7 +287,7 @@ const ViewerDashboard = () => {
             </div>
           </div>
         </a>
-        <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
+        <Link to={'/super-admin-activities'} style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
           <div class="card bg-light shadow-sm">
             <div class="card-body py-4">
               <div
@@ -312,7 +312,7 @@ const ViewerDashboard = () => {
               </div>
             </div>
           </div>
-        </a>
+        </Link>
         <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
           <div class="card bg-light shadow-sm">
             <div class="card-body py-4">
@@ -341,26 +341,6 @@ const ViewerDashboard = () => {
         </a>
       </div>
 
-      <div className="container my-2">
-        <div style={{ display: "flex", justifyContent: "end" }}>
-          <i
-            style={{ fontSize: "30px", color: "blue" }}
-            class="fa-solid fa-angle-left"
-          ></i>
-          <h5 style={{ color: "blue" }} className="px-2">
-            <a
-              onClick={() => {
-                localStorage.setItem("user_code", "");
-                localStorage.setItem("user_type", "");
-                navigate("/login");
-              }}
-            >
-              {" "}
-              LogOut
-            </a>
-          </h5>
-        </div>
-      </div>
     </section>
   );
 };

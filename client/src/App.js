@@ -98,6 +98,8 @@ import AdminActivites from "./Structure/Dashboard/SuperAdminDashboard/Activities
 import StudentActivities from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivities";
 import StudentActivitiesSubmit from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivitiesSubmit";
 import ListNotice from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Viewer Notice/ListNotice";
+import AdminViewActivities from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/AdminViewActivities";
+import CSVUpload from "./Structure/Dashboard/SchoolDashboard/CSVUpload";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -155,7 +157,8 @@ function App(props) {
           <Route path="/studentlibrary" element={<Library />} />
           <Route path="/studentebook" element={<EBook />} />
           <Route path="/studentimportantlink" element={<ImportantLink />} />
-          <Route path="/student-eschool" element={<ESchool />} />
+          <Route path="/studentimport ViewActivities from './Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewActivities';
+-eschool" element={<ESchool />} />
           <Route path="/student-payment" element={<StudentPayment />} />
           <Route path="/studentprofileedit" element={<StudentProfileEdit />} />
           <Route path="/dueinvoice" element={<DueInvoice />} />
@@ -325,6 +328,14 @@ function App(props) {
           <Route
             path="/admin-activities"
             element={<AdminActivites user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/super-admin-activities"
+            element={<AdminViewActivities user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/csv-upload"
+            element={<CSVUpload user={[user_code, user_type]} />}
           />        
               
               

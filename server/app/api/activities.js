@@ -150,14 +150,14 @@ module.exports = (app) => {
     const secton_id = req.query.section_id
     const class_id = req.query.class_id
     const subject_id = req.query.subject_id
-    const issue_date = moment(req.query.issue_date).format("YYYY-MM-DD")
-    const due_date = moment(req.query.due_date).format("YYYY-MM-DD")
+    const issue_date = req.query.issue_date!== undefined && req.query.issue_date!== ''?moment(req.query.issue_date).format("YYYY-MM-DD"):''
+    const due_date = req.query.due_date!== undefined && req.query.due_date!== ''?moment(req.query.due_date).format("YYYY-MM-DD"):''
     const teacher_id = req.query.teacher_id
     let condition = secton_id!== ''?` and activities.section_id="${secton_id}"`:``
     condition+= class_id!== ''?` and activities.class_id="${class_id}"`:``
     condition+= subject_id!== ''?` and activities.subject_id="${subject_id}"`:``
     condition+= teacher_id!== ''?` and activities.teacher_id="${teacher_id}"`:``
-    condition+= issue_date!== ''?` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    condition+= issue_date!== undefined && issue_date!== ''?` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
     var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission
     from activities
     join class on activities.class_id=class.id 
@@ -167,6 +167,7 @@ module.exports = (app) => {
     join session on activities.session_id=session.id
     where 1=1 ${condition}
     order by activities.due_date;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

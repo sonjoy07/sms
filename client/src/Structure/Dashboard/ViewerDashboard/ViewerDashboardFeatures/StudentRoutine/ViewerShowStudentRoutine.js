@@ -63,6 +63,21 @@ const ViewerShowStudentRoutine = () => {
       .then((response) => {
         setDays(response.data);
       });
+      axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/routine/admin-search?school_info_id=${school_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data)
+        setRoutine(response.data);
+        setShow(true)
+  
+      });
   }, []);
   useEffect(() => {
     axios

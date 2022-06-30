@@ -104,26 +104,6 @@ const ListNotice = () => {
        
       </div>
 
-      <div className="container my-2">
-        <div style={{ display: "flex", justifyContent: "end" }}>
-          <i
-            style={{ fontSize: "30px", color: "blue" }}
-            class="fa-solid fa-angle-left"
-          ></i>
-          <h5 style={{ color: "blue" }} className="px-2">
-            <a
-              onClick={() => {
-                localStorage.setItem("user_code", "");
-                localStorage.setItem("user_type", "");
-                navigate("/login");
-              }}
-            >
-              {" "}
-              LogOut
-            </a>
-          </h5>
-        </div>
-      </div>
     </section>
   );
 };

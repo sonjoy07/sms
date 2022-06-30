@@ -12,7 +12,8 @@ const ShowHomeWork = () => {
   );
   const [school_type, setSchool_type] = useState(localStorage.getItem("school_type"))
   const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
-  const [date, setDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [homework, setHomework] = useState([]);
 
   const [class_id, setClass_id] = useState("");
@@ -51,7 +52,7 @@ const ShowHomeWork = () => {
     setTeacher_id(e.target.value);
   };
   let handleDateChange = (e) => {
-    setDate(e.target.value);
+    setStartDate(e.target.value);
   };
 
   useEffect(() => {
@@ -65,6 +66,7 @@ const ShowHomeWork = () => {
       .then((response) => {
         setClses(response.data);
       });
+      getHomework()
   }, []);
   useEffect(() => {
     axios
@@ -112,7 +114,7 @@ const ShowHomeWork = () => {
   const getHomework = () => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/homework/all/filter?school_info_id=${school_info_id}&class_id=${class_id}&section_id=${section_id}&subject_id=${subject_id}&date=${date}`,
+        `${process.env.REACT_APP_NODE_API}/api/homework/all/filter?school_info_id=${school_info_id}&class_id=${class_id}&section_id=${section_id}&subject_id=${subject_id}&&start_date=${startDate}&&end_date=${endDate}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -248,19 +250,33 @@ const ShowHomeWork = () => {
                   <div class={"col-sm-6 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className="pb-2" for="exampleInputEmail1">
-                        Date :{" "}
+                       Start Date :{" "}
                       </label>
                       <input
                         style={{ border: "1px solid blue" }}
                         type="date"
                         class="form-control"
-                        value={date}
+                        value={startDate}
                         onChange={handleDateChange}
                       />
                     </div>
                   </div>
-
                   <div class={"col-sm-6 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleInputEmail1">
+                       End Date :{" "}
+                      </label>
+                      <input
+                        style={{ border: "1px solid blue" }}
+                        type="date"
+                        class="form-control"
+                        value={endDate}
+                        onChange={(e)=>setEndDate(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div class={"col-sm-6 p-2"}>
                     <div className="pt-2 mx-auto">
                       <button
                         style={{ color: "white", fontSize: "20px" }}

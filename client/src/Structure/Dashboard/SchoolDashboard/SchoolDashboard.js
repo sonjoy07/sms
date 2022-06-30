@@ -5,12 +5,11 @@ import organization from "../../images/icons/organization.png";
 import ebook from "../../images/icons/ebook.png";
 import section from "../../images/icons/section.png";
 import notices from "../../images/icons/notices.png";
-import subject from "../../images/icons/subject.png";
 import routine from "../../images/icons/routine.png";
 import student from "../../images/icons/student.png";
 import teacher from "../../images/icons/teacher.png";
 import accounts from "../../images/icons/accounts.png";
-import profile from "../../images/profile/profile.png";
+import csv from "../../images/icons/csv.png";
 import evaluation from "../../images/icons/evaluation.png";
 import SchoolHeader from "./schoolHeader/SchoolHeader";
 const SchoolDashboard = () => {
@@ -275,6 +274,22 @@ const SchoolDashboard = () => {
                        <div className='px-3'>
                          <h4 className="card-title">SMS Report</h4>
                          <p className="card-text">SMS details</p>
+                       </div>
+                   </div>
+                 
+               </div>
+            </div>
+        </a> 
+        <a href='/csv-upload' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+               <div className="card-body py-4">
+               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
+                       <div className='px-3'>
+                          <img style={{width:'64px', height:'64px'}} src={csv} alt=""/>
+                       </div>
+                       <div className='px-3'>
+                         <h4 className="card-title">CSV Upload</h4>
+                         <p className="card-text">CSV upload for teacher student routine</p>
                        </div>
                    </div>
                  

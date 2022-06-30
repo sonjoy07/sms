@@ -508,7 +508,7 @@ const AdminActivities = (props) => {
                     <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
-                          School :{" "}
+                          School Type :{" "}
                         </label>
                         <select
                           style={{ border: "1px solid blue" }}
