@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 import axios from "axios";
@@ -367,7 +367,7 @@ const ShowHomeWork = () => {
                       {homeworkJSON.topic}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
-                      Show Home Work
+                    <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a

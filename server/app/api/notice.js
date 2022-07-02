@@ -96,12 +96,13 @@ module.exports = (app) => {
   app.get("/api/notice/student", authenticateToken, (req, res) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date
     from notice
-    join notice_user on notice_user.notice_id = notice.id
-    join class on notice.class_id=class.id 
-    join section on notice.section_id=section.id
-    join session on notice.session_id=session.id
+    left join notice_user on notice_user.notice_id = notice.id
+    left join class on (class.id=notice.class_id and all_class = 0)  
+    left join section on (notice.section_id=section.id and all_section = 0)
+    left join session on notice.session_id=session.id
     where notice_user.student_id="${req.query.student_id}"
     and type = ${req.query.type === 'teacher' ? 1 : 2}
+    group BY notice.id 
     order by notice.id
     ;`;
     con.query(sql, function (err, result, fields) {
@@ -202,95 +203,37 @@ module.exports = (app) => {
     if (id === '') {
       var sql
       if (class_id === 0 && section_id === 0) {
-        const sections = await query('select * from section');
-        const classes = await query('select * from class');
-        let input = []
-        classes.forEach(res => {
-          input.push(res)
-          sections.forEach(resSec => {
-            sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${resSec.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
-            notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
-          })
-
-        })
-        if (classes.length === input.length) {
-          res.json({ status: "success" });
-        }
+        
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
+        notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
+        res.json({ status: "success" });
       } else if (class_id === 0 && section_id !== 0) {
-
-        const classes = await query('select * from class');
-        let input = []
-
-        classes.forEach(res => {
-          input.push(res)
-          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
-        })
-        if (classes.length === input.length) {
           res.json({ status: "success" });
-        }
       } else if (section_id === 0 && class_id !== 0) {
-
-
-        const sections = await query('select * from section');
-
-        let input = []
-        sections.forEach(res => {
-          input.push(res)
-          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values("${session_id}", "${school_info_id}", "${class_id}", "${res.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}"),`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values("${session_id}", "${school_info_id}", "${class_id}", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
-        })
-        if (sections.length === input.length) {
           res.json({ status: "success" });
-        }
       } else {
-        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "${class_id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",0,0)`
         notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
         res.json({ status: "success" });
       }
     } else {
       if (class_id === 0 && section_id === 0) {
-        var sql = "Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values "
-        con.query(`delete from notice where notice_id = ${id}`)
-        const sections = await query('select * from section');
-        const classes = await query('select * from class');
-        let input = []
-
-        classes.forEach(res => {
-          input.push(res)
-          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
-          notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
-        })
-        if (classes.length === input.length) {
-          res.json({ status: "success" });
-        }
+        
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
+        notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
+        res.json({ status: "success" });
       } else if (class_id === 0 && section_id !== 0) {
-        con.query(`delete from notice where notice_id = ${id}`)
-        const classes = await query('select * from class');
-
-        let input = []
-
-        classes.forEach(res => {
-          input.push(res)
-          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values ("${session_id}", "${school_info_id}", "${res.id}", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}")`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
-        })
-        if (classes.length === input.length) {
           res.json({ status: "success" });
-        }
       } else if (section_id === 0 && class_id !== 0) {
-        con.query(`delete from notice where notice_id = ${id}`)
-        const sections = await query('select * from section');
-
-        let input = []
-        sections.forEach(res => {
-          input.push(res)
-          sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type) values("${session_id}", "${school_info_id}", "${class_id}", "${res.id}", "${headline}", "${description}", "${date}", "${uid}", "${type}"),`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values("${session_id}", "${school_info_id}", "${class_id}", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
-        })
-        if (sections.length === input.length) {
           res.json({ status: "success" });
-        }
       } else {
         sql = `update notice set session_id = "${session_id}", school_info_id = "${school_info_id}", class_id = "${class_id}", section_id = "${section_id}", notice_headline= "${headline}",notice_description = "${description}", publishing_date="${date}",user_code= "${uid}",type="${type}" where id = ${id}`
         notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)

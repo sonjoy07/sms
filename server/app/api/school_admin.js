@@ -1,5 +1,9 @@
 const moment = require('moment')
 const axios = require('axios')
+const csv = require('csv-parser');
+const fs = require('fs');
+var path = require('path');
+const { ignore } = require('nodemon/lib/rules');
 module.exports = (app) => {
     const con = require('../models/db')
     const authenticateToken = require("../middleware/middleware");
@@ -157,24 +161,24 @@ module.exports = (app) => {
     });
     app.get('/api/subjectList', (req, res) => {
         const student_id = req.query.student_id
-        let condition = student_id!== undefined && student_id!=="" ? ` and student.student_code="${student_id}"` : ``
-        var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 "+condition
+        let condition = student_id !== undefined && student_id !== "" ? ` and student.student_code="${student_id}"` : ``
+        var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 " + condition
         console.log(sql);
         con.query(sql,
-        function (err, result, fields) {
-            if (err) throw err;
-            res.send(result);
-        })
+            function (err, result, fields) {
+                if (err) throw err;
+                res.send(result);
+            })
     })
     app.get('/api/forthSubjectList', (req, res) => {
         const student_id = req.query.student_id
-        let condition = student_id!== undefined && student_id!=="" ? ` and student.student_code="${student_id}"` : ``
-        var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_4th_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_4th_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 "+condition
+        let condition = student_id !== undefined && student_id !== "" ? ` and student.student_code="${student_id}"` : ``
+        var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_4th_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_4th_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 " + condition
         con.query(sql,
-        function (err, result, fields) {
-            if (err) throw err;
-            res.send(result);
-        })
+            function (err, result, fields) {
+                if (err) throw err;
+                res.send(result);
+            })
     })
     app.get('/api/groups/all', (req, res) => {
         con.query(
@@ -220,38 +224,37 @@ module.exports = (app) => {
         });
     });
     app.post("/api/csvUpload", (req, res) => {
-        var student_code = req.body.student_code;
-        var first_name = req.body.first_name;
-        var middle_name = req.body.middle_name;
-        var last_name = req.body.last_name;
-        var gender_id = req.body.gender_id;
-        var present_address = req.body.present_address;
-        var permanent_address = req.body.permanent_address;
-        var father_phone_number = req.body.father_phone_number;
-        var mother_name = req.body.mother_name;
-        var mother_phone_number = req.body.mother_phone_number;
-        var photo_id = req.body.photo_id;
-        var dob = req.body.dob;
-        var blood_group = req.body.blood_group;
-        var father_name = req.body.father_name;
-        var mobile_no = req.body.mobile_no;
-        var email = req.body.email;
-        var school_info_id = req.body.school_info_id;
-        var division_id = req.body.division_id;
-        var id = req.body.id;
 
-
-        var sql
-        if (id === '') {
-            sql = `INSERT INTO student (student_code,first_name,middle_name,last_name,mobile_no,gender_id,email,present_address,permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id) VALUES ("${student_code}","${first_name}","${middle_name}","${last_name}","${mobile_no}","${gender_id}","${email}","${present_address}","${permanent_address}","${father_name}","${father_phone_number}","${mother_name}","${mother_phone_number}","${dob}","${blood_group}","${photo_id}","${school_info_id}")`;
-        } else {
-            sql = `update student set student_code = "${student_code}",first_name = "${first_name}",middle_name = "${middle_name}",last_name = "${last_name}",mobile_no = "${mobile_no}",gender_id = "${gender_id}",email = "${email}",present_address = "${present_address}",father_name = "${father_name}",father_phone_number = "${father_phone_number}",mother_name = "${mother_name}",mother_phone_number = "${mother_phone_number}",dob = "${dob}",blood_group = "${blood_group}",photo_id = "${photo_id}",school_info_id = "${school_info_id}" where id = ${id}`
-        }
-
-        con.query(sql, function (err, result, fields) {
-            if (err) throw err;
-            res.json({ status: "success" });
+        const file = req.files.file
+        var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+        file.mv(`${uploadPath}/${file.name}`, err => {
+            if (err) {
+                return res.status(500).send(err)
+            }
+        })
+        let csvData = [];
+        let stream = fs.createReadStream(`${uploadPath}/${file.name}`).pipe(csv({})).on('data',(data=>csvData.push(data))).on('end',()=>{
+            console.log(csvData)
         });
+        // let csvStream = csv.parse()
+        // .on("data", function (data) {
+        //     console.log(csvData);
+        //     csvData.push(data);
+        // }).on("end", function () {
+        //     // Remove Header ROW
+        //     csvData.shift();
+        // })
+        // csv.fromStream(stream,{headers:["id","student_code","first_name"],ignoreEmpty:true})
+        // .on("data",function(data){
+        //     console.log(data);
+        // }).on("end",function(){
+
+        // console.log("ddone");
+        // })
+        
+        // let test = stream.pipe(csvStream);
+        // console.log(test);
+
     });
     app.post("/api/save/subjectRegistration", async (req, res) => {
         var studentChecked = req.body.studentChecked;
@@ -332,12 +335,12 @@ module.exports = (app) => {
         });
     });
 
-    app.get('/api/sms/count', async(req,res)=>{
+    app.get('/api/sms/count', async (req, res) => {
         const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
         var sql = `select smsReport.*,CONCAT( teacher.first_name, ' ', teacher.middle_name, ' ', teacher.last_name ) AS teacher_full_name,CONCAT( school_admin.first_name, ' ', school_admin.middle_name, ' ', school_admin.last_name ) AS school_admin_full_name from smsReport left join teacher on teacher.teacher_code = smsReport.user_id left join school_admin on school_admin.admin_code = smsReport.user_id where smsReport.school_info_id = ${req.query.school_info_id}`
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
-            res.send({result:result,data:test.data} );
+            res.send({ result: result, data: test.data });
         });
         console.log(test.data)
     })
