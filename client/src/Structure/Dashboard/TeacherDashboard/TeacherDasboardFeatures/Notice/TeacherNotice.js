@@ -263,10 +263,10 @@ const TeacherNotice = (props) => {
       .then((res) => res.json())
       .then((json) => {
         if (id) {
-          toast("Notice updated successfully");
+          toast("Note's updated successfully");
 
         } else {
-          toast("Notice saved successfully");
+          toast("Note's saved successfully");
         }
         console.log("ok");
         setClass_id(0);
@@ -311,7 +311,7 @@ const TeacherNotice = (props) => {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/notice/delete?id=${id}`)
       if (result) {
-        toast("Notice deleted successfully");
+        toast("Note's deleted successfully");
         getHWList()
       }
     }
@@ -352,7 +352,7 @@ const TeacherNotice = (props) => {
                       }}
                       className="card-title pt-2"
                     >
-                      Create Notice{" "}
+                      Create Note's{" "}
                     </h3>
                   </div>
                   <div className="card-tools">
@@ -556,7 +556,7 @@ const TeacherNotice = (props) => {
             <thead>
               <tr>
                 <th scope="col">Publishing Date</th>
-                <th scope="col">Notice Headline</th>
+                <th scope="col">Note's Headline</th>
                 <th scope="col">Description</th>
                 <th scope="col">Class</th>
                 <th scope="col">Section</th>

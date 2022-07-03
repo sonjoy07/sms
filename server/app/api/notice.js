@@ -56,11 +56,12 @@ module.exports = (app) => {
   app.get("/api/notice/school", authenticateToken, (req, res) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name
     from notice
-    join class on notice.class_id=class.id 
-    join section on notice.section_id=section.id
-    join session on notice.session_id=session.id
+    left join class on (notice.class_id=class.id and all_class= 0)
+    left join section on (notice.section_id=section.id and all_section =0)
+    left join session on notice.session_id=session.id
     where notice.school_info_id="${req.query.school_info_id}"
     and type = "${req.query.type}"
+    group by notice.id
     order by notice.id
     ;`;
     con.query(sql, function (err, result, fields) {

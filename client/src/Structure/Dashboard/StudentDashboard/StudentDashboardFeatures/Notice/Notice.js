@@ -48,7 +48,7 @@ const Notice = () => {
                     <thead>
                         <tr>
                             <th scope="col">Publishing Date</th>
-                            <th scope="col">Notice Headline</th>
+                            <th scope="col">Note's Headline</th>
                             <th scope="col">Description</th>
                             <th scope="col">Class</th>
                             <th scope="col">Section</th>

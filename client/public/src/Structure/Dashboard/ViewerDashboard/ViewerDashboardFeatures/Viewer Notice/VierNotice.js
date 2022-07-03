@@ -60,7 +60,7 @@ const VierNotice = () => {
         <div>
             <ViewerHeader />
             <div className="container">
-                <h3 className='text-center py-2 '>School Notice List</h3>
+                <h3 className='text-center py-2 '>School Note's List</h3>
                 {notice.map((noticeJSON) => {
 
                     return (

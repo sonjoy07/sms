@@ -215,8 +215,8 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 className="card-title">Notices</h4>
-                    <p className="card-text">Add Notices/Events</p>
+                    <h4 className="card-title">Note's</h4>
+                    <p className="card-text">Add Note's/Events</p>
                   </div>
                 </div>
               </div>
@@ -296,7 +296,7 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 className="card-title">Students</h4>
+                    <h4 className="card-title">Mentoring Students</h4>
                     <p className="card-text">All Students Portal</p>
                   </div>
                 </div>

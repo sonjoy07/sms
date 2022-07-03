@@ -145,6 +145,22 @@ const SuperAdminDashboard = () => {
                         </div>
                     </div>
                 </a>
+                <a style={{ textDecoration: 'none' }} href='/newExam' className="col-sm-12 col-md-6 my-4 col1">
+                    <div className="card bg-light shadow-sm">
+                        <div className="card-body py-4">
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                                <div className='px-3'>
+                                    <img style={{ width: '64px', height: '64px' }} src={inventory} alt="" />
+                                </div>
+                                <div className='px-3'>
+                                    <h4 className="card-title">Exam</h4>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
 
 
 

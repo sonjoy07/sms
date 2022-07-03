@@ -184,7 +184,7 @@ const SchoolAdminNotice = () => {
           <div className="d-flex justify-content-between px-4">
             <div>
               <h2 style={{ fontWeight: "bold" }} class="card-title text-info ">
-                Add Notice
+                Add Note's
               </h2>
             </div>
             <div className="card-tools">
@@ -416,7 +416,7 @@ const SchoolAdminNotice = () => {
         <div className="col-12">
           <div className="card card-primary">
             <div className="card-header">
-              <h3 className="card-title">All Notices</h3>
+              <h3 className="card-title">All Note's</h3>
             </div>
             {/* /.card-header */}
             <div className="card-body table-responsive p-0">

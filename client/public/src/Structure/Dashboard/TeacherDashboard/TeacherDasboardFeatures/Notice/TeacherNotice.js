@@ -299,7 +299,7 @@ const TeacherNotice = (props) => {
                       }}
                       class="card-title pt-2"
                     >
-                      Create Notice{" "}
+                      Create Note's{" "}
                     </h3>
                   </div>
                   <div className="card-tools">
@@ -495,7 +495,7 @@ const TeacherNotice = (props) => {
             <thead>
               <tr>
                 <th scope="col">Publishing Date</th>
-                <th scope="col">Notice Headline</th>
+                <th scope="col">Note's Headline</th>
                 <th scope="col">Description</th>
                 <th scope="col">Class</th>
                 <th scope="col">Section</th>

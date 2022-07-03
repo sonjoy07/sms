@@ -94,8 +94,8 @@ const SchoolDashboard = () => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 className="card-title">Notices</h4>
-                    <p className="card-text">Add Notices/Events</p>
+                    <h4 className="card-title">Note's</h4>
+                    <p className="card-text">Add Note's/Events</p>
                   </div>
                 </div>
               </div>

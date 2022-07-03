@@ -240,7 +240,7 @@ const ShowHomeWork = () => {
                         {teachers.map((teacherJSON) => {
                           return (
                             <option value={teacherJSON.id}>
-                              {teacherJSON.initial}
+                              {teacherJSON.full_name}
                             </option>
                           );
                         })}
@@ -284,7 +284,7 @@ const ShowHomeWork = () => {
                         class="btn bg-secondary bg-gradient px-5"
                         onClick={getHomework}
                       >
-                        Submit
+                        Search
                       </button>
                     </div>
                   </div>

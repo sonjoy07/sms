@@ -62,8 +62,8 @@ const Notices = () => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 class="card-title">Notices</h4>
-                    <p class="card-text">Add Notices/Events</p>
+                    <h4 class="card-title">Note's</h4>
+                    <p class="card-text">Add Note's/Events</p>
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ const axios = require('axios')
 const csv = require('csv-parser');
 const fs = require('fs');
 var path = require('path');
+const csv2 = require('fast-csv');
 const { ignore } = require('nodemon/lib/rules');
 module.exports = (app) => {
     const con = require('../models/db')
@@ -226,16 +227,76 @@ module.exports = (app) => {
     app.post("/api/csvUpload", (req, res) => {
 
         const file = req.files.file
+        const option = req.body.option
+        console.log(option);
         var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
         file.mv(`${uploadPath}/${file.name}`, err => {
             if (err) {
                 return res.status(500).send(err)
             }
         })
+
+        let streamR = fs.createReadStream(`${uploadPath}/${file.name}`);
+        let csvDataR = [];
+        let csvStream = csv2
+        .parse()
+        .on("data", function (data) {
+            csvDataR.push(data);
+        })
+        .on("end", function () {
+            // console.log('csvDataR',csvDataR);
+            // Remove Header ROW
+            csvDataR.shift();
+            csvDataR.map(res=>{  
+                if(option === "routine"){      
+                let splitInsertData = res[0].replaceAll('"','').split(';')
+                const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${splitInsertData[0]}", "${splitInsertData[1]}", "${splitInsertData[2]}", "${splitInsertData[3]}","${splitInsertData[4]}","${splitInsertData[5]}", "${splitInsertData[6]}", "${splitInsertData[7]}", "${splitInsertData[8]}", "${splitInsertData[9]}", "${splitInsertData[10]}", "${splitInsertData[11]}" )`;
+                  
+                  con.query(sql, function (err, result, fields) {
+                    if (err) throw err;
+                  });
+                }
+            })
+        })
+        streamR.pipe(csvStream);
+
+
+
         let csvData = [];
-        let stream = fs.createReadStream(`${uploadPath}/${file.name}`).pipe(csv({})).on('data',(data=>csvData.push(data))).on('end',()=>{
-            console.log(csvData)
+        let stream = fs.createReadStream(`${uploadPath}/${file.name}`).pipe(csv({})).on('data', (data => csvData.push(data))).on('end', () => {
+            // csvData.shift()
+            csvData.map(res => {
+                let newD= JSON.stringify(res).replace(/[{()}]/g, '').split(":")
+                const newInsertData = newD[1].replaceAll('\\', '').replaceAll('"','')
+                const insertArray = newInsertData.split(";")
+                if (option === 'student') {
+                    let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id) values ("${insertArray[0]}","${insertArray[1]}","${insertArray[2]}","${insertArray[3]}","${insertArray[4]}","${insertArray[5]}","${insertArray[6]}","${insertArray[7]}","${insertArray[8]}","${insertArray[9]}","${insertArray[10]}","${insertArray[11]}","${insertArray[12]}","${insertArray[13]}","${insertArray[14]}","${insertArray[15]}","${insertArray[16]}","${insertArray[17]}")`
+                    con.query(sql, (err, result, fields) => {
+                        if (err) throw err
+                    })
+                }
+                if(option === "teacher"){
+                   const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${insertArray[0]}","${insertArray[1]}","${insertArray[2]}","${insertArray[3]}","${insertArray[4]}","${insertArray[5]}","${insertArray[6]}","${insertArray[7]}","${insertArray[8]}","${insertArray[9]}","${insertArray[10]}","${insertArray[11]}","${insertArray[12]}","${insertArray[13]}","${insertArray[14]}","${insertArray[15]}")`;
+                   con.query(sql, function (err, result, fields) {
+                    if (err) throw err;
+                  });
+                }
+                if(option === "routine"){
+                //     let newDR= JSON.stringify(res).replace(/[{()}]/g, '')
+                //     const newInsertDataR = newD[1].replace(/\\/g, '')
+                //     console.log("newInsertDataR",newInsertDataR);
+                //   const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${insertArray[0]}", "${insertArray[1]}", "${insertArray[2]}", "${insertArray[3]}","${insertArray[4]}","${insertArray[5]}", "${insertArray[6]}", "${insertArray[7]}", "${insertArray[8]}", "${insertArray[9]}", "${insertArray[10]}", "${insertArray[11]}" )`;
+                  
+                //   con.query(sql, function (err, result, fields) {
+                //     if (err) throw err;
+                //   });
+                }
+                // if()
+            })
+            res.json({ status: "success" });
         });
+
+        
         // let csvStream = csv.parse()
         // .on("data", function (data) {
         //     console.log(csvData);
@@ -251,7 +312,7 @@ module.exports = (app) => {
 
         // console.log("ddone");
         // })
-        
+
         // let test = stream.pipe(csvStream);
         // console.log(test);
 
