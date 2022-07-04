@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
+import SchoolHeader from './schoolHeader/SchoolHeader';
 
 const CreateNewExam = () => {
     const [schools, setSchools] = useState([]);
@@ -176,9 +177,9 @@ const CreateNewExam = () => {
             .then((json) => {
                 setReset(reset+1)
                 if (id === '') {
-                  toast('New exam saved successfully')
+                  toast('New Evaluation Schedule saved successfully')
                 } else {
-                  toast('exam updated successfully')
+                  toast('Evaluation Schedule updated successfully')
                 }
             });
         setClass_id('')
@@ -218,7 +219,8 @@ const CreateNewExam = () => {
         }
     }
     console.log(class_id,teacher);
-    return (
+    return (<>
+        <SchoolHeader/>
         <section className='container'>
             <div className='row mt-4'>
                 <div className=' col-md-12'>
@@ -226,7 +228,7 @@ const CreateNewExam = () => {
                         <div className="card-header">
                             <div className='d-flex justify-content-between px-4'>
                                 <div>
-                                    <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Create New Exam : </h3>
+                                    <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Create New Evaluation Schedule : </h3>
                                 </div>
                                 <div className="card-tools">
                                     <button id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
@@ -394,7 +396,7 @@ const CreateNewExam = () => {
             </div>
 
             <div className='py-5'>
-                <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Marks Entry Sheet</h2>
+                <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Evaluation Schedule</h2>
 
                 <table class="table table-striped">
                     <thead>
@@ -448,6 +450,7 @@ const CreateNewExam = () => {
                 </table>
             </div>
         </section>
+        </>
     )
 }
 

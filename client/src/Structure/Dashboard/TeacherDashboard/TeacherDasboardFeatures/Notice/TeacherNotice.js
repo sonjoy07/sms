@@ -165,12 +165,12 @@ const TeacherNotice = (props) => {
         for (const inputName in response.data) {
           const check = selectedStudents.find(res => res == response.data[inputName].student_id)
           if (check) {
-              list[inputName] = true;
+            list[inputName] = true;
           } else {
-              list[inputName] = false;
+            list[inputName] = false;
 
           }
-      }
+        }
         setChecked(list)
       });
   }, [section_id, class_id]);
@@ -234,8 +234,8 @@ const TeacherNotice = (props) => {
     //     finalStudents.push(students[index].id);
     //   }
     // });
-    students.map((stu,index)=>{
-      if(checked[index] === true){
+    students.map((stu, index) => {
+      if (checked[index] === true) {
         finalStudents.push(stu.id)
       }
     })
@@ -335,7 +335,7 @@ const TeacherNotice = (props) => {
   console.log(checkedStudents);
   return (
     <>
-    <TeacherHeader/>
+      <TeacherHeader />
       <ToastContainer />
       <div className="container ">
         <div className="row mt-4">
@@ -576,9 +576,10 @@ const TeacherNotice = (props) => {
                     <td style={{ color: "blue" }}>
                       {noticeJSON.notice_description}
                     </td>
-                    <td style={{ color: "blue" }}>{noticeJSON.class_name}</td>
+
+                    <td style={{ color: "blue" }}>{noticeJSON.class_name ? noticeJSON.class_name : 'All'}</td>
                     <td style={{ color: "blue" }}>
-                      {noticeJSON.section_local_name}
+                      {noticeJSON.section_default_name ? noticeJSON.section_default_name : 'All'}
                     </td>
 
                     <td>

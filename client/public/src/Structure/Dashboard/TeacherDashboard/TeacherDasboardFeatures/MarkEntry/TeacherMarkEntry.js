@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import profile from "../../../../images/profile/profile.png";
 import TeacherHeader from '../../TeacherHeader/TeacherHeader';
+import EvalutionSchedule from './../../../../../../../src/Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/Evaluation/EvalutionSchedule';
 const ExamMarksEntry = () => {
     let navigate = useNavigate();
     let student_mark = [];
@@ -408,7 +409,7 @@ const ExamMarksEntry = () => {
                 {
                     show ? (
                         <div className='py-5'>
-                            <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Marks Entry Sheet</h2>
+                            <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Evaluation Schedule</h2>
 
                             <table class="table table-striped">
                                 <thead>

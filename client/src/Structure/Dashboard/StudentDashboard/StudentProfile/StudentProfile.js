@@ -57,7 +57,7 @@ const StudentProfile = () => {
             console.log(uploadData);
             setProfilePhoto(uploadData.filePath)
     }
-    console.log(profilePhoto);
+    console.log(student);
     return (
         <div class="container">
             <div class="main-body my-5">
@@ -97,7 +97,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Student Code : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Kenneth Valdez
+                                        {student.student_code}
                                     </div>
                                 </div>
 
@@ -106,7 +106,12 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Full Name : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        fip@jukmuh.al
+                                    {student.full_name}
+                                    {/* <div className='row form-inline'>
+                                        <input className='col-sm-4 form-control' />
+                                        <input className='col-sm-4 form-control' />
+                                        <input className='col-sm-4 form-control' />
+                                    </div> */}
                                     </div>
                                 </div>
 
@@ -115,7 +120,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Mobile No. : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        (239) 816-9029
+                                    {student.mobile_no}
                                     </div>
                                 </div>
 
@@ -124,7 +129,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Sex : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        (320) 380-4539
+                                    {student.gender_id === 1?"Male":"Female"}
                                     </div>
                                 </div>
 
@@ -133,7 +138,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Email : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                    {student.email}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -141,15 +146,15 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Present Address : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                    {student.present_address}
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Permarent Address : </h6>
+                                        <h6 class="mb-0">Permanent Address : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.permanent_address}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -157,7 +162,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Father Name : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.father_name}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -165,7 +170,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Father Phone No. : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.father_phone_number}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -173,7 +178,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Mother Name : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.mother_name}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -181,7 +186,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Mother Phone No. : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.mother_phone_number}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -189,7 +194,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Date Of Birth : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.dob}
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -197,7 +202,7 @@ const StudentProfile = () => {
                                         <h6 class="mb-0">Blood Group : </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        Bay Area, San Francisco, CA
+                                        {student.blood_group}
                                     </div>
                                 </div>
 

@@ -36,10 +36,12 @@ module.exports = (app) => {
         var exam_info_id = req.body.exam_info_id;
         var subject_id = req.body.subject_id;
         var mark_update = req.body.mark_update;
+        var mark_update = req.body.mark_update;
+        var teacher_id = req.body.teacher_id;
 
-        var sql = `INSERT INTO exam_marks (exam_info_id,subject_id,student_id,marks_obtained) VALUES `
+        var sql = `INSERT INTO exam_marks (exam_info_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
         mark_update.map((sts) => {
-            sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}'),`
+            sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
         });
         sql = sql.slice(0, -1);
         con.query(sql, function (err, result, fields) {
@@ -47,6 +49,27 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+    app.post("/api/exam_mark/update", authenticateToken, (req, res) => {
+        var updateData = req.body.updateData;
+        var index = req.body.index;
+
+        var sql = `Update exam_marks set marks_obtained = ${updateData}  where id = ${index}`
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+    app.delete("/api/exam-mark/delete", authenticateToken, (req, res) => {
+        var id = req.query.id
+
+        var sql = `delete from  exam_marks where id = ${id}`
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+
+
 
 
     app.get('/api/exam_mark', authenticateToken, (req, res) => {

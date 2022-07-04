@@ -5,9 +5,10 @@ module.exports = (app) => {
   const authenticateToken = require("../middleware/middleware");
   app.get("/api/student/profile", (req, res) => {
     con.query(
-      `SELECT student_present_status.id, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code,student.school_info_id,session_id,class_id 
+      `SELECT student_present_status.id, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code,student.school_info_id,session_id,class_id,section_default_name,student.*
       FROM student_present_status 
-      join student on student_present_status.student_id=student.id 
+      left join student on student_present_status.student_id=student.id 
+      left join section on student_present_status.section_id= section.id
       where student_present_status.id="${req.query.student_id}";`,
       function (err, result, fields) {
         if (err) throw err;
@@ -43,7 +44,7 @@ module.exports = (app) => {
   });
   app.get("/api/student/all", authenticateToken, (req, res) => {
     let condition = req.query.student_id !== undefined && req.query.student_id !== ""?` and student.student_code= "${req.query.student_id}"`:``
-    con.query(`SELECT * FROM student where student.school_info_id="${req.query.school_info_id}"${condition}`, function (err, result, fields) {
+    con.query(`SELECT student.*, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name FROM student where student.school_info_id="${req.query.school_info_id}"${condition}`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

@@ -2,7 +2,7 @@ module.exports = (app) => {
     const con = require("../models/db");
     const authenticateToken = require("../middleware/middleware");
     app.get("/api/mark", authenticateToken, (req, res) => {
-        var sql = `select exam_grade_sheet.id,student.student_code,school_info.address_division,CONCAT(student.first_name,' ' ,student.middle_name) as name, school_info.school_name, session.session_year,section.section_default_name, class.class_name,student.student_code,
+        var sql = `select exam_grade_sheet.id,student.student_code,school_info.address_division,CONCAT(student.first_name,' ' ,student.middle_name) as name, school_info.school_name, session.session_year,section.section_default_name, class.class_name,student.student_code,exam_grade_sheet.subject_id,
         subject.subject_name,half_yearly_exam_sub,half_yearly_exam_mcq,monthly_class_test_average, (final_exam_sub+final_exam_mcq+half_yearly_exam_sub+half_yearly_exam_mcq)/2*.7 as converted,final_exam_sub,final_exam_mcq,
         ((final_exam_sub+final_exam_mcq+half_yearly_exam_sub+half_yearly_exam_mcq)/2*.7 +(attendance_marks+extra_curriculum+monthly_class_test_average)) as total,attendance_marks,	extra_curriculum,
     CASE
@@ -23,10 +23,11 @@ module.exports = (app) => {
         join class on exam_grade_sheet.class_id=class.id
         join subject on exam_grade_sheet.subject_id=subject.id
         join student on exam_grade_sheet.student_id=student.id
-        join school_info on exam_grade_sheet.school_info_id=school_info.id
+        left join school_info on exam_grade_sheet.school_info_id=school_info.id
     
         where student_code='${req.query.student_code}' and session_id="${req.query.session_id}"`;
 
+        console.log(sql);
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.send(result);

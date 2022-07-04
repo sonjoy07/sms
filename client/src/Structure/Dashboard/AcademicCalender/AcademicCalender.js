@@ -203,7 +203,7 @@ const AcademicCalender = () => {
 
                      <table className="table table-striped">
                         <thead>
-                           <tr>
+                           <tr style={{textAlign: 'center'}}>
                               <th scope="col">Schedule Type</th>
                               <th scope="col">Schedule Date</th>
                               <th scope="col">Action</th>

@@ -18,8 +18,8 @@ module.exports = (app) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name,notice.class_id,
     notice.session_id
     from notice
-    join class on notice.class_id=class.id 
-    join section on notice.section_id=section.id
+    left join class on (notice.class_id=class.id and all_class= 0)
+    left join section on (notice.section_id=section.id and all_section= 0)
     join session on notice.session_id=session.id
     order by notice.id
     ;`;
@@ -32,9 +32,9 @@ module.exports = (app) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,section.section_default_name,notice.class_id,
     notice.session_id,GROUP_CONCAT(notice_user.student_id) notice_users
     from notice
-    join notice_user on notice_user.notice_id = notice.id
-    join class on notice.class_id=class.id 
-    join section on notice.section_id=section.id
+    left join notice_user on notice_user.notice_id = notice.id
+    left join class on (notice.class_id=class.id and all_class= 0)
+    left join section on (notice.section_id=section.id and all_section= 0)
     join session on notice.session_id=session.id
     where notice.id = ${req.query.id}
     group by notice.id
@@ -81,8 +81,8 @@ module.exports = (app) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,section_default_name as section_local_name,
     notice.session_id
     from notice
-    join class on notice.class_id=class.id 
-    join section on notice.section_id=section.id
+    left join class on (notice.class_id=class.id and all_class= 0)
+    left join section on (notice.section_id=section.id and all_section = 0)
     join session on notice.session_id=session.id
     where notice.user_code="${req.query.uid}"
     order by notice.id

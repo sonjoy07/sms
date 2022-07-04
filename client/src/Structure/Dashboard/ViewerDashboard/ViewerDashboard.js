@@ -176,7 +176,7 @@ const ViewerDashboard = () => {
           </div>
         </a>
         <a
-          href="/viewevaluation"
+          href="/viewevaluationlist"
           style={{ textDecoration: "none" }}
           class="col-sm-6 my-4 col1"
         >

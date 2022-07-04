@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import profile from "../../../../images/profile/profile.png";
 import TeacherHeader from '../../TeacherHeader/TeacherHeader';
 const ExamMarksEntry = () => {
@@ -22,6 +23,8 @@ const ExamMarksEntry = () => {
     const [section_id, setSection_id] = useState("");
 
     const [subject_id, setSubject_id] = useState("");
+    const [index, setIndex] = useState("");
+    const [updateData, setUpdateData] = useState("");
     const [session_id, setSession_id] = useState("");
     const [session, setSession] = useState("");
     const [clses, setClses] = useState([]);
@@ -60,6 +63,7 @@ const ExamMarksEntry = () => {
             });
     }, [user_code, access_token]);
 
+
     let handleClassChange = (e) => {
         setClass_id(e.target.value);
         console.log(e.target.value)
@@ -92,6 +96,33 @@ const ExamMarksEntry = () => {
         setSubject_id(e.target.value);
         console.log(e.target.value)
     };
+
+    const updateMarks = (event) => {
+        if (event.key === 'Enter') {
+            fetch(`${process.env.REACT_APP_NODE_API}/api/exam_mark/update`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: "bearer " + localStorage.getItem("access_token"),
+                },
+                body: JSON.stringify({
+                    updateData: updateData,
+                    index: index,
+                })
+            })
+                .then((res) => {
+                    console.log(res)
+                    res.json()
+                })
+                .then((json) => {
+                    alert(`student's Mark updated successful!!`)
+                    window.location.reload()
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
 
     const HandleInputChange = (e) => {
         let name = e.target.name;
@@ -141,6 +172,18 @@ const ExamMarksEntry = () => {
                 },
             }).then((response) => {
                 setSessions(response.data);
+            });
+
+        axios
+            .get(
+                `${process.env.REACT_APP_NODE_API}/api/mark-entry-list?teacher_id=${user_code}`,
+                {
+                    headers: { authorization: "bearer " + access_token },
+                }
+            )
+            .then((response) => {
+                setmarkShow(response.data);
+                console.log(response.data);
             });
     }, []);
 
@@ -238,6 +281,7 @@ const ExamMarksEntry = () => {
                 exam_info_id: exam_id,
                 subject_id: subject_id,
                 mark_update: results,
+                teacher_id: user_code
             })
         })
             .then((res) => {
@@ -262,7 +306,17 @@ const ExamMarksEntry = () => {
         setInserted(true);
 
     }
-
+    const deleteMark = async (id) => {
+        const check = window.confirm('Are you sure to delete?');
+        if (check) {
+           axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+           const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/exam-mark/delete?id=${id}`)
+           if (result) {
+              toast("Exam Mark deleted successfully");
+              window.location.reload()
+           }
+        }
+     }
     return (
         <div>
             <TeacherHeader />
@@ -404,7 +458,7 @@ const ExamMarksEntry = () => {
                 {
                     show ? (
                         <div className='py-5'>
-                            <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Marks Entry Sheet</h2>
+                            <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Evaluation Schedule</h2>
 
                             <table class="table table-striped">
                                 <thead>
@@ -412,7 +466,6 @@ const ExamMarksEntry = () => {
                                         <th scope="col">Student Id</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Marks Obtained</th>
-                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -434,14 +487,7 @@ const ExamMarksEntry = () => {
                                                     />
                                                 </td>
 
-                                                <td>
-                                                    <a href="" className="btn btn-success mr-3">
-                                                        Edit
-                                                    </a>
-                                                    <a href="" className="btn btn-danger">
-                                                        Delete
-                                                    </a>
-                                                </td>
+                                                
 
                                             </tr>
                                         );
@@ -466,7 +512,6 @@ const ExamMarksEntry = () => {
                                         <th scope="col">Student Id</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Marks Obtained</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -492,6 +537,52 @@ const ExamMarksEntry = () => {
                     ) : null
 
                 }
+                <div className='py-5'>
+                    <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Inserted data</h2>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Student Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Marks Obtained</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                markShow?.map((info, key) => {
+
+                                    return (
+                                        <tr key={key}>
+                                            <td>{info.student_code}</td>
+                                            <td>{info.full_name}</td>
+                                            <td>
+                                                {index !== info.id && info.marks_obtained}
+                                                {index === info.id && <input
+                                                    type="text"
+                                                    name="mark"
+                                                    value={updateData}
+                                                    onKeyDown={(e) => updateMarks(e)
+                                                    }
+                                                    onChange={(e) => setUpdateData(e.target.value)}
+                                                />}
+                                            </td>
+                                            <td>
+                                                <button type='button' className="btn btn-success mr-3" onClick={() => { setIndex(info.id); setUpdateData(info.marks_obtained) }}>
+                                                    Edit
+                                                </button>
+                                                <button type='button' className="btn btn-danger" onClick={() => deleteMark(info.id)}>
+                                                    Delete
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                    );
+                                })}
+                        </tbody>
+                    </table>
+                </div>
 
             </section>
         </div>

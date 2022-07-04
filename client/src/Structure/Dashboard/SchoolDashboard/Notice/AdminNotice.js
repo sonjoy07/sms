@@ -569,9 +569,9 @@ const AdminNotice = (props) => {
                                         <td style={{ color: "blue" }}>
                                             {noticeJSON.notice_description}
                                         </td>
-                                        <td style={{ color: "blue" }}>{noticeJSON.class_name}</td>
+                                        <td style={{ color: "blue" }}>{noticeJSON.class_name?noticeJSON.class_name:'All'}</td>
                                         <td style={{ color: "blue" }}>
-                                            {noticeJSON.section_local_name}
+                                            {noticeJSON.section_default_name?noticeJSON.section_default_name:'All'}
                                         </td>
 
                                         <td>

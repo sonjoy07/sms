@@ -296,7 +296,7 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 className="card-title">Mentoring Students</h4>
+                    <h4 className="card-title">Students</h4>
                     <p className="card-text">All Students Portal</p>
                   </div>
                 </div>

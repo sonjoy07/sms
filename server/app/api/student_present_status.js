@@ -17,21 +17,21 @@ module.exports = (app) => {
 
     })
 
-    app.post("/api/exam_mark", authenticateToken, (req, res) => {
-        var exam_info_id = req.body.exam_info_id;
-        var subject_id = req.body.subject_id;
-        var mark_update = req.body.mark_update;
+    // app.post("/api/exam_mark", authenticateToken, (req, res) => {
+    //     var exam_info_id = req.body.exam_info_id;
+    //     var subject_id = req.body.subject_id;
+    //     var mark_update = req.body.mark_update;
 
-        var sql = `INSERT INTO exam_marks (exam_info_id,subject_id,student_id,marks_obtained) VALUES `
-        mark_update.map((sts) => {
-            sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}'),`
-        });
-        sql = sql.slice(0, -1);
-        con.query(sql, function (err, result, fields) {
-            if (err) throw err;
-            res.json({ status: "success" });
-        });
-    });
+    //     var sql = `INSERT INTO exam_marks (exam_info_id,subject_id,student_id,marks_obtained) VALUES `
+    //     mark_update.map((sts) => {
+    //         sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}'),`
+    //     });
+    //     sql = sql.slice(0, -1);
+    //     con.query(sql, function (err, result, fields) {
+    //         if (err) throw err;
+    //         res.json({ status: "success" });
+    //     });
+    // });
 
     app.get("/api/school_info", authenticateToken, (req, res) => {
         var sql = 'select school_code,school_name from school_info';

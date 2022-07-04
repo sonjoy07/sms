@@ -1,14 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import profile from '../../../../images/profile/profile.png';
 import StudentHeader from '../../StudentHeader';
 const ExamMarksSheet = () => {
     const [sessionInput, setSessionInput] = useState('')
     const [session_id, setSessionid] = useState('')
     const [exam_infoInput, setExamInfo] = useState('')
     const [exam_id, setExamId] = useState('')
-    const [studentInput, setStudentInput] = useState('')
+    const [studentInput, setStudentInput] = useState(localStorage.getItem('u_id'))
     const [student_id, setStudent_id] = useState('')
     const [student_info, setStudentInfo] = useState([])
     const [sessions, setSessions] = useState([])
@@ -155,12 +154,12 @@ const ExamMarksSheet = () => {
                                         </div>
                                     </div>
 
-                                    <div class={"col-sm-3 mx-auto p-2"}>
+                                    {/* <div class={"col-sm-3 mx-auto p-2"}>
                                         <div class="form-group">
                                             <label className='pb-2' for="exampleSelect">Student Id : </label>
                                             <input onChange={handleCode} style={{ border: '1px solid blue' }} class="form-control" id="class" name="class" placeholder='Student Id' />
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div class={"col-sm-3 p-4 mx-auto"}>
                                         <div className='pt-2 mx-auto'>
                                             <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>

@@ -85,8 +85,6 @@ const ViewEvaluation = () => {
                            <div className="card-tools">
                               <button id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
                               </button>
-                              {/* onClick={handlelist} */}
-                              {/* active */}
                            </div>
                         </div>
                      </div>
@@ -134,7 +132,7 @@ const ViewEvaluation = () => {
 
             {
                show ? (
-                  <div className='py-5'>
+                  info.length> 0 &&<div className='py-5'>
                      <div style={{ textAlign: 'center', color: 'LightSeaGreen' }}>
                         <h4>{info?.school_name}</h4>
                      </div>
@@ -253,26 +251,6 @@ const ViewEvaluation = () => {
                   </div>
                ) : null
             }
-            <div className="container my-2">
-               <div style={{ display: "flex", justifyContent: "end", cursor: 'pointer' }}>
-                  <i
-                     style={{ fontSize: "30px", color: "blue" }}
-                     class="fa-solid fa-angle-left"
-                  ></i>
-                  <h5 style={{ color: "blue" }} className="px-2">
-                     <a
-                        onClick={() => {
-                           localStorage.setItem("user_code", "");
-                           localStorage.setItem("user_type", "");
-                           Navigate("/login");
-                        }}
-                     >
-                        {" "}
-                        LogOut
-                     </a>
-                  </h5>
-               </div>
-            </div>
          </section>
       </div>
    )

@@ -425,7 +425,7 @@ const AddStudent = () => {
                                     return (
                                         <tr>
                                             <td style={{ textAlign: 'center' }}>{student.student_code}</td>
-                                            <td style={{ textAlign: 'center' }}>{student.first_name}</td>
+                                            <td style={{ textAlign: 'center' }}>{student.full_name}</td>
                                             <td style={{ textAlign: 'center' }}>{student.mobile_no}</td>
                                             <td style={{ textAlign: 'center' }}>{student.email}</td>
                                             <td style={{ textAlign: 'center' }}>

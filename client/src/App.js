@@ -9,7 +9,6 @@ import TeacherDashboard from "./Structure/Dashboard/TeacherDashboard/TeacherDash
 import StudentDashboard from "./Structure/Dashboard/StudentDashboard/StudentDashboard";
 import Attendance from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Attendance/Attendance";
 import TeacherNotice from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Notice/TeacherNotice";
-import Check from "./Structure/Dashboard/TeacherDashboard/Check/Check";
 import Checktwo from "./Structure/Dashboard/TeacherDashboard/Check/Checktwo";
 import SchoolDashboard from "./Structure/Dashboard/SchoolDashboard/SchoolDashboard";
 import SuperAdminDashboard from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboard";
@@ -39,6 +38,7 @@ import Home from "./Structure/components/Home/Home";
 
 import SchoolAdminRoutine from "./Structure/Dashboard/SchoolDashboard/SchoolAdminRoutine";
 import SchoolAdminNotice from "./Structure/Dashboard/SchoolDashboard/SchoolAdminNotice";
+import GradeSheetSchool from "./Structure/Dashboard/SchoolDashboard/GradeSheet";
 
 import TeacherAttendance from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Attendance/TeacherAttendance";
 
@@ -60,6 +60,7 @@ import SchoolAdminSection from "./Structure/Dashboard/SchoolDashboard/schoolAdmi
 import SchoolAdminSubject from "./Structure/Dashboard/SchoolDashboard/SchoolAdminSubject";
 import SchoolAdminPeriod from "./Structure/Dashboard/SchoolDashboard/SchoolAdminPeriod";
 import StudentView from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/Evaluation/StudentView";
+import EvalutionScheduleStudent from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/Evaluation/EvalutionSchedule";
 import ExamMarksSheet from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/Evaluation/ExamMarksSheet";
 import GradeSheet from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/Evaluation/GradeSheet";
 import Notice from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/Notice/Notice";
@@ -100,6 +101,11 @@ import StudentActivitiesSubmit from "./Structure/Dashboard/StudentDashboard/Stud
 import ListNotice from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Viewer Notice/ListNotice";
 import AdminViewActivities from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/AdminViewActivities";
 import CSVUpload from "./Structure/Dashboard/SchoolDashboard/CSVUpload";
+import ExamMarksSheetAll from "./Structure/Dashboard/SchoolDashboard/ExamMarksSheetAll";
+import ViewEvaluationList from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewEvaluationList";
+import ViewerMarkSheet from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewerMarkSheet";
+import GradeSheetTeacher from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/GradeSheet";
+import EvalutionSchedule from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/EvalutionSchedule";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -142,6 +148,9 @@ function App(props) {
             element={<ViewerShowStudentRoutine />}
           />
           <Route path="/viewevaluation" element={<ViewEvaluation />} />
+
+          <Route path="/viewevaluationlist" element={<ViewEvaluationList />} />
+          <Route path="/view-mark-sheet" element={<ViewerMarkSheet />} />
           <Route
             path="/viewershowattendanceview"
             element={<ViewerShowAttendanceView />}
@@ -336,6 +345,30 @@ function App(props) {
           <Route
             path="/csv-upload"
             element={<CSVUpload user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/create-mark-sheet"
+            element={<ExamMarksSheetAll user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/csv-upload"
+            element={<CSVUpload user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/teacherGradeSheet"
+            element={<GradeSheetTeacher user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/school-grade-sheet"
+            element={<GradeSheetSchool user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/evalutionScheduleTeacher"
+            element={<EvalutionSchedule user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/evalutionScheduleStudent"
+            element={<EvalutionScheduleStudent user={[user_code, user_type]} />}
           />        
               
               

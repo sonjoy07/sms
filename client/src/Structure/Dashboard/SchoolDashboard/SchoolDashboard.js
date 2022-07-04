@@ -296,6 +296,34 @@ const SchoolDashboard = () => {
                </div>
             </div>
         </a>
+        <div onClick={() => {
+            navigate("/school-admin")
+          }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className=""
+                >
+                  <div className="px-3">
+                    <img
+                      style={{ width: "64px", height: "64px" }}
+                      src={student}
+                      alt=""
+                    />
+                  </div>
+                  <div className="px-3">
+                    <h4 className="card-title">Mentoring Student</h4>
+                    <p className="card-text">Add Mentoring Student</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </>
