@@ -5,9 +5,8 @@ import TeacherHeader from "../../TeacherHeader/TeacherHeader";
 const GradeSheetTeacher = () => {
     const [info, setInfo] = useState([])
     const [allExam, setAllExam] = useState([])
-    const [examWiseMarks, setExamWiseMarks] = useState([])
+    const [schoolInfo, setSchoolInfo] = useState([])
 
-    const [student_id, setStudent_code] = useState('')
 
     const [session_id, setSession_id] = useState('')
     const [student, setStudent] = useState('')
@@ -61,7 +60,15 @@ const GradeSheetTeacher = () => {
         // setSession_id(session)
         // setStudent_code(student)
         setShow(true)
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${user_code}&session_id=${session}`,
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/getStudentId?student_code=${student}`,
+            {
+                headers: {
+                    authorization: "bearer " + localStorage.getItem("access_token"),
+                },
+            })
+
+            .then((response) => {
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${response.data.id}&session_id=${session}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
@@ -71,6 +78,18 @@ const GradeSheetTeacher = () => {
             .then((response) => {
                 setInfo(response.data)
             })
+            axios.get(`${process.env.REACT_APP_NODE_API}/api/school_info_by_student?student_code=${response.data.id}`,
+                {
+                    headers: {
+                        authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+                })
+    
+                .then((response) => {
+                    setSchoolInfo(response.data)
+                })
+        })
+            
 
     }
 
@@ -166,27 +185,27 @@ const GradeSheetTeacher = () => {
                         info.length > 0 && <>
                             <div className='py-5'>
                                 <div style={{ textAlign: 'center', color: 'LightSeaGreen' }}>
-                                    <h4>{info[0].school_name}</h4>
+                                    <h4>{schoolInfo[0]?.school_name}</h4>
                                 </div>
                                 <div style={{ textAlign: 'center', color: 'LightSeaGreen' }}>
-                                    <h4>Address: {info[0].address_division}</h4>
+                                    <h4>Address: {schoolInfo[0]?.address_division}</h4>
                                 </div>
 
                                 <div className='row mt-4 mx-1'>
                                     <div className='col-sm-3 p-2'>
-                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>ID : {info[0]?.student_code}</h5>
+                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>ID : {schoolInfo[0]?.student_code}</h5>
                                     </div>
                                     <div className='col-sm-3 p-2'>
-                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Name : {info[0]?.name}</h5>
+                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Name : {schoolInfo[0]?.name}</h5>
                                     </div>
                                     <div className='col-sm-3 p-2'>
-                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Session : {info[0]?.session_year}</h5>
+                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Session : {schoolInfo[0]?.session_year}</h5>
                                     </div>
                                     <div className='col-sm-3 p-2'>
-                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Class : {info[0]?.class_name}</h5>
+                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Class : {schoolInfo[0]?.class_name}</h5>
                                     </div>
                                     <div className='col-sm-3 p-2'>
-                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Section : {info[0]?.section_default_name}</h5>
+                                        <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Section : {schoolInfo[0]?.section_default_name}</h5>
                                     </div>
                                 </div>
 
@@ -208,14 +227,15 @@ const GradeSheetTeacher = () => {
                                     </thead>
                                     <tbody>
 
-                                        {info.map((student, index) => {
-                                            let ctTotal = (student.ct1 + student.ct2 + student.ct3 + student.ct4) / 4
+                                        {info.map((student,index) => {
+                                            let ctTotal = (student.ct1+student.ct2+student.ct3+student.ct4)/4                                         
 
-                                            const attendance = student.total_school_day > 0 ? (student.total_present / student.total_school_day) * 5 : 0
+                                            const attendance = student.total_school_day>0?(student.total_present / student.total_school_day) * 5:5
+                                            const activities = student.total_activities_sub>0?(student.total_activities_sub / student.total_activities) * 5:5
 
-                                            const total = attendance + ctTotal + (student.half / 2) + (student.final / 2) + student?.extra_curriculum
+                                            const total = attendance + ctTotal + (student.half / 2) + (student.full / 2) + activities
                                             const grade = resultCalculation(total)
-                                            grandTotal += total
+                                            grandTotal +=total
                                             return (
                                                 <tr>
                                                     <td style={{ textAlign: 'center' }}>{student.student_code}</td>
@@ -227,8 +247,8 @@ const GradeSheetTeacher = () => {
                                                     <td style={{ textAlign: 'center' }}>{student.ct4}</td>
                                                     <td style={{ textAlign: 'center' }}>{ctTotal}</td>
                                                     <td style={{ textAlign: 'center' }}>{student.half / 2}</td>
-                                                    <td style={{ textAlign: 'center' }}>{student.final / 2}</td>
-                                                    <td style={{ textAlign: 'center' }}>{student.extra_curriculum}</td>
+                                                    <td style={{ textAlign: 'center' }}>{student.full / 2}</td>
+                                                    <td style={{ textAlign: 'center' }}>{activities}</td>
                                                     <td style={{ textAlign: 'center' }}>{total}</td>
                                                     <td style={{ textAlign: 'center' }}>{grade?.grade}</td>
                                                     <td style={{ textAlign: 'center' }}>{grade?.point}</td>
@@ -245,18 +265,18 @@ const GradeSheetTeacher = () => {
                                         <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold', textAlign: 'center' }}>Yearly Calculation</h3>
                                     </div>
                                     <div className='row mt-4'>
-                                        <div className='col-sm-4 p-2'>
+                                        <div className='col-sm-3 p-2'>
                                             <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Total Marks : 100</h5>
                                         </div>
-                                        {/* <div className='col-sm-4 p-2'>
-                                            <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Total Grade Point : {grade.point}</h5>
-                                    </div>*/}
-                                        <div className='col-sm-4 p-2'>
-                                            <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Grade Point Average : {grandTotal / info.length}%</h5>
+                                        <div className='col-sm-3 p-2'>
+                                            <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Total Grade Point : {resultCalculation(grandTotal/info.length).point}</h5>
+                                    </div>
+                                        <div className='col-sm-3 p-2'>
+                                            <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Grade Point Average : {grandTotal/info.length}%</h5>
                                         </div>
-                                        {/* <div className='col-sm-3 p-2'>
-                                            <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Position in Section : 05</h5>
-                                        </div> */}
+                                        <div className='col-sm-3 p-2'>
+                                            <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Position in Section : {schoolInfo[0]?.position}</h5>
+                                        </div>
                                     </div>
                                 </div>
 

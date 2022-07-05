@@ -100,4 +100,10 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/getStudentId", authenticateToken, (req, res) => {
+    con.query(`SELECT student.id FROM student where student_code = "${req.query.student_code}"`, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result[0]);
+    });
+  });
 };

@@ -108,6 +108,7 @@ import GradeSheetTeacher from "./Structure/Dashboard/TeacherDashboard/TeacherDas
 import EvalutionSchedule from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/EvalutionSchedule";
 import ViewerSubmissionDetails from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewerSubmissionDetails";
 import ViewerEvalutationSchedule from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewerEvalutationSchedule";
+import CreateExamType from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateExamType/CreateExamType";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -379,6 +380,10 @@ function App(props) {
           <Route
             path="/viewerEvalutationSchedule"
             element={<ViewerEvalutationSchedule user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/newExamType"
+            element={<CreateExamType user={[user_code, user_type]} />}
           />        
               
               

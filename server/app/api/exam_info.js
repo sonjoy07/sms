@@ -79,7 +79,7 @@ module.exports = (app) => {
         );
     });
     app.get("/api/exam_info_check", authenticateToken, (req, res) => {
-        var sql = "select  from exam_name";
+        var sql = "select * from exam_name";
         con.query(
             sql,
             function (err, result, fields) {
@@ -122,6 +122,17 @@ module.exports = (app) => {
         });
     });
 
+    app.post("/api/exam_type", authenticateToken, (req, res) => {
+        var type = req.body.type
+        var id = req.body.id
+        if(id){
+           let sql=   `update exam_name set exam_name = "${type}" where id = "${id}"`
+            con.query(sql, function (err, result, fields) {
+                if (err) throw err;
+                res.json({ status: "success" });
+            });
+        }
+    })
 };
 
 

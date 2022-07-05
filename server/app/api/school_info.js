@@ -36,4 +36,10 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/school_info_by_student", authenticateToken, (req, res) => {
+    con.query(`SELECT position,school_info.school_name,school_info.address_division,CONCAT(student.first_name,' ' ,student.middle_name) as name,session.session_year,section.section_default_name, class.class_name,student.student_code FROM student left join school_info on school_info.id = student.school_info_id left join student_present_status on student.id = student_present_status.student_id left join class on class.id = student_present_status.class_id left join session on session.id = student_present_status.session_id left join section on section.id = student_present_status.section_id where student.id = ${req.query.student_code}`, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
 };
