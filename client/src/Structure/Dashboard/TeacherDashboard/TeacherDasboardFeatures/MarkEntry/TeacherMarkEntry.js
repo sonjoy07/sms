@@ -21,6 +21,7 @@ const ExamMarksEntry = () => {
     const [sessions, setSessions] = useState([]);
     const [class_id, setClass_id] = useState("");
     const [section_id, setSection_id] = useState("");
+    const [reset, setReset] = useState(0);
 
     const [subject_id, setSubject_id] = useState("");
     const [index, setIndex] = useState("");
@@ -31,6 +32,7 @@ const ExamMarksEntry = () => {
 
     const [class_input, setClass_Input] = useState('')
     const [exam_id, setExam_id] = useState("");
+    const [search_exam_type, setSearch_exam_type] = useState("");
 
     const [exam, setExam] = useState([])
     const [markShow, setmarkShow] = useState([])
@@ -174,9 +176,11 @@ const ExamMarksEntry = () => {
                 setSessions(response.data);
             });
 
+    }, []);
+    useEffect(()=>{
         axios
             .get(
-                `${process.env.REACT_APP_NODE_API}/api/mark-entry-list?teacher_id=${user_code}`,
+                `${process.env.REACT_APP_NODE_API}/api/mark-entry-list?teacher_id=${user_code}&&exam_type=${search_exam_type}`,
                 {
                     headers: { authorization: "bearer " + access_token },
                 }
@@ -185,7 +189,8 @@ const ExamMarksEntry = () => {
                 setmarkShow(response.data);
                 console.log(response.data);
             });
-    }, []);
+
+    },[reset])
 
     //get student
     useEffect(() => {
@@ -309,14 +314,14 @@ const ExamMarksEntry = () => {
     const deleteMark = async (id) => {
         const check = window.confirm('Are you sure to delete?');
         if (check) {
-           axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
-           const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/exam-mark/delete?id=${id}`)
-           if (result) {
-              toast("Exam Mark deleted successfully");
-              window.location.reload()
-           }
+            axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+            const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/exam-mark/delete?id=${id}`)
+            if (result) {
+                toast("Exam Mark deleted successfully");
+                window.location.reload()
+            }
         }
-     }
+    }
     return (
         <div>
             <TeacherHeader />
@@ -487,7 +492,7 @@ const ExamMarksEntry = () => {
                                                     />
                                                 </td>
 
-                                                
+
 
                                             </tr>
                                         );
@@ -539,11 +544,37 @@ const ExamMarksEntry = () => {
                 }
                 <div className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Inserted data</h2>
-
+                    <div className='row'>
+                        <div class={"col-sm-4"}>
+                            <div class="form-group">
+                                <label className='pb-2' for="exampleSelect">Exam Type : </label>
+                                <select
+                                    className="form-control"
+                                    value={search_exam_type}
+                                    onChange={(e)=>setSearch_exam_type(e.target.value)}
+                                >
+                                    <option value="">Select</option>
+                                    {exam.map((classJSON) => {
+                                        return (
+                                            <option value={classJSON.id}>
+                                                {classJSON.exam_name}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+                        <div class={"col-sm-4 "}>
+                            <div class="form-group">
+                                <button className='btn btn-success' style={{marginTop: '32px'}} type='button' onClick={()=>setReset(reset+1)}>Search</button>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Student Id</th>
+                                <th scope="col">Exam Type</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Marks Obtained</th>
 
@@ -556,6 +587,7 @@ const ExamMarksEntry = () => {
                                     return (
                                         <tr key={key}>
                                             <td>{info.student_code}</td>
+                                            <td>{info.exam_name}</td>
                                             <td>{info.full_name}</td>
                                             <td>
                                                 {index !== info.id && info.marks_obtained}

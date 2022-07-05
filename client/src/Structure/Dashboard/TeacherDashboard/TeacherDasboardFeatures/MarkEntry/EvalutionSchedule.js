@@ -20,7 +20,7 @@ export default function EvalutionSchedule() {
   return (<>
       <TeacherHeader/>
     <div className='py-5'>
-                <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Marks Entry Sheet</h2>
+                <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Evaluation Schedule</h2>
 
                 <table class="table table-striped">
                     <thead>

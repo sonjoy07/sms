@@ -65,6 +65,35 @@ const ViewEvaluationList = () => {
                     </div>
                 </div>
             </a>
+            <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1"
+                onClick={() => {
+                    navigate("/viewerEvalutationSchedule");
+                }}>
+                <div class="card bg-light shadow-sm">
+                    <div class="card-body py-4">
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                            className=""
+                        >
+                            <div className="px-3">
+                                <img
+                                    style={{ width: "64px", height: "64px" }}
+                                    src={evaluation}
+                                    alt=""
+                                />
+                            </div>
+                            <div className="px-3">
+                                <h4 class="card-title">Evaluation Schedule</h4>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
     );
 };

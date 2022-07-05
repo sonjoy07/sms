@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 import axios from "axios";
+import ViewerHeader from "../../ViewerHeader";
 
 const ShowHomeWork = () => {
   let navigate = useNavigate();
@@ -129,6 +130,7 @@ const ShowHomeWork = () => {
 
   return (
     <>
+    <ViewerHeader/>
       <div className="container">
         <div className="row">
           <div className="col-md-12">

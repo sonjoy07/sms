@@ -106,6 +106,8 @@ import ViewEvaluationList from "./Structure/Dashboard/ViewerDashboard/ViewerDash
 import ViewerMarkSheet from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewerMarkSheet";
 import GradeSheetTeacher from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/GradeSheet";
 import EvalutionSchedule from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/EvalutionSchedule";
+import ViewerSubmissionDetails from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewerSubmissionDetails";
+import ViewerEvalutationSchedule from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewerEvalutationSchedule";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -369,6 +371,14 @@ function App(props) {
           <Route
             path="/evalutionScheduleStudent"
             element={<EvalutionScheduleStudent user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/viewerSubmissionDetails"
+            element={<ViewerSubmissionDetails user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/viewerEvalutationSchedule"
+            element={<ViewerEvalutationSchedule user={[user_code, user_type]} />}
           />        
               
               

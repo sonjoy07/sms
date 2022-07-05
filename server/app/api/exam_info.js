@@ -66,7 +66,10 @@ module.exports = (app) => {
         );
     })
     app.get("/api/mark-entry-list", authenticateToken, (req, res) => {
-        var sql = `select CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, exam_marks.*,student_code from exam_marks left join student on student.id = exam_marks.student_id where exam_marks.teacher_id = ${req.query.teacher_id}`;
+        let condition = req.query.teacher_id !== '' && req.query.teacher_id !== undefined?` and exam_marks.teacher_id="${req.query.teacher_id}"`:``
+    condition += req.query.exam_type !== '' && req.query.exam_type !== undefined?` and exam_marks.exam_info_id="${req.query.exam_type}"`: ``
+        
+        var sql = `select CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, exam_marks.*,student_code,exam_name from exam_marks left join student on student.id = exam_marks.student_id left join exam_name on exam_name.id = exam_marks.exam_info_id where 1=1${condition}`;
         con.query(
             sql,
             function (err, result, fields) {
