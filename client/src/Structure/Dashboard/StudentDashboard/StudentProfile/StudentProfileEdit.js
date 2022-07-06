@@ -4,7 +4,7 @@ import profile from '../../../images/profile/profile.png'
 
 
 const StudentProfileEdit = () => {
-    const [name, setNAme] = useState('')
+    const [firstName, setFirstName] = useState('')
     const [email, setEmail] = useState('')
     const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
     const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
@@ -62,7 +62,7 @@ const StudentProfileEdit = () => {
                                 <div class="d-flex flex-column align-items-center text-center">
                                     <img src={profile} alt="" class="rounded-circle p-1 bg-primary" width="150" />
                                     <div class="my-4">
-                                        <h4>John Doe</h4>
+                                        <h4>{student.full_name}</h4>
                                     </div>
                                 </div>
 
@@ -74,7 +74,7 @@ const StudentProfileEdit = () => {
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">mobile</h6>
+                                        <h6 class="mb-0">First Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
                                         <input onChange={nameChange} type="text" class="form-control" value={name} />

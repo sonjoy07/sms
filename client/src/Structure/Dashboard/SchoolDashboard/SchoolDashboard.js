@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import calendar from "../../images/icons/calendar.png";
 import organization from "../../images/icons/organization.png";
 import ebook from "../../images/icons/ebook.png";
-import section from "../../images/icons/section.png";
+import school from "../../images/icons/school.png";
 import notices from "../../images/icons/notices.png";
 import routine from "../../images/icons/routine.png";
 import student from "../../images/icons/student.png";
@@ -12,6 +12,8 @@ import accounts from "../../images/icons/accounts.png";
 import csv from "../../images/icons/csv.png";
 import evaluation from "../../images/icons/evaluation.png";
 import SchoolHeader from "./schoolHeader/SchoolHeader";
+import { toast } from 'react-toastify';
+import axios from "axios";
 const SchoolDashboard = () => {
   let navigate = useNavigate();
   const [school_name, setSchoolName] = useState(localStorage.getItem("school_name"));
@@ -30,6 +32,18 @@ const SchoolDashboard = () => {
   useEffect(() => {
     checkLoggedIn();
   }, []);
+
+  const generateRank =()=>{
+    axios
+    .get(`${process.env.REACT_APP_NODE_API}/api/student-rank/${localStorage.getItem('school_id')}`, {
+        headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+    })
+    .then((response) => {
+        toast('Student Position updated')
+    });
+  }
   return (
     <>
       <SchoolHeader/>
@@ -319,6 +333,35 @@ const SchoolDashboard = () => {
                   <div className="px-3">
                     <h4 className="card-title">Mentoring Student</h4>
                     <p className="card-text">Add Mentoring Student</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div onClick={() => {
+            // navigate("/school-admin")
+            generateRank()
+          }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className=""
+                >
+                  <div className="px-3">
+                    <img
+                      style={{ width: "64px", height: "64px" }}
+                      src={school}
+                      alt=""
+                    />
+                  </div>
+                  <div className="px-3">
+                    <h4 className="card-title">Generate Position</h4>
+                    <p className="card-text">Student Position</p>
                   </div>
                 </div>
               </div>

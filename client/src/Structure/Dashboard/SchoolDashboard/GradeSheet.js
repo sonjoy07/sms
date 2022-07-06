@@ -66,7 +66,7 @@ const GradeSheetTeacher = () => {
           })
 
           .then((response) => {
-      axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${response.data.id}&session_id=${session}`,
+      axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${response.data.id}&session_id=${session}&&school_id=${localStorage.getItem('school_id')}`,
           {
               headers: {
                   authorization: "bearer " + localStorage.getItem("access_token"),

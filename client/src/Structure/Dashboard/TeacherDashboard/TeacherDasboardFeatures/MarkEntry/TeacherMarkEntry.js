@@ -33,6 +33,7 @@ const ExamMarksEntry = () => {
     const [class_input, setClass_Input] = useState('')
     const [exam_id, setExam_id] = useState("");
     const [search_exam_type, setSearch_exam_type] = useState("");
+    const [search_student_code, setSearch_student_code] = useState("");
 
     const [exam, setExam] = useState([])
     const [markShow, setmarkShow] = useState([])
@@ -180,7 +181,7 @@ const ExamMarksEntry = () => {
     useEffect(()=>{
         axios
             .get(
-                `${process.env.REACT_APP_NODE_API}/api/mark-entry-list?teacher_id=${user_code}&&exam_type=${search_exam_type}`,
+                `${process.env.REACT_APP_NODE_API}/api/mark-entry-list?teacher_id=${user_code}&&exam_type=${search_exam_type}&&student_code=${search_student_code}&&school_id=${localStorage.getItem('school_id')}`,
                 {
                     headers: { authorization: "bearer " + access_token },
                 }
@@ -463,7 +464,7 @@ const ExamMarksEntry = () => {
                 {
                     show ? (
                         <div className='py-5'>
-                            <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Evaluation Schedule</h2>
+                            <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>Mark Entry</h2>
 
                             <table class="table table-striped">
                                 <thead>
@@ -564,6 +565,12 @@ const ExamMarksEntry = () => {
                                 </select>
                             </div>
                         </div>
+                        <div class={"col-sm-4"}>
+                            <div class="form-group">
+                                <label className='pb-2' for="exampleSelect">Student Code : </label>
+                                <input type="text" className="form-control" value={search_student_code} onChange={(e)=>setSearch_student_code(e.target.value)}/>
+                            </div>
+                        </div>
                         <div class={"col-sm-4 "}>
                             <div class="form-group">
                                 <button className='btn btn-success' style={{marginTop: '32px'}} type='button' onClick={()=>setReset(reset+1)}>Search</button>
@@ -576,6 +583,8 @@ const ExamMarksEntry = () => {
                                 <th scope="col">Student Id</th>
                                 <th scope="col">Exam Type</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Class</th>
+                                <th scope="col">Section</th>
                                 <th scope="col">Marks Obtained</th>
 
                             </tr>
@@ -589,6 +598,8 @@ const ExamMarksEntry = () => {
                                             <td>{info.student_code}</td>
                                             <td>{info.exam_name}</td>
                                             <td>{info.full_name}</td>
+                                            <td>{info.class_name}</td>
+                                            <td>{info.section_default_name}</td>
                                             <td>
                                                 {index !== info.id && info.marks_obtained}
                                                 {index === info.id && <input

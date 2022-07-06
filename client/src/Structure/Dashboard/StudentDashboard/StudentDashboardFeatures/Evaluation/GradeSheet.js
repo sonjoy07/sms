@@ -75,7 +75,7 @@ const GradeSheet = () => {
         // setSession_id(session)
         // setStudent_code(student)
         setShow(true)
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${user_code}&session_id=${session}`,
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${user_code}&session_id=${session}&&school_id=${localStorage.getItem('school_id')}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),

@@ -52,7 +52,7 @@ const ExamMarksSheetAll = () => {
     }, []);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/exam_mark?session_id=${session_id}&exam_info_id=${exam_id}&student_code=${student_id}`,
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/exam_mark?session_id=${session_id}&exam_info_id=${exam_id}&student_code=${student_id}&&school_info_id=${localStorage.getItem('school_info_id')}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
