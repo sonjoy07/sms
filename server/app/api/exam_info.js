@@ -71,7 +71,23 @@ module.exports = (app) => {
     condition += req.query.student_code !== '' && req.query.student_code !== undefined?` and student_code="${req.query.student_code}"`: ``
     condition += req.query.school_id !== '' && req.query.school_id !== undefined?` and school_info_id="${req.query.school_id}"`: ``
         
-        var sql = `select full_name, exam_marks.*,student_code,class_name, section_default_name,exam_name from exam_marks left join student_info on student_info.id = exam_marks.student_id left join exam_name on exam_name.id = exam_marks.exam_info_id where 1=1${condition}`;
+        var sql = `select full_name, exam_marks.*,student_code,class_name, subject_name,section_default_name,exam_name from exam_marks left join student_info on student_info.id = exam_marks.student_id left join exam_name on exam_name.id = exam_marks.exam_info_id left join subject on subject.id = exam_marks.subject_id where 1=1${condition}`;
+        console.log(sql);
+        con.query(
+            sql,
+            function (err, result, fields) {
+                if (err) throw err;
+                res.send(result);
+            }
+        );
+    });
+    app.get("/api/extra-mark-entry-list", authenticateToken, (req, res) => {
+        let condition = req.query.teacher_id !== '' && req.query.teacher_id !== undefined?` and extra_curriculum_marks.teacher_id="${req.query.teacher_id}"`:``
+    condition += req.query.exam_type !== '' && req.query.exam_type !== undefined?` and extra_curriculum_marks.activities_id="${req.query.exam_type}"`: ``
+    condition += req.query.student_code !== '' && req.query.student_code !== undefined?` and student_code="${req.query.student_code}"`: ``
+    condition += req.query.school_id !== '' && req.query.school_id !== undefined?` and school_info_id="${req.query.school_id}"`: ``
+        
+        var sql = `select full_name, extra_curriculum_marks.*,student_code,class_name, subject_name,section_default_name,exam_name from extra_curriculum_marks left join student_info on student_info.id = extra_curriculum_marks.student_id left join exam_name on exam_name.id = extra_curriculum_marks.activities_id left join subject on subject.id = extra_curriculum_marks.subject_id where 1=1${condition}`;
         console.log(sql);
         con.query(
             sql,

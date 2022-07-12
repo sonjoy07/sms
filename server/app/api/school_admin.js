@@ -149,9 +149,11 @@ module.exports = (app) => {
         const section_id = req.query.section_id
         const class_id = req.query.class_id
         const session_id = req.query.session_id
+        const school_id = req.query.school_id
         let condition = section_id !== "0" ? ` and routine.section_id="${section_id}"` : ``
         condition += class_id !== "0" ? ` and routine.class_id="${class_id}"` : ``
         condition += session_id !== "0" ? ` and routine.session_id="${session_id}"` : ``
+        condition += school_id !== "0" ? ` and routine.school_info_id="${school_id}"` : ``
         con.query(
             `SELECT distinct subject_code,subject_name, subject_id FROM subject left join routine on routine.subject_id = subject.id where 1=1 ${condition}`,
             function (err, result, fields) {

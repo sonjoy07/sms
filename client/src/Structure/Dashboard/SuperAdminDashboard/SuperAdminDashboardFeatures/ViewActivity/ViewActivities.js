@@ -24,7 +24,7 @@ const ViewActivities = () => {
     }, []);
     return (<><SuperAdminHeader/>
         <section className='py-3 container'>
-            <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Activities : </h2>
+            <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Extra Curriculum : </h2>
 
             <table class="table table-striped">
                 <thead>
@@ -36,7 +36,7 @@ const ViewActivities = () => {
                         {/* <th scope="col">Section</th> */}
                         <th scope="col">Status</th>
                         <th scope="col">Submission Date</th>
-                        <th scope="col">Activities File</th>
+                        <th scope="col">Extra Curriculum File</th>
                     </tr>
                 </thead>
                 <tbody>

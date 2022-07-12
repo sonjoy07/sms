@@ -12,7 +12,7 @@ module.exports = (app) => {
   });
   app.get("/api/teacher/profile", (req, res) => {
     con.query(
-      `SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, initial, teacher_code, mobile, email, school_info_id FROM teacher where id="${req.query.teacher_id}"`,
+      `SELECT teacher.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, initial, teacher_code, mobile, school_name,designation,department,email,blood_group,dob, school_info_id FROM teacher left join school_info on school_info.id = teacher.school_info_id where teacher.id="${req.query.teacher_id}"`,
       function (err, result, fields) {
         if (err) throw err;
         res.send(result[0]);
@@ -32,6 +32,12 @@ module.exports = (app) => {
   });
   app.get("/api/teacher/all", authenticateToken, (req, res) => {
     con.query("SELECT * FROM teacher", function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/teacher/schoolWise", authenticateToken, (req, res) => {
+    con.query(`SELECT id,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name FROM teacher where school_info_id=${req.query.school_info_id}` , function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

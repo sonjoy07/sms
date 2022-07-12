@@ -146,7 +146,7 @@ const AdminViewActivities = () => {
                       }}
                       class="card-title py-2"
                     >
-                      Student Activities
+                      Student Extra Curriculum
                     </h3>
                   </div>
                 </div>
@@ -301,7 +301,7 @@ const AdminViewActivities = () => {
           style={{ color: "white", backgroundColor: "gray" }}
           className="px-2 py-2"
         >
-          Student Activities
+          Student Extra Curriculum
         </h2>
 
         <table class="table table-striped">
@@ -349,7 +349,7 @@ const AdminViewActivities = () => {
                       {homeworkJSON.subject_name}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {homeworkJSON.section_local_name}
+                      {homeworkJSON.section_default_name}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a

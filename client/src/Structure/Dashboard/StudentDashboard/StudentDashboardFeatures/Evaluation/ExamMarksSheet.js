@@ -205,7 +205,7 @@ const ExamMarksSheet = () => {
 
                             <table class="table table-striped mt-5">
                                 <thead>
-                                    <tr>
+                                    <tr style={{ textAlign: 'center' }}>
                                         <th scope="col">S/N</th>
                                         <th scope="col">Subject</th>
                                         <th scope="col">Marks Obtained</th>

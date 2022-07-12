@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import StudentHeader from './../StudentHeader';
 
 const ChangePassword = () => {
@@ -40,7 +41,7 @@ const ChangePassword = () => {
         })
             .then((res) => res.json())
             .then((json) => {
-                alert('password Changed successfully!!')
+                toast('password Changed successfully!!')
             });
         setOld('')
         newPass('')
@@ -54,7 +55,7 @@ const ChangePassword = () => {
         console.log(e.target.value)
     }
     const checkLoggedIn = () => {
-        if (user_type != 1) {
+        if (user_type === "") {
             navigate('/login')
         }
     }
@@ -85,7 +86,7 @@ const ChangePassword = () => {
                             <div class={"col-sm-3 mx-auto p-2"}>
                                 <div class="form-group">
                                     <label className='pb-2' for="exampleSelect">Type Old Password </label>
-                                    <input onChange={handleOld} value={old} type="password" />
+                                    <input onChange={handleOld} value={old} type="password" className='form-control' />
                                 </div>
                             </div>
 
@@ -93,7 +94,7 @@ const ChangePassword = () => {
                             <div class={"col-sm-3 mx-auto p-2"}>
                                 <div class="form-group">
                                     <label className='pb-2' for="exampleSelect">New Password </label>
-                                    <input value={pass} onChange={handlechange} type="password" />
+                                    <input value={pass} onChange={handlechange} type="password" className='form-control'/>
                                 </div>
                             </div>
 

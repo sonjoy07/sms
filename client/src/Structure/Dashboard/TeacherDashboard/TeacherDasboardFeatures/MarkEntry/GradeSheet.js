@@ -231,7 +231,7 @@ const GradeSheetTeacher = () => {
                                             let ctTotal = (student.ct1+student.ct2+student.ct3+student.ct4)/4                                         
 
                                             const attendance = student.total_school_day>0?(student.total_present / student.total_school_day) * 5:5
-                                            const activities = student.total_activities_sub>0?(student.total_activities_sub / student.total_activities) * 5:5
+                                            const activities = student.extra_mark > 0 ? student.extra_mark : 0
 
                                             const total = attendance + ctTotal + (student.half / 2) + (student.full / 2) + activities
                                             const grade = resultCalculation(total)

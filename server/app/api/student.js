@@ -5,11 +5,7 @@ module.exports = (app) => {
   const authenticateToken = require("../middleware/middleware");
   app.get("/api/student/profile", (req, res) => {
     con.query(
-      `SELECT student_present_status.id, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, student_present_status.section_id, student.student_code,student.school_info_id,session_id,class_id,section_default_name,student.*
-      FROM student_present_status 
-      left join student on student_present_status.student_id=student.id 
-      left join section on student_present_status.section_id= section.id
-      where student_present_status.id="${req.query.student_id}";`,
+      `select * from student_info where id="${req.query.student_id}";`,
       function (err, result, fields) {
         if (err) throw err;
         res.send(result);
@@ -50,11 +46,23 @@ module.exports = (app) => {
     });
   });
   app.post("/api/student/profile_update", authenticateToken, (req, res) => {
-    var mobile = req.body.mobile;
+    var mobile = req.body.mobileNo?req.body.mobileNo:0;
     var email = req.body.email;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var middleName = req.body.middleName;
+    var presentAddress = req.body.presentAddress;
+    var permanentAddress = req.body.permanentAddress;
+    var sex = req.body.sex?req.body.sex:1;
+    var fatherMobileNo = req.body.fatherMobileNo?req.body.fatherMobileNo:0;
+    var fatherName = req.body.fatherName;
+    var motherMobileNo = req.body.motherMobileNo?req.body.motherMobileNo:0;
+    var motherName = req.body.motherName;
+    var dob = req.body.dob;
+    var bloodGroup = req.body.bloodGroup;
     var sql = `Update student 
     set mobile_no="${mobile}",
-        email="${email}" 
+        email="${email}",first_name="${firstName}",last_name="${lastName}",middle_name="${middleName}",present_address="${presentAddress}",permanent_address="${permanentAddress}",gender_id="${sex}",father_name="${fatherName}",father_phone_number="${fatherMobileNo}",mother_name="${motherName}",mother_phone_number="${motherMobileNo}",dob="${dob}",blood_group="${bloodGroup}" 
     where student_code="${req.query.student_code}"
     
     `

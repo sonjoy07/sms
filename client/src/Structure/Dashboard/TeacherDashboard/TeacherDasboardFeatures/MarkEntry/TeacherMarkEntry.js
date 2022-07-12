@@ -188,7 +188,6 @@ const ExamMarksEntry = () => {
             )
             .then((response) => {
                 setmarkShow(response.data);
-                console.log(response.data);
             });
 
     },[reset])
@@ -209,7 +208,6 @@ const ExamMarksEntry = () => {
                     student_mark.push({ student_id: stu.student_id, student_name: stu.name, student_code: stu.student_code, mark_obtained: '0' });
                 });
                 setPresent_marks(student_mark);
-                console.log(student_mark)
             });
     }, [section, session, class_input, subject_id])
 
@@ -567,7 +565,7 @@ const ExamMarksEntry = () => {
                         </div>
                         <div class={"col-sm-4"}>
                             <div class="form-group">
-                                <label className='pb-2' for="exampleSelect">Student Code : </label>
+                                <label className='pb-2' for="exampleSelect">Student ID : </label>
                                 <input type="text" className="form-control" value={search_student_code} onChange={(e)=>setSearch_student_code(e.target.value)}/>
                             </div>
                         </div>
@@ -582,6 +580,7 @@ const ExamMarksEntry = () => {
                             <tr>
                                 <th scope="col">Student Id</th>
                                 <th scope="col">Exam Type</th>
+                                <th scope="col">Subject Name</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Class</th>
                                 <th scope="col">Section</th>
@@ -597,6 +596,7 @@ const ExamMarksEntry = () => {
                                         <tr key={key}>
                                             <td>{info.student_code}</td>
                                             <td>{info.exam_name}</td>
+                                            <td>{info.subject_name}</td>
                                             <td>{info.full_name}</td>
                                             <td>{info.class_name}</td>
                                             <td>{info.section_default_name}</td>

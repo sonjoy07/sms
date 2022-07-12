@@ -38,8 +38,9 @@ module.exports = (app) => {
     condition += req.query.section_id !== '' && req.query.section_id !== undefined?` and activities.section_id="${req.query.section_id}"`: ``
     condition += req.query.class_id !== '' && req.query.class_id !== undefined?` and activities.class_id="${req.query.class_id}"`:``
     condition += req.query.subject_id !== '' && req.query.subject_id !== undefined?` and activities.subject_id="${req.query.subject_id}"`:``
+    condition += req.query.school_teacher_id !== '' && req.query.school_teacher_id !== undefined?` and activities.school_teacher_id="${req.query.school_teacher_id}"`:``
     condition += req.query.date !== '' && req.query.date !== undefined?` and activities.issue_date="${req.query.date}"`:``
-    var sql = `select activities.id, class.class_name, subject.subject_name, activities.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link
+    var sql = `select activities.id, class.class_name, subject.subject_name, activities.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
     from activities
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
@@ -48,18 +49,20 @@ module.exports = (app) => {
     join session on activities.session_id=session.id
     where 1=1 ${condition}
     order by activities.id;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
   });
   app.get("/api/activities/teacher/individual", authenticateToken, (req, res) => {
-    var sql = `select activities.id, class.class_name, subject.subject_name, teacher.first_name, topic, details, issue_date, due_date, session.session_year,attachment_link,activities.class_id,activities.section_id,activities.subject_id,activities.session_id,section_default_name
+    var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,activities.class_id,activities.section_id,activities.subject_id,activities.session_id,section_default_name,school_name,activities.school_info_id,activities.school_teacher_id
     from activities
     join class on activities.class_id=class.id 
+    join school_info on activities.school_info_id=school_info.id 
     join section on activities.section_id=section.id
     join subject on activities.subject_id=subject.id
-    join teacher on activities.teacher_id=teacher.id
+    join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
     where activities.teacher_id="${req.query.teacher_id}"
     order by activities.id;`;
@@ -75,6 +78,7 @@ module.exports = (app) => {
     var class_id = req.body.class_id;
     var section_id = req.body.section_id;
     var teacher_id = req.body.teacher_id;
+    var school_teacher_id = req.body.school_teacher_id;
     var subject_id = req.body.subject_id;
     var session_id = req.body.session_id;
     var topic = req.body.topic;
@@ -96,11 +100,12 @@ module.exports = (app) => {
       if (id) {
         const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}"` : ``
         sql = `UPDATE activities
-        SET school_info_id="${school_info_id}", class_id="${class_id}",section_id="${section_id}",teacher_id="${teacher_id}",subject_id="${subject_id}",session_id="${session_id}",topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date}"${attachment}
+        SET school_info_id="${school_info_id}", class_id="${class_id}",section_id="${section_id}",teacher_id="${teacher_id}",subject_id="${subject_id}",session_id="${session_id}",topic="${topic}",school_teacher_id="${school_teacher_id}",details="${details}",issue_date="${issue_date}",due_date="${due_date}"${attachment}
         WHERE id=${id}`
+        console.log(sql);
       } else {
         const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
-        sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}",${attachment} )`;
+        sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${school_teacher_id}",${attachment} )`;
       }
 
       con.query(sql, function (err, result, fields) {
@@ -185,6 +190,7 @@ module.exports = (app) => {
     const class_id = req.query.class_id
     const subject_id = req.query.subject_id
     const school_info_id = req.query.school_info_id
+    const search_school_teacher_id = req.query.search_school_teacher_id
     const issue_date = req.query.issue_date !== ""?moment(req.query.issue_date).format("YYYY-MM-DD"):""
     const due_date = req.query.due_date !== ""?moment(req.query.due_date).format("YYYY-MM-DD"):""
     let condition = section_id!== ''?` and activities.section_id="${section_id}"`:``
@@ -192,13 +198,15 @@ module.exports = (app) => {
     condition+= subject_id!== ''?` and activities.subject_id="${subject_id}"`:``
     condition+= session_id!== ''?` and activities.session_id="${session_id}"`:``
     condition+= school_info_id!== ''?` and activities.school_info_id="${school_info_id}"`:``
+    condition+= search_school_teacher_id!== ''?` and activities.school_teacher_id="${search_school_teacher_id}"`:``
     condition+= issue_date!== ''?` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
-    var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission
+    var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission,school_name
     from activities
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
     join subject on activities.subject_id=subject.id
-    join teacher on activities.teacher_id=teacher.id
+    join teacher on activities.school_teacher_id=teacher.id
+    join school_info on activities.school_info_id=school_info.id 
     join session on activities.session_id=session.id
     where 1=1 ${condition}
     order by activities.due_date;`;
@@ -252,6 +260,13 @@ module.exports = (app) => {
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
+    });
+  });
+  app.get("/api/activities/byTeacher", authenticateToken, (req, res) => {
+    var sql = `select * from activities where school_teacher_id = ${req.query.teacher_id};`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+        res.send(result);
     });
   });
 };

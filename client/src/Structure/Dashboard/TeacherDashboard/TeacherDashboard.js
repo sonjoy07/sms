@@ -330,7 +330,9 @@ const TeacherDashboard = (props) => {
               </div>
             </div>
           </a>
-          <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+          <a style={{ textDecoration: "none" }}  onClick={() => {
+                        navigate("/extraMarkReport");
+                    }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
               <div className="card-body py-4">
                 <div
@@ -349,8 +351,36 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 className="card-title">Activity</h4>
-                    <p className="card-text">Student Activities</p>
+                    <h4 className="card-title">Extra Curriculum</h4>
+                    <p className="card-text">Student Extra Curriculum</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <a style={{ textDecoration: "none" }}  onClick={() => {
+                        navigate("/extraMarkEntry");
+                    }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className=""
+                >
+                  <div className="px-3">
+                    <img
+                      style={{ width: "64px", height: "64px" }}
+                      src={activities}
+                      alt=""
+                    />
+                  </div>
+                  <div className="px-3">
+                    <h4 className="card-title">Extra Curriculum Mark</h4>
+                    <p className="card-text">Student Extra Curriculum Mark</p>
                   </div>
                 </div>
               </div>

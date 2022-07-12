@@ -28,12 +28,15 @@ const AdminActivities = (props) => {
 
   const [schools, setSchools] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [search_subjects, setSearch_Subjects] = useState([]);
   const [subject, setSubject] = useState("");
 
   const [sessions, setSessions] = useState([]);
   const [session, setSession] = useState("");
 
+  const [school_teacher_id, setSchool_teacher_id] = useState("");
+  const [search_school_teacher_id, setSearch_School_teacher_id] = useState("");
   const [school_info_id, setSchool_info_id] = useState("");
   const [teacher_id, setTeacher_id] = useState(
     localStorage.getItem("user_code")
@@ -58,7 +61,8 @@ const AdminActivities = (props) => {
   const [due_date, setDue_date] = useState("");
   const [search_issue_date, setSearch_Issue_date] = useState("");
   const [search_due_date, setSearch_Due_date] = useState("");
-  const [search_school_id, setSearchShool_id] = useState("");
+  const [search_school_id, setSearchShool_id] = useState("");  
+  const [search_teachers, setSearch_Teachers] = useState([]);
   const [access_token, setAccess_token] = useState(
     localStorage.getItem("access_token")
   );
@@ -98,11 +102,45 @@ const AdminActivities = (props) => {
         // setSchool_info_id(response.data.school_info_id);
       });
   }, [teacher_id]);
+  
+  useEffect(() => {
+    if(school_info_id !== ''){
+    axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${school_info_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        setTeachers(response.data)
+      });
+    }
+  }, [school_info_id]);
+
+  useEffect(() => {
+    if(search_school_id !== ''){
+    axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${search_school_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        setSearch_Teachers(response.data)
+      });
+    }
+  }, [search_school_id]);
 
   const handleSearch = () => {
     axios
     .get(
-      `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}`,
+      `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}&&search_school_teacher_id=${search_school_teacher_id}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -280,6 +318,7 @@ const AdminActivities = (props) => {
     formData.append("section_id", section_id);
     formData.append("subject_id", subject_id);
     formData.append("teacher_id", teacher_id);
+    formData.append("school_teacher_id", school_teacher_id);
     formData.append("session_id", session_id);
     formData.append("topic", topic);
     formData.append("details", details);
@@ -298,9 +337,9 @@ const AdminActivities = (props) => {
         .then((res) => res.json())
         .then((json) => {
           if (id) {
-            toast("Activities updated successfully");
+            toast("Extra Curriculum updated successfully");
           } else {
-            toast("Activities submited successfully");
+            toast("Extra Curriculum submited successfully");
           }
           setId("");
           setClass_id("");
@@ -337,6 +376,8 @@ const AdminActivities = (props) => {
     setDue_date(moment(data.due_date).format("YYYY-MM-DD"));
     setTopic(data.topic);
     setDetails(data.details);
+    setSchool_info_id(data.school_info_id);
+    setSchool_teacher_id(data.school_teacher_id);
   }
 
   const deleteHomework = async (id) => {
@@ -345,7 +386,7 @@ const AdminActivities = (props) => {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/activities/student/delete?id=${id}`)
       if (result) {
-        toast("Activities deleted successfully");
+        toast("Extra Curriculum deleted successfully");
         getHWList()
       }
     }
@@ -413,7 +454,7 @@ const AdminActivities = (props) => {
                       }}
                       class="card-title pt-2"
                     >
-                      Create Activities{" "}
+                      Create Extra Curriculum{" "}
                     </h3>
                   </div>
                   <div className="card-tools">
@@ -620,6 +661,30 @@ const AdminActivities = (props) => {
                           return (
                             <option value={subjectJSON.id}>
                               {subjectJSON.subject_name}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 mx-auto p-2"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleSelect">
+                        Teacher :{" "}
+                      </label>
+                      <select
+                        style={{ border: "1px solid blue" }}
+                        class="form-control"
+                        value={school_teacher_id}
+                        onChange={(e)=>setSchool_teacher_id(e.target.value)}
+                        id="class"
+                        name="class"
+                      >
+                        <option value="">Select Teacher</option>
+                        {teachers.map((subjectJSON) => {
+                          return (
+                            <option value={subjectJSON.id}>
+                              {subjectJSON.full_name}
                             </option>
                           );
                         })}
@@ -839,6 +904,30 @@ const AdminActivities = (props) => {
                         </select>
                       </div>
                     </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          Teacher :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={search_school_teacher_id}
+                          onChange={(e)=>setSearch_School_teacher_id(e.target.value)}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select Teacher</option>
+                          {search_teachers.map((subjectJSON) => {
+                            return (
+                              <option value={subjectJSON.id}>
+                                {subjectJSON.full_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
                     <div class={"col-sm-2 p-2 mx-auto"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleInputEmail1">
@@ -883,7 +972,9 @@ const AdminActivities = (props) => {
           <table class="table table-striped">
             <thead>
               <tr>
-                <th scope="col">Activities Meterial</th>
+                <th scope="col">School Name</th>
+                <th scope="col">Teacher Name</th>
+                <th scope="col">Extra Curriculum Material</th>
                 <th scope="col">Topic</th>
                 <th scope="col">Assignment Details</th>
                 <th scope="col">Class</th>
@@ -892,7 +983,7 @@ const AdminActivities = (props) => {
                 <th scope="col">Subject </th>
                 <th scope="col">Start Date </th>
                 <th scope="col">Due Date</th>
-                <th scope="col">View Activities</th>
+                <th scope="col">View Extra Curriculum</th>
                 <th scope="col">Edit/Delete</th>
               </tr>
             </thead>
@@ -900,6 +991,8 @@ const AdminActivities = (props) => {
               {homework.map((homeworkJSON) => {
                 return (
                   <tr>
+                    <td>{homeworkJSON.school_name}</td>
+                    <td>{homeworkJSON.full_name}</td>
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
@@ -927,7 +1020,7 @@ const AdminActivities = (props) => {
                         style={{ textDecoration: "none", color: "blue" }}
                       >
                         {" "}
-                        View Activities
+                        View Extra Curriculum
                       </a>
                     </td>
                     <td>

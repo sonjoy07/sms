@@ -94,7 +94,7 @@ const StudentActivitiesSubmit = (props) => {
     })
       .then((res) => res.json())
       .then((json) => {
-        toast("Activities submitted successfully");
+        toast("Extra Curriculum submitted successfully");
         console.log("ok",json);
         // navigate("/studenthomework");
       });
@@ -104,7 +104,7 @@ const StudentActivitiesSubmit = (props) => {
     <>
     <StudentHeader/>
     <div className="container">
-      <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Activities : </h2>
+      <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Extra Curriculum : </h2>
     <ToastContainer />
       <div className="row mt-4">
         <div className="-md-12">

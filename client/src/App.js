@@ -109,6 +109,9 @@ import EvalutionSchedule from "./Structure/Dashboard/TeacherDashboard/TeacherDas
 import ViewerSubmissionDetails from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewerSubmissionDetails";
 import ViewerEvalutationSchedule from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewerEvalutationSchedule";
 import CreateExamType from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateExamType/CreateExamType";
+import ExtraMarkentry from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraMarkentry";
+import ExtraReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraReport";
+import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfileEdit";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -173,6 +176,7 @@ function App(props) {
 -eschool" element={<ESchool />} />
           <Route path="/student-payment" element={<StudentPayment />} />
           <Route path="/studentprofileedit" element={<StudentProfileEdit />} />
+          <Route path="/teacherprofileedit" element={<TeacherProfileEdit />} />
           <Route path="/dueinvoice" element={<DueInvoice />} />
           <Route path="/payoption" element={<PayOption />} />
           <Route path="/paidinvoice" element={<PaidInvoice />} />
@@ -384,6 +388,14 @@ function App(props) {
           <Route
             path="/newExamType"
             element={<CreateExamType user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/extraMarkEntry"
+            element={<ExtraMarkentry user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/extraMarkReport"
+            element={<ExtraReport user={[user_code, user_type]} />}
           />        
               
               

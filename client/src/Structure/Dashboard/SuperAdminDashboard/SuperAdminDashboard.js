@@ -137,7 +137,7 @@ const SuperAdminDashboard = () => {
                                     <img style={{ width: '64px', height: '64px' }} src={inventory} alt="" />
                                 </div>
                                 <div className='px-3'>
-                                    <h4 className="card-title">Activities</h4>
+                                    <h4 className="card-title">Extra Curriculum</h4>
 
                                 </div>
                             </div>

@@ -154,7 +154,7 @@ const SubjectRegistration = () => {
   const handleSearch = () => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/search/subjects?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}`,
+        `${process.env.REACT_APP_NODE_API}/api/search/subjects?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&school_id=${localStorage.getItem('school_id')}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
