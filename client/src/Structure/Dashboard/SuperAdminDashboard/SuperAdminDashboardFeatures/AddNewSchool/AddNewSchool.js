@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SuperAdminHeader from '../../SuperAdminHeader';
 import './AddNewSchool.css'
+import { useState } from 'react';
+import axios from 'axios';
 
 const AddNewSchool = () => {
+   const [typies,setTypies] = useState([])
+   const [access_token, setAccess_token] = useState(
+      localStorage.getItem("access_token")
+    );
 
     // const handlelist = () => {
     //     document.getElementById("list").classList.toggle("active");
     // }
     // const handlelist1 = () => {
     //     document.getElementById("list").classList.toggle("active");
-    // }
-
+    // }/api/school_type/all
+    useEffect(() => {
+      axios
+        .get(
+          `${process.env.REACT_APP_NODE_API}/api/school_type/all`,
+          {
+            headers: { authorization: "bearer " + access_token },
+          }
+        )
+        .then((response) => {
+         setTypies(response.data);
+        });
+    }, []);
     return (
        <>
        <SuperAdminHeader/>
@@ -44,22 +61,10 @@ const AddNewSchool = () => {
                                 <label className='pb-2' for="exampleSelect">School Type : </label>
                                 <select className="form-control" id="class" name="class">
 
-                                    <option>Select Class</option>
-                                    <option>K.G</option>
-                                    <option>Nursery</option>
-                                    <option>Play</option>
-                                    <option>One</option>
-                                    <option>Two</option>
-                                    <option>Three</option>
-                                    <option>Four</option>
-                                    <option>Five</option>
-                                    <option>Six</option>
-                                    <option>Seven</option>
-                                    <option>Eight</option>
-                                    <option>Nine</option>
-                                    <option>Ten</option>
-                                    <option>Eleven</option>
-                                    <option>Twelve</option>
+                                    <option>Select Type</option>
+                                    {typies.map(res=>{
+                                       return <option value={res.id}>{res.type_name}</option>
+                                    })}
                                 </select>
 
                             </div>

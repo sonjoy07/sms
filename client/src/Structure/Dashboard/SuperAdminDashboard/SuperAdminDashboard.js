@@ -81,7 +81,7 @@ const SuperAdminDashboard = () => {
                         </div>
                     </div>
                 </a>
-                <a style={{ textDecoration: 'none' }} href='/period-create' className="col-sm-12 col-md-6  my-4 col1">
+                <a style={{ textDecoration: 'none' }} href='/section_create' className="col-sm-12 col-md-6  my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -162,6 +162,22 @@ const SuperAdminDashboard = () => {
                     </div>
                 </a>
 
+                <a style={{ textDecoration: 'none' }} href='/school-wise-sms-report' class="col-sm-12 col-md-6 my-4 col1">
+                    <div class="card bg-light shadow-sm">
+                        <div class="card-body py-4">
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                                <div className='px-3'>
+                                    <img style={{ width: '64px', height: '64px' }} src={subject} alt="" />
+                                </div>
+                                <div className='px-3'>
+                                    <h4 class="card-title">School Wise SMS Report</h4>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
 
 
 

@@ -1,15 +1,35 @@
-import React, { useState } from 'react';
 import SuperAdminHeader from '../../SuperAdminHeader';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const CreateNewOrganization = () => {
   const [organization_type, setOrganization_type] = useState('')
   const [orga_code, setOrgaName] = useState('')
+  const [classList, setClassList] = useState([])
+  const [reset, setReset] = useState(0)
+  const [id, setId] = useState("");
+  const [access_token, setAccess_token] = useState(
+    localStorage.getItem("access_token")
+  );
   const handleType = e => {
     setOrganization_type(e.target.value)
   }
   const handlecode = e => {
     setOrgaName(e.target.value)
   }
+  useEffect(() => {  
+    axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/school_type/all`,
+        {
+          headers: { authorization: "bearer " + access_token },
+        }
+      )
+      .then((response) => {
+        setClassList(response.data);
+      });
+  }, [reset]);
 
   const handleSubmit = () => {
     fetch(`${process.env.REACT_APP_NODE_API}/api/organization`,
@@ -21,18 +41,41 @@ const CreateNewOrganization = () => {
         },
 
         body: JSON.stringify({
-          Organization_type: organization_type,
-          organization_code: orga_code
+          type_name: organization_type,
+          id:id
 
         }),
       })
       .then((res) => res.json())
       .then((json) => {
-        alert('New Organization Created!')
+        if (id === '') {
+          toast('Organization saved successfully')
+       } else {
+          toast('Organization updated successfully')
+       }
+       setOrganization_type("")
+        setId("")
+        setReset(reset + 1)
       });
 
 
   }
+  const editClass = (res)=>{
+    setOrganization_type(res.type_name)
+    setId(res.id)
+
+  }
+  const deleteClass = async (id) => {
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/school_type/delete?id=${id}`)
+       if (result) {
+          toast("Organization deleted successfully");
+          setReset(reset+1)
+       }
+    }
+ }
 
   return (<><SuperAdminHeader/>
     <div className='container pt-4'>
@@ -60,16 +103,10 @@ const CreateNewOrganization = () => {
 
 
 
-                <div class={"col-sm-4 p-2 mx-auto"}>
+                <div class={"col-sm-5 p-2 mx-auto"}>
                   <div class="form-group">
                     <label className='pb-2' for="exampleInputEmail1">Add New Type : </label>
                     <input onChange={handleType} value={organization_type} type="text" class="form-control" />
-                  </div>
-                </div>
-                <div class={"col-sm-4 p-2 mx-auto"}>
-                  <div class="form-group">
-                    <label className='pb-2' for="exampleInputEmail1">Code : </label>
-                    <input onChange={handlecode} value={orga_code} type="text" class="form-control" />
                   </div>
                 </div>
                 <div class={"col-sm-2 p-2 mx-auto"}>
@@ -94,61 +131,25 @@ const CreateNewOrganization = () => {
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Id</th>
               <th scope="col">Organization Type</th>
-              <th scope="col">Code</th>
               <th scope="col">Edit/Delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-
-              <td>07-APR-22</td>
-              <td>22221130015</td>
-              <td>Tasmi Jahan</td>
-              <td>
-                <div className='.d-flex'>
-                  <div>
-                    <button style={{ color: 'white' }} className='bg-success'>Edit</button>
-                  </div>
-                  <div>
-                    <button style={{ color: 'white' }} className='bg-danger'>Delete</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-
-              <td>07-APR-22</td>
-              <td>22221130015</td>
-              <td>Tasmi Jahan</td>
-              <td>
-                <div className='.d-flex'>
-                  <div>
-                    <button style={{ color: 'white' }} className='bg-success'>Edit</button>
-                  </div>
-                  <div>
-                    <button style={{ color: 'white' }} className='bg-danger'>Delete</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-
-              <td>07-APR-22</td>
-              <td>22221130015</td>
-              <td>Tasmi Jahan</td>
-              <td>
-                <div className='.d-flex'>
-                  <div>
-                    <button style={{ color: 'white' }} className='bg-success'>Edit</button>
-                  </div>
-                  <div>
-                    <button style={{ color: 'white' }} className='bg-danger'>Delete</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
+          {classList.map(res => {
+                return (<tr>
+                  <td>{res.type_name}</td>
+                  <td>
+                    <div className='.d-flex'>
+                      <div>
+                        <button style={{ color: 'white' }}onClick={() => editClass(res)}className='bg-success'>Edit</button>
+                      </div>
+                      <div>
+                        <button style={{ color: 'white' }} onClick={() => deleteClass(res.id)} className='bg-danger'>Delete</button>
+                      </div>
+                    </div>
+                  </td></tr>)
+              })}
 
           </tbody>
         </table>

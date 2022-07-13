@@ -43,6 +43,8 @@ const TeacherNotice = (props) => {
   const [session_id, setSession_id] = useState("");
   const [school_id, setSchool] = useState(localStorage.getItem("school_id"))
   const [headline, setHeadline] = useState("");
+  const [search_issue_date, setSearch_Issue_date] = useState("");
+  const [search_due_date, setSearch_Due_date] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [sendList, setSendList] = useState([]);
@@ -304,6 +306,17 @@ const TeacherNotice = (props) => {
         setNotice(response.data);
       });
   };
+  const handleSearch = () => {
+    axios
+      .get(`${process.env.REACT_APP_NODE_API}/api/notice/creator?uid=${uid}&&start_date=${search_issue_date}&&end_date=${search_due_date}`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setNotice(response.data);
+      });
+  };
 
   const deleteNotice = async (id) => {
     const check = window.confirm('Are you sure to delete?');
@@ -317,6 +330,14 @@ const TeacherNotice = (props) => {
     }
 
   }
+  
+  let handleIssueDateSearchChange = (e) => {
+    setSearch_Issue_date(e.target.value);
+  };
+  let handleDueDateSearchChange = (e) => {
+    setSearch_Due_date(e.target.value);
+  };
+
   const editNotice = async (id) => {
     // setSection_id("");
     // setClass_id("");
@@ -332,7 +353,6 @@ const TeacherNotice = (props) => {
     const users = result.data[0].notice_users.split(',')
     setSelectedStudents(users)
   }
-  console.log(checkedStudents);
   return (
     <>
       <TeacherHeader />
@@ -551,6 +571,41 @@ const TeacherNotice = (props) => {
           >
             Information :{" "}
           </h2>
+          <div className="row">
+          <div class={"col-sm-4 p-2 mx-auto"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleInputEmail1">
+                          Start Date :{" "}
+                        </label>
+                        <input
+                          style={{ border: "1px solid blue" }}
+                          type="date"
+                          class="form-control"
+                          value={search_issue_date}
+                          onChange={handleIssueDateSearchChange}
+                        />
+                      </div>
+                    </div>
+                    <div class={"col-sm-4 p-2 mx-auto"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleInputEmail1">
+                          End Date :{" "}
+                        </label>
+                        <input
+                          style={{ border: "1px solid blue" }}
+                          type="date"
+                          class="form-control"
+                          value={search_due_date}
+                          onChange={handleDueDateSearchChange}
+                        />
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2"}>
+                      <div className='pt-2 mx-auto'>
+                        <button style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5"  onClick={handleSearch}>Search</button>
+                      </div>
+                    </div>
+          </div>
 
           <table className="table table-striped">
             <thead>
@@ -579,7 +634,7 @@ const TeacherNotice = (props) => {
 
                     <td style={{ color: "blue" }}>{noticeJSON.class_name ? noticeJSON.class_name : 'All'}</td>
                     <td style={{ color: "blue" }}>
-                      {noticeJSON.section_default_name ? noticeJSON.section_default_name : 'All'}
+                      {noticeJSON.section_local_name ? noticeJSON.section_local_name : 'All'}
                     </td>
 
                     <td>

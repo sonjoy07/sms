@@ -7,7 +7,7 @@ import SuperAdminHeader from '../../SuperAdminHeader';
 const ViewActivities = () => {
     const [homework, setHomework] = useState([]);
     useEffect(() => {
-      const home_work_id = localStorage.getItem("homeworkid")
+      const home_work_id = localStorage.getItem("activityid")
       axios
         .get(
           `${process.env.REACT_APP_NODE_API}/api/activities/teacher/submitlist?home_work_id=${home_work_id}`,

@@ -47,7 +47,7 @@ module.exports = (app) => {
     condition += req.query.section_id !== undefined && req.query.section_id !== ""?` and home_work.section_id= "${req.query.section_id}"`:``
     condition += req.query.subject_id !== undefined && req.query.subject_id !== ""?` and home_work.subject_id= "${req.query.subject_id}"`:``
     condition += req.query.start_date !== undefined && req.query.start_date !== ""?` and home_work.issue_date between "${req.query.start_date}" and "${req.query.end_date}"`:``
-    var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link
+    var sql = `select home_work.id, class.class_name, subject.subject_name, home_work.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section_default_name
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id

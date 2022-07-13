@@ -125,10 +125,6 @@ const SuperAdminDashboard = () => {
                         </div>
                     </div>
                 </a>
-
-
-
-
             </div>
         </section>
     );

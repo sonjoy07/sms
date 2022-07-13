@@ -349,7 +349,7 @@ const ShowHomeWork = () => {
                       {homeworkJSON.subject_name}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {homeworkJSON.section_local_name}
+                      {homeworkJSON.section_default_name}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a

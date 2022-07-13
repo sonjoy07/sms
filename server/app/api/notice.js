@@ -78,13 +78,14 @@ module.exports = (app) => {
   //   sections = value;
   // }
   app.get("/api/notice/creator", authenticateToken, (req, res) => {
+    let condition = req.query.start_date !== "" && req.query.start_date !== undefined?` and notice.publishing_date between "${req.query.start_date}" and "${req.query.end_date}"`:``
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,section_default_name as section_local_name,
     notice.session_id
     from notice
     left join class on (notice.class_id=class.id and all_class= 0)
     left join section on (notice.section_id=section.id and all_section = 0)
     join session on notice.session_id=session.id
-    where notice.user_code="${req.query.uid}"
+    where notice.user_code="${req.query.uid}" ${condition}
     order by notice.id
     ;`;
 
@@ -301,7 +302,7 @@ function notice_users(con, sql, class_id, section_id, students, id, query, sessi
         if (err) throw err;
       });
     } else {
-      res.status(400).json({ msg: 'select users' })
+      // res.status(400).json({ msg: 'select users' })
     }
   });
 }

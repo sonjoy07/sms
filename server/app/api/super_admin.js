@@ -3,11 +3,15 @@ module.exports = (app) => {
     const con = require('../models/db')
     const authenticateToken = require("../middleware/middleware");
     app.post("/api/organization", authenticateToken, (req, res) => {
-        var Organization_type = req.body.Organization_type;
-        var organization_code = req.body.organization_code;
+        var type_name = req.body.type_name;
+        var id = req.body.id;
 
-
-        var sql = `INSERT INTO Organization_tpe (Organization_type,organization_code) VALUES ("${Organization_type}","${organization_code}")`;
+        var sql 
+        if(id){
+            sql = `Update school_type set type_name= "${type_name}" where id = ${id}`
+        }else{
+            sql = `INSERT INTO school_type (type_name) VALUES ("${type_name}")`;
+        }
 
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
@@ -44,6 +48,13 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+
+    app.delete("/api/school_type/delete",(req,res)=>{
+        con.query(`delete from school_type where id = ${req.query.id}`, function (err, result, fields) {
+          if (err) throw err;
+          res.send(result);
+        })
+      })
 
 
 

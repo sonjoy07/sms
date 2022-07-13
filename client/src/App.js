@@ -112,6 +112,7 @@ import CreateExamType from "./Structure/Dashboard/SuperAdminDashboard/SuperAdmin
 import ExtraMarkentry from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraMarkentry";
 import ExtraReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraReport";
 import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfileEdit";
+import SchoolSMSreport from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/SchoolSMSreport";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -396,6 +397,10 @@ function App(props) {
           <Route
             path="/extraMarkReport"
             element={<ExtraReport user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/school-wise-sms-report"
+            element={<SchoolSMSreport user={[user_code, user_type]} />}
           />        
               
               
