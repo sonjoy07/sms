@@ -118,7 +118,7 @@ const SubjectRegistration = () => {
   }, []);
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/forthSubjectList`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/forthSubjectList?school_id=${localStorage.getItem('school_id')}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
@@ -127,7 +127,7 @@ const SubjectRegistration = () => {
         setForthSubjectsList(response.data);
       });
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/subjectList`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/subjectList?school_id=${localStorage.getItem('school_id')}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
@@ -256,7 +256,7 @@ const SubjectRegistration = () => {
   };
   const searchSubject = () => {
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/subjectList?student_id=${start_date}`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/subjectList?school_id=${localStorage.getItem('school_id')}&&student_id=${start_date}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
@@ -267,7 +267,7 @@ const SubjectRegistration = () => {
   }
   const searchForthSubject = () => {
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/forthSubjectList?student_id=${start_forth_date}`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/forthSubjectList?school_id=${localStorage.getItem('school_id')}&&student_id=${start_forth_date}`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },

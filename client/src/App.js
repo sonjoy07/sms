@@ -113,6 +113,7 @@ import ExtraMarkentry from "./Structure/Dashboard/TeacherDashboard/TeacherDasboa
 import ExtraReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraReport";
 import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfileEdit";
 import SchoolSMSreport from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/SchoolSMSreport";
+import ExtraDetails from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraDetails";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -246,6 +247,15 @@ function App(props) {
             path="/activityshow"
             element={
               <ViewActivities
+                user={[user_code, user_type]}
+                selecthw={setHomeworkid}
+              />
+            }
+          />
+          <Route
+            path="/activityTeachershow"
+            element={
+              <ExtraDetails
                 user={[user_code, user_type]}
                 selecthw={setHomeworkid}
               />

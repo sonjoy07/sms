@@ -59,6 +59,10 @@ const CreateNewSection = () => {
     setId("")
     setReset(reset + 1)
   }
+  const addClass = ()=>{
+    setSection_default('')
+    setId("")
+  }
   const editClass = (res)=>{
     setSection_default(res.section_default_name)
     setId(res.id)
@@ -88,7 +92,7 @@ const CreateNewSection = () => {
                   <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Create New Section</h3>
                 </div>
                 <div className="card-tools">
-                  <button id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
+                  <button  onClick={addClass} id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
                   </button>
                   {/* onClick={handlelist} */}
                   {/* active */}

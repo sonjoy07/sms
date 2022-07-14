@@ -178,7 +178,7 @@ const StudentActivitiesSubmit = (props) => {
                               style={{ textAlign: "left", color: "red" }}
                             >
                               {" "}
-                              {moment(hw.due_date).format("YYYY-MM-DD")}{" "}
+                              {moment(hw.due_date).format("Do MMM  YYYY")}{" "}
                             </p>
                             <p
                               className=""

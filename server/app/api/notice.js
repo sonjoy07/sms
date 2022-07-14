@@ -21,7 +21,7 @@ module.exports = (app) => {
     left join class on (notice.class_id=class.id and all_class= 0)
     left join section on (notice.section_id=section.id and all_section= 0)
     join session on notice.session_id=session.id
-    order by notice.id
+    order by notice.id desc
     ;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -82,8 +82,8 @@ module.exports = (app) => {
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date,notice.class_id,section_default_name as section_local_name,
     notice.session_id
     from notice
-    left join class on (notice.class_id=class.id and all_class= 0)
-    left join section on (notice.section_id=section.id and all_section = 0)
+    left join class on (notice.class_id=class.id and all_class!= 0)
+    left join section on (notice.section_id=section.id and all_section != 0)
     join session on notice.session_id=session.id
     where notice.user_code="${req.query.uid}" ${condition}
     order by notice.id
@@ -96,17 +96,20 @@ module.exports = (app) => {
     });
   });
   app.get("/api/notice/student", authenticateToken, (req, res) => {
+    let condition = req.query.start_date !== ""&& req.query.start_date!== undefined ?` and notice.publishing_date between "${req.query.start_date}" and "${req.query.end_date}"`:``
+    condition += req.query.school_info_id !== ""&& req.query.school_info_id!== undefined ?` and notice.school_info_id = "${req.query.school_info_id}"`:``
+    condition += req.query.student_id !== ""&& req.query.student_id!== undefined ?` and notice_user.student_id = "${req.query.student_id}"`:``
     var sql = `select notice.id, notice.school_info_id, session.session_year, notice.section_id, class.class_name,  notice.notice_headline, notice.notice_description, notice.publishing_date
     from notice
     left join notice_user on notice_user.notice_id = notice.id
     left join class on (class.id=notice.class_id and all_class = 0)  
     left join section on (notice.section_id=section.id and all_section = 0)
     left join session on notice.session_id=session.id
-    where notice_user.student_id="${req.query.student_id}"
-    and type = ${req.query.type === 'teacher' ? 1 : 2}
+    where type = ${req.query.type === 'teacher' ? 1 : 2}${condition}
     group BY notice.id 
     order by notice.id
     ;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

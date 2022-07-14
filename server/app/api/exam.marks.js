@@ -54,6 +54,18 @@ module.exports = (app) => {
         var index = req.body.index;
 
         var sql = `Update exam_marks set marks_obtained = ${updateData}  where id = ${index}`
+        console.log(sql);
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+    app.post("/api/exam_curi_mark/update", authenticateToken, (req, res) => {
+        var updateData = req.body.updateData;
+        var index = req.body.index;
+
+        var sql = `Update extra_curriculum_marks set marks_obtained = ${updateData}  where id = ${index}`
+        console.log(sql);
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.json({ status: "success" });

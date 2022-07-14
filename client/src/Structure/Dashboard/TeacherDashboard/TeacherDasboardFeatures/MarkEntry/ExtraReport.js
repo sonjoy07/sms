@@ -374,8 +374,8 @@ const ExtraReport = () => {
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a
                         onClick={() => {
-                          localStorage.setItem("homeworkid", homeworkJSON.id);
-                          navigate("/submitdetails");
+                          localStorage.setItem("activityid", homeworkJSON.id);
+                          navigate("/activityTeachershow");
                         }}
                         style={{ textDecoration: "none" }}
                       >
@@ -383,10 +383,10 @@ const ExtraReport = () => {
                       </a>
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(homeworkJSON.issue_date).format("YYYY-MM-DD")}
+                      {moment(homeworkJSON.issue_date).format("Do MMM  YYYY")}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(homeworkJSON.due_date).format("YYYY-MM-DD")}
+                      {moment(homeworkJSON.due_date).format("Do MMM  YYYY")}
                     </td>
                   </tr>
                 );

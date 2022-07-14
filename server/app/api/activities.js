@@ -11,7 +11,7 @@ module.exports = (app) => {
     join subject on activities.subject_id=subject.id
     join teacher on activities.teacher_id=teacher.id
     join session on activities.session_id=session.id
-    order by activities.id;`;
+    order by activities.id desc`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
@@ -45,7 +45,7 @@ module.exports = (app) => {
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
     join subject on activities.subject_id=subject.id
-    join teacher on activities.teacher_id=teacher.id
+    join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
     where 1=1 ${condition}
     order by activities.id;`;

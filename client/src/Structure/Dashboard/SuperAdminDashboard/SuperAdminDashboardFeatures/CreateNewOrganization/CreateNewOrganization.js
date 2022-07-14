@@ -60,6 +60,10 @@ const CreateNewOrganization = () => {
 
 
   }
+  const addClass = ()=>{
+    setOrganization_type("")
+     setId("")
+  }
   const editClass = (res)=>{
     setOrganization_type(res.type_name)
     setId(res.id)
@@ -88,7 +92,7 @@ const CreateNewOrganization = () => {
                   <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Create New Organization Type</h3>
                 </div>
                 <div className="card-tools">
-                  <button id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
+                  <button  onClick={addClass} id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
                   </button>
                   {/* onClick={handlelist} */}
                   {/* active */}

@@ -1005,10 +1005,10 @@ const AdminActivities = (props) => {
                     <td>{homeworkJSON.session_year}</td>
                     <td>{homeworkJSON.subject_name}</td>
                     <td>
-                      {moment(homeworkJSON.issue_date).format("YYYY-MM-DD")}
+                      {moment(homeworkJSON.issue_date).format("Do MMM  YYYY")}
                     </td>
                     <td>
-                      {moment(homeworkJSON.due_date).format("YYYY-MM-DD")}
+                      {moment(homeworkJSON.due_date).format("Do MMM  YYYY")}
                     </td>
                     <td>
                       {" "}

@@ -201,7 +201,7 @@ module.exports = (app) => {
     condition+= session_id!== ''?` and home_work.session_id="${session_id}"`:``
     condition+= teacher_id!== ''?` and home_work.teacher_id="${teacher_id}"`:``
     condition+= issue_date!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
-    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission
+    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission,section_default_name
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id

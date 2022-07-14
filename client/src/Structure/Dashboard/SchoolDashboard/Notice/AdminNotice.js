@@ -618,7 +618,7 @@ const AdminNotice = (props) => {
                                 return (
                                     <tr>
                                         <td style={{ color: "blue" }}>
-                                            {moment(noticeJSON.publishing_date).format("YYYY-MM-DD")}
+                                            {moment(noticeJSON.publishing_date).format("Do MMM  YYYY")}
                                         </td>
                                         <td style={{ color: "blue" }}>
                                             {noticeJSON.notice_headline}
@@ -628,7 +628,7 @@ const AdminNotice = (props) => {
                                         </td>
                                         <td style={{ color: "blue" }}>{noticeJSON.class_name?noticeJSON.class_name:'All'}</td>
                                         <td style={{ color: "blue" }}>
-                                            {noticeJSON.section_default_name?noticeJSON.section_default_name:'All'}
+                                            {noticeJSON.section_local_name?noticeJSON.section_local_name:'All'}
                                         </td>
 
                                         <td>

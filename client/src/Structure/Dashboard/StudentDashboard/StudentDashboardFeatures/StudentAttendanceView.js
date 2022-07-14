@@ -316,7 +316,7 @@ const StudentAttendanceView = (props) => {
                       return (
                         <tr>
                           <td>
-                            {moment(attendanceJSON.date).format("YYYY-MM-DD")}
+                            {moment(attendanceJSON.date).format("Do MMM  YYYY")}
                           </td>
                           <td>{attendanceJSON.period_code}</td>
                           <td>{attendanceJSON.subject_name}</td>

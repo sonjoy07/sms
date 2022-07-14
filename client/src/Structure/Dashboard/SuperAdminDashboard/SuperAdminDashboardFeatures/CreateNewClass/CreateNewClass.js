@@ -81,13 +81,19 @@ const CreateNewClass = () => {
       });
 
   }
+  const addClass = ()=>{
+    setClassCode("")
+        setOrgId("")
+        setShift("")
+        setClassName("")
+        setId("")
+  }
   const editClass = (res)=>{
     setClassCode(res.class_code)
     setOrgId(res.school_type_id)
     setShift(res.shift_id)
     setClassName(res.class_name)
     setId(res.id)
-
   }
   const deleteClass = async (id) => {
     const check = window.confirm('Are you sure to delete?');
@@ -113,7 +119,7 @@ const CreateNewClass = () => {
                     <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Add New Class : </h3>
                   </div>
                   <div className="card-tools">
-                    <button id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
+                    <button onClick={addClass} id="w-change-close" type="button" className="btn btn-tool" data-card-widget="collapse"><i className="fas fa-plus icons" />
                     </button>
                     {/* onClick={handlelist} */}
                     {/* active */}

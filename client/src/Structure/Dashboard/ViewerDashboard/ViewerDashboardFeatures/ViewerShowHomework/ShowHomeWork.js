@@ -383,10 +383,10 @@ const ShowHomeWork = () => {
                       </a>
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(homeworkJSON.issue_date).format("YYYY-MM-DD")}
+                      {moment(homeworkJSON.issue_date).format("Do MMM  YYYY")}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(homeworkJSON.due_date).format("YYYY-MM-DD")}
+                      {moment(homeworkJSON.due_date).format("Do MMM  YYYY")}
                     </td>
                   </tr>
                 );

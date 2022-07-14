@@ -12,6 +12,8 @@ const StudentNoticeList = (props) => {
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
   const [student, setStudent] = useState([]);
   const [notice, setNotice] = useState([]);
+  const [search_issue_date, setSearch_Issue_date] = useState("");
+  const [search_due_date, setSearch_Due_date] = useState("");
 
   const type = searchParams.get('type')
 
@@ -54,10 +56,67 @@ const StudentNoticeList = (props) => {
       });
   }, [user_code]);
 
+   
+  let handleIssueDateSearchChange = (e) => {
+    setSearch_Issue_date(e.target.value);
+  };
+  let handleDueDateSearchChange = (e) => {
+    setSearch_Due_date(e.target.value);
+  };
+  const handleSearch = () => {
+    axios
+    .get(
+      `${process.env.REACT_APP_NODE_API}/api/notice/student?student_id=${user_code}&&type=${type}&&start_date=${search_issue_date}&&end_date=${search_due_date}`,
+      {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((response) => {
+      setNotice(response.data);
+    });
+  };
+
   return (
     <div>
       <StudentHeader/>
       <div className="container">
+          <div className="row">
+          <div class={"col-sm-4 p-2 mx-auto"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleInputEmail1">
+                          Start Date :{" "}
+                        </label>
+                        <input
+                          style={{ border: "1px solid blue" }}
+                          type="date"
+                          class="form-control"
+                          value={search_issue_date}
+                          onChange={handleIssueDateSearchChange}
+                        />
+                      </div>
+                    </div>
+                    <div class={"col-sm-4 p-2 mx-auto"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleInputEmail1">
+                          End Date :{" "}
+                        </label>
+                        <input
+                          style={{ border: "1px solid blue" }}
+                          type="date"
+                          class="form-control"
+                          value={search_due_date}
+                          onChange={handleDueDateSearchChange}
+                        />
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 p-2"}>
+                      <div className='pt-2 mx-auto'>
+                        <button style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5"  onClick={handleSearch}>Search</button>
+                      </div>
+                    </div>
+          </div>
         {notice.map((noticeJSON) => {
           return (
             <div className="row mt-4">
@@ -145,7 +204,7 @@ const StudentNoticeList = (props) => {
                                     {" "}
                                     Date:{" "}
                                     {moment(noticeJSON.publishing_date).format(
-                                      "YYYY-MM-DD"
+                                      "Do MMM  YYYY"
                                     )}{" "}
                                   </p>
                                   <p

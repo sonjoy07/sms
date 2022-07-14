@@ -106,7 +106,7 @@ const ExtraMarkentry = () => {
 
     const updateMarks = (event) => {
         if (event.key === 'Enter') {
-            fetch(`${process.env.REACT_APP_NODE_API}/api/exam_mark/update`, {
+            fetch(`${process.env.REACT_APP_NODE_API}/api/exam_curi_mark/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

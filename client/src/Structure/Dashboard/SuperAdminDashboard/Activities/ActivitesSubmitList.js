@@ -60,7 +60,7 @@ const HomeWorkSubmitList = (props) => {
                 <td>{homeworkJSON.first_name}</td>
                 <td>Submit</td>
                 <td>
-                  {moment(homeworkJSON.submission_time).format("YYYY-MM-DD")}
+                  {moment(homeworkJSON.submission_time).format("Do MMM  YYYY")}
                 </td>
                 <td style={{ color: "blue" }}>Open File</td>
               </tr>

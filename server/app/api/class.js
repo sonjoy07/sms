@@ -11,7 +11,7 @@ module.exports = (app) => {
     );
   });
   app.get("/api/class/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM class", function (err, result, fields) {
+    con.query("SELECT * FROM class order by class.id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

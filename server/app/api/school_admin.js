@@ -35,7 +35,7 @@ module.exports = (app) => {
     var id = req.body.id;
     var sql
     if (id) {
-      sql = `update section set section_default_name = ${section_default_name} where id = ${id}`
+      sql = `update section set section_default_name = "${section_default_name}" where id = ${id}`
     } else {
       sql = `INSERT INTO section (section_default_name) VALUES ("${section_default_name}")`;
     }
@@ -51,9 +51,17 @@ module.exports = (app) => {
     var subject_name = req.body.subject_name;
     var class_id = req.body.class_id;
     var school_type_id = req.body.school_type_id
+    var id = req.body.id
 
-    var sql = `INSERT INTO subject (subject_code,subject_name, class_id, school_type_id) VALUES ("${subject_code}","${subject_name}", "${class_id}", "${school_type_id}")`;
+    var sql
+    if(id){
+      sql = `update subject set subject_code = "${subject_code}",subject_name="${subject_name}", class_id="${class_id}", school_type_id="${school_type_id}" where id = ${id}`;
 
+    }else{
+      sql = `INSERT INTO subject (subject_code,subject_name, class_id, school_type_id) VALUES ("${subject_code}","${subject_name}", "${class_id}", "${school_type_id}")`;
+
+    }
+    
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.json({ status: "success" });
@@ -179,7 +187,7 @@ module.exports = (app) => {
   app.get('/api/subjectList', (req, res) => {
     const student_id = req.query.student_id
     let condition = student_id !== undefined && student_id !== "" ? ` and student.student_code="${student_id}"` : ``
-    var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 " + condition
+    var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where sr.school_info_id="+req.query.school_id + condition
     console.log(sql);
     con.query(sql,
       function (err, result, fields) {
@@ -190,7 +198,7 @@ module.exports = (app) => {
   app.get('/api/forthSubjectList', (req, res) => {
     const student_id = req.query.student_id
     let condition = student_id !== undefined && student_id !== "" ? ` and student.student_code="${student_id}"` : ``
-    var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_4th_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_4th_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where 1=1 " + condition
+    var sql = "select section_default_name,session_year,division_name,class_name,subject_name,student_code,sr.* from subject_4th_registration sr left join session on session.id = sr.session_id left join `group` gp on gp.id = sr.group_id left join class on class.id = sr.class_id left join subject on subject.id = sr.subject_4th_id left join student on student.id = sr.student_id left join section on section.id = sr.section_id where sr.school_info_id="+req.query.school_id + condition
     con.query(sql,
       function (err, result, fields) {
         if (err) throw err;
