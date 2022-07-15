@@ -194,8 +194,8 @@ const CreateNewPeriod = () => {
              console.log(className);
             return  <tr>
 
-             <td>{className.school_name}</td>
-             <td>{typeName.shift_name}</td>
+             <td>{className?.school_name}</td>
+             <td>{typeName?.shift_name}</td>
              <td>{res.period_code}</td>
              <td>
                <div className='.d-flex'>

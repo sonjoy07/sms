@@ -6,10 +6,10 @@ module.exports = (app) => {
         var type_name = req.body.type_name;
         var id = req.body.id;
 
-        var sql 
-        if(id){
+        var sql
+        if (id) {
             sql = `Update school_type set type_name= "${type_name}" where id = ${id}`
-        }else{
+        } else {
             sql = `INSERT INTO school_type (type_name) VALUES ("${type_name}")`;
         }
 
@@ -42,10 +42,10 @@ module.exports = (app) => {
         var id = req.body.id;
 
 
-        var sql 
-        if(id){
+        var sql
+        if (id) {
             sql = `update school_info set type_id="${type_id}",school_code="${school_code}",eiin="${eiin}",administrator_id="${administrator_id}",school_name="${school_name}",short_name="${short_name}",address_division="${address_division}",address_district="${address_district}",address_upazila="${address_upazila}",	address_village="${address_village}",school_phone="${school_phone}",school_email="${school_email}",school_head_name="${school_head_name}",school_head_phone="${school_head_phone}",school_head_email="${school_head_email}",contact_person_name="${contact_person_name}",contact_person_phone="${contact_person_phone}",contact_person_email="${contact_person_email}",status="${status}" where id =${id}`;
-        }else{
+        } else {
             sql = `INSERT INTO school_info (type_id,school_code,eiin,administrator_id,school_name,short_name,address_division,address_district,address_upazila,	address_village,school_phone,school_email,school_head_name,school_head_phone,school_head_email,contact_person_name,contact_person_phone,contact_person_email,status) VALUES ("${type_id}","${school_code}","${eiin}","${administrator_id}","${school_name}","${short_name}","${address_division}","${address_district}","${address_upazila}","${address_village}","${school_phone}","${school_email}","${school_head_name}","${school_head_phone}","${school_head_email}","${contact_person_name}","${contact_person_phone}","${contact_person_email}","${status}")`;
         }
 
@@ -55,37 +55,49 @@ module.exports = (app) => {
         });
     });
 
-    app.delete("/api/school_type/delete",(req,res)=>{
+    app.delete("/api/school_type/delete", (req, res) => {
         con.query(`delete from school_type where id = ${req.query.id}`, function (err, result, fields) {
-          if (err) throw err;
-          res.send(result);
-        })
-      })
-      
-      app.delete("/api/period/delete",(req,res)=>{
-          con.query(`delete from period where id = ${req.query.id}`, function (err, result, fields) {
             if (err) throw err;
             res.send(result);
-          })
         })
-      app.delete("/api/school/delete",(req,res)=>{
-          con.query(`delete from school_info where id = ${req.query.id}`, function (err, result, fields) {
+    })
+    app.delete("/api/subject/delete", (req, res) => {
+        con.query(`delete from subject where id = ${req.query.id}`, function (err, result, fields) {
             if (err) throw err;
             res.send(result);
-          })
         })
-      app.get("/api/district", authenticateToken, (req, res) => {
+    })
+
+    app.delete("/api/period/delete", (req, res) => {
+        con.query(`delete from period where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+        })
+    })
+    app.delete("/api/exam_type/delete", (req, res) => {
+        con.query(`delete from exam_name where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+        })
+    })
+    app.delete("/api/school/delete", (req, res) => {
+        con.query(`delete from school_info where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+        })
+    })
+    app.get("/api/district", authenticateToken, (req, res) => {
         con.query(`SELECT * FROM districts where division_id = "${req.query.division_id}"`, function (err, result, fields) {
-          if (err) throw err;
-          res.send(result);
+            if (err) throw err;
+            res.send(result);
         });
-      });
-      app.get("/api/upazila", authenticateToken, (req, res) => {
+    });
+    app.get("/api/upazila", authenticateToken, (req, res) => {
         con.query(`SELECT * FROM upazilas where district_id = "${req.query.district_id}"`, function (err, result, fields) {
-          if (err) throw err;
-          res.send(result);
+            if (err) throw err;
+            res.send(result);
         });
-      });
+    });
 
 
 

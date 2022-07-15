@@ -60,9 +60,17 @@ module.exports = (app) => {
     var motherName = req.body.motherName;
     var dob = req.body.dob;
     var bloodGroup = req.body.bloodGroup;
+    const file = req.files.file
+    var attachment_link = req.body.fileName;
+    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    file.mv(`${uploadPath}/${file.name}`, err => {
+      if (err) {
+        return res.status(500).send(err)
+      }
+    })
     var sql = `Update student 
     set mobile_no="${mobile}",
-        email="${email}",first_name="${firstName}",last_name="${lastName}",middle_name="${middleName}",present_address="${presentAddress}",permanent_address="${permanentAddress}",gender_id="${sex}",father_name="${fatherName}",father_phone_number="${fatherMobileNo}",mother_name="${motherName}",mother_phone_number="${motherMobileNo}",dob="${dob}",blood_group="${bloodGroup}" 
+        email="${email}",first_name="${firstName}",last_name="${lastName}",middle_name="${middleName}",present_address="${presentAddress}",permanent_address="${permanentAddress}",gender_id="${sex}",father_name="${fatherName}",father_phone_number="${fatherMobileNo}",mother_name="${motherName}",mother_phone_number="${motherMobileNo}",dob="${dob}",blood_group="${bloodGroup}",photo_id="${attachment_link}" 
     where student_code="${req.query.student_code}"
     
     `

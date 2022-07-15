@@ -56,6 +56,17 @@ const CreateExamType = () => {
     setType('')
     setCode('')
   }
+  const deleteClass = async (id) => {
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/exam_type/delete?id=${id}`)
+       if (result) {
+          toast("Exam Type deleted successfully");
+          setReset(reset+1)
+       }
+    }
+ }
   return (
     <>
       <SuperAdminHeader />
@@ -134,6 +145,9 @@ const CreateExamType = () => {
                     <div className='.d-flex'>
                       <div>
                         <button style={{ color: 'white' }} onClick={() => { setId(res.id); setType(res.exam_name);setCode(res.exam_code) }} className='bg-success'>Edit</button>
+                      </div>
+                      <div>
+                        <button style={{ color: 'white' }} className='bg-danger' onClick={() => deleteClass(res.id)} >Delete</button>
                       </div>
                     </div>
                   </td>

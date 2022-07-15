@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./TeacherProfile.css";
 import profile from "../../../images/profile/profile.png";
+import TeacherHeader from "../TeacherHeader/TeacherHeader";
 
 const TeacherProfile = () => {
   const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
@@ -23,6 +24,7 @@ const TeacherProfile = () => {
   }, []);
 
   return (
+      <><TeacherHeader/>
     <div class="container">
             <div class="main-body my-5">
 
@@ -31,7 +33,8 @@ const TeacherProfile = () => {
                         <div class="card">
                             <div class="card-body py-5">
                                 <div class="d-flex flex-column align-items-center text-center">
-                                    <img src={profile} alt="Admin" class="rounded-circle" width="150" />
+                                    <img src={
+                    teacher.photo_id ? `/uploads/${teacher.photo_id}` : profile} alt="Admin" class="rounded-circle" width="150" />
                                     <div class="my-4">
                                         <h4>{teacher?.full_name}</h4>
                                         {/* <p class="text-secondary mb-1">Full Stack Developer</p>
@@ -132,7 +135,7 @@ const TeacherProfile = () => {
                 </div>
 
             </div>
-        </div>
+        </div></>
   );
 };
 
