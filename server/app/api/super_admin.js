@@ -39,9 +39,15 @@ module.exports = (app) => {
         var contact_person_phone = req.body.contact_person_phone;
         var contact_person_email = req.body.contact_person_email;
         var status = req.body.status;
+        var id = req.body.id;
 
 
-        var sql = `INSERT INTO school_info (type_id,school_code,eiin,administrator_id,school_name,short_name,address_division,address_district,address_upazila,	address_village,school_phone,school_email,school_head_name,school_head_phone,school_head_email,contact_person_name,contact_person_phone,contact_person_email,status) VALUES ("${type_id}","${school_code}","${eiin}","${administrator_id}","${school_name}","${short_name}","${address_division}","${address_district}","${address_upazila}","${address_village}","${school_phone}","${school_email}","${school_head_name}","${school_head_phone}","${school_head_email}","${contact_person_name}","${contact_person_phone}","${contact_person_email}","${status})`;
+        var sql 
+        if(id){
+            sql = `update school_info set type_id="${type_id}",school_code="${school_code}",eiin="${eiin}",administrator_id="${administrator_id}",school_name="${school_name}",short_name="${short_name}",address_division="${address_division}",address_district="${address_district}",address_upazila="${address_upazila}",	address_village="${address_village}",school_phone="${school_phone}",school_email="${school_email}",school_head_name="${school_head_name}",school_head_phone="${school_head_phone}",school_head_email="${school_head_email}",contact_person_name="${contact_person_name}",contact_person_phone="${contact_person_phone}",contact_person_email="${contact_person_email}",status="${status}" where id =${id}`;
+        }else{
+            sql = `INSERT INTO school_info (type_id,school_code,eiin,administrator_id,school_name,short_name,address_division,address_district,address_upazila,	address_village,school_phone,school_email,school_head_name,school_head_phone,school_head_email,contact_person_name,contact_person_phone,contact_person_email,status) VALUES ("${type_id}","${school_code}","${eiin}","${administrator_id}","${school_name}","${short_name}","${address_division}","${address_district}","${address_upazila}","${address_village}","${school_phone}","${school_email}","${school_head_name}","${school_head_phone}","${school_head_email}","${contact_person_name}","${contact_person_phone}","${contact_person_email}","${status}")`;
+        }
 
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
@@ -55,6 +61,31 @@ module.exports = (app) => {
           res.send(result);
         })
       })
+      
+      app.delete("/api/period/delete",(req,res)=>{
+          con.query(`delete from period where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+          })
+        })
+      app.delete("/api/school/delete",(req,res)=>{
+          con.query(`delete from school_info where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+          })
+        })
+      app.get("/api/district", authenticateToken, (req, res) => {
+        con.query(`SELECT * FROM districts where division_id = "${req.query.division_id}"`, function (err, result, fields) {
+          if (err) throw err;
+          res.send(result);
+        });
+      });
+      app.get("/api/upazila", authenticateToken, (req, res) => {
+        con.query(`SELECT * FROM upazilas where district_id = "${req.query.district_id}"`, function (err, result, fields) {
+          if (err) throw err;
+          res.send(result);
+        });
+      });
 
 
 

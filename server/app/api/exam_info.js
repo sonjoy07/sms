@@ -143,9 +143,16 @@ module.exports = (app) => {
 
     app.post("/api/exam_type", authenticateToken, (req, res) => {
         var type = req.body.type
+        var code = req.body.code
         var id = req.body.id
         if(id){
-           let sql=   `update exam_name set exam_name = "${type}" where id = "${id}"`
+           let sql=   `update exam_name set exam_name = "${type}" ,exam_code = "${code}" where id = "${id}"`
+            con.query(sql, function (err, result, fields) {
+                if (err) throw err;
+                res.json({ status: "success" });
+            });
+        }else{
+            let sql=   `insert into exam_name (exam_name,exam_code) values("${type}","${code}")`
             con.query(sql, function (err, result, fields) {
                 if (err) throw err;
                 res.json({ status: "success" });

@@ -73,8 +73,14 @@ module.exports = (app) => {
     var shift_id = req.body.shift_id;
     var period_code = req.body.period_code;
     var school_type_id = req.body.school_type_id
+    var id = req.body.id
 
-    var sql = `INSERT INTO period (school_type_id,shift_id,period_code) VALUES ("${school_type_id}","${shift_id}","${period_code}")`;
+    var sql
+    if(id){      
+    sql = `update period set school_info_id="${school_type_id}",shift_id="${shift_id}",period_code="${period_code}" where id = ${id}`;
+    }else{
+      sql = `INSERT INTO period (school_info_id,shift_id,period_code) VALUES ("${school_type_id}","${shift_id}","${period_code}")`;
+    }
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

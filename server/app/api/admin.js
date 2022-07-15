@@ -3,7 +3,7 @@ module.exports = (app) => {
   const authenticateToken = require("../middleware/middleware");
   app.get("/api/administrator", authenticateToken, (req, res) => {
     con.query(
-      "SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, initial FROM administrator",
+      "SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name FROM administrator",
       function (err, result, fields) {
         if (err) throw err;
         res.send(result);
