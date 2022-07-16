@@ -114,6 +114,7 @@ import ExtraReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardF
 import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfileEdit";
 import SchoolSMSreport from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/SchoolSMSreport";
 import ExtraDetails from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraDetails";
+import PaidList from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Payment/PaidList";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -213,6 +214,8 @@ function App(props) {
             element={<StudentRoutine user={[user_code, user_type]} />}
           />
           <Route path="/attendance" element={<Attendance />} />
+
+          <Route path="/paidList" element={<PaidList />} />
 
           <Route path="/teacherprofile" element={<TeacherProfile />} />
 

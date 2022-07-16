@@ -52,7 +52,7 @@ module.exports = (app) => {
     var middleName = req.body.middleName;
     var dob = req.body.dob;
     var bloodGroup = req.body.bloodGroup;
-    const file = req.files?.file
+    const file = req.files=== null?undefined:req.files.file
     var attachment_link = req.body.fileName;
     if(file !== undefined){
     var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');

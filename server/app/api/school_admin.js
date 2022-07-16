@@ -371,14 +371,14 @@ module.exports = (app) => {
 
     const inserData = await Promise.all(studentChecked.map(res => {
       subjectChecked.length > 0 && subjectChecked.map(resSub => {
-        sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${1}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
+        sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${0}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
         });
       })
       forthChecked.length > 0 && forthChecked.map(resSub => {
-        sql = `insert into subject_4th_registration (school_info_id,student_id,session_id,group_id,class_id,subject_4th_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${1}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
+        sql = `insert into subject_4th_registration (school_info_id,student_id,session_id,group_id,class_id,subject_4th_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${0}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
@@ -403,15 +403,19 @@ module.exports = (app) => {
   app.post("/api/add_sector", (req, res) => {
     var sector_code = req.body.sector_code;
     var sector_name = req.body.sector_name;
-    // var id = req.body.id;
+    var classId = req.body.class_id;
+    var lastDate = req.body.last_date;
+    var school_id = req.body.school_id;
+    var amount = req.body.amount;
+    var id = req.body.id;
 
 
     var sql
-    // if (id === '') {
-    sql = `INSERT INTO sector (sector_code,sector_name) VALUES ("${sector_code}","${sector_name}")`;
-    // } else {
-    //     sql = `update student set student_code = "${student_code}",first_name = "${first_name}",middle_name = "${middle_name}",last_name = "${last_name}",mobile_no = "${mobile_no}",gender_id = "${gender_id}",email = "${email}",present_address = "${present_address}",father_name = "${father_name}",father_phone_number = "${father_phone_number}",mother_name = "${mother_name}",mother_phone_number = "${mother_phone_number}",dob = "${dob}",blood_group = "${blood_group}",photo_id = "${photo_id}",school_info_id = "${school_info_id}" where id = ${id}`
-    // }
+    if (id === '') {
+    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id) VALUES ("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}")`;
+    } else {
+        sql = `update sector set sector_code = "${sector_code}",sector_name = "${sector_name}",last_date = "${lastDate}",amount = "${amount}",class_id = "${classId}" where id = ${id}`
+    }
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -452,9 +456,17 @@ module.exports = (app) => {
     var sql
     // if (id === '') {
     sql = `select * from sector`;
-    // } else {
-    //     sql = `update student set student_code = "${student_code}",first_name = "${first_name}",middle_name = "${middle_name}",last_name = "${last_name}",mobile_no = "${mobile_no}",gender_id = "${gender_id}",email = "${email}",present_address = "${present_address}",father_name = "${father_name}",father_phone_number = "${father_phone_number}",mother_name = "${mother_name}",mother_phone_number = "${mother_phone_number}",dob = "${dob}",blood_group = "${blood_group}",photo_id = "${photo_id}",school_info_id = "${school_info_id}" where id = ${id}`
-    // }
+    
+
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result)
+    });
+  });
+  app.get("/api/sectorBySchool", (req, res) => {
+    var sql
+    sql = `select * from sector where school_id="${req.query.school_id}" and class_id = ${req.query.class_id}`;
+   
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

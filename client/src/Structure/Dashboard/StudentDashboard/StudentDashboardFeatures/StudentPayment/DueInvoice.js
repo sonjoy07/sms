@@ -1,8 +1,48 @@
 import React from 'react'
-import profile from '../../../../images/profile/profile.png'
+import axios from 'axios'
+import moment from 'moment'
 import StudentHeader from '../../StudentHeader'
+import { useEffect,useState } from 'react';
+import { toast } from 'react-toastify';
 
 const DueInvoice = () => {
+    const [sectors, setSectors] = useState([])
+    useEffect(()=>{
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/sectorBySchool?school_id=${localStorage.getItem("school_id")}&&class_id=${localStorage.getItem("class")}`, {
+            headers: {
+              authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+          }).then((response) => {
+            setSectors(response.data);
+          });
+    },[])
+    const payment =(invoice,res)=>{
+        const check = window.confirm('Are you sure to Pay?');
+        if (check) {
+            fetch(`${process.env.REACT_APP_NODE_API}/api/create_payment`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: "bearer " + localStorage.getItem("access_token"),
+              },
+      
+              body: JSON.stringify({
+                invoice: invoice,
+                sector_id: res.id,
+                student_id: localStorage.getItem("user_code"),
+                transaction_id: "e7f4s54ad8d2d47c52e7",
+                paidDate: moment().format('YYYY-MM-DD')
+              }),
+            })
+            .then((res) => res.json())
+            .then((json) => {
+                  toast(json.status)
+              });
+        // }else{
+
+        }
+    }
     return (
         <>
             <StudentHeader />
@@ -20,15 +60,17 @@ const DueInvoice = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>87487fch33</td>
-                            <td>Registration</td>
-                            <td>1200</td>
-                            <td>30-June-2022</td>
+                        {sectors.map(res=>{
+                            const invoice =`${localStorage.getItem('u_id').substring(0,4)}${res.id}${moment(res.last_date).format('DDMM')}`
+                        return<tr>
+                            <td>{invoice}</td>
+                            <td>{res.sector_name}</td>
+                            <td>{res.amount}</td>
+                            <td>{moment(res.last_date).format("Do MMM  YYYY")}</td>
                             <td>
-                                <a href='/payoption'><button style={{ backgroundColor: 'tomato', color: 'white' }}>Pay Now</button></a>
+                                <button onClick={()=>payment(invoice,res)} className='btn btn-danger mt-1' style={{ backgroundColor: 'tomato'}}>Pay Now</button>
                             </td>
-                        </tr>
+                        </tr>})}
                     </tbody>
                 </table>
             </section>

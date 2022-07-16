@@ -400,7 +400,7 @@ const CreateNewExam = () => {
 
                 <table class="table table-striped">
                     <thead>
-                        <tr>
+                        <tr style={{ textAlign: 'center' }}>
                             <th scope="col">Session</th>
                             <th scope="col">Exam Type</th>
                             <th scope="col">Class</th>

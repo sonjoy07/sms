@@ -39,24 +39,24 @@ module.exports = (app) => {
     );
   });
   app.get("/api/student/all", authenticateToken, (req, res) => {
-    let condition = req.query.student_id !== undefined && req.query.student_id !== ""?` and student.student_code= "${req.query.student_id}"`:``
+    let condition = req.query.student_id !== undefined && req.query.student_id !== "" ? ` and student.student_code= "${req.query.student_id}"` : ``
     con.query(`SELECT student.*, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name FROM student where student.school_info_id="${req.query.school_info_id}"${condition}`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
   });
   app.post("/api/student/profile_update", authenticateToken, (req, res) => {
-    var mobile = req.body.mobileNo?req.body.mobileNo:0;
+    var mobile = req.body.mobileNo ? req.body.mobileNo : 0;
     var email = req.body.email;
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var middleName = req.body.middleName;
     var presentAddress = req.body.presentAddress;
     var permanentAddress = req.body.permanentAddress;
-    var sex = req.body.sex?req.body.sex:1;
-    var fatherMobileNo = req.body.fatherMobileNo?req.body.fatherMobileNo:0;
+    var sex = req.body.sex ? req.body.sex : 1;
+    var fatherMobileNo = req.body.fatherMobileNo ? req.body.fatherMobileNo : 0;
     var fatherName = req.body.fatherName;
-    var motherMobileNo = req.body.motherMobileNo?req.body.motherMobileNo:0;
+    var motherMobileNo = req.body.motherMobileNo ? req.body.motherMobileNo : 0;
     var motherName = req.body.motherName;
     var dob = req.body.dob;
     var bloodGroup = req.body.bloodGroup;
@@ -110,6 +110,18 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/allPayment", authenticateToken, (req, res) => {
+    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where student_id = ${req.query.student_code}`, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/allPaymentSchool", authenticateToken, (req, res) => {
+    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where school_id = ${req.query.school_id}`, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
   app.get("/api/division", authenticateToken, (req, res) => {
     con.query("SELECT * FROM divisions", function (err, result, fields) {
       if (err) throw err;
@@ -120,6 +132,27 @@ module.exports = (app) => {
     con.query(`SELECT student.id FROM student where student_code = "${req.query.student_code}"`, function (err, result, fields) {
       if (err) throw err;
       res.send(result[0]);
+    });
+  });
+  app.post("/api/create_payment", authenticateToken, (req, res) => {
+    var invoice = req.body.invoice;
+    var sector_id = req.body.sector_id;
+    var student_id = req.body.student_id;
+    var transaction_id = req.body.transaction_id;
+    var paidDate = req.body.paidDate;
+
+    con.query(`select * from payment where invoice_no=${invoice}`, function (err, result, fields) {
+      if (err) throw err;
+      if (result.length === 0) {
+        var sql = `INSERT INTO payment (sector_id, student_id, invoice_no, transaction_id, paid_date) VALUES ("${sector_id}", "${student_id}", "${invoice}", "${transaction_id}", "${paidDate}")`;
+
+        con.query(sql, function (err, result, fields) {
+          if (err) throw err;
+          res.json({ status: "Paid Successfully" });
+        });
+      }else{
+        res.json({ status: "Already Paid", });
+      }
     });
   });
 };

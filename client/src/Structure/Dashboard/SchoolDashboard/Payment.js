@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -6,9 +7,21 @@ import SchoolHeader from './schoolHeader/SchoolHeader'
 const Payment = () => {
   const [sector_code, setSector_code] = useState('')
   const [sector_name, setSector_name] = useState('')
+  const [amount, setAmount] = useState('')
+  const [classId, setClassId] = useState('')
+  const [lastDate, setLastDate] = useState('')
+  const [id, setId] = useState('')
   const [sectors, setSectors] = useState([])
+  const [classes, setClasses] = useState([])
   const [reset, setReset] = useState(0)
   useEffect(() => {
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${localStorage.getItem('school_type')}`, {
+      headers: {
+        authorization: "bearer " + localStorage.getItem("access_token"),
+      },
+    }).then((response) => {
+      setClasses(response.data);
+    });
     axios.get(`${process.env.REACT_APP_NODE_API}/api/sector/all`, {
       headers: {
         authorization: "bearer " + localStorage.getItem("access_token"),
@@ -24,18 +37,26 @@ const Payment = () => {
       body: JSON.stringify({
         sector_code: sector_code,
         sector_name: sector_name,
+        class_id: classId,
+        last_date: lastDate,
+        school_id: localStorage.getItem('school_info_id'),
+        id: id,
+        amount: amount
       }),
     })
       .then((res) => res.json())
       .then((json) => {
-        // if (id === '') {
-        toast('New Sector saved successfully')
-        // } else {
-        //     toast('Sector updated successfully')
-        // }
+        if (id === '') {
+          toast('New Sector saved successfully')
+        } else {
+          toast('Sector updated successfully')
+        }
         setSector_code('')
+        setAmount('')
+        setClassId('')
+        setLastDate('')
         setSector_name('')
-        setReset(reset+1)
+        setReset(reset + 1)
       });
   }
   return (
@@ -65,17 +86,41 @@ const Payment = () => {
 
 
 
-                  <div class={"col-sm-4 p-2 mx-auto"}>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
                     <div class="form-group">
-                      <label className='pb-2' for="exampleInputEmail1">Sector Code : </label>
-                      <input onChange={(e) => setSector_code(e.target.value)} 
-                      value={sector_code} style={{ border: '1px solid blue' }} type="text" class="form-control" />
+                      <label className='pb-2' for="exampleInputEmail1">Class : </label>
+                      <select onChange={(e) => setClassId(e.target.value)}
+                        value={classId} style={{ border: '1px solid blue' }} class="form-control" >
+                        <option>select</option>
+                        {classes.map(res => {
+                          return <option value={res.id}>{res.class_name}</option>
+                        })}
+                      </select>
                     </div>
                   </div>
-                  <div class={"col-sm-4 p-2 mx-auto"}>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className='pb-2' for="exampleInputEmail1">Sector Code : </label>
+                      <input onChange={(e) => setSector_code(e.target.value)}
+                        value={sector_code} style={{ border: '1px solid blue' }} type="text" class="form-control" />
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className='pb-2' for="exampleInputEmail1">Sector Name : </label>
                       <input onChange={(e) => setSector_name(e.target.value)} value={sector_name} style={{ border: '1px solid blue' }} type="text" class="form-control" />
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className='pb-2' for="exampleInputEmail1">Amount : </label>
+                      <input onChange={(e) => setAmount(e.target.value)} value={amount} style={{ border: '1px solid blue' }} type="text" class="form-control" />
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className='pb-2' for="exampleInputEmail1">Last Date : </label>
+                      <input onChange={(e) => setLastDate(e.target.value)} value={lastDate} style={{ border: '1px solid blue' }} type="date" class="form-control" />
                     </div>
                   </div>
                   <div class={"col-sm-2 p-2 mx-auto"}>
@@ -100,14 +145,21 @@ const Payment = () => {
               <tr style={{ textAlign: 'center' }}>
                 <th scope="col">Sector Code</th>
                 <th scope="col">Sector Name</th>
+                <th scope="col">Class</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Last Date</th>
               </tr>
             </thead>
             <tbody>
 
               {sectors.map(res => {
+                let cls = classes.find(resc=>resc.id === res.class_id)
                 return <tr style={{ textAlign: 'center' }}>
                   <td>{res.sector_code}</td>
                   <td>{res.sector_name}</td>
+                  <td>{cls?.class_name}</td>
+                  <td>{res.amount}</td>
+                  <td>{moment(res.last_date).format("Do MMM  YYYY")}</td>
                 </tr>
               })
               }
