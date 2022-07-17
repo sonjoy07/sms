@@ -66,7 +66,7 @@ const DueInvoice = () => {
                             <td>{invoice}</td>
                             <td>{res.sector_name}</td>
                             <td>{res.amount}</td>
-                            <td>{moment(res.last_date).format("Do MMM  YYYY")}</td>
+                            <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
                             <td>
                                 <button onClick={()=>payment(invoice,res)} className='btn btn-danger mt-1' style={{ backgroundColor: 'tomato'}}>Pay Now</button>
                             </td>

@@ -33,12 +33,12 @@ const SMSreport = () => {
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>
                     <div className='row mb-3'>
-                        <div className='card col-sm-6'>
+                        {/* <div className='card col-sm-6'>
                             <div className='card-body'>
                                 <h4 style={{ textAlign: 'center' }}>{total}</h4>
                             </div>
-                        </div>
-                        <div className='card col-sm-6'>
+                        </div> */}
+                        <div className='card col-sm-12'>
                             <div className='card-body'>
                                 <h4 style={{ textAlign: 'center' }}>SMS Used: {totalUsed.length}</h4>
                             </div>

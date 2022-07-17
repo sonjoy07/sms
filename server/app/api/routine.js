@@ -21,7 +21,7 @@ module.exports = (app) => {
     join teacher on routine.teacher_id=teacher.id
     join session on routine.session_id=session.id
     join shift on routine.shift_id=shift.id
-    order by routine.id
+    order by routine.id desc
     ;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

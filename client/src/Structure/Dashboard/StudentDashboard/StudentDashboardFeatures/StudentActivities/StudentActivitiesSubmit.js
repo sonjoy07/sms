@@ -178,7 +178,7 @@ const StudentActivitiesSubmit = (props) => {
                                 style={{ textAlign: "left", color: "red" }}
                               >
                                 {" "}
-                                {moment(hw.due_date).format("Do MMM  YYYY")}{" "}
+                                {moment(hw.due_date).format("DD-MM-YYYY")}{" "}
                               </p>
                               <p
                                 className=""
@@ -265,7 +265,7 @@ const StudentActivitiesSubmit = (props) => {
                                 return (<tr>
                                   <td>{res.full_name}</td>
                                   <td>{res.student_code}</td>
-                                  <td>{moment(res.submission_time).format("Do MMM  YYYY")}</td>
+                                  <td>{moment(res.submission_time).format("DD-MM-YYYY")}</td>
                                   <td>Submit</td>
                                   <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
                                 </tr>)

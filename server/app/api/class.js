@@ -23,7 +23,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/class/all_info", (req, res) => {
-    con.query(`SELECT class.*,type_name,shift_name FROM class left join shift on shift.id = class.shift_id left join school_type on school_type.id = class.school_type_id`, function (err, result, fields) {
+    con.query(`SELECT class.*,type_name,shift_name FROM class left join shift on shift.id = class.shift_id left join school_type on school_type.id = class.school_type_id order by class.id desc`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

@@ -218,6 +218,7 @@ const SubjectRegistration = () => {
         studentChecked: studentChecked,
         subjectChecked: subjectChecked,
         forthChecked: forthChecked,
+        group_id: group_id,
         school_info_id: localStorage.getItem('school_info_id'),
         id: id
       }),
@@ -236,7 +237,7 @@ const SubjectRegistration = () => {
           setId('')
           toast('Subject Registration saved successfully')
         } else {
-          toast('Routine updated successfully')
+          toast('Subject Registration updated successfully')
         }
       });
   }
@@ -422,7 +423,7 @@ const SubjectRegistration = () => {
                         value={group_id}
                         onChange={handleGroupChange} id="class" name="class">
 
-                        <option>Select Group</option>
+                        <option value={0}>Select Group</option>
                         {groups.map((classJSON) => {
                           return (
                             <option value={classJSON.id}>

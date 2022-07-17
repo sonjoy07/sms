@@ -20,7 +20,7 @@ module.exports = (app) => {
     );
   });
   app.get("/api/administrator/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM administrator", function (err, result, fields) {
+    con.query("SELECT * FROM administrator order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

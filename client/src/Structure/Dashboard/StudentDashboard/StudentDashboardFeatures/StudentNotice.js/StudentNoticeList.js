@@ -204,7 +204,7 @@ const StudentNoticeList = (props) => {
                                     {" "}
                                     Date:{" "}
                                     {moment(noticeJSON.publishing_date).format(
-                                      "Do MMM  YYYY"
+                                      "DD-MM-YYYY"
                                     )}{" "}
                                   </p>
                                   <p

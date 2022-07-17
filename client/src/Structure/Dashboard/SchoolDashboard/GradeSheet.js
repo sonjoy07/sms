@@ -171,7 +171,7 @@ const GradeSheetTeacher = () => {
                   </div>
                   <div class={"col-sm-2 p-4 mx-auto"}>
                     <div className='pt-2 mx-auto'>
-                      <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>
+                      <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5 mt-1">Submit</button>
                     </div>
                   </div>
                 </div>

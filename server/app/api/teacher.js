@@ -32,7 +32,7 @@ module.exports = (app) => {
     );
   });
   app.get("/api/teacher/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM teacher", function (err, result, fields) {
+    con.query("SELECT * FROM teacher order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

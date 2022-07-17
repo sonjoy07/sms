@@ -11,7 +11,7 @@ module.exports = (app) => {
     );
   });
   app.get("/api/attendance/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM attendance", function (err, result, fields) {
+    con.query("SELECT * FROM attendance order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
@@ -67,7 +67,7 @@ module.exports = (app) => {
       join student_present_status on attendance.student_present_status_id=student_present_status.id
       join school_info on student_present_status.school_info_id=school_info.id
       
-      group by school_info.id;`;
+      group by school_info.id`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

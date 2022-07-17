@@ -31,7 +31,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/school_type/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM school_type", function (err, result, fields) {
+    con.query("SELECT * FROM school_type order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

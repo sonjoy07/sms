@@ -113,8 +113,15 @@ const SMSsent = (props) => {
             setChecked(list)
         });
     };
-    const handleSmsSend = () => {
-
+    const handleSmsSend = async() => {
+        const checksms = await axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`,
+        {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }
+    )
+    if(checksms.data !== ''){
         let items = [...absentList];
         absentList.forEach((res, index) => {
             if (checked[index] === true) {
@@ -134,6 +141,16 @@ const SMSsent = (props) => {
                     }),
                   })
                     .then((res) => res.json())
+                fetch(`${process.env.REACT_APP_NODE_API}/api/smsCountUpdate`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+                    body: JSON.stringify({
+                        school_info_id: localStorage.getItem('school_info_id')
+                    }),
+                  })
                 let item = { ...items[index] };
                 item.status = 1
                 items[index] = item
@@ -144,9 +161,13 @@ const SMSsent = (props) => {
         setAbsentList(items);
 
         toast("SMS Sent successfully");
+    }else{
+        toast("SMS not available");
+    }
         setSmsText("")
         setChecked([])
         setCheckedAll(false)
+
     }
     return (
         <>

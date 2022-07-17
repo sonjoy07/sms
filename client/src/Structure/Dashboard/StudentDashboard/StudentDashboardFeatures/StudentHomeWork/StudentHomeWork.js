@@ -333,7 +333,7 @@ const StudentHomeWork = (props) => {
                                     {" "}
                                     Last Date:{" "}
                                     {moment(homeworkJSON.due_date).format(
-                                      "Do MMM  YYYY"
+                                      "DD-MM-YYYY"
                                     )}{" "}
                                   </p>
                                   <p

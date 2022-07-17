@@ -22,7 +22,7 @@ const Payment = () => {
     }).then((response) => {
       setClasses(response.data);
     });
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/sector/all`, {
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/sector/all?school_id=${localStorage.getItem('school_id')}`, {
       headers: {
         authorization: "bearer " + localStorage.getItem("access_token"),
       },
@@ -59,6 +59,25 @@ const Payment = () => {
         setReset(reset + 1)
       });
   }
+  const editClass = (res)=>{
+    setSector_code(res.sector_code)
+    setAmount(res.amount)
+    setClassId(res.class_id)
+    setLastDate(moment(res.last_date).format('YYYY-MM-DD'))
+    setSector_name(res.sector_name)
+    setId(res.id)
+  }
+  const deleteClass = async (id) => {
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/payment/delete?id=${id}`)
+       if (result) {
+          toast("Payment Sector deleted successfully");
+          setReset(reset+1)
+       }
+    }
+ }
   return (
     <>
       <SchoolHeader />
@@ -80,12 +99,7 @@ const Payment = () => {
               </div>
 
               <div className='card-body' >
-
-
                 <div className='row'>
-
-
-
                   <div class={"col-sm-2 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className='pb-2' for="exampleInputEmail1">Class : </label>
@@ -148,6 +162,7 @@ const Payment = () => {
                 <th scope="col">Class</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Last Date</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -159,7 +174,15 @@ const Payment = () => {
                   <td>{res.sector_name}</td>
                   <td>{cls?.class_name}</td>
                   <td>{res.amount}</td>
-                  <td>{moment(res.last_date).format("Do MMM  YYYY")}</td>
+                  <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
+                  <td><div className='.d-flex'>
+                      <div>
+                        <button style={{ color: 'white' }}onClick={() => editClass(res)}className='bg-success'>Edit</button>
+                      </div>
+                      <div>
+                        <button style={{ color: 'white' }} onClick={() => deleteClass(res.id)} className='bg-danger'>Delete</button>
+                      </div>
+                    </div></td>
                 </tr>
               })
               }

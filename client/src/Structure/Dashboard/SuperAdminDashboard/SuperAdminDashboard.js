@@ -6,7 +6,7 @@ import section from '../../images/icons/section.png';
 import period from '../../images/icons/clock.png';
 import subject from '../../images/icons/subject.png';
 import inventory from '../../images/icons/inventory.png';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SuperAdminHeader from './SuperAdminHeader';
 
 
@@ -32,7 +32,7 @@ const SuperAdminDashboard = () => {
         <section className="container">
             <h2 style={{ color: 'Blue', display: 'flex', justifyContent: 'center', fontSize: '30px', fontWeight: 'bold' }} className='mt-5'>Super Admin Dashboard</h2>
             <div className="row mx-auto mt-5">
-                <a style={{ textDecoration: 'none' }} href='/add-school' className="col-sm-12 col-md-6 my-4 col1">
+                <Link style={{ textDecoration: 'none' }} to='/add-school' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -48,8 +48,8 @@ const SuperAdminDashboard = () => {
                         </div>
                     </div>
 
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/add-organization' className="col-sm-12 col-md-6 my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/add-organization' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -64,8 +64,8 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/create-class' className="col-sm-12 col-md-6 my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/create-class' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -80,8 +80,8 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/section_create' className="col-sm-12 col-md-6  my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/section_create' className="col-sm-12 col-md-6  my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -96,8 +96,8 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/create-period' className="col-sm-12 col-md-6 my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/create-period' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -112,8 +112,8 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/create-subject' className="col-sm-12 col-md-6 my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/create-subject' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -128,8 +128,8 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/admin-activities' className="col-sm-12 col-md-6 my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/admin-activities' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -144,8 +144,8 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
-                <a style={{ textDecoration: 'none' }} href='/newExamType' className="col-sm-12 col-md-6 my-4 col1">
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/newExamType' className="col-sm-12 col-md-6 my-4 col1">
                     <div className="card bg-light shadow-sm">
                         <div className="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -160,9 +160,25 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
+                </Link>
 
-                <a style={{ textDecoration: 'none' }} href='/school-wise-sms-report' class="col-sm-12 col-md-6 my-4 col1">
+                <Link style={{ textDecoration: 'none' }} to='/school-wise-sms-limit' class="col-sm-12 col-md-6 my-4 col1">
+                    <div class="card bg-light shadow-sm">
+                        <div class="card-body py-4">
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                                <div className='px-3'>
+                                    <img style={{ width: '64px', height: '64px' }} src={subject} alt="" />
+                                </div>
+                                <div className='px-3'>
+                                    <h4 class="card-title">School Wise SMS Limit</h4>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </Link>
+                <Link style={{ textDecoration: 'none' }} to='/school-wise-sms-report' class="col-sm-12 col-md-6 my-4 col1">
                     <div class="card bg-light shadow-sm">
                         <div class="card-body py-4">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
@@ -177,7 +193,7 @@ const SuperAdminDashboard = () => {
 
                         </div>
                     </div>
-                </a>
+                </Link>
 
 
 

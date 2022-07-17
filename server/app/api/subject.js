@@ -20,7 +20,7 @@ module.exports = (app) => {
     );
   });
   app.get("/api/subject/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM subject", function (err, result, fields) {
+    con.query("SELECT * FROM subject order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

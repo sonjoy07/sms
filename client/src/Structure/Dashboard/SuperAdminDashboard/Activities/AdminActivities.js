@@ -61,7 +61,7 @@ const AdminActivities = (props) => {
   const [due_date, setDue_date] = useState("");
   const [search_issue_date, setSearch_Issue_date] = useState("");
   const [search_due_date, setSearch_Due_date] = useState("");
-  const [search_school_id, setSearchShool_id] = useState("");  
+  const [search_school_id, setSearchShool_id] = useState("");
   const [search_teachers, setSearch_Teachers] = useState([]);
   const [access_token, setAccess_token] = useState(
     localStorage.getItem("access_token")
@@ -74,6 +74,19 @@ const AdminActivities = (props) => {
       navigate("/login");
     }
   };
+  useEffect(() => {
+    if (school_type !== "") {
+      axios
+        .get(`${process.env.REACT_APP_NODE_API}/api/school_info_type_wise?type_id=${school_type}`, {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          setSchools(response.data);
+        });
+    }
+  }, [school_type])
   //get teacher info
   useEffect(() => {
     axios
@@ -102,76 +115,67 @@ const AdminActivities = (props) => {
         // setSchool_info_id(response.data.school_info_id);
       });
   }, [teacher_id]);
-  
+
   useEffect(() => {
-    if(school_info_id !== ''){
-    axios
-      .get(
-        `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${school_info_id}`,
-        {
-          headers: {
-            authorization: "bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .then((response) => {
-        setTeachers(response.data)
-      });
+    if (school_info_id !== '') {
+      axios
+        .get(
+          `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${school_info_id}`,
+          {
+            headers: {
+              authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .then((response) => {
+          setTeachers(response.data)
+        });
     }
   }, [school_info_id]);
 
   useEffect(() => {
-    if(search_school_id !== ''){
-    axios
-      .get(
-        `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${search_school_id}`,
-        {
-          headers: {
-            authorization: "bearer " + localStorage.getItem("access_token"),
-          },
-        }
-      )
-      .then((response) => {
-        setSearch_Teachers(response.data)
-      });
+    if (search_school_id !== '') {
+      axios
+        .get(
+          `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${search_school_id}`,
+          {
+            headers: {
+              authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        )
+        .then((response) => {
+          setSearch_Teachers(response.data)
+        });
     }
   }, [search_school_id]);
 
   const handleSearch = () => {
     axios
-    .get(
-      `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}&&search_school_teacher_id=${search_school_teacher_id}`,
-      {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      }
-    )
-    .then((response) => {
-      if (status === 'Submitted') {
-        setHomework(response.data.filter(res => res.submission > 0));
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}&&search_school_teacher_id=${search_school_teacher_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        if (status === 'Submitted') {
+          setHomework(response.data.filter(res => res.submission > 0));
 
-      } else if(status === 'Not Submitted'){
-        setHomework(response.data.filter(res => res.submission === 0));
-      }else{
-        setHomework(response.data);
-      }
-    });
+        } else if (status === 'Not Submitted') {
+          setHomework(response.data.filter(res => res.submission === 0));
+        } else {
+          setHomework(response.data);
+        }
+      });
   }
 
   useEffect(() => {
     checkLoggedIn();
+
     axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/school_info/all`, {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .then((response) => {
-        setSchools(response.data);
-      });
-     
-      axios
       .get(`${process.env.REACT_APP_NODE_API}/api/school_type/all`, {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -436,7 +440,7 @@ const AdminActivities = (props) => {
   };
   return (
     <>
-    <SuperAdminHeader/>
+      <SuperAdminHeader />
       <ToastContainer />
 
       <div className="container ">
@@ -521,55 +525,55 @@ const AdminActivities = (props) => {
                       />
                     </div>
                   </div>
-                  
                   <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
-                          School :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={school_info_id}
-                          onChange={(e)=>setSchool_info_id(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select School</option>
-                          {schools.map((classJSON) => {
-                            return (
-                              <option value={classJSON.id}>
-                                {classJSON.school_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleSelect">
+                        School Type :{" "}
+                      </label>
+                      <select
+                        style={{ border: "1px solid blue" }}
+                        class="form-control"
+                        value={school_type}
+                        onChange={(e) => setSchoolType(e.target.value)}
+                        id="class"
+                        name="class"
+                      >
+                        <option value="">Select School Type</option>
+                        {schoolTypes.map((classJSON) => {
+                          return (
+                            <option value={classJSON.id}>
+                              {classJSON.type_name}
+                            </option>
+                          );
+                        })}
+                      </select>
                     </div>
-                    <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
-                          School Type :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={school_type}
-                          onChange={(e)=>setSchoolType(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select School Type</option>
-                          {schoolTypes.map((classJSON) => {
-                            return (
-                              <option value={classJSON.id}>
-                                {classJSON.type_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
+                  </div>
+                  <div class={"col-sm-2 mx-auto p-2"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleSelect">
+                        School :{" "}
+                      </label>
+                      <select
+                        style={{ border: "1px solid blue" }}
+                        class="form-control"
+                        value={school_info_id}
+                        onChange={(e) => setSchool_info_id(e.target.value)}
+                        id="class"
+                        name="class"
+                      >
+                        <option value="">Select School</option>
+                        {schools.map((classJSON) => {
+                          return (
+                            <option value={classJSON.id}>
+                              {classJSON.school_name}
+                            </option>
+                          );
+                        })}
+                      </select>
                     </div>
+                  </div>
+
 
                   <div class={"col-sm-2 mx-auto p-2"}>
                     <div class="form-group">
@@ -676,7 +680,7 @@ const AdminActivities = (props) => {
                         style={{ border: "1px solid blue" }}
                         class="form-control"
                         value={school_teacher_id}
-                        onChange={(e)=>setSchool_teacher_id(e.target.value)}
+                        onChange={(e) => setSchool_teacher_id(e.target.value)}
                         id="class"
                         name="class"
                       >
@@ -769,7 +773,7 @@ const AdminActivities = (props) => {
                           style={{ border: "1px solid blue" }}
                           class="form-control"
                           value={search_school_id}
-                          onChange={(e)=>setSearchShool_id(e.target.value)}
+                          onChange={(e) => setSearchShool_id(e.target.value)}
                           id="class"
                           name="class"
                         >
@@ -793,7 +797,7 @@ const AdminActivities = (props) => {
                           style={{ border: "1px solid blue" }}
                           class="form-control"
                           value={school_type_search}
-                          onChange={(e)=>setSchoolTypeSearch(e.target.value)}
+                          onChange={(e) => setSchoolTypeSearch(e.target.value)}
                           id="class"
                           name="class"
                         >
@@ -913,7 +917,7 @@ const AdminActivities = (props) => {
                           style={{ border: "1px solid blue" }}
                           class="form-control"
                           value={search_school_teacher_id}
-                          onChange={(e)=>setSearch_School_teacher_id(e.target.value)}
+                          onChange={(e) => setSearch_School_teacher_id(e.target.value)}
                           id="class"
                           name="class"
                         >
@@ -1005,10 +1009,10 @@ const AdminActivities = (props) => {
                     <td>{homeworkJSON.session_year}</td>
                     <td>{homeworkJSON.subject_name}</td>
                     <td>
-                      {moment(homeworkJSON.issue_date).format("Do MMM  YYYY")}
+                      {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>
                     <td>
-                      {moment(homeworkJSON.due_date).format("Do MMM  YYYY")}
+                      {moment(homeworkJSON.due_date).format("DD-MM-YYYY")}
                     </td>
                     <td>
                       {" "}

@@ -11,7 +11,7 @@ module.exports = (app) => {
     );
   });
   app.get("/api/shift/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM shift", function (err, result, fields) {
+    con.query("SELECT * FROM shift order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

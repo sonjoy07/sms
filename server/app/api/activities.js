@@ -27,7 +27,7 @@ module.exports = (app) => {
     join teacher on activities.teacher_id=teacher.id
     join session on activities.session_id=session.id
     where activities.school_info_id="${req.query.school_info_id}" and activities.issue_date="${req.query.date}"
-    order by activities.id;`;
+    order by activities.id desc`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
@@ -48,7 +48,7 @@ module.exports = (app) => {
     join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
     where 1=1 ${condition}
-    order by activities.id;`;
+    order by activities.id desc`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -234,7 +234,7 @@ module.exports = (app) => {
   });
 
   app.get("/api/activities/student/submit/all", authenticateToken, (req, res) => {
-    var sql = `select * from activities_submission;`;
+    var sql = `select * from activities_submission order by id desc`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

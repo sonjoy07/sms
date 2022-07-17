@@ -779,10 +779,10 @@ const TeacherHomework = (props) => {
                     <td>{homeworkJSON.session_year}</td>
                     <td>{homeworkJSON.subject_name}</td>
                     <td>
-                      {moment(homeworkJSON.issue_date).format("Do MMM  YYYY")}
+                      {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>
                     <td>
-                      {moment(homeworkJSON.due_date).format("Do MMM  YYYY")}
+                      {moment(homeworkJSON.due_date).format("DD-MM-YYYY")}
                     </td>
                     <td>
                       {" "}

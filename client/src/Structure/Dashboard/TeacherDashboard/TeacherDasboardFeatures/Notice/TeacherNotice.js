@@ -623,7 +623,7 @@ const TeacherNotice = (props) => {
                 return (
                   <tr>
                     <td style={{ color: "blue" }}>
-                      {moment(noticeJSON.publishing_date).format("Do MMM  YYYY")}
+                      {moment(noticeJSON.publishing_date).format("DD-MM-YYYY")}
                     </td>
                     <td style={{ color: "blue" }}>
                       {noticeJSON.notice_headline}

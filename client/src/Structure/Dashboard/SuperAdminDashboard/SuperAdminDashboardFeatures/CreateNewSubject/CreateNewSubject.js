@@ -23,16 +23,19 @@ const CreateNewSubject = () => {
       Navigate("/login");
     }
   };
+  useEffect(()=>{
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${typeId}`,
+    {
+      headers: {
+        authorization: "bearer " + localStorage.getItem("access_token"),
+      },
+    }).then((response) => {
+      setClassList(response.data);
+    });
+  },[typeId])
   useEffect(() => {
     checkLoggedIn()
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/class/all`,
-      {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      }).then((response) => {
-        setClassList(response.data);
-      });
+   
     axios.get(`${process.env.REACT_APP_NODE_API}/api/school_type/all`,
       {
         headers: {
@@ -149,19 +152,6 @@ const CreateNewSubject = () => {
                 </div>
                 <div class={"col-sm-2 mx-auto p-2"}>
                   <div class="form-group">
-                    <label className='pb-2' for="exampleSelect">Class : </label>
-                    <select value={classId} onChange={(e) => setClassId(e.target.value)} class="form-control" id="class" name="class">
-
-                      <option>Select Class</option>
-                      {classList.map(res => {
-                        return <option value={res.id}>{res.class_name}</option>
-                      })}
-                    </select>
-
-                  </div>
-                </div>
-                <div class={"col-sm-2 mx-auto p-2"}>
-                  <div class="form-group">
                     <label className='pb-2' for="exampleSelect">Organization Type: </label>
                     <select value={typeId} onChange={(e) => setTypeId(e.target.value)} class="form-control" id="class" name="class">
 
@@ -173,6 +163,20 @@ const CreateNewSubject = () => {
 
                   </div>
                 </div>
+                <div class={"col-sm-2 mx-auto p-2"}>
+                  <div class="form-group">
+                    <label className='pb-2' for="exampleSelect">Class : </label>
+                    <select value={classId} onChange={(e) => setClassId(e.target.value)} class="form-control" id="class" name="class">
+
+                      <option>Select Class</option>
+                      {classList.map(res => {
+                        return <option value={res.id}>{res.class_name}</option>
+                      })}
+                    </select>
+
+                  </div>
+                </div>
+                
                 <div class={"col-sm-2 p-2 mx-auto"}>
                   <div className='pt-1 mx-auto'>
                     <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>

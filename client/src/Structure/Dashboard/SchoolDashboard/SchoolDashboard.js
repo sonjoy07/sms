@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import calendar from "../../images/icons/calendar.png";
 import organization from "../../images/icons/organization.png";
 import ebook from "../../images/icons/ebook.png";
@@ -233,7 +233,7 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div>
-          <div onClick={() => {
+          {/* <div onClick={() => {
             navigate('/payment')
           }
           } className="col-sm-6 my-4 col1">
@@ -261,7 +261,7 @@ const SchoolDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <a href='/subjectregistration' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
                <div className="card-body py-4">
@@ -278,7 +278,7 @@ const SchoolDashboard = () => {
                </div>
             </div>
         </a>
-          <a href='/sms-report' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
+          <Link to='/sms-report' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
                <div className="card-body py-4">
                <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
@@ -293,8 +293,8 @@ const SchoolDashboard = () => {
                  
                </div>
             </div>
-        </a> 
-        <a href='/csv-upload' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
+        </Link> 
+        <Link to='/csv-upload' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
                <div className="card-body py-4">
                <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
@@ -309,7 +309,7 @@ const SchoolDashboard = () => {
                  
                </div>
             </div>
-        </a>
+        </Link>
         <div onClick={() => {
             navigate("/school-admin")
           }} className="col-sm-6 my-4 col1">
@@ -338,7 +338,7 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div>
-          <a href='/payment' style={{textDecoration: 'none'}} class="col-sm-6 my-4 col1">
+          <Link to='/payment' style={{textDecoration: 'none'}} class="col-sm-6 my-4 col1">
             <div class="card bg-light shadow-sm">
                <div class="card-body py-4">
                <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
@@ -353,7 +353,7 @@ const SchoolDashboard = () => {
                  
                </div>
             </div>
-        </a>
+        </Link>
         <div onClick={() => {
             generateRank()
           }} className="col-sm-6 my-4 col1">
@@ -382,6 +382,22 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div>
+          <Link to='/sms-payment' style={{textDecoration: 'none'}} class="col-sm-6 my-4 col1">
+            <div class="card bg-light shadow-sm">
+               <div class="card-body py-4">
+               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
+                       <div className='px-3'>
+                          <img style={{width:'64px', height:'64px'}} src={accounts} alt=""/>
+                       </div>
+                       <div className='px-3'>
+                         <h4 class="card-title">SMS Payment</h4>
+                         <p class="card-text">Create SMS Payment</p>
+                       </div>
+                   </div>
+                 
+               </div>
+            </div>
+        </Link>
 
         </div>
       </section>

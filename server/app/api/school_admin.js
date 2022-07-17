@@ -213,7 +213,7 @@ module.exports = (app) => {
   })
   app.get('/api/groups/all', (req, res) => {
     con.query(
-      "SELECT * FROM `group`",
+      "SELECT * FROM `group` order by id desc",
       function (err, result, fields) {
         if (err) throw err;
         res.send(result);
@@ -364,6 +364,7 @@ module.exports = (app) => {
     var studentChecked = req.body.studentChecked;
     var subjectChecked = req.body.subjectChecked;
     var forthChecked = req.body.forthChecked;
+    var group_id = req.body.group_id;
     var school_info_id = req.body.school_info_id;
     const date = moment().format("YYYY-MM-DD")
     // var id = req.body.id;
@@ -371,14 +372,14 @@ module.exports = (app) => {
 
     const inserData = await Promise.all(studentChecked.map(res => {
       subjectChecked.length > 0 && subjectChecked.map(resSub => {
-        sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${0}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
+        sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
         });
       })
       forthChecked.length > 0 && forthChecked.map(resSub => {
-        sql = `insert into subject_4th_registration (school_info_id,student_id,session_id,group_id,class_id,subject_4th_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${0}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
+        sql = `insert into subject_4th_registration (school_info_id,student_id,session_id,group_id,class_id,subject_4th_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
@@ -445,7 +446,7 @@ module.exports = (app) => {
 
   app.get('/api/sms/count', async (req, res) => {
     const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
-    var sql = `select smsReport.*,CONCAT( teacher.first_name, ' ', teacher.middle_name, ' ', teacher.last_name ) AS teacher_full_name,CONCAT( school_admin.first_name, ' ', school_admin.middle_name, ' ', school_admin.last_name ) AS school_admin_full_name from smsReport left join teacher on teacher.teacher_code = smsReport.user_id left join school_admin on school_admin.admin_code = smsReport.user_id where smsReport.school_info_id = ${req.query.school_info_id}`
+    var sql = `select sms_payment.*,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,school_name from sms_payment left join school_info on school_info.id = sms_payment.school_info_id left join school_admin on school_admin.id =sms_payment.user_id where sms_payment.school_info_id = ${req.query.school_info_id}`
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send({ result: result, data: test.data });
@@ -455,7 +456,7 @@ module.exports = (app) => {
   app.get("/api/sector/all", (req, res) => {
     var sql
     // if (id === '') {
-    sql = `select * from sector`;
+    sql = `select * from sector  where school_id = ${req.query.school_id} order by id desc`;
     
 
     con.query(sql, function (err, result, fields) {
@@ -473,6 +474,16 @@ module.exports = (app) => {
       res.send(result)
     });
   });
+  app.get("/api/smsCheck", (req, res) => {
+    var sql
+    sql = `select * from sms_count where school_info_id="${req.query.school_id}"`;
+   
+
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result[0])
+    });
+  });
 
   app.delete("/api/student/delete", authenticateToken, (req, res) => {
     var id = req.query.id;
@@ -485,6 +496,22 @@ module.exports = (app) => {
   app.delete("/api/section/delete", authenticateToken, (req, res) => {
     var id = req.query.id;
     var sql = `delete from section where id ="${id}"`
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.json({ status: "success" });
+    });
+  });
+  app.post("/api/update_sms_payment", authenticateToken, (req, res) => {
+    var id = req.body.id;
+    var sql = `update  sms_payment set status = 2 where id ="${id}"`
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.json({ status: "Status Updated" });
+    });
+  });
+  app.delete("/api/payment/delete", authenticateToken, (req, res) => {
+    var id = req.query.id;
+    var sql = `delete from sector where id ="${id}"`
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.json({ status: "success" });

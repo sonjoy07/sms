@@ -1,6 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import SuperAdminHeader from '../SuperAdminHeader'
 
 const SchoolSMSreport = () => {
@@ -38,6 +39,29 @@ const SchoolSMSreport = () => {
             setTotal(response.data.data);
         });
     }
+    const payNow =(id)=>{
+        const check = window.confirm('Are you sure to Pay?');
+        if (check) {
+            fetch(`${process.env.REACT_APP_NODE_API}/api/update_sms_payment`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: "bearer " + localStorage.getItem("access_token"),
+              },
+      
+              body: JSON.stringify({
+                id: id,
+              }),
+            })
+            .then((res) => res.json())
+            .then((json) => {
+                  toast(json.status)
+              });
+        // }else{
+
+        }
+    }
     return (
         <>
             <SuperAdminHeader />
@@ -58,35 +82,42 @@ const SchoolSMSreport = () => {
                         </div>
                     </div>
                     <div className='row mb-3'>
-                        <div className='card col-sm-6'>
+                        <div className='card col-sm-12'>
                             <div className='card-body'>
                                 <h4 style={{ textAlign: 'center' }}>{total}</h4>
                             </div>
                         </div>
-                        <div className='card col-sm-6'>
+                        {/* <div className='card col-sm-6'>
                             <div className='card-body'>
                                 <h4 style={{ textAlign: 'center' }}>SMS Used: {totalUsed.length}</h4>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Sender Name</th>
-                                <th scope="col">Date Time</th>
-                                <th scope="col">Text</th>
-                                <th scope="col">Purpose</th>
+                                <th scope="col">School Name</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Invoice No</th>
+                                <th scope="col">Transaction ID</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Payment Date</th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
 
                             {totalUsed.map(res => {
                                 return <tr>
-                                    <td>{res.purpose === 1 ? res.school_admin_full_name : res.teacher_full_name}</td>
-                                    <td>{moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a')}</td>
-                                    <td>{res.text}</td>
-                                    <td>{res.purpose === 1 ? 'notice' : 'absent'}</td>
+                                    <td>{res.school_name}</td>
+                                    <td>{res.full_name}</td>
+                                    <td>{res.invoice_no}</td>
+                                    <td>{res.transaction_id}</td>
+                                    <td>{res.amount}</td>
+                                    <td>{moment(res.payment_date).format('DD-MM-YYYY')}</td>
+                                    <td>{res.status === 1?"Pending":"Paid"}</td>
+                                    <td>{res.status === 1?<button onClick={()=>payNow(res.id)} className='btn btn-success mt-1'>Update Now</button>:''}</td>
                                 </tr>
                             })}
 

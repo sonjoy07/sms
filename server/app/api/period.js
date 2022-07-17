@@ -20,7 +20,13 @@ module.exports = (app) => {
     );
   });
   app.get("/api/period/all", authenticateToken, (req, res) => {
-    con.query("SELECT * FROM period", function (err, result, fields) {
+    con.query("SELECT * FROM period order by id desc", function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/sms_count/all", authenticateToken, (req, res) => {
+    con.query("SELECT * FROM sms_count order by id desc", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

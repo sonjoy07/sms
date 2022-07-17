@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import logo from "./logo.svg";
 import "./App.css";
 import { ToastContainer } from 'react-toastify';
 
@@ -9,7 +8,6 @@ import TeacherDashboard from "./Structure/Dashboard/TeacherDashboard/TeacherDash
 import StudentDashboard from "./Structure/Dashboard/StudentDashboard/StudentDashboard";
 import Attendance from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Attendance/Attendance";
 import TeacherNotice from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Notice/TeacherNotice";
-import Checktwo from "./Structure/Dashboard/TeacherDashboard/Check/Checktwo";
 import SchoolDashboard from "./Structure/Dashboard/SchoolDashboard/SchoolDashboard";
 import SuperAdminDashboard from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboard";
 import StudentAttendanceView from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentAttendanceView";
@@ -20,7 +18,6 @@ import CreateNewSection from "./Structure/Dashboard/SuperAdminDashboard/SuperAdm
 import CreateNewSubject from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateNewSubject/CreateNewSubject";
 import CreateNewPeriod from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateNewPeriod/CreateNewPeriod";
 import Login from "./Structure/Pages/Login/Login";
-import ClassRoutine from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/ClassRoutine/ClassRoutine";
 import Routine from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Routine/Routine";
 
 import ViewerSchoolViewList from "./Structure/Dashboard/ViewerDashboard/ViewerSchoolViewList/ViewerSchoolViewList";
@@ -115,6 +112,8 @@ import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherPr
 import SchoolSMSreport from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/SchoolSMSreport";
 import ExtraDetails from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraDetails";
 import PaidList from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Payment/PaidList";
+import CreateSmsLimit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateSmsLimit/CreateSmsLimit";
+import SmsPayment from "./Structure/Dashboard/SchoolDashboard/SmsPayment";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -414,6 +413,14 @@ function App(props) {
           <Route
             path="/school-wise-sms-report"
             element={<SchoolSMSreport user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/school-wise-sms-limit"
+            element={<CreateSmsLimit user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/sms-payment"
+            element={<SmsPayment user={[user_code, user_type]} />}
           />        
               
               

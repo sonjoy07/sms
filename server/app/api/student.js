@@ -111,13 +111,13 @@ module.exports = (app) => {
     });
   });
   app.get("/api/allPayment", authenticateToken, (req, res) => {
-    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where student_id = ${req.query.student_code}`, function (err, result, fields) {
+    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where student_id = ${req.query.student_code} order by payment.id desc`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
   });
   app.get("/api/allPaymentSchool", authenticateToken, (req, res) => {
-    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where school_id = ${req.query.school_id}`, function (err, result, fields) {
+    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where school_id = ${req.query.school_id} order by payment.id desc`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
@@ -154,5 +154,20 @@ module.exports = (app) => {
         res.json({ status: "Already Paid", });
       }
     });
+  });
+  app.post("/api/create_sms_payment", authenticateToken, (req, res) => {
+    var invoice = req.body.invoice;
+    var user_id = req.body.user_id;
+    var school_info_id = req.body.school_info_id;
+    var transaction_id = req.body.transaction_id;
+    var paidDate = req.body.paidDate;
+
+  
+        var sql = `INSERT INTO sms_payment (user_id, school_info_id, invoice_no, transaction_id, payment_date,amount) VALUES ("${user_id}", "${school_info_id}", "${invoice}", "${transaction_id}", "${paidDate}","1000")`;
+
+        con.query(sql, function (err, result, fields) {
+          if (err) throw err;
+          res.json({ status: "Paid Successfully" });
+        });
   });
 };

@@ -383,10 +383,10 @@ const AdminViewActivities = () => {
                       </a>
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(homeworkJSON.issue_date).format("Do MMM  YYYY")}
+                      {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {moment(homeworkJSON.due_date).format("Do MMM  YYYY")}
+                      {moment(homeworkJSON.due_date).format("DD-MM-YYYY")}
                     </td>
                   </tr>
                 );

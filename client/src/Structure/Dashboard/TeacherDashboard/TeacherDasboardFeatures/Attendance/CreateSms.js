@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";import {  toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { toast } from 'react-toastify';
+import { axios } from 'axios';
 const CreateSms = (props) => {
     const [absentList, setAbsentList] = useState([])
     const [checkedAll, setCheckedAll] = useState(false);
@@ -31,8 +33,14 @@ const CreateSms = (props) => {
             return newState;
         });
     };
-    const handleSmsSend = () => {
-       
+    const handleSmsSend = async () => {
+        const checksms = await axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`,
+            {
+                headers: {
+                    authorization: "bearer " + localStorage.getItem("access_token"),
+                },
+            }
+        )
         absentList.forEach((res, index) => {
             if (checked[index] === true) {
                 fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg="${smsText}"`)
@@ -40,8 +48,8 @@ const CreateSms = (props) => {
                 fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
                     method: "POST",
                     headers: {
-                      "Content-Type": "application/json",
-                      authorization: "bearer " + localStorage.getItem("access_token"),
+                        "Content-Type": "application/json",
+                        authorization: "bearer " + localStorage.getItem("access_token"),
                     },
                     body: JSON.stringify({
                         smsText: smsText,
@@ -49,12 +57,22 @@ const CreateSms = (props) => {
                         purpose: 2,
                         school_info_id: localStorage.getItem('school_id')
                     }),
-                  })
+                })
                     .then((res) => res.json())
+                fetch(`${process.env.REACT_APP_NODE_API}/api/smsCountUpdate`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+                    body: JSON.stringify({
+                        school_info_id: localStorage.getItem('school_info_id')
+                    }),
+                })
             }
-            
+
         })
-        
+
         toast("SMS Sent successfully");
         setAbsentList([]);
         setSmsText("")
@@ -133,8 +151,8 @@ const CreateSms = (props) => {
                                     <div class="form-group">
                                         <label className='pb-2' for="exampleSelect">SMS Text : </label>
                                         <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class"
-                                        value={smsText}
-                                        onChange={(e) => setSmsText(e.target.value)}
+                                            value={smsText}
+                                            onChange={(e) => setSmsText(e.target.value)}
                                         >
                                         </textarea>
 

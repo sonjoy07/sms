@@ -67,7 +67,7 @@ const HomeWorkShow = () => {
                   <td>{student.student_code}</td>
                   <td>{student.full_name}</td>
                   <td>Submit</td>
-                  <td> {moment(student.submission_time).format("Do MMM  YYYY")}</td>
+                  <td> {moment(student.submission_time).format("DD-MM-YYYY")}</td>
                   <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${student.attachment_link}`} download>{student.attachment_link}</Link></td>
                 </tr>
               )

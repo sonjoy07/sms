@@ -18,6 +18,23 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+    app.post("/api/create_smsLimit", authenticateToken, (req, res) => {
+        var school_type_id = req.body.school_type_id;
+        var period_code = req.body.period_code;
+        var id = req.body.id;
+
+        var sql
+        if (id) {
+            sql = `Update sms_count set school_info_id= "${school_type_id}",sms_limit= "${period_code}" where id = ${id}`
+        } else {
+            sql = `INSERT INTO sms_count (school_info_id,sms_limit) VALUES ("${school_type_id}","${period_code}")`;
+        }
+
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
 
     app.post("/api/add_school", (req, res) => {
         var type_id = req.body.type_id;
@@ -74,6 +91,12 @@ module.exports = (app) => {
             res.send(result);
         })
     })
+    app.delete("/api/sms_count/delete", (req, res) => {
+        con.query(`delete from sms_count where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+        })
+    })
     app.delete("/api/exam_type/delete", (req, res) => {
         con.query(`delete from exam_name where id = ${req.query.id}`, function (err, result, fields) {
             if (err) throw err;
@@ -99,6 +122,12 @@ module.exports = (app) => {
         });
     });
 
-
+    app.get("/api/school_info_type_wise", authenticateToken, (req, res) => {
+        var sql = `select id,school_code,school_name from school_info where type_id=${req.query.type_id}`;
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result)
+        })
+    })
 
 }
