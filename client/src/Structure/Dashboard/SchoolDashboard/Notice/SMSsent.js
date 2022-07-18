@@ -113,57 +113,58 @@ const SMSsent = (props) => {
             setChecked(list)
         });
     };
-    const handleSmsSend = async() => {
+    const handleSmsSend = async () => {
+        console.log(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`);
         const checksms = await axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`,
-        {
-            headers: {
-                authorization: "bearer " + localStorage.getItem("access_token"),
-            },
-        }
-    )
-    if(checksms.data !== ''){
-        let items = [...absentList];
-        absentList.forEach((res, index) => {
-            if (checked[index] === true) {
-                fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg="${smsText}"`)
-
-                fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      authorization: "bearer " + localStorage.getItem("access_token"),
-                    },
-                    body: JSON.stringify({
-                        smsText: smsText,
-                        user_id: localStorage.getItem('u_id'),
-                        purpose: 1,
-                        school_info_id: localStorage.getItem('school_info_id')
-                    }),
-                  })
-                    .then((res) => res.json())
-                fetch(`${process.env.REACT_APP_NODE_API}/api/smsCountUpdate`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      authorization: "bearer " + localStorage.getItem("access_token"),
-                    },
-                    body: JSON.stringify({
-                        school_info_id: localStorage.getItem('school_info_id')
-                    }),
-                  })
-                let item = { ...items[index] };
-                item.status = 1
-                items[index] = item
+            {
+                headers: {
+                    authorization: "bearer " + localStorage.getItem("access_token"),
+                },
             }
+        )
+        if (checksms.data !== '' && checksms.data.sms_limit > 0) {
+            let items = [...absentList];
+            absentList.forEach((res, index) => {
+                if (checked[index] === true) {
+                    fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg="${smsText}"`)
 
-        })
+                    fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            authorization: "bearer " + localStorage.getItem("access_token"),
+                        },
+                        body: JSON.stringify({
+                            smsText: smsText,
+                            user_id: localStorage.getItem('u_id'),
+                            purpose: 1,
+                            school_info_id: localStorage.getItem('school_info_id')
+                        }),
+                    })
+                        .then((res) => res.json())
+                    fetch(`${process.env.REACT_APP_NODE_API}/api/smsCountUpdate`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            authorization: "bearer " + localStorage.getItem("access_token"),
+                        },
+                        body: JSON.stringify({
+                            school_info_id: localStorage.getItem('school_info_id')
+                        }),
+                    })
+                    let item = { ...items[index] };
+                    item.status = 1
+                    items[index] = item
+                }
 
-        setAbsentList(items);
+            })
 
-        toast("SMS Sent successfully");
-    }else{
-        toast("SMS not available");
-    }
+            setAbsentList(items);
+
+            toast("SMS Sent successfully");
+        } else {
+            toast("SMS not available");
+        }
         setSmsText("")
         setChecked([])
         setCheckedAll(false)
@@ -171,7 +172,7 @@ const SMSsent = (props) => {
     }
     return (
         <>
-        <SchoolHeader/>
+            <SchoolHeader />
 
             <div className='container pt-4'>
 
@@ -264,43 +265,43 @@ const SMSsent = (props) => {
                             </div>
                         </div>
                     </div>
-                    
-                <div className='row'>
-                    <div className='col-md-12'>
-                        <div className="card card-dark collapsed-card">
-                            <div className="card-header">
-                                <div className='d-flex justify-content-between px-1'>
-                                    <div>
-                                        <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2">Create SMS</h3>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div className='card-body' >
-
-
-                                <div className='row'>
-                                    <div class={"col-sm-12 p-2 mx-auto"}>
-                                        <div class="form-group">
-                                            <label className='pb-2' for="exampleSelect">SMS Text : </label>
-                                            <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class" value={smsText} onChange={(e) => setSmsText(e.target.value)}>
-                                            </textarea>
-
+                    <div className='row'>
+                        <div className='col-md-12'>
+                            <div className="card card-dark collapsed-card">
+                                <div className="card-header">
+                                    <div className='d-flex justify-content-between px-1'>
+                                        <div>
+                                            <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2">Create SMS</h3>
                                         </div>
                                     </div>
-                                    <div class={"col-sm-2 p-2 mx-auto"}>
-                                        <div className='pt-2 mx-auto'>
-                                            <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
-                                        </div>
-                                    </div>
-
-
                                 </div>
-                            </div>
 
+                                <div className='card-body' >
+
+
+                                    <div className='row'>
+                                        <div class={"col-sm-12 p-2 mx-auto"}>
+                                            <div class="form-group">
+                                                <label className='pb-2' for="exampleSelect">SMS Text : </label>
+                                                <textarea style={{ border: '1px solid blue' }} class="form-control" id="class" name="class" value={smsText} onChange={(e) => setSmsText(e.target.value)}>
+                                                </textarea>
+
+                                            </div>
+                                        </div>
+                                        <div class={"col-sm-2 p-2 mx-auto"}>
+                                            <div className='pt-2 mx-auto'>
+                                                <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
                     <table class="table table-striped">
                         <thead>
                             <tr>

@@ -354,11 +354,11 @@ const ExtraReport = () => {
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a
                         onClick={() => {
-                          localStorage.setItem(
-                            "user_code",
-                            homeworkJSON.teacher_id
-                          );
-                          navigate("/teacherprofile");
+                          // localStorage.setItem(
+                          //   "user_code",
+                          //   homeworkJSON.teacher_id
+                          // );
+                          navigate(`/teacherProfileById/${homeworkJSON.teacher_id}`);
                         }}
                         style={{ textDecoration: "none" }}
                       >

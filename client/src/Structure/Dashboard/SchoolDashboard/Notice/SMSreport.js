@@ -15,9 +15,16 @@ const SMSreport = () => {
                 },
             }
         ).then((response) => {
-            console.log(response);
             setTotalUsed(response.data.result);
-            setTotal(response.data.data);
+        });
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_info_id')}`,
+            {
+                headers: {
+                    authorization: "bearer " + localStorage.getItem("access_token"),
+                },
+            }
+        ).then((response) => {
+            setTotal(response.data);
         });
         // const totalData = await fetch('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance',{method: "GET",headers: headers})
         //         axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
@@ -33,12 +40,12 @@ const SMSreport = () => {
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>
                     <div className='row mb-3'>
-                        {/* <div className='card col-sm-6'>
+                        <div className='card col-sm-6'>
                             <div className='card-body'>
-                                <h4 style={{ textAlign: 'center' }}>{total}</h4>
+                                <h4 style={{ textAlign: 'center' }}>SMS Remain: {total.sms_limit}</h4>
                             </div>
-                        </div> */}
-                        <div className='card col-sm-12'>
+                        </div>
+                        <div className='card col-sm-6'>
                             <div className='card-body'>
                                 <h4 style={{ textAlign: 'center' }}>SMS Used: {totalUsed.length}</h4>
                             </div>

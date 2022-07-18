@@ -443,6 +443,18 @@ module.exports = (app) => {
       res.json({ status: "success" });
     });
   });
+  app.post("/api/smsCountUpdate", (req, res) => {
+    var school_info_id = req.body.school_info_id;
+
+
+    var sql
+    // if (id === '') { 
+    sql = `update sms_count  set sms_limit = sms_limit-1 where school_info_id = "${school_info_id}"`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.json({ status: "success" });
+    });
+  });
 
   app.get('/api/sms/count', async (req, res) => {
     const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
@@ -476,9 +488,8 @@ module.exports = (app) => {
   });
   app.get("/api/smsCheck", (req, res) => {
     var sql
-    sql = `select * from sms_count where school_info_id="${req.query.school_id}"`;
-   
-
+    sql = `select * from sms_count where school_info_id="${req.query.school_id}"`;   
+    
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result[0])

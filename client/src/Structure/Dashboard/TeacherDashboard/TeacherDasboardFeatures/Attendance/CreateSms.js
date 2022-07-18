@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
-import { axios } from 'axios';
+import axios  from 'axios';
 const CreateSms = (props) => {
     const [absentList, setAbsentList] = useState([])
     const [checkedAll, setCheckedAll] = useState(false);
@@ -34,13 +34,17 @@ const CreateSms = (props) => {
         });
     };
     const handleSmsSend = async () => {
-        const checksms = await axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`,
+        const url = `${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=1`
+        const checksms = await axios.get(url,
+        // const checksms = await axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
                 },
             }
         )
+        debugger
+        if(checksms.data !== '' && checksms.data.sms_limit>0){
         absentList.forEach((res, index) => {
             if (checked[index] === true) {
                 fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg="${smsText}"`)
@@ -74,6 +78,9 @@ const CreateSms = (props) => {
         })
 
         toast("SMS Sent successfully");
+    }else{
+        toast("SMS not available.");
+    }
         setAbsentList([]);
         setSmsText("")
         setChecked([])

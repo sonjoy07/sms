@@ -40,7 +40,7 @@ module.exports = (app) => {
     condition += req.query.subject_id !== '' && req.query.subject_id !== undefined?` and activities.subject_id="${req.query.subject_id}"`:``
     condition += req.query.school_teacher_id !== '' && req.query.school_teacher_id !== undefined?` and activities.school_teacher_id="${req.query.school_teacher_id}"`:``
     condition += req.query.date !== '' && req.query.date !== undefined?` and activities.issue_date="${req.query.date}"`:``
-    var sql = `select activities.id, class.class_name, subject.subject_name, activities.teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
+    var sql = `select activities.id, class.class_name, subject.subject_name, activities.school_teacher_id as teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
     from activities
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id

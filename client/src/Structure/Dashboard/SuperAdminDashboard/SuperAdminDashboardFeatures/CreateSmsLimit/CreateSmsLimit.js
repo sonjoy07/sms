@@ -23,7 +23,7 @@ const CreateSmsLimit = () => {
       Navigate("/login");
     }
   };
-  
+
   useEffect(() => {
     checkLoggedIn()
     axios.get(`${process.env.REACT_APP_NODE_API}/api/school_info/all`,
@@ -44,7 +44,7 @@ const CreateSmsLimit = () => {
       });
 
   }, [reset])
-  
+
   const handleSubmit = () => {
     fetch(`${process.env.REACT_APP_NODE_API}/api/create_smsLimit`,
       {
@@ -62,10 +62,14 @@ const CreateSmsLimit = () => {
       })
       .then((res) => res.json())
       .then((json) => {
-        if (id === '') {
-          toast('SMS Count saved successfully')
+        if (json.status === 'warning') {
+          toast.warning('Duplicate Entry!')
         } else {
-          toast('SMS Count updated successfully')
+          if (id === '') {
+            toast('SMS Count saved successfully')
+          } else {
+            toast('SMS Count updated successfully')
+          }
         }
       });
     setSubjectName('')
@@ -74,14 +78,14 @@ const CreateSmsLimit = () => {
     setId("")
     setReset(reset + 1)
   }
-  const addClass = ()=>{
+  const addClass = () => {
     setSubjectName('')
     setClassId('')
     setTypeId('')
     setId("")
   }
 
-  const editClass = (res)=>{
+  const editClass = (res) => {
     setSubjectName(res.sms_limit)
     setClassId(res.school_info_id)
     setId(res.id)
@@ -89,14 +93,14 @@ const CreateSmsLimit = () => {
   const deleteClass = async (id) => {
     const check = window.confirm('Are you sure to delete?');
     if (check) {
-       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
-       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/sms_count/delete?id=${id}`)
-       if (result) {
-          toast("SMS Count deleted successfully");
-          setReset(reset+1)
-       }
+      axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/sms_count/delete?id=${id}`)
+      if (result) {
+        toast("SMS Count deleted successfully");
+        setReset(reset + 1)
+      }
     }
- }
+  }
   return (<><SuperAdminHeader />
     <div className='container mt-4'>
       <div className='row'>
@@ -165,24 +169,24 @@ const CreateSmsLimit = () => {
             </tr>
           </thead>
           <tbody>
-          {subjectList.map(res=>{
-             let className= classList.find(resc=>resc.id === res.school_info_id)
-            return  <tr>
+            {subjectList.map(res => {
+              let className = classList.find(resc => resc.id === res.school_info_id)
+              return <tr>
 
-             <td>{className?.school_name}</td>
-             <td>{res.sms_limit}</td>
-             <td>
-               <div className='.d-flex'>
-                 <div>
-                   <button onClick={() => editClass(res)} style={{ color: 'white' }} className='bg-success'>Edit</button>
-                 </div>
-                 <div>
-                   <button  onClick={() => deleteClass(res.id)}  style={{ color: 'white' }} className='bg-danger'>Delete</button>
-                 </div>
-               </div>
-             </td>
-           </tr>
-           })} 
+                <td>{className?.school_name}</td>
+                <td>{res.sms_limit}</td>
+                <td>
+                  <div className='.d-flex'>
+                    <div>
+                      <button onClick={() => editClass(res)} style={{ color: 'white' }} className='bg-success'>Edit</button>
+                    </div>
+                    <div>
+                      <button onClick={() => deleteClass(res.id)} style={{ color: 'white' }} className='bg-danger'>Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            })}
 
           </tbody>
         </table>

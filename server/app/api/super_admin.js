@@ -31,8 +31,13 @@ module.exports = (app) => {
         }
 
         con.query(sql, function (err, result, fields) {
-            if (err) throw err;
-            res.json({ status: "success" });
+            if(err.code === "ER_DUP_ENTRY"){
+                res.json({ status: "warning" })
+            }else{
+                res.json({ status: "success" });
+            }
+            // if (err) throw err;
+           
         });
     });
 

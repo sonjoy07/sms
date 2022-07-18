@@ -114,6 +114,7 @@ import ExtraDetails from "./Structure/Dashboard/TeacherDashboard/TeacherDasboard
 import PaidList from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Payment/PaidList";
 import CreateSmsLimit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateSmsLimit/CreateSmsLimit";
 import SmsPayment from "./Structure/Dashboard/SchoolDashboard/SmsPayment";
+import TeacherProfilebyId from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfilebyId";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -421,6 +422,10 @@ function App(props) {
           <Route
             path="/sms-payment"
             element={<SmsPayment user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/teacherProfileById/:id"
+            element={<TeacherProfilebyId user={[user_code, user_type]} />}
           />        
               
               
