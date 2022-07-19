@@ -28,7 +28,7 @@ const SchoolSMSreport = () => {
         // setTotal(totalData)
     }, [])
     const handleSearch=()=>{
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/sms/count?school_info_id=${school_id}`,
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/sms/count_report?school_info_id=${school_id}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),

@@ -31,13 +31,13 @@ module.exports = (app) => {
         }
 
         con.query(sql, function (err, result, fields) {
-            if(err.code === "ER_DUP_ENTRY"){
+            if (err.code === "ER_DUP_ENTRY") {
                 res.json({ status: "warning" })
-            }else{
+            } else {
                 res.json({ status: "success" });
             }
             // if (err) throw err;
-           
+
         });
     });
 
@@ -109,9 +109,12 @@ module.exports = (app) => {
         })
     })
     app.delete("/api/school/delete", (req, res) => {
-        con.query(`delete from school_info where id = ${req.query.id}`, function (err, result, fields) {
+        con.query(`delete from school_admin where school_info_id = ${req.query.id}`, function (err, result, fields) {
             if (err) throw err;
-            res.send(result);
+            con.query(`delete from school_info where id = ${req.query.id}`, function (err, result, fields) {
+                if (err) throw err;
+                res.send(result);
+            })
         })
     })
     app.get("/api/district", authenticateToken, (req, res) => {
