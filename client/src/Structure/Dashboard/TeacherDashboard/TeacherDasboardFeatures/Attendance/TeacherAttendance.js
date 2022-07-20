@@ -122,10 +122,10 @@ const TeacherAttendance = (props) => {
   }
 
   //Get Student Data
-  const getStudentList = (sec_id, rt_id, class_id) => {
+  const getStudentList = (sec_id, rt_id, class_id,subject_id) => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/attendance/student?section_id=${sec_id}&school_info_id=${school_id}&class_id=${class_id}`,
+        `${process.env.REACT_APP_NODE_API}/api/attendance/student?section_id=${sec_id}&school_info_id=${school_id}&class_id=${class_id}&&subject_id=${subject_id}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -219,7 +219,6 @@ const TeacherAttendance = (props) => {
         console.log(error);
       });
   };
-  console.log(totalpresent);
   return (
     <>
       <TeacherHeader />
@@ -360,7 +359,8 @@ const TeacherAttendance = (props) => {
                                 getStudentList(
                                   routineJSON.section_id,
                                   routineJSON.id,
-                                  routineJSON.class
+                                  routineJSON.class,
+                                  routineJSON.subject_id
                                 );
                                 // setClass(routineJSON.class);
                                 setLatest_attendance([]);

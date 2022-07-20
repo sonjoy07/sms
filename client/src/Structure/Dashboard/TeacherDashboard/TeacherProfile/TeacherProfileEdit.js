@@ -38,7 +38,7 @@ const TeacherProfileEdit = () => {
                 setDob(studentData.dob)
                 setBloodGroup(studentData.blood_group)
                 setStudent(response.data);
-                setPreview(`/uploads/${studentData.photo_id}`);
+                setPreview(`${process.env.REACT_APP_NODE_API}/uploads/${studentData.photo_id}`);
             })
             .catch((e) => console.log(e));
     }, []);

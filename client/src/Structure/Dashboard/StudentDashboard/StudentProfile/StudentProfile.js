@@ -45,7 +45,7 @@ const StudentProfile = () => {
               <div class="card-body py-5">
                 <div class="d-flex flex-column align-items-center text-center">
                   <img src={
-                    student.photo_id ? `/uploads/${student.photo_id}` : profilePhoto} alt="Admin" class="rounded-circle" width="150" />
+                    student.photo_id ? `${process.env.REACT_APP_NODE_API}/uploads/${student.photo_id}` : profilePhoto} alt="Admin" class="rounded-circle" width="150" />
                   <div class="my-4">
                     <h4>{student?.full_name}</h4>
 

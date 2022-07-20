@@ -186,7 +186,7 @@ const SuperAdminDashboard = () => {
                                     <img style={{ width: '64px', height: '64px' }} src={subject} alt="" />
                                 </div>
                                 <div className='px-3'>
-                                    <h4 class="card-title">School Wise SMS Report</h4>
+                                    <h4 class="card-title">School Wise SMS Payment Report</h4>
 
                                 </div>
                             </div>
