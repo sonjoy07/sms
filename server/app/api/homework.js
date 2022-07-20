@@ -92,7 +92,7 @@ module.exports = (app) => {
     var attachment_link = req.body.fileName;
     if (req.files !== null) {
       const file = req.files.file
-      var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+      var uploadPath = path.resolve(__dirname, '../../uploads/');
       file.mv(`${uploadPath}/${file.name}`, err => {
         if (err) {
           return res.status(500).send(err)
@@ -128,7 +128,7 @@ module.exports = (app) => {
     var attachment_link = req.body.fileName;
 
     const file = req.files.file
-    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    var uploadPath = path.resolve(__dirname, '../../uploads/');
     file.mv(`${uploadPath}/${file.name}`, err => {
       if (err) {
         return res.status(500).send(err)

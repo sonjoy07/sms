@@ -369,7 +369,7 @@ const AdminViewActivities = () => {
                       {homeworkJSON.topic}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
-                    <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
+                    <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a

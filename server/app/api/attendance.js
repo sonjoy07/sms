@@ -22,8 +22,11 @@ module.exports = (app) => {
     join student on student_present_status.student_id=student.id
     join school_info on student_present_status.school_info_id=school_info.id
     join class on student_present_status.class_id=class.id
-    where section_id="${req.query.section_id}" and student_present_status.school_info_id="${req.query.school_info_id}" and class.id="${req.query.class_id}" 
+    join subject_registration on student_present_status.class_id=subject_registration.class_id
+    join subject_4th_registration on student_present_status.class_id=subject_4th_registration.class_id
+    where student_present_status.section_id="${req.query.section_id}" and student_present_status.school_info_id="${req.query.school_info_id}" and class.id="${req.query.class_id}" and (subject_4th_registration.subject_4th_id = "${req.query.subject_id}" or subject_registration.subject_id = "${req.query.subject_id}") 
    `;
+   console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

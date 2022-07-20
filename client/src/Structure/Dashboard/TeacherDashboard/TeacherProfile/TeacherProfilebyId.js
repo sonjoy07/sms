@@ -36,7 +36,7 @@ const TeacherProfilebyId = () => {
                 <div class="card-body py-5">
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src={
-                      teacher.photo_id ? `/uploads/${teacher.photo_id}` : profile} alt="Admin" class="rounded-circle" width="150" />
+                      teacher.photo_id ? `${process.env.REACT_APP_NODE_API}/uploads/${teacher.photo_id}` : profile} alt="Admin" class="rounded-circle" width="150" />
                     <div class="my-4">
                       <h4>{teacher?.full_name}</h4>
                       {/* <p class="text-secondary mb-1">Full Stack Developer</p>

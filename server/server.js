@@ -5,6 +5,7 @@ const cors = require("cors");
 const fileUpload = require('express-fileupload');
 
 const app = express();
+app.use('/uploads', express.static('uploads'));
 var corsOptions = {
   origin: "*",
   credentials: true,

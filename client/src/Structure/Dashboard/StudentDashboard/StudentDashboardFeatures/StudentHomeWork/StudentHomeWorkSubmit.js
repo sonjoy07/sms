@@ -26,7 +26,7 @@ const StudentHomeWorkSubmit = (props) => {
   const [preview, setPreview] = useState()
 
   const [hw, setHw] = useState({});
-  const [reset,setReset] = useState(0)
+  const [reset, setReset] = useState(0)
 
   const [submissionList, setSubmissionList] = useState([])
 
@@ -44,22 +44,22 @@ const StudentHomeWorkSubmit = (props) => {
         setHw(response.data);
         console.log(response.data);
       });
-   
+
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     axios
-    .get(
-      `${process.env.REACT_APP_NODE_API}/api/homework/teacher/submitlist?home_work_id=${homework_id}`,
-      {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      }
-    )
-    .then((response) => {
-      setSubmissionList(response.data.filter(res=>res.student_code == localStorage.getItem('u_id')));
-    });
-  },[reset])
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/homework/teacher/submitlist?home_work_id=${homework_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        setSubmissionList(response.data.filter(res => res.student_code == localStorage.getItem('u_id')));
+      });
+  }, [reset])
 
   const fileUpload = (e) => {
     setAttachment_link(e.target.files[0])
@@ -98,179 +98,180 @@ const StudentHomeWorkSubmit = (props) => {
       .then((res) => res.json())
       .then((json) => {
         toast("Home work submitted successfully");
-        setReset(reset+1)
+        setReset(reset + 1)
         // navigate("/studenthomework");
       });
   };
   return (
     <>
-    <StudentHeader/>
-    <div className="container">
-    <ToastContainer />
-      <div className="row mt-4">
-        <div className="-md-12">
-          <div className="">
+      <StudentHeader />
+      <div className="container">
+        <ToastContainer />
+        <div className="row mt-4">
+          <div className="-md-12">
             <div className="">
-              <div className="d-flex justify-content-between px-4">
-                <div>
-                  <h3
-                    style={{
-                      color: "LightSeaGreen",
-                      fontSize: "25px",
-                      fontWeight: "700",
-                    }}
-                    class="card-title pt-2"
-                  >
-                    {hw.topic}
-                  </h3>
-                  <h5
-                    style={{
-                      color: "LightSeaGreen",
-                      fontSize: "18px",
-                      fontWeight: "400",
-                    }}
-                    class="card-title pt-2"
-                  >
-                    {hw.subject_name}
-                  </h5>
+              <div className="">
+                <div className="d-flex justify-content-between px-4">
+                  <div>
+                    <h3
+                      style={{
+                        color: "LightSeaGreen",
+                        fontSize: "25px",
+                        fontWeight: "700",
+                      }}
+                      class="card-title pt-2"
+                    >
+                      {hw.topic}
+                    </h3>
+                    <h5
+                      style={{
+                        color: "LightSeaGreen",
+                        fontSize: "18px",
+                        fontWeight: "400",
+                      }}
+                      class="card-title pt-2"
+                    >
+                      {hw.subject_name}
+                    </h5>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="container">
-              <div className="mt-2">
-                <div
-                  className=""
-                  style={{ background: "#EFEFEF", height: "", padding: "0" }}
-                >
-                  <div className="row">
-                    <div className="col-12 text-center">
-                      <div className="row" style={{ background: "#fff" }}>
-                        <div className="col-12">
-                          <div>
-                            <p
-                              style={{ textAlign: "left", color: "black" }}
-                              className="py-3"
-                            >
-                              <Link target="_blank" to={`../uploads/${hw.attachment_link}`} download>{hw.attachment_link}</Link>
-                            </p>
-                          </div>
-                          <div style={{ display: "flex", alignItem: "center" }}>
-                            <i
-                              style={{ color: "black" }}
-                              class="fa-solid fa-person pt-1"
-                            ></i>
-                            <p
-                              className="px-3"
-                              style={{ textAlign: "left", color: "black" }}
-                            >
-                              {" "}
-                              {hw.teacher_name}
-                            </p>
-                          </div>
-                          <div style={{ display: "flex" }}>
-                            <i
-                              style={{ color: "black" }}
-                              class="fa-solid fa-clock  pt-1"
-                            ></i>
-                            <p
-                              className="mx-2"
-                              style={{ textAlign: "left", color: "red" }}
-                            >
-                              {" "}
-                              {moment(hw.due_date).format("DD-MM-YYYY")}{" "}
-                            </p>
-                            <p
-                              className=""
-                              style={{ textAlign: "left", color: "black" }}
-                            ></p>
-                          </div>
-                          <div>
-                            <p
-                              className="pt-4"
-                              style={{
-                                textAlign: "left",
-                                color: "black",
-                                fontSize: "24px",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {hw.details}
-                            </p>
-                          </div>
-                          <div
-                            style={{ border: "1px solid red" }}
-                            className="mt-5"
-                          >
-                            <div class="form-group p-5">
-                              <label
-                                style={{ fontSize: "20px", fontWeight: "700" }}
-                                className="pb-3"
-                                for="exampleInputEmail1"
+              <div className="container">
+                <div className="mt-2">
+                  <div
+                    className=""
+                    style={{ background: "#EFEFEF", height: "", padding: "0" }}
+                  >
+                    <div className="row">
+                      <div className="col-12 text-center">
+                        <div className="row" style={{ background: "#fff" }}>
+                          <div className="col-12">
+                            <div>
+                              <p
+                                style={{ textAlign: "left", color: "black" }}
+                                className="py-3"
                               >
-                                Assignment Attachment :{" "}
-                              </label>
-                              {preview &&
-                                <p>{preview}
-                                  <i
-                                    style={{ color: "black", marginLeft: "5px", cursor: "pointer" }}
-                                    class="fa-solid fa-times  pt-1"
-                                    onClick={() => { setPreview(undefined); setAttachment_link("") }}
-                                  ></i></p>}
-                              <input
-                                style={{
-                                  border: "1px solid blue",
-                                  padding: "5px 10px",
-                                }}
-                                type="file"
-                                class="form-control"
-                                onChange={fileUpload}
-                                id="avatar"
-                                name="avatar"
-                                required
-                              />
+                                <Link target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${hw.attachment_link}`} download>{hw.attachment_link}</Link>
+                              </p>
                             </div>
-                          </div>
-                          {/* <input
+                            <div style={{ display: "flex", alignItem: "center" }}>
+                              <i
+                                style={{ color: "black" }}
+                                class="fa-solid fa-person pt-1"
+                              ></i>
+                              <p
+                                className="px-3"
+                                style={{ textAlign: "left", color: "black" }}
+                              >
+                                {" "}
+                                {hw.teacher_name}
+                              </p>
+                            </div>
+                            <div style={{ display: "flex" }}>
+                              <i
+                                style={{ color: "black" }}
+                                class="fa-solid fa-clock  pt-1"
+                              ></i>
+                              <p
+                                className="mx-2"
+                                style={{ textAlign: "left", color: "red" }}
+                              >
+                                {" "}
+                                {moment(hw.due_date).format("DD-MM-YYYY")}{" "}
+                              </p>
+                              <p
+                                className=""
+                                style={{ textAlign: "left", color: "black" }}
+                              ></p>
+                            </div>
+                            <div>
+                              <p
+                                className="pt-4"
+                                style={{
+                                  textAlign: "left",
+                                  color: "black",
+                                  fontSize: "24px",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {hw.details}
+                              </p>
+                            </div>
+                            <div
+                              style={{ border: "1px solid red" }}
+                              className="mt-5"
+                            >
+                              <div class="form-group p-5">
+                                <label
+                                  style={{ fontSize: "20px", fontWeight: "700" }}
+                                  className="pb-3"
+                                  for="exampleInputEmail1"
+                                >
+                                  Assignment Attachment :{" "}
+                                </label>
+                                {preview &&
+                                  <p>{preview}
+                                    <i
+                                      style={{ color: "black", marginLeft: "5px", cursor: "pointer" }}
+                                      class="fa-solid fa-times  pt-1"
+                                      onClick={() => { setPreview(undefined); setAttachment_link("") }}
+                                    ></i></p>}
+                                <input
+                                  style={{
+                                    border: "1px solid blue",
+                                    padding: "5px 10px",
+                                  }}
+                                  type="file"
+                                  class="form-control"
+                                  onChange={fileUpload}
+                                  id="avatar"
+                                  name="avatar"
+                                  required
+                                />
+                              </div>
+                            </div>
+                            {/* <input
                             style={{ border: "1px solid blue" }}
                             type="text"
                             class="form-control"
                             value={attachment_link}
                             onChange={(e) => setAttachment_link(e.target.value)}
                           /> */}
-                          <div className="row">
-                            <button
-                              className="btn btn-primary"
-                              onClick={handleSubmit}
-                            >
-                              Submit
-                            </button>
+                            <div className="row">
+                              <button
+                                className="btn btn-primary"
+                                onClick={handleSubmit}
+                              >
+                                Submit
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="row">
-                        <table class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th scope="col">Name</th>
-                              <th scope="col">Student Code</th>
-                              <th scope="col">Submission Time</th>
-                              <th scope="col">Status</th>
-                              <th scope="col">Attachment</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {submissionList.map(res => {
-                              return (<tr>
-                                <td>{res.full_name}</td>
-                                <td>{res.student_code}</td>
-                                <td>{moment(res.submission_time).format("DD-MM-YYYY")}</td>
-                                <td>Submit</td>
-                                <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
-                              </tr>)
-                            })}
-                          </tbody>
-                        </table>
+                        <div className="row">
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Student Code</th>
+                                <th scope="col">Submission Time</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Attachment</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {submissionList.map(res => {
+                                return (<tr>
+                                  <td>{res.full_name}</td>
+                                  <td>{res.student_code}</td>
+                                  <td>{moment(res.submission_time).format("DD-MM-YYYY")}</td>
+                                  <td>Submit</td>
+                                  <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
+                                </tr>)
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -280,7 +281,6 @@ const StudentHomeWorkSubmit = (props) => {
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

@@ -62,7 +62,7 @@ module.exports = (app) => {
     var bloodGroup = req.body.bloodGroup;
     const file = req.files.file
     var attachment_link = req.body.fileName;
-    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    var uploadPath = path.resolve(__dirname, '../../uploads/');
     file.mv(`${uploadPath}/${file.name}`, err => {
       if (err) {
         return res.status(500).send(err)
@@ -84,7 +84,7 @@ module.exports = (app) => {
       return res.status(400).json({ msg: 'No file uploaded' })
     }
     const file = req.files.file
-    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    var uploadPath = path.resolve(__dirname, '../../uploads/');
     file.mv(`${uploadPath}/${file.name}`, err => {
       if (err) {
         return res.status(500).send(err)

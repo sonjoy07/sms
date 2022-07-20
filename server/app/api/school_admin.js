@@ -259,7 +259,7 @@ module.exports = (app) => {
     const file = req.files.file
     const option = req.body.option
     console.log(option);
-    var uploadPath = path.resolve(__dirname, '../../../client/public/uploads/');
+    var uploadPath = path.resolve(__dirname, '../../uploads/');
     file.mv(`${uploadPath}/${file.name}`, err => {
       if (err) {
         return res.status(500).send(err)
