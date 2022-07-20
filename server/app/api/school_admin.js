@@ -507,10 +507,14 @@ module.exports = (app) => {
 
   app.delete("/api/student/delete", authenticateToken, (req, res) => {
     var id = req.query.id;
+    var sql = `delete from student_present_status where student_id ="${id}"`
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
     var sql = `delete from student where id ="${id}"`
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.json({ status: "success" });
+    });
     });
   });
   app.delete("/api/section/delete", authenticateToken, (req, res) => {

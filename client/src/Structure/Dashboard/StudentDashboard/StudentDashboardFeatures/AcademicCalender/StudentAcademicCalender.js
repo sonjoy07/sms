@@ -108,7 +108,7 @@ const StudentAcademicCalender = () => {
 
           <table class="table table-striped">
             <thead>
-              <tr>
+              <tr style={{textAlign: 'center'}}>
                 <th scope="col">Schedule Type</th>
                 <th scope="col">Schedule Date</th>
               </tr>

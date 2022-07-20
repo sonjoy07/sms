@@ -480,13 +480,13 @@ const SchoolAdminRoutine = () => {
                 <div class={"col-sm-4 "}>
                   <div class="form-group">
                     <label className='' for="exampleSelect">Start time : </label>
-                    <input onChange={handleStart} style={{ border: '1px solid blue' }} class="form-control" id="class" value={start_time} name="class" placeholder='start time' />
+                    <input onChange={handleStart} style={{ border: '1px solid blue' }} class="form-control" id="class" value={start_time} name="class" placeholder='Start time' />
                   </div>
                 </div>
                 <div class={"col-sm-4 "}>
                   <div class="form-group">
                     <label className='' for="exampleSelect">End Time : </label>
-                    <input onChange={handleEnd} style={{ border: '1px solid blue' }} class="form-control" id="class" value={end_time} name="class" placeholder='end time' />
+                    <input onChange={handleEnd} style={{ border: '1px solid blue' }} class="form-control" id="class" value={end_time} name="class" placeholder='End time' />
                   </div>
                 </div>
 
