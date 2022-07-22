@@ -34,12 +34,12 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/all/filter", authenticateToken, (req, res) => {
-    let condition = req.query.school_info_id !== '' && req.query.school_info_id !== undefined?` and activities.school_info_id="${req.query.school_info_id}"`:``
-    condition += req.query.section_id !== '' && req.query.section_id !== undefined?` and activities.section_id="${req.query.section_id}"`: ``
-    condition += req.query.class_id !== '' && req.query.class_id !== undefined?` and activities.class_id="${req.query.class_id}"`:``
-    condition += req.query.subject_id !== '' && req.query.subject_id !== undefined?` and activities.subject_id="${req.query.subject_id}"`:``
-    condition += req.query.school_teacher_id !== '' && req.query.school_teacher_id !== undefined?` and activities.school_teacher_id="${req.query.school_teacher_id}"`:``
-    condition += req.query.date !== '' && req.query.date !== undefined?` and activities.issue_date="${req.query.date}"`:``
+    let condition = req.query.school_info_id !== '' && req.query.school_info_id !== undefined ? ` and activities.school_info_id="${req.query.school_info_id}"` : ``
+    condition += req.query.section_id !== '' && req.query.section_id !== undefined ? ` and activities.section_id="${req.query.section_id}"` : ``
+    condition += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and activities.class_id="${req.query.class_id}"` : ``
+    condition += req.query.subject_id !== '' && req.query.subject_id !== undefined ? ` and activities.subject_id="${req.query.subject_id}"` : ``
+    condition += req.query.school_teacher_id !== '' && req.query.school_teacher_id !== undefined ? ` and activities.school_teacher_id="${req.query.school_teacher_id}"` : ``
+    condition += req.query.date !== '' && req.query.date !== undefined ? ` and activities.issue_date="${req.query.date}"` : ``
     var sql = `select activities.id, class.class_name, subject.subject_name, activities.school_teacher_id as teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
     from activities
     join class on activities.class_id=class.id 
@@ -105,13 +105,28 @@ module.exports = (app) => {
         console.log(sql);
       } else {
         const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
-        sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${school_teacher_id}",${attachment} )`;
+        if (school_info_id === 'all') {
+          let sql = `select * from school_info`
+          con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            result.map(res => {
+              let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES ("${res.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${school_teacher_id}",${attachment} )`;
+              con.query(sql, function (err, result, fields) {
+                if (err) throw err;
+              });
+            })
+            res.json({ status: "success" });
+          });
+        } else {
+          sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES ("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${school_teacher_id}",${attachment} )`;
+          con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+          });
+        }
       }
 
-      con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        res.json({ status: "success" });
-      });
+
     } else {
       res.status(500).json({ msg: "Please fill any field" })
     }
@@ -161,14 +176,14 @@ module.exports = (app) => {
     const secton_id = req.query.section_id
     const class_id = req.query.class_id
     const subject_id = req.query.subject_id
-    const issue_date = req.query.issue_date!== undefined && req.query.issue_date!== ''?moment(req.query.issue_date).format("YYYY-MM-DD"):''
-    const due_date = req.query.due_date!== undefined && req.query.due_date!== ''?moment(req.query.due_date).format("YYYY-MM-DD"):''
+    const issue_date = req.query.issue_date !== undefined && req.query.issue_date !== '' ? moment(req.query.issue_date).format("YYYY-MM-DD") : ''
+    const due_date = req.query.due_date !== undefined && req.query.due_date !== '' ? moment(req.query.due_date).format("YYYY-MM-DD") : ''
     const teacher_id = req.query.teacher_id
-    let condition = secton_id!== ''?` and activities.section_id="${secton_id}"`:``
-    condition+= class_id!== ''?` and activities.class_id="${class_id}"`:``
-    condition+= subject_id!== ''?` and activities.subject_id="${subject_id}"`:``
-    condition+= teacher_id!== ''?` and activities.teacher_id="${teacher_id}"`:``
-    condition+= issue_date!== undefined && issue_date!== ''?` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    let condition = secton_id !== '' ? ` and activities.section_id="${secton_id}"` : ``
+    condition += class_id !== '' ? ` and activities.class_id="${class_id}"` : ``
+    condition += subject_id !== '' ? ` and activities.subject_id="${subject_id}"` : ``
+    condition += teacher_id !== '' ? ` and activities.teacher_id="${teacher_id}"` : ``
+    condition += issue_date !== undefined && issue_date !== '' ? ` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"` : ``
     var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission
     from activities
     join class on activities.class_id=class.id 
@@ -191,15 +206,15 @@ module.exports = (app) => {
     const subject_id = req.query.subject_id
     const school_info_id = req.query.school_info_id
     const search_school_teacher_id = req.query.search_school_teacher_id
-    const issue_date = req.query.issue_date !== ""?moment(req.query.issue_date).format("YYYY-MM-DD"):""
-    const due_date = req.query.due_date !== ""?moment(req.query.due_date).format("YYYY-MM-DD"):""
-    let condition = section_id!== ''?` and activities.section_id="${section_id}"`:``
-    condition+= class_id!== ''?` and activities.class_id="${class_id}"`:``
-    condition+= subject_id!== ''?` and activities.subject_id="${subject_id}"`:``
-    condition+= session_id!== ''?` and activities.session_id="${session_id}"`:``
-    condition+= school_info_id!== ''?` and activities.school_info_id="${school_info_id}"`:``
-    condition+= search_school_teacher_id!== ''?` and activities.school_teacher_id="${search_school_teacher_id}"`:``
-    condition+= issue_date!== ''?` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    const issue_date = req.query.issue_date !== "" ? moment(req.query.issue_date).format("YYYY-MM-DD") : ""
+    const due_date = req.query.due_date !== "" ? moment(req.query.due_date).format("YYYY-MM-DD") : ""
+    let condition = section_id !== '' ? ` and activities.section_id="${section_id}"` : ``
+    condition += class_id !== '' ? ` and activities.class_id="${class_id}"` : ``
+    condition += subject_id !== '' ? ` and activities.subject_id="${subject_id}"` : ``
+    condition += session_id !== '' ? ` and activities.session_id="${session_id}"` : ``
+    condition += school_info_id !== '' ? ` and activities.school_info_id="${school_info_id}"` : ``
+    condition += search_school_teacher_id !== '' ? ` and activities.school_teacher_id="${search_school_teacher_id}"` : ``
+    condition += issue_date !== '' ? ` and activities.due_date BETWEEN "${issue_date}" AND "${due_date}"` : ``
     var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission,school_name
     from activities
     join class on activities.class_id=class.id 
@@ -266,7 +281,7 @@ module.exports = (app) => {
     var sql = `select * from activities where school_teacher_id = ${req.query.teacher_id};`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
-        res.send(result);
+      res.send(result);
     });
   });
 };

@@ -38,7 +38,8 @@ module.exports = (app) => {
     });
   });
   app.get("/api/teacher/schoolWise", authenticateToken, (req, res) => {
-    con.query(`SELECT id,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name FROM teacher where school_info_id=${req.query.school_info_id}`, function (err, result, fields) {
+    let condition = req.query.school_info_id === 'all'?'':` and school_info_id="${req.query.school_info_id}"`
+    con.query(`SELECT id,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name FROM teacher where 1=1 ${condition}`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

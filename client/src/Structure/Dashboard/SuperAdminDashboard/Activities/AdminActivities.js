@@ -27,6 +27,7 @@ const AdminActivities = (props) => {
   const [status, setStatus] = useState("")
 
   const [schools, setSchools] = useState([]);
+  const [searchSchools, setSearchSchools] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [search_subjects, setSearch_Subjects] = useState([]);
@@ -196,6 +197,17 @@ const AdminActivities = (props) => {
       .then((response) => {
         setSearchClses(response.data);
       });
+      if (school_type !== "") {
+        axios
+          .get(`${process.env.REACT_APP_NODE_API}/api/school_info_type_wise?type_id=${school_type_search}`, {
+            headers: {
+              authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+          })
+          .then((response) => {
+            setSearchSchools(response.data);
+          });
+      }
   }, [school_type_search]);
   useEffect(() => {
     axios
@@ -347,6 +359,8 @@ const AdminActivities = (props) => {
           }
           setId("");
           setClass_id("");
+          setSchoolType("")
+          setSchool_info_id("")
           setSection_id("");
           setSubject_id("");
           setSession_id("");
@@ -426,11 +440,6 @@ const AdminActivities = (props) => {
         setHomework(response.data);
       });
   };
-
-  let handleTeacherChange = (e) => {
-    setTeacher_id(e.target.value);
-  };
-
 
   let handleDueDateSearchChange = (e) => {
     setSearch_Due_date(e.target.value);
@@ -563,6 +572,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select School</option>
+                        <option value="all">All</option>
                         {schools.map((classJSON) => {
                           return (
                             <option value={classJSON.id}>
@@ -764,31 +774,8 @@ const AdminActivities = (props) => {
               <div className="card card-dark collapsed-card">
                 <div className='card-body' >
                   <div className='row'>
-                    <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
-                          School :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={search_school_id}
-                          onChange={(e) => setSearchShool_id(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select School</option>
-                          {schools.map((classJSON) => {
-                            return (
-                              <option value={classJSON.id}>
-                                {classJSON.school_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                    <div class={"col-sm-2 mx-auto p-2"}>
+                    
+                  <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
                           School Type :{" "}
@@ -806,6 +793,30 @@ const AdminActivities = (props) => {
                             return (
                               <option value={classJSON.id}>
                                 {classJSON.type_name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div class={"col-sm-2 mx-auto p-2"}>
+                      <div class="form-group">
+                        <label className="pb-2" for="exampleSelect">
+                          School :{" "}
+                        </label>
+                        <select
+                          style={{ border: "1px solid blue" }}
+                          class="form-control"
+                          value={search_school_id}
+                          onChange={(e) => setSearchShool_id(e.target.value)}
+                          id="class"
+                          name="class"
+                        >
+                          <option value="">Select School</option>
+                          {searchSchools.map((classJSON) => {
+                            return (
+                              <option value={classJSON.id}>
+                                {classJSON.school_name}
                               </option>
                             );
                           })}
