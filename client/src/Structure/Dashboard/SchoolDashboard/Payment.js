@@ -9,10 +9,14 @@ const Payment = () => {
   const [sector_name, setSector_name] = useState('')
   const [amount, setAmount] = useState('')
   const [classId, setClassId] = useState('')
+  const [sectionId, setSectionId] = useState('')
+  const [studentId, setStudentId] = useState('')
   const [lastDate, setLastDate] = useState('')
   const [id, setId] = useState('')
   const [sectors, setSectors] = useState([])
   const [classes, setClasses] = useState([])
+  const [sections, setSections] = useState([])
+  const [students, setStudents] = useState([])
   const [reset, setReset] = useState(0)
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${localStorage.getItem('school_type')}`, {
@@ -22,6 +26,13 @@ const Payment = () => {
     }).then((response) => {
       setClasses(response.data);
     });
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/section/all`, {
+      headers: {
+        authorization: "bearer " + localStorage.getItem("access_token"),
+      },
+    }).then((response) => {
+      setSections(response.data);
+    });
     axios.get(`${process.env.REACT_APP_NODE_API}/api/sector/all?school_id=${localStorage.getItem('school_id')}`, {
       headers: {
         authorization: "bearer " + localStorage.getItem("access_token"),
@@ -30,6 +41,15 @@ const Payment = () => {
       setSectors(response.data);
     });
   }, [reset])
+  useEffect(()=>{
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/student/admin-search?section_id=${sectionId}&&class_id=${classId}&&school_info_id=${localStorage.getItem('school_id')}`, {
+      headers: {
+        authorization: "bearer " + localStorage.getItem("access_token"),
+      },
+    }).then((response) => {
+      setStudents(response.data);
+    });
+  },[sectionId,classId])
   const handleSubmit = () => {
     fetch(`${process.env.REACT_APP_NODE_API}/api/add_sector`, {
       method: "POST",
@@ -38,7 +58,10 @@ const Payment = () => {
         sector_code: sector_code,
         sector_name: sector_name,
         class_id: classId,
+        section_id: sectionId,
+        student_id: studentId,
         last_date: lastDate,
+        school_type: localStorage.getItem('school_type'),
         school_id: localStorage.getItem('school_info_id'),
         id: id,
         amount: amount
@@ -54,6 +77,8 @@ const Payment = () => {
         setSector_code('')
         setAmount('')
         setClassId('')
+        setSectionId('')
+        setStudentId('')
         setLastDate('')
         setSector_name('')
         setReset(reset + 1)
@@ -78,6 +103,7 @@ const Payment = () => {
        }
     }
  }
+ console.log(studentId);
   return (
     <>
       <SchoolHeader />
@@ -105,9 +131,36 @@ const Payment = () => {
                       <label className='pb-2' for="exampleInputEmail1">Class : </label>
                       <select onChange={(e) => setClassId(e.target.value)}
                         value={classId} style={{ border: '1px solid blue' }} class="form-control" >
-                        <option>select</option>
+                        <option>Select</option>
+                        <option value={'all'}>All</option>
                         {classes.map(res => {
                           return <option value={res.id}>{res.class_name}</option>
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className='pb-2' for="exampleInputEmail1">Section : </label>
+                      <select onChange={(e) => setSectionId(e.target.value)}
+                        value={sectionId} style={{ border: '1px solid blue' }} class="form-control" >
+                        <option>Select</option>
+                        <option value={'all'}>All</option>
+                        {sections.map(res => {
+                          return <option value={res.id}>{res.section_default_name}</option>
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className='pb-2' for="exampleInputEmail1">Student : </label>
+                      <select onChange={(e) => setStudentId(e.target.value)}
+                        value={studentId} style={{ border: '1px solid blue' }} class="form-control" >
+                        <option>Select</option>
+                        <option value={'all'}>All</option>
+                        {students.map(res => {
+                          return <option value={res.student_id}>{res.full_name}</option>
                         })}
                       </select>
                     </div>
