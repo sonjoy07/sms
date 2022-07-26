@@ -121,7 +121,7 @@ module.exports = (app) => {
   });
   app.get("/api/school-admin/profile", (req, res) => {
     con.query(
-      `SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, admin_code, mobile_number, email_address, school_info_id FROM school_admin where id="${req.query.teacher_id}"`,
+      `SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, admin_code, mobile_number, email_address, photo_id,first_name,middle_name,last_name, school_info_id FROM school_admin where id="${req.query.teacher_id}"`,
       function (err, result, fields) {
         if (err) throw err;
         res.send(result[0]);
@@ -283,12 +283,21 @@ module.exports = (app) => {
             con.query(sql, (err, result, fields) => {
               if (err) throw err
             })
+            let sql2 = `insert into users (user_type_id,user_code,password,status) values(1,"${res[0]}","12345",1)`
+            con.query(sql2, (err, result, fields) => {
+              if (err) throw err
+            })
           }
           if (option === "teacher") {
             const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}")`;
             con.query(sql, function (err, result, fields) {
               if (err) throw err;
             });
+
+            let sql2 = `insert into users (user_type_id,user_code,password,status) values(2,"${res[0]}","12345",1)`
+            con.query(sql2, (err, result, fields) => {
+              if (err) throw err
+            })
           }
           if (option === "routine") {
             let splitInsertData = res[0].replaceAll('"', '').split(';')
@@ -417,7 +426,7 @@ module.exports = (app) => {
     var sql
     if (id === '') {
 
-      sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+
       if (classId === 'all') {
         con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
           if (err) throw err;
@@ -449,43 +458,65 @@ module.exports = (app) => {
                 })
               })
             } else {
-              sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sectionId}","${studentId}"),`
+              if (studentId === 'all') {
+                con.query(`select * from student_info where school_info_id = ${school_type} and class_id = ${cls.id} and section_id = ${sectionId}`, function (err, result, fields) {
+                  if (err) throw err;
+                  if (result.length > 0) {
+                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+                    result.map(stu => {
+                      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sectionId}","${stu.id}"),`
+                    })
+                    sql = sql.slice(0, -1);
+                    console.log(sql);
+                    con.query(sql, function (err, result, fields) {
+                      if (err) throw err;
+                      res.json({ status: "success" });
+                    });
+                  } else {
+                    res.json({ status: "success" });
+                  }
+                })
+              } else {
+                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sectionId}","${studentId}"),`
+                con.query(sql, function (err, result, fields) {
+                  if (err) throw err;
+                  res.json({ status: "success" });
+                });
+              }
             }
-            sql = sql.slice(0, -1);
-            con.query(sql, function (err, result, fields) {
-              if (err) throw err;
-              res.json({ status: "success" });
-            });
           })
+          res.json({ status: "success" });
         })
       } else {
         if (sectionId === 'all') {
           con.query(`select * from section`, function (err, result, fields) {
             if (err) throw err;
-            sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
             result.map(sec => {
-              if (studentId === 'all') {                
+              if (studentId === 'all') {
                 con.query(`select * from student_info where school_info_id = ${school_id} and class_id = ${classId} and section_id = ${sec.id}`, function (err, result, fields) {
                   if (err) throw err;
-                  result.map(stu => {
-                    sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${stu.id}"),`
-                  })
+                  if (result.length > 0) {
+                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+                    result.map(stu => {
+                      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${stu.id}"),`
+                    })
+
+                    sql = sql.slice(0, -1);
+                    con.query(sql, function (err, result, fields) {
+                      if (err) throw err;
+                      res.json({ status: "success" });
+                    });
+                  }
                 })
               } else {
-                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${studentId}"),` 
+                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${studentId}"),`
                 sql = sql.slice(0, -1);
                 con.query(sql, function (err, result, fields) {
                   if (err) throw err;
                   res.json({ status: "success" });
                 });
               }
-            })            
-            sql = sql.slice(0, -1);
-            console.log(sql);
-            con.query(sql, function (err, result, fields) {
-              if (err) throw err;
-              // res.json({ status: "success" });
-            });
+            })
           })
         } else {
           if (studentId === 'all') {
@@ -525,7 +556,7 @@ module.exports = (app) => {
       });
     }
 
-   
+
   });
   app.post("/api/save/smsReport", (req, res) => {
     var smsText = req.body.smsText;
@@ -659,6 +690,33 @@ module.exports = (app) => {
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.json({ status: "success" });
+    });
+  });
+  app.post("/api/school/profile_update", authenticateToken, (req, res) => {
+    var mobile = req.body.mobileNo ? req.body.mobileNo : 0;
+    var email = req.body.email;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var middleName = req.body.middleName;
+    var attachment_link = req.body.fileName;
+    var uploadPath = path.resolve(__dirname, '../../uploads/');
+    if (req.files !== null) {
+      const file = req.files.file
+      file.mv(`${uploadPath}/${file.name}`, err => {
+        if (err) {
+          return res.status(500).send(err)
+        }
+      })
+    }
+    var sql = `Update school_admin 
+    set mobile_number="${mobile}",
+    email_address="${email}",first_name="${firstName}",last_name="${lastName}",middle_name="${middleName}",photo_id="${attachment_link}" 
+    where admin_code="${req.query.student_code}"
+    
+    `
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
     });
   });
 }

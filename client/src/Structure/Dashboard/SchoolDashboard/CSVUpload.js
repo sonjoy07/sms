@@ -10,8 +10,7 @@ export default function CSVUpload() {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData();  
-        console.log(csvFile);      
+        const formData = new FormData();   
         formData.append("file", csvFile);
         formData.append("option", option);
         

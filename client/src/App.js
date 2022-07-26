@@ -115,6 +115,10 @@ import PaidList from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatu
 import CreateSmsLimit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateSmsLimit/CreateSmsLimit";
 import SmsPayment from "./Structure/Dashboard/SchoolDashboard/SmsPayment";
 import TeacherProfilebyId from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfilebyId";
+import SuperAdminProfile from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/SuperAdminProfile";
+import SchoolProfile from "./Structure/Dashboard/SchoolDashboard/SchoolProfile/SchoolProfile";
+import SchoolProfileEdit from "./Structure/Dashboard/SchoolDashboard/SchoolProfile/SchoolProfileEdit";
+import ChangeSchoolPassword from "./Structure/Dashboard/SchoolDashboard/SchoolProfile/ChangePassword";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -426,6 +430,18 @@ function App(props) {
           <Route
             path="/teacherProfileById/:id"
             element={<TeacherProfilebyId user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/school-admin-profile"
+            element={<SchoolProfile user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/schoolprofileedit"
+            element={<SchoolProfileEdit user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/schoolpassword"
+            element={<ChangeSchoolPassword user={[user_code, user_type]} />}
           />        
               
               
