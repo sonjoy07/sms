@@ -1,6 +1,7 @@
 module.exports = (app) => {
 
     const con = require('../models/db')
+    var path = require('path');
     const authenticateToken = require("../middleware/middleware");
     app.post("/api/organization", authenticateToken, (req, res) => {
         var type_name = req.body.type_name;
@@ -137,5 +138,41 @@ module.exports = (app) => {
             res.send(result)
         })
     })
+    app.get("/api/super-admin/profile", authenticateToken, (req, res) => {
+        con.query(
+            `SELECT id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,  super_admin_code,photo_id,email,mobile_no, first_name,last_name,middle_name FROM super_admin where id="${req.query.admin_id}"`,
+            function (err, result, fields) {
+                if (err) throw err;
+                res.send(result);
+            }
+        );
+    });
+    app.post("/api/super-admin/profile_update", authenticateToken, (req, res) => {
+        var mobile = req.body.mobileNo ? req.body.mobileNo : 0;
+        var email = req.body.email;
+        var firstName = req.body.firstName;
+        var lastName = req.body.lastName;
+        var middleName = req.body.middleName;        
+        var attachment_link = req.body.fileName;
+        var uploadPath = path.resolve(__dirname, '../../uploads/');
+        if (req.files !== null) {
+            const file = req.files.file
+            file.mv(`${uploadPath}/${file.name}`, err => {
+              if (err) {
+                return res.status(500).send(err)
+              }
+            })
+          }
+        var sql = `Update super_admin 
+        set mobile_no="${mobile}",
+            email="${email}",first_name="${firstName}",last_name="${lastName}",middle_name="${middleName}",photo_id="${attachment_link}" 
+        where super_admin_code="${req.query.student_code}"
+        
+        `
+        con.query(sql, function (err, result, fields) {
+          if (err) throw err;
+          res.send(result);
+        });
+      });
 
 }

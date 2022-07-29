@@ -119,6 +119,11 @@ import SuperAdminProfile from "./Structure/Dashboard/SuperAdminDashboard/SuperAd
 import SchoolProfile from "./Structure/Dashboard/SchoolDashboard/SchoolProfile/SchoolProfile";
 import SchoolProfileEdit from "./Structure/Dashboard/SchoolDashboard/SchoolProfile/SchoolProfileEdit";
 import ChangeSchoolPassword from "./Structure/Dashboard/SchoolDashboard/SchoolProfile/ChangePassword";
+import ViewerProfile from "./Structure/Dashboard/ViewerDashboard/ViewerProfile/ViewerProfile";
+import ViewerProfileEdit from "./Structure/Dashboard/ViewerDashboard/ViewerProfile/ViewerProfileEdit";
+import ChangeViewerPassword from "./Structure/Dashboard/ViewerDashboard/ViewerProfile/ChangePassword";
+import SuperAdminProfileEdit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/SuperAdminProfileEdit";
+import ChangeSuperPassword from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/ChangeSuperPassword";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -442,6 +447,30 @@ function App(props) {
           <Route
             path="/schoolpassword"
             element={<ChangeSchoolPassword user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/viewer-profile"
+            element={<ViewerProfile user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/viewerprofileedit"
+            element={<ViewerProfileEdit user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/viewerpassword"
+            element={<ChangeViewerPassword user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/super-admin-profile"
+            element={<SuperAdminProfile user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/superadminprofileedit"
+            element={<SuperAdminProfileEdit user={[user_code, user_type]} />}
+          />        
+          <Route
+            path="/superadminpassword"
+            element={<ChangeSuperPassword user={[user_code, user_type]} />}
           />        
               
               

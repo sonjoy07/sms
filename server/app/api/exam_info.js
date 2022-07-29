@@ -26,7 +26,7 @@ module.exports = (app) => {
     });
 
     app.get("/api/exam_name", authenticateToken, (req, res) => {
-        var sql = "select * from exam_name order by id desc";
+        var sql = "select * from exam_name";
         con.query(
             sql,
             function (err, result, fields) {

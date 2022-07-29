@@ -21,7 +21,7 @@ const SuperAdminProfile = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/student/profile?student_id=${user_code}`,
+        `${process.env.REACT_APP_NODE_API}/api/super-admin/profile?admin_id=${user_code}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -59,10 +59,10 @@ const SuperAdminProfile = () => {
               <div class="card-body">
                 <div class="row py-2">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Student Code : </h6>
+                    <h6 class="mb-0">Admin Code : </h6>
                   </div>
                   <div class="col-sm-9 text-secondary">
-                    {student.student_code}
+                    {student.super_admin_code}
                   </div>
                 </div>
 
@@ -89,14 +89,6 @@ const SuperAdminProfile = () => {
                   </div>
                 </div>
 
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Sex : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.gender_id === 1 ? "Male" : "Female"}
-                  </div>
-                </div>
 
                 <div class="row py-2">
                   <div class="col-sm-3">
@@ -106,80 +98,17 @@ const SuperAdminProfile = () => {
                     {student.email}
                   </div>
                 </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Present Address : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.present_address}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Permanent Address : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.permanent_address}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Father Name : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.father_name}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Father Phone No. : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.father_phone_number}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Mother Name : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.mother_name}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Mother Phone No. : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.mother_phone_number}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Date Of Birth : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.dob}
-                  </div>
-                </div>
-                <div class="row py-2">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Blood Group : </h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    {student.blood_group}
-                  </div>
-                </div>
+               
 
                 <div className='' style={{ display: 'flex' }}>
                   <div class="row  p-2">
                     <div class="col-sm-12">
-                      <a class="btn btn-info" href="/studentprofileedit">Edit</a>
+                      <a class="btn btn-info" href="/superadminprofileedit">Edit</a>
                     </div>
                   </div>
                   <div class="row mx-1 p-2">
                     <div class="col-sm-12">
-                      <a class="btn btn-info" href="/studentpassword">Reset Password</a>
+                      <a class="btn btn-info" href="/superadminpassword">Reset Password</a>
                     </div>
                   </div>
                 </div>

@@ -22,7 +22,7 @@ const ViewerHeader = () => {
                                 localStorage.setItem("user_type", "");
                                 navigate("/login");
                             }} class="dropdown-item">Log out</a></li>
-                            {/* <li><a className="dropdown-item" href="/teacherprofile">Profile</a></li> */}
+                            <li><Link className="dropdown-item" to="/viewer-profile">Profile</Link></li>
                             <li><Link className='dropdown-item' to="/viewer-school">Home</Link></li>
 
 

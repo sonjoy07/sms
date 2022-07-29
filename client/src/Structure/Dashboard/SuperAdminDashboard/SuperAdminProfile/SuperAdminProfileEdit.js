@@ -11,15 +11,6 @@ const SuperAdminProfileEdit = () => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [mobileNo, setMobileNo] = useState('')
-  const [sex, setSex] = useState('')
-  const [presentAddress, setPresentAddress] = useState('')
-  const [permanentAddress, setPermanentAddress] = useState('')
-  const [fatherName, setFatherName] = useState('')
-  const [motherName, setMotherName] = useState('')
-  const [fatherMobileNo, setFatherMobileNo] = useState('')
-  const [motherMobileNo, setMotherMobileNo] = useState('')
-  const [dob, setDob] = useState('')
-  const [bloodGroup, setBloodGroup] = useState('')
   const [user_code, setUser_code] = useState(localStorage.getItem("user_code"));
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
   const [student, setStudent] = useState([]);
@@ -29,7 +20,7 @@ const SuperAdminProfileEdit = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/student/profile?student_id=${user_code}`,
+        `${process.env.REACT_APP_NODE_API}/api/super-admin/profile?admin_id=${user_code}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -42,16 +33,7 @@ const SuperAdminProfileEdit = () => {
         setLastName(studentData.last_name)
         setMiddleName(studentData.middle_name)
         setMobileNo(studentData.mobile_no)
-        setEmail(studentData.email)
-        setPresentAddress(studentData.present_address)
-        setPermanentAddress(studentData.permanent_address)
-        setSex(studentData.gender_id)
-        setFatherMobileNo(studentData.father_phone_number)
-        setFatherName(studentData.father_name)
-        setMotherName(studentData.mother_name)
-        setMotherMobileNo(studentData.mother_phone_number)
-        setDob(studentData.dob)
-        setBloodGroup(studentData.blood_group)
+        setEmail(studentData.email)       
         setStudent(response.data);
         setPreview(`${process.env.REACT_APP_NODE_API}/uploads/${studentData.photo_id}`);
       })
@@ -73,15 +55,7 @@ const SuperAdminProfileEdit = () => {
     formData.append("middleName", middleName);
     formData.append("mobileNo", mobileNo);
     formData.append("email", email);
-    formData.append("presentAddress", presentAddress);
-    formData.append("permanentAddress", permanentAddress);
-    formData.append("fatherMobileNo", fatherMobileNo);
-    formData.append("fatherName", fatherName);
-    formData.append("motherMobileNo", motherMobileNo);
-    formData.append("motherName", motherName);
-    formData.append("dob", dob);
-    formData.append("bloodGroup", bloodGroup);
-    fetch(`${process.env.REACT_APP_NODE_API}/api/student/profile_update?student_code=${student[0].student_code}`, {
+    fetch(`${process.env.REACT_APP_NODE_API}/api/super-admin/profile_update?student_code=${student[0].super_admin_code}`, {
       method: "POST",
       headers: {
         authorization: "bearer " + localStorage.getItem("access_token"),
@@ -157,18 +131,7 @@ const SuperAdminProfileEdit = () => {
                     <input onChange={(e) => setLastName(e.target.value)} type="text" class="form-control" value={lastName} />
                   </div>
                 </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Sex</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <select value={sex} onChange={(e) => setSex(e.target.value)} className='form-control'>
-                      <option>Select</option>
-                      <option value={1}>Male</option>
-                      <option value={2}>Female</option>
-                    </select>
-                  </div>
-                </div>
+                
                 <div class="row mb-3">
                   <div class="col-sm-3">
                     <h6 class="mb-0">Email</h6>
@@ -185,70 +148,7 @@ const SuperAdminProfileEdit = () => {
                     <input type="text" onChange={(e) => setMobileNo(e.target.value)} class="form-control" value={mobileNo} />
                   </div>
                 </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Present Address</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setPresentAddress(e.target.value)} class="form-control" value={presentAddress} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Permanent Address</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setPermanentAddress(e.target.value)} class="form-control" value={permanentAddress} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Father Name</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setFatherName(e.target.value)} class="form-control" value={fatherName} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Father Mobile No</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setFatherMobileNo(e.target.value)} class="form-control" value={fatherMobileNo} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Mother Name</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setMotherName(e.target.value)} class="form-control" value={motherName} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Mother Mobile No</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setMotherMobileNo(e.target.value)} class="form-control" value={motherMobileNo} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Date of Birth</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setDob(e.target.value)} class="form-control" value={dob} />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Blood Group</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <input type="text" onChange={(e) => setBloodGroup(e.target.value)} class="form-control" value={bloodGroup} />
-                  </div>
-                </div>
+                
                 <div class="row">
                   <div class="col-sm-3"></div>
                   <div class="col-sm-9 text-secondary">

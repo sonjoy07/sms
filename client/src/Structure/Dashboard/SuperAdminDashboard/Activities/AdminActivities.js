@@ -76,7 +76,7 @@ const AdminActivities = (props) => {
     }
   };
   useEffect(() => {
-    if (school_type !== "") {
+    if (school_type !== "" && school_type !== 'all') {
       axios
         .get(`${process.env.REACT_APP_NODE_API}/api/school_info_type_wise?type_id=${school_type}`, {
           headers: {
@@ -86,6 +86,8 @@ const AdminActivities = (props) => {
         .then((response) => {
           setSchools(response.data);
         });
+    }else{
+      setSchools([]);
     }
   }, [school_type])
   //get teacher info
@@ -197,28 +199,32 @@ const AdminActivities = (props) => {
       .then((response) => {
         setSearchClses(response.data);
       });
-      if (school_type !== "") {
-        axios
-          .get(`${process.env.REACT_APP_NODE_API}/api/school_info_type_wise?type_id=${school_type_search}`, {
-            headers: {
-              authorization: "bearer " + localStorage.getItem("access_token"),
-            },
-          })
-          .then((response) => {
-            setSearchSchools(response.data);
-          });
-      }
+    if (school_type_search !== "") {
+      axios
+        .get(`${process.env.REACT_APP_NODE_API}/api/school_info_type_wise?type_id=${school_type_search}`, {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          setSearchSchools(response.data);
+        });
+    }
   }, [school_type_search]);
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${school_type}`, {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .then((response) => {
-        setClses(response.data);
-      });
+    if (school_type !== 'all') {
+      axios
+        .get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${school_type}`, {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          setClses(response.data);
+        });
+    }else{      
+      setClses([]);
+    }
   }, [school_type]);
   useEffect(() => {
     axios
@@ -330,6 +336,7 @@ const AdminActivities = (props) => {
     formData.append("file", attachment);
     formData.append("fileName", attachment.name);
     formData.append("school_info_id", school_info_id);
+    formData.append("school_type", school_type);
     formData.append("class_id", class_id);
     formData.append("section_id", section_id);
     formData.append("subject_id", subject_id);
@@ -366,6 +373,7 @@ const AdminActivities = (props) => {
           setSession_id("");
           setIssue_date("");
           setDue_date("");
+          setSchool_teacher_id("");
           setTopic("");
           setDetails("");
         })
@@ -548,6 +556,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select School Type</option>
+                        <option value="all">All</option>
                         {schoolTypes.map((classJSON) => {
                           return (
                             <option value={classJSON.id}>
@@ -599,6 +608,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Class</option>
+                        <option value="all">All</option>
                         {clses.map((classJSON) => {
                           return (
                             <option value={classJSON.id}>
@@ -623,6 +633,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Section</option>
+                        <option value="all">All</option>
                         {sections.map((sectionJSON) => {
                           return (
                             <option value={sectionJSON.id}>
@@ -647,6 +658,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Session</option>
+                        <option value="all">All</option>
                         {sessions.map((sessionJSON) => {
                           return (
                             <option value={sessionJSON.id}>
@@ -671,6 +683,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Subject</option>
+                        <option value="all">All</option>
                         {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
@@ -695,6 +708,7 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Teacher</option>
+                        <option value="all">All</option>
                         {teachers.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
@@ -774,8 +788,8 @@ const AdminActivities = (props) => {
               <div className="card card-dark collapsed-card">
                 <div className='card-body' >
                   <div className='row'>
-                    
-                  <div class={"col-sm-2 mx-auto p-2"}>
+
+                    <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
                           School Type :{" "}
