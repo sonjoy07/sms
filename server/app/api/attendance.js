@@ -26,10 +26,43 @@ module.exports = (app) => {
       AND subject_registration.student_id = student.id) OR EXISTS ( SELECT * from subject_4th_registration where subject_4th_registration.subject_4th_id = "${req.query.subject_id}" 
       AND subject_4th_registration.student_id = student.id) 
    `;
-   console.log(sql);
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
+    });
+  });
+  app.get("/api/attendanceReport/student", (req, res) => {
+    let condition = req.query.start_date !== '' && req.query.start_date !== undefined ? ` and date between "${req.query.start_date}" and "${req.query.end_date}"` : ''
+    var sql = `SELECT attendance.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, class_roll_no, student_code,date, mobile_no,class.class_name,section.section_default_name,attendance 
+    FROM attendance 
+        left JOIN student_present_status on  student_present_status.id = attendance.student_present_status_id
+        join student on student_present_status.student_id=student.id
+        join class on student_present_status.class_id=class.id
+       join section on student_present_status.class_id=section.id
+    where student_present_status.school_info_id = "${req.query.school_info_id}" ${condition} order by attendance.id desc
+   `;
+    console.log(sql);
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/attendance/statusChange", (req, res) => {
+    var sql = `SELECT * from attendance where id= "${req.query.id}"`;
+    console.log(sql);
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      console.log(result);
+      if (result[0].attendance === 1) {
+        sql = `Update attendance set attendance = 0 where id= ${req.query.id}`
+      } else {
+        sql = `Update attendance set attendance = 1 where id= ${req.query.id}`
+      }
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.send(result);
+      });
     });
   });
   app.post("/api/attendance/student", authenticateToken, (req, res) => {
@@ -102,9 +135,9 @@ module.exports = (app) => {
     "/api/attendance/summary/section/today",
     authenticateToken,
     (req, res) => {
-      let condition = req.query.section_id !== undefined && req.query.section_id !== ""?` and student_present_status.section_id= "${req.query.section_id}"`:``
-      condition += req.query.date !== undefined && req.query.date !== ""?` and attendance.date= "${req.query.date}"`:``
-      condition += req.query.class_id !== undefined && req.query.class_id !== ""?` and class.id= "${req.query.class_id}"`:``
+      let condition = req.query.section_id !== undefined && req.query.section_id !== "" ? ` and student_present_status.section_id= "${req.query.section_id}"` : ``
+      condition += req.query.date !== undefined && req.query.date !== "" ? ` and attendance.date= "${req.query.date}"` : ``
+      condition += req.query.class_id !== undefined && req.query.class_id !== "" ? ` and class.id= "${req.query.class_id}"` : ``
       var sql = `SELECT
     subject.subject_name, routine.subject_id, period.period_code, routine.start_time, attendance.time, teacher.id as t_id, teacher.initial,routine.id as r_id,
     COUNT(*) as 'all', 
@@ -164,9 +197,9 @@ module.exports = (app) => {
     }
   );
   app.get("/api/attendance/section/absent", authenticateToken, (req, res) => {
-    let condition = req.query.section_id !== undefined && req.query.section_id !== ""?` and student_present_status.section_id= "${req.query.section_id}"`:``
-    condition += req.query.routine_id !== undefined && req.query.routine_id !== ""?` and attendance.routine_id= "${req.query.routine_id}"`:``
-    condition += req.query.date !== undefined && req.query.date !== ""?` and attendance.date= "${req.query.date}"`:``
+    let condition = req.query.section_id !== undefined && req.query.section_id !== "" ? ` and student_present_status.section_id= "${req.query.section_id}"` : ``
+    condition += req.query.routine_id !== undefined && req.query.routine_id !== "" ? ` and attendance.routine_id= "${req.query.routine_id}"` : ``
+    condition += req.query.date !== undefined && req.query.date !== "" ? ` and attendance.date= "${req.query.date}"` : ``
     var sql = `SELECT
     CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, class.class_name, section.section_default_name, student.mobile_no, attendance.attendance
     FROM

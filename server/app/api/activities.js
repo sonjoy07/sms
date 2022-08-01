@@ -107,85 +107,97 @@ module.exports = (app) => {
       } else {
         const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
         if (school_type === 'all') {
+          console.log('all type ok')
           con.query(`select * from school_type`, function (err, result, fields) {
             if (err) throw err;
             result.map(type => {
               if (school_info_id === 'all') {
+                console.log('all school ok')
                 let sql = `select * from school_info`
                 con.query(sql, function (err, result, fields) {
                   if (err) throw err;
                   result.map(sch => {
                     if (class_id === 'all') {
+                      console.log('all class ok')
                       con.query(`select * from class where school_type_id = ${type.id}`, function (err, result, fields) {
                         result.map(cls => {
-    
+
                           if (err) throw err;
                           if (section_id === 'all') {
+                            console.log('all section ok')
                             //all section if
                             con.query(`select * from section`, function (err, result, fields) {
                               if (err) throw err;
                               result.map(sec => {
                                 if (session_id === 'all') {
+                                  console.log('all session ok')
                                   //all session
                                   con.query(`select * from session`, function (err, result, fields) {
                                     if (err) throw err;
                                     result.map(ses => {
                                       if (subject_id === 'all') {
+                                        console.log('all subject ok')
                                         con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${cls.id}`, function (err, result, fields) {
                                           if (err) throw err;
                                           result.map(sub => {
                                             if (school_teacher_id === 'all') {
+                                              console.log('all teacher ok')
                                               con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
                                                 if (err) throw err;
-                                                let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-                                                result.map(tec => {
-                                                  sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-                                                })
-                                                sql = sql.slice(0, -1);
-                                                con.query(sql, function (err, result, fields) {
-                                                  if (err) throw err;
-                                                });
+                                                if (result.length > 0) {
+                                                  let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
+                                                  result.map(tec => {
+                                                    sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
+                                                  })
+                                                  sql = sql.slice(0, -1);
+                                                  console.log('query', sql);
+                                                  con.query(sql, function (err, result, fields) {
+                                                    if (err) throw err;
+                                                  });
+                                                }
                                               })
                                             } else {
                                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-                
+
                                               sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                               sql = sql.slice(0, -1);
                                               con.query(sql, function (err, result, fields) {
                                                 if (err) throw err;
                                               });
-                
+
                                             }
                                           })
-                
+
                                         })
                                       } else {
                                         if (school_teacher_id === 'all') {
                                           con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
                                             if (err) throw err;
-                                            let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-                                            result.map(tec => {
-                                              sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-                                            })
-                                            sql = sql.slice(0, -1);
-                                            con.query(sql, function (err, result, fields) {
-                                              if (err) throw err;
-                                            });
+                                            if (result.length > 0) {
+                                              let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
+                                              result.map(tec => {
+                                                sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
+                                              })
+                                              sql = sql.slice(0, -1);
+                                              con.query(sql, function (err, result, fields) {
+                                                if (err) throw err;
+                                              });
+                                            }
                                           })
                                         } else {
                                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-                
+
                                           sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                           sql = sql.slice(0, -1);
                                           con.query(sql, function (err, result, fields) {
                                             if (err) throw err;
                                           });
-                
+
                                         }
                                       }
                                     })
                                   })
-        
+
                                 } else {
                                   //all session else
                                   con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${cls.id}`, function (err, result, fields) {
@@ -203,7 +215,7 @@ module.exports = (app) => {
                                         });
                                       })
                                     })
-        
+
                                   })
                                 }
                               })
@@ -232,16 +244,16 @@ module.exports = (app) => {
                                           })
                                         } else {
                                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                           sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                           sql = sql.slice(0, -1);
                                           con.query(sql, function (err, result, fields) {
                                             if (err) throw err;
                                           });
-            
+
                                         }
                                       })
-            
+
                                     })
                                   } else {
                                     if (school_teacher_id === 'all') {
@@ -258,18 +270,18 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                       sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-            
+
                                     }
                                   }
                                 })
                               })
-        
+
                             } else {
                               if (subject_id === 'all') {
                                 con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${cls.id}`, function (err, result, fields) {
@@ -289,16 +301,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -315,18 +327,18 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
-        
+
                             }
-        
+
                           }
                         })
                       })
@@ -359,16 +371,16 @@ module.exports = (app) => {
                                           })
                                         } else {
                                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                           sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                           sql = sql.slice(0, -1);
                                           con.query(sql, function (err, result, fields) {
                                             if (err) throw err;
                                           });
-            
+
                                         }
                                       })
-            
+
                                     })
                                   } else {
                                     if (school_teacher_id === 'all') {
@@ -385,18 +397,18 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                       sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-            
+
                                     }
                                   }
                                 })
                               })
-    
+
                             } else {
                               //all session else
                               con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${class_id}`, function (err, result, fields) {
@@ -414,7 +426,7 @@ module.exports = (app) => {
                                     });
                                   })
                                 })
-    
+
                               })
                             }
                           })
@@ -443,16 +455,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -469,18 +481,18 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
                             })
                           })
-    
+
                         } else {
                           if (subject_id === 'all') {
                             con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${class_id}`, function (err, result, fields) {
@@ -500,16 +512,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -526,18 +538,18 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
-    
+
                         }
-    
+
                       }
                     }
                   })
@@ -546,7 +558,7 @@ module.exports = (app) => {
                 if (class_id === 'all') {
                   con.query(`select * from class where school_type_id = ${type.id}`, function (err, result, fields) {
                     result.map(cls => {
-    
+
                       if (err) throw err;
                       if (section_id === 'all') {
                         //all section if
@@ -576,16 +588,16 @@ module.exports = (app) => {
                                           })
                                         } else {
                                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                           sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                           sql = sql.slice(0, -1);
                                           con.query(sql, function (err, result, fields) {
                                             if (err) throw err;
                                           });
-            
+
                                         }
                                       })
-            
+
                                     })
                                   } else {
                                     if (school_teacher_id === 'all') {
@@ -602,18 +614,18 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                       sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-            
+
                                     }
                                   }
                                 })
                               })
-    
+
                             } else {
                               //all session else
                               con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${cls.id}`, function (err, result, fields) {
@@ -631,7 +643,7 @@ module.exports = (app) => {
                                     });
                                   })
                                 })
-    
+
                               })
                             }
                           })
@@ -660,16 +672,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -686,18 +698,18 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
                             })
                           })
-    
+
                         } else {
                           if (subject_id === 'all') {
                             con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${cls.id}`, function (err, result, fields) {
@@ -717,16 +729,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -743,18 +755,18 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
-    
+
                         }
-    
+
                       }
                     })
                   })
@@ -787,16 +799,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -813,18 +825,18 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
                             })
                           })
-    
+
                         } else {
                           //all session else
                           con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${class_id}`, function (err, result, fields) {
@@ -842,7 +854,7 @@ module.exports = (app) => {
                                 });
                               })
                             })
-    
+
                           })
                         }
                       })
@@ -871,16 +883,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -897,18 +909,18 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
                         })
                       })
-    
+
                     } else {
                       if (subject_id === 'all') {
                         con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${school_info_id}`, function (err, result, fields) {
@@ -928,16 +940,16 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           })
-    
+
                         })
                       } else {
                         if (school_teacher_id === 'all') {
@@ -955,18 +967,18 @@ module.exports = (app) => {
                           })
                         } else {
                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                           sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                           sql = sql.slice(0, -1);
                           con.query(sql, function (err, result, fields) {
                             if (err) throw err;
                           });
-    
+
                         }
                       }
-    
+
                     }
-    
+
                   }
                 }
               }
@@ -1012,16 +1024,16 @@ module.exports = (app) => {
                                           })
                                         } else {
                                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                           sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                           sql = sql.slice(0, -1);
                                           con.query(sql, function (err, result, fields) {
                                             if (err) throw err;
                                           });
-            
+
                                         }
                                       })
-            
+
                                     })
                                   } else {
                                     if (school_teacher_id === 'all') {
@@ -1038,18 +1050,18 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-            
+
                                       sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-            
+
                                     }
                                   }
                                 })
                               })
-    
+
                             } else {
                               //all session else
                               con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
@@ -1067,7 +1079,7 @@ module.exports = (app) => {
                                     });
                                   })
                                 })
-    
+
                               })
                             }
                           })
@@ -1096,16 +1108,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -1122,18 +1134,18 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
                             })
                           })
-    
+
                         } else {
                           if (subject_id === 'all') {
                             con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
@@ -1153,16 +1165,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -1179,18 +1191,18 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
-    
+
                         }
-    
+
                       }
                     })
                   })
@@ -1223,16 +1235,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -1249,13 +1261,13 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
                             })
@@ -1307,16 +1319,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -1333,13 +1345,13 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
                         })
@@ -1440,16 +1452,16 @@ module.exports = (app) => {
                                       })
                                     } else {
                                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                       sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                       sql = sql.slice(0, -1);
                                       con.query(sql, function (err, result, fields) {
                                         if (err) throw err;
                                       });
-        
+
                                     }
                                   })
-        
+
                                 })
                               } else {
                                 if (school_teacher_id === 'all') {
@@ -1466,13 +1478,13 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-        
+
                                   sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-        
+
                                 }
                               }
                             })
@@ -1524,16 +1536,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -1550,13 +1562,13 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
                         })
@@ -1651,16 +1663,16 @@ module.exports = (app) => {
                                   })
                                 } else {
                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                                   sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                                   sql = sql.slice(0, -1);
                                   con.query(sql, function (err, result, fields) {
                                     if (err) throw err;
                                   });
-    
+
                                 }
                               })
-    
+
                             })
                           } else {
                             if (school_teacher_id === 'all') {
@@ -1677,13 +1689,13 @@ module.exports = (app) => {
                               })
                             } else {
                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-    
+
                               sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
                               sql = sql.slice(0, -1);
                               con.query(sql, function (err, result, fields) {
                                 if (err) throw err;
                               });
-    
+
                             }
                           }
                         })

@@ -124,6 +124,7 @@ import ViewerProfileEdit from "./Structure/Dashboard/ViewerDashboard/ViewerProfi
 import ChangeViewerPassword from "./Structure/Dashboard/ViewerDashboard/ViewerProfile/ChangePassword";
 import SuperAdminProfileEdit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/SuperAdminProfileEdit";
 import ChangeSuperPassword from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/ChangeSuperPassword";
+import TeacherAttendanceReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Attendance/TeacherAttendanceReport";
 
 function App(props) {
   const [user_code, setUser_code] = useState("");
@@ -231,6 +232,10 @@ function App(props) {
           <Route
             path="/teacherattendance"
             element={<TeacherAttendance user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/teacherattendancereport"
+            element={<TeacherAttendanceReport user={[user_code, user_type]} />}
           />
           <Route
             path="/studentviewattendance"

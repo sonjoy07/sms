@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./TeacherDashboard.css";
 import attendance from "../../images/icons/attendance.png";
@@ -386,6 +386,40 @@ const TeacherDashboard = (props) => {
               </div>
             </div>
           </a>
+          <Link
+            style={{ textDecoration: "none" }}
+            to={"/teacherattendancereport"}
+            onClick={() => {
+              // navigate("/teacherattendancereport");
+            }}
+            className="col-sm-6 my-4 col1"
+          >
+            <div className="card  bg-light shadow-sm">
+              <div className="card-body py-4">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className=""
+                >
+                  <div className="px-3">
+                    <img
+                      style={{ width: "64px", height: "64px" }}
+                      src={attendance}
+                      alt=""
+                    />
+                  </div>
+
+                  <div className="px-3">
+                    <h4 className="card-title">Attendance Report</h4>
+                    <p className="card-text">Make All Students Attendance Report</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
 

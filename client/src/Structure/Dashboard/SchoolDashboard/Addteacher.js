@@ -150,8 +150,23 @@ const Addteacher = () => {
             toast("Please fill up the required field!!")
         }
     }
+    const addTeacher = ()=>{
+        setteacher_id('')
+        setFname('')
+        setMiddle('')
+        setLLname('')
+        setMobile('')
+        setDob('')
+        setBlood('')
+        setDesignation('')
+        setsubject('')
+        setInitial('')
+        setMpo('')
+        setIndex('')
+        settitle('')
+        setId('')
+    }
     const editRoutine = (info) => {
-        debugger;
         setteacher_id(info.teacher_code)
         setFname(info.first_name)
         setMiddle(info.middle_name)
@@ -192,7 +207,7 @@ const Addteacher = () => {
                                         <h3 style={{ color: '#008B8B', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2"> Add Teacher</h3>
                                     </div>
                                 </div>
-                                <div className='float-right'>
+                                <div className='float-right' onClick={addTeacher}>
                                     <i className='fa fa-plus'></i>
                                 </div>
                             </div>
