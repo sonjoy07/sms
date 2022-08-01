@@ -437,8 +437,6 @@ module.exports = (app) => {
 
     var sql
     if (id === '') {
-
-
       if (classId === 'all') {
         con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
           if (err) throw err;
@@ -453,9 +451,9 @@ module.exports = (app) => {
 
 
                       if (result.length > 0) {
-                        sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+                        sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allstudent,allsection,allclass) VALUES `
                         result.map(stu => {
-                          sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${stu.id}"),`
+                          sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${stu.id}",1,1,1),`
                         })
                         sql = sql.slice(0, -1);
                         console.log(sql);
@@ -466,12 +464,12 @@ module.exports = (app) => {
                       }
                     })
                   } else {
-                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
-                    sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${studentId}"),`
+                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allsection,allclass) VALUES `
+                    sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${studentId}",1,1),`
                     sql = sql.slice(0, -1);
                     con.query(sql, function (err, result, fields) {
                       if (err) throw err;
-                      res.json({ status: "success" });
+                      // res.json({ status: "success" });
                     });
                   }
                 })
@@ -481,15 +479,15 @@ module.exports = (app) => {
                 con.query(`select * from student_info where school_info_id = ${school_type} and class_id = ${cls.id} and section_id = ${sectionId}`, function (err, result, fields) {
                   if (err) throw err;
                   if (result.length > 0) {
-                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allstudent,allclass) VALUES `
                     result.map(stu => {
-                      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sectionId}","${stu.id}"),`
+                      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sectionId}","${stu.id}",1,1),`
                     })
                     sql = sql.slice(0, -1);
                     console.log(sql);
                     con.query(sql, function (err, result, fields) {
                       if (err) throw err;
-                      res.json({ status: "success" });
+                      // res.json({ status: "success" });
                     });
                   } else {
                     res.json({ status: "success" });
@@ -497,11 +495,11 @@ module.exports = (app) => {
                 })
               } else {
 
-                sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
-                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sectionId}","${studentId}")`
+                sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allclass) VALUES `
+                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sectionId}","${studentId}",1)`
                 con.query(sql, function (err, result, fields) {
                   if (err) throw err;
-                  res.json({ status: "success" });
+                  // res.json({ status: "success" });
                 });
               }
             }
@@ -517,9 +515,9 @@ module.exports = (app) => {
                 con.query(`select * from student_info where school_info_id = ${school_id} and class_id = ${classId} and section_id = ${sec.id}`, function (err, result, fields) {
                   if (err) throw err;
                   if (result.length > 0) {
-                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allstudent,allsection) VALUES `
                     result.map(stu => {
-                      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${stu.id}"),`
+                      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${stu.id}",1,1),`
                     })
 
                     sql = sql.slice(0, -1);
@@ -530,12 +528,12 @@ module.exports = (app) => {
                   }
                 })
               } else {
-                sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
-                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${studentId}"),`
+                sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allsection) VALUES `
+                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sec.id}","${studentId}",1),`
                 sql = sql.slice(0, -1);
                 con.query(sql, function (err, result, fields) {
                   if (err) throw err;
-                  res.json({ status: "success" });
+                  // res.json({ status: "success" });
                 });
               }
             })
@@ -546,14 +544,14 @@ module.exports = (app) => {
           if (studentId === 'all') {
             con.query(`select * from student_info where school_info_id = ${school_id} and class_id = ${classId} and section_id = ${sectionId}`, function (err, result, fields) {
               if (err) throw err;
-              sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id) VALUES `
+              sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allstudent) VALUES `
               result.map(stu => {
-                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sectionId}","${stu.id}"),`
+                sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sectionId}","${stu.id}",1),`
               })
               sql = sql.slice(0, -1);
               con.query(sql, function (err, result, fields) {
                 if (err) throw err;
-                res.json({ status: "success" });
+                // res.json({ status: "success" });
               });
             })
           } else {
@@ -562,19 +560,13 @@ module.exports = (app) => {
             sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}","${sectionId}","${studentId}")`
             con.query(sql, function (err, result, fields) {
               if (err) throw err;
-              res.json({ status: "success" });
+              // res.json({ status: "success" });
             });
           }
         }
       }
-      // ("${sector_code}","${sector_name}","${lastDate}","${amount}","${classId}","${school_id}")`;
-      // sectionId.map(sec => {
-      //   classId.map(cla => {
-      //     studentId.map(stu => {
-      //       sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cla.id}","${school_id}","${sec.id}","${stu.student_id}"),`
-      //     })
-      //   })
-      // })
+
+      res.json({ status: "success" });
     } else {
       sql = `update sector set sector_code = "${sector_code}",sector_name = "${sector_name}",last_date = "${lastDate}",amount = "${amount}",class_id = "${classId}" where id = ${id}`
       con.query(sql, function (err, result, fields) {
@@ -639,7 +631,7 @@ module.exports = (app) => {
   app.get("/api/sector/all", (req, res) => {
     var sql
     // if (id === '') {
-    sql = `select * from sector  where school_id = ${req.query.school_id} order by id desc`;
+    sql = `select * from sector  where school_id = ${req.query.school_id} group by sector_code order by id desc`;
 
 
     con.query(sql, function (err, result, fields) {

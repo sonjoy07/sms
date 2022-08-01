@@ -34,12 +34,14 @@ module.exports = (app) => {
   });
   app.get("/api/attendanceReport/student", (req, res) => {
     let condition = req.query.start_date !== '' && req.query.start_date !== undefined ? ` and date between "${req.query.start_date}" and "${req.query.end_date}"` : ''
-    var sql = `SELECT attendance.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, class_roll_no, student_code,date, mobile_no,class.class_name,section.section_default_name,attendance 
+    condition += req.query.section_id !== '' && req.query.section_id !== undefined ? ` and student_present_status.section_id ="${req.query.section_id}"` : ''
+    condition += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and student_present_status.class_id ="${req.query.class_id}"` : ''
+    var sql = `SELECT attendance.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, class_roll_no, student_code,date, mobile_no,class.class_name,section.section_default_name,attendance,time 
     FROM attendance 
         left JOIN student_present_status on  student_present_status.id = attendance.student_present_status_id
-        join student on student_present_status.student_id=student.id
-        join class on student_present_status.class_id=class.id
-       join section on student_present_status.class_id=section.id
+       left join student on student_present_status.student_id=student.id
+        left join class on student_present_status.class_id=class.id
+       left join section on student_present_status.section_id=section.id
     where student_present_status.school_info_id = "${req.query.school_info_id}" ${condition} order by attendance.id desc
    `;
     console.log(sql);

@@ -224,8 +224,8 @@ const Payment = () => {
                 let cls = classes.find(resc=>resc.id === res.class_id)
                 return <tr style={{ textAlign: 'center' }}>
                   <td>{res.sector_code}</td>
-                  <td>{res.sector_name}</td>
-                  <td>{cls?.class_name}</td>
+                  <td>{res.allsection===1?"All":res.sector_name}</td>
+                  <td>{res.allclass===1?"All":cls?.class_name}</td>
                   <td>{res.amount}</td>
                   <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
                   <td><div className='.d-flex'>

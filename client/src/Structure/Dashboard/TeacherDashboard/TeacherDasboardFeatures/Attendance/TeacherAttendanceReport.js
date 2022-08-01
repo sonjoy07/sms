@@ -24,7 +24,11 @@ const TeacherAttendanceReport = (props) => {
     const [search_issue_date, setSearch_Issue_date] = useState("");
     const [search_due_date, setSearch_Due_date] = useState("");
     const [notice, setNotice] = useState([]);
+    const [clses, setClses] = useState([]);
+    const [sections, setSections] = useState([]);
     const [reset, setReset] = useState(0);
+    const [class_id, setClass_id] = useState('');
+    const [section_id, setSection_id] = useState('');
     const checkLoggedIn = () => {
         if (user_type != 2) {
             navigate("/login");
@@ -46,12 +50,38 @@ const TeacherAttendanceReport = (props) => {
             .then((response) => {
                 setNotice(response.data);
             });
+        axios
+            .get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${localStorage.getItem("school_type")}`, {
+                headers: {
+                    authorization: "bearer " + localStorage.getItem("access_token"),
+                },
+            })
+            .then((response) => {
+                setClses(response.data);
+            });
+        axios
+            .get(
+                `${process.env.REACT_APP_NODE_API}/api/section/all`,
+                {
+                    headers: {
+                        authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+                }
+            )
+            .then((response) => {
+                setSections(response.data);
+            });
     }, [reset]);
     //get homework
-
+    let handleClassChange = (e) => {
+        setClass_id(e.target.value);
+    };
+    let handleSectionChange = (e) => {
+        setSection_id(e.target.value);
+      };
     const handleSearch = () => {
         axios
-            .get(`${process.env.REACT_APP_NODE_API}/api/attendanceReport/student?school_info_id=${localStorage.getItem("school_id")}&&start_date=${search_issue_date}&&end_date=${search_due_date}`, {
+            .get(`${process.env.REACT_APP_NODE_API}/api/attendanceReport/student?school_info_id=${localStorage.getItem("school_id")}&&start_date=${search_issue_date}&&end_date=${search_due_date}&&section_id=${section_id}&&class_id=${class_id}`, {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
                 },
@@ -97,6 +127,54 @@ const TeacherAttendanceReport = (props) => {
                         <div class={"col-sm-4 p-2 mx-auto"}>
                             <div class="form-group">
                                 <label className="pb-2" for="exampleInputEmail1">
+                                    Class :{" "}
+                                </label>
+                                <select
+                                    style={{ border: "1px solid blue" }}
+                                    className="form-control"
+                                    value={class_id}
+                                    onChange={handleClassChange}
+                                    id="class"
+                                    name="class"
+                                >
+                                    <option value="">Select</option>
+                                    {clses.map((classJSON) => {
+                                        return (
+                                            <option value={classJSON.id}>
+                                                {classJSON.class_name}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+                        <div class={"col-sm-4 p-2 mx-auto"}>
+                            <div class="form-group">
+                                <label className="pb-2" for="exampleInputEmail1">
+                                    Section :{" "}
+                                </label>
+                                <select
+                                    style={{ border: "1px solid blue" }}
+                                    className="form-control"
+                                    value={section_id}
+                                    onChange={handleSectionChange}
+                                    id="class"
+                                    name="class"
+                                >
+                                    <option value="">Select</option>
+                                    {sections.map((sectionJSON) => {
+                                        return (
+                                            <option value={sectionJSON.id}>
+                                                {sectionJSON.section_default_name}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+                        <div class={"col-sm-4 p-2 mx-auto"}>
+                            <div class="form-group">
+                                <label className="pb-2" for="exampleInputEmail1">
                                     Start Date :{" "}
                                 </label>
                                 <input
@@ -136,6 +214,7 @@ const TeacherAttendanceReport = (props) => {
                                 <th scope="col">Section</th>
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Date</th>
+                                <th scope="col">Class Time</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -157,7 +236,11 @@ const TeacherAttendanceReport = (props) => {
                                             {moment(noticeJSON.date).format('DD-MM-YYYY')}
                                         </td>
                                         <td style={{ color: "blue" }}>
-                                            {noticeJSON.attendance}
+                                            {moment(noticeJSON.time, "HH:mm:ss").format("hh:mm A")
+                                            }
+                                        </td>
+                                        <td style={{ color: "blue" }}>
+                                            {noticeJSON.attendance === 1 ? 'Present' : 'Absent'}
                                         </td>
                                         <td style={{ color: "blue" }}>
                                             <button className="btn btn-primary mt-1" onClick={() => changeStatus(noticeJSON.id)}>Change Attendance</button>

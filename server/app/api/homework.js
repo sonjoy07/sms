@@ -252,7 +252,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/homework/teacher/submitlist", authenticateToken, (req, res) => {
-    var sql = `select student.student_code, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, home_work_submission.submission_time, home_work_submission.attachment_link 
+    var sql = `select student.student_code, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, home_work_submission.submission_time, home_work_submission.attachment_link,marks,home_work_submission.id 
     from home_work_submission 
     join student_present_status on home_work_submission.student_present_status_id=student_present_status.id
     join student on student_present_status.student_id=student.id
@@ -262,4 +262,11 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.post('/api/homework_mark/update', authenticateToken, (req, res) => {
+    let sql= `update home_work_submission set marks="${req.body.updateData}" where id = ${req.body.index}`
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  })
 };
