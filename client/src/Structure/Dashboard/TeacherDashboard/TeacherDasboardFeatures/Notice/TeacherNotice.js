@@ -632,10 +632,11 @@ const TeacherNotice = (props) => {
                       {noticeJSON.notice_description}
                     </td>
 
-                    <td style={{ color: "blue" }}>{noticeJSON.class_name ? noticeJSON.class_name : 'All'}</td>
+                    <td style={{ color: "blue" }}>{noticeJSON.all_class === 0 ? noticeJSON.class_name : 'All'}</td>
                     <td style={{ color: "blue" }}>
-                      {noticeJSON.section_local_name ? noticeJSON.section_local_name : 'All'}
+                      {noticeJSON.all_section === 0 ? noticeJSON.section_local_name : 'All'}
                     </td>
+                    
 
                     <td>
                       <div className=".d-flex">

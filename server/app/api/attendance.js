@@ -1,3 +1,4 @@
+const moment = require('moment')
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
@@ -33,7 +34,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/attendanceReport/student", (req, res) => {
-    let condition = req.query.start_date !== '' && req.query.start_date !== undefined ? ` and date between "${req.query.start_date}" and "${req.query.end_date}"` : ''
+    let condition = req.query.start_date !== '' && req.query.start_date !== undefined ? ` and date between "${moment(req.query.start_date).format('YYYY-MM-DD')}" and "${moment(req.query.end_date).format('YYYY-MM-DD')}"` : ''
     condition += req.query.section_id !== '' && req.query.section_id !== undefined ? ` and student_present_status.section_id ="${req.query.section_id}"` : ''
     condition += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and student_present_status.class_id ="${req.query.class_id}"` : ''
     var sql = `SELECT attendance.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, class_roll_no, student_code,date, mobile_no,class.class_name,section.section_default_name,attendance,time 

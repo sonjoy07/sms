@@ -291,9 +291,14 @@ module.exports = (app) => {
         csvDataR.shift();
         csvDataR.map(res => {
           if (option === 'student') {
-            let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id) values ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}","${res[16]}","${res[17]}")`
+            let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position) values ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}","${res[16]}","${res[17]}","${res[18]}")`
             con.query(sql, (err, result, fields) => {
               if (err) throw err
+              sql = `insert into student_present_status (school_info_id,session_id,shift_id,student_id,class_id,section_id,class_roll_no) values ("${res[17]}","${res[19]}","${res[20]}","${result.insertId}","${res[21]}","${res[22]}",0)`
+              con.query(sql, (err, result, fields) => {
+                if (err) throw err
+              })
+
             })
             let sql2 = `insert into users (user_type_id,user_code,password,status) values(1,"${res[0]}","12345",1)`
             con.query(sql2, (err, result, fields) => {

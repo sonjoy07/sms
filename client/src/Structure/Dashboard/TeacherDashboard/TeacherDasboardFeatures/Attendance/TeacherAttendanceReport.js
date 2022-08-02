@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import profile from '../../../../images/profile/profile.png';
-import { ToastContainer, toast } from 'react-toastify';
+import DatePicker from "react-datepicker";
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TeacherHeader from "../../TeacherHeader/TeacherHeader";
 
@@ -92,10 +92,10 @@ const TeacherAttendanceReport = (props) => {
     };
 
     let handleIssueDateSearchChange = (e) => {
-        setSearch_Issue_date(e.target.value);
+        setSearch_Issue_date(e);
     };
     let handleDueDateSearchChange = (e) => {
-        setSearch_Due_date(e.target.value);
+        setSearch_Due_date(e);
     };
 
     const changeStatus = async (id) => {
@@ -177,13 +177,16 @@ const TeacherAttendanceReport = (props) => {
                                 <label className="pb-2" for="exampleInputEmail1">
                                     Start Date :{" "}
                                 </label>
-                                <input
+                                {/* <input
                                     style={{ border: "1px solid blue" }}
                                     type="date"
                                     class="form-control"
                                     value={search_issue_date}
+                                    pattern="\d{4}-\d{2}-\d{2}"
                                     onChange={handleIssueDateSearchChange}
-                                />
+                                /> */}
+                                <DatePicker selected={search_issue_date} 
+                                    className="form-control" onChange={(date) => handleIssueDateSearchChange(date)} dateFormat="dd/MM/yyyy" placeholderText="dd/mm/yyyy"/>
                             </div>
                         </div>
                         <div class={"col-sm-4 p-2 mx-auto"}>
@@ -191,13 +194,15 @@ const TeacherAttendanceReport = (props) => {
                                 <label className="pb-2" for="exampleInputEmail1">
                                     End Date :{" "}
                                 </label>
-                                <input
+                                {/* <input
                                     style={{ border: "1px solid blue" }}
                                     type="date"
                                     class="form-control"
                                     value={search_due_date}
                                     onChange={handleDueDateSearchChange}
-                                />
+                                /> */}
+                                 <DatePicker selected={search_due_date} 
+                                    className="form-control" onChange={(date) => handleDueDateSearchChange(date)} dateFormat="dd/MM/yyyy" placeholderText="dd/mm/yyyy"/>
                             </div>
                         </div>
                         <div class={"col-sm-2 p-2"}>
