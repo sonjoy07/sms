@@ -25,6 +25,7 @@ const SchoolAdminRoutine = () => {
   const [period, setPeriod] = useState("");
 
   const [subjects, setSubjects] = useState([]);
+  const [search_subjects, setSearch_Subjects] = useState([]);
   const [subject, setSubject] = useState("");
 
   const [teachers, setTeachers] = useState([]);
@@ -41,14 +42,22 @@ const SchoolAdminRoutine = () => {
 
   const [school_info_id, setSchool_info_id] = useState("");
   const [class_id, setClass_id] = useState("");
+  const [search_class_id, setSearch_Class_id] = useState("");
   const [section_id, setSection_id] = useState("");
+  const [search_section_id, setSearch_Section_id] = useState("");
   const [day_id, setDay_id] = useState("");
+  const [search_day_id, setSearch_Day_id] = useState("");
   const [period_id, setPeriod_id] = useState("");
+  const [search_period_id, setSearch_Period_id] = useState("");
   const [subject_id, setSubject_id] = useState("");
+  const [search_subject_id, setSearch_Subject_id] = useState("");
   const [teacher_id, setTeacher_id] = useState("");
+  const [search_teacher_id, setSearch_Teacher_id] = useState("");
   const [room, setRoom] = useState("");
   const [session_id, setSession_id] = useState("");
+  const [search_session_id, setSearch_Session_id] = useState("");
   const [shift_id, setShift_id] = useState("");
+  const [search_shift_id, setSearch_Shift_id] = useState("");
 
   //search
   const [school_info, setSchool_info] = useState('')
@@ -101,7 +110,6 @@ const SchoolAdminRoutine = () => {
       .then((response) => {
         setSchools(response.data);
       });
-    console.log(school_type)
   }, []);
   useEffect(() => {
     axios
@@ -154,6 +162,21 @@ const SchoolAdminRoutine = () => {
         setSubjects(response.data);
       });
   }, [class_id, school_type]);
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/subject?class_id=${search_class_id}&school_type_id=${school_type}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data)
+        setSearch_Subjects(response.data);
+      });
+  }, [search_class_id, school_type]);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}`, {
@@ -212,22 +235,21 @@ const SchoolAdminRoutine = () => {
       });
   }, [school_id]);
 
-  const handleSearch =()=>{
+  const handleSearch = () => {
     axios
-    .get(`${process.env.REACT_APP_NODE_API}/api/routine/school/filter?school_info_id=${school_id}&&day=${searchDay}`, {
-      headers: {
-        authorization: "bearer " + localStorage.getItem("access_token"),
-      },
-    })
-    .then((response) => {
-      setRoutine(response.data);
-    });
+      .get(`${process.env.REACT_APP_NODE_API}/api/routine/school/filter?school_info_id=${school_id}&&day=${searchDay}&&class_id=${search_class_id}&&section_id=${search_section_id}&&teacher_id=${search_teacher_id}&&subject_id=${search_subject_id}&&shift_id=${search_shift_id}&&period_id=${search_period_id}&&session_id=${search_session_id}`, {
+        headers: {
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+      })
+      .then((response) => {
+        setRoutine(response.data);
+      });
   }
 
   let handleClassChange = (e) => {
     setCls(e.target.value);
     setClass_id(e.target.value);
-    console.log(e.target.value)
   };
   let handleSectionChange = (e) => {
     setSection(e.target.value);
@@ -558,7 +580,7 @@ const SchoolAdminRoutine = () => {
                 <div class={"col-sm-4 "}>
                   <div class="form-group">
                     <label className='' for="exampleSelect">End Time : </label>
-                    <input onChange={handleEnd} style={{ border: '1px solid blue' }} class="form-control" id="class" value={end_time} name="class" placeholder='End time'  type={'time'}/>
+                    <input onChange={handleEnd} style={{ border: '1px solid blue' }} class="form-control" id="class" value={end_time} name="class" placeholder='End time' type={'time'} />
                   </div>
                 </div>
 
@@ -582,15 +604,141 @@ const SchoolAdminRoutine = () => {
             <div className="card-header">
               <h3 className="card-title">All Class Routines</h3>
               <div className="row mt-2">
-                <div className="col-sm-4">
-                  <select onChange={(e)=>setSearchDay(e.target.value)} className="form-control">
+                <div className="col-sm-2">
+                  <select onChange={(e) => setSearchDay(e.target.value)} className="form-control">
                     <option value={""}>Select Days</option>
                     {days.map(res => {
                       return <option value={res.id}>{res.day}</option>
                     })}
                   </select>
                 </div>
-                <div className="col-sm-4">
+                <div className="col-sm-2">
+                  <div className="form-group">
+                    <select
+                      className="form-control"
+                      value={search_class_id}
+                      onChange={(e)=>setSearch_Class_id(e.target.value)}
+                    >
+                      <option value="">Select Class</option>
+                      {clses.map((classJSON) => {
+                        return (
+                          <option value={classJSON.id}>
+                            {classJSON.class_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
+                  <div className="form-group">
+                    <select
+                      className="form-control"
+                      value={search_section_id}                      
+                      onChange={(e)=>setSearch_Section_id(e.target.value)}
+                    >
+                      <option value="">Select Section</option>
+                      {sections.map((sectionJSON) => {
+                        return (
+                          <option value={sectionJSON.id}>
+                            {sectionJSON.section_default_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
+                  <div className="form-group">
+                    <select
+                      className="form-control"
+                      value={search_teacher_id}                      
+                      onChange={(e)=>setSearch_Teacher_id(e.target.value)}
+                    >
+                      <option value="">Select Teacher</option>
+                      {teachers.map((teacherJSON) => {
+                        return (
+                          <option value={teacherJSON.id}>
+                            {teacherJSON.full_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
+                  <div className="form-group">
+                  <select
+                      className="form-control"
+                      value={search_subject_id}
+                      onChange={(e)=>setSearch_Subject_id(e.target.value)}
+                    >
+                      <option value="">Select Subject</option>
+                      {search_subjects.map((subjectJSON) => {
+                        return (
+                          <option value={subjectJSON.id}>
+                            {subjectJSON.subject_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
+                  <div className="form-group">
+                  <select
+                      className="form-control"
+                      value={search_session_id}
+                      onChange={(e)=>setSearch_Session_id(e.target.value)}
+                    >
+                      <option value="">Select Session</option>
+                      {sessions.map((sessionJSON) => {
+                        return (
+                          <option value={sessionJSON.id}>
+                            {sessionJSON.session_year}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
+                  <div className="form-group">
+                  <select
+                      className="form-control"
+                      value={search_period_id}
+                      onChange={(e)=>setSearch_Period_id(e.target.value)}
+                    >
+                      <option value="">Select Period</option>
+                      {periods.map((periodJSON) => {
+                        return (
+                          <option value={periodJSON.id}>
+                            {periodJSON.period_code}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
+                  <div className="form-group">
+                  <select
+                      className="form-control"
+                      value={search_shift_id}
+                      onChange={(e)=>setSearch_Shift_id(e.target.value)}
+                    >
+                      <option value="">Select Shift</option>
+                      {shifts.map((shiftJSON) => {
+                        return (
+                          <option value={shiftJSON.id}>
+                            {shiftJSON.shift_name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div className="col-sm-2">
                   <button type="button" onClick={handleSearch} className="btn btn-primary mt-1">Search</button>
                 </div>
               </div>

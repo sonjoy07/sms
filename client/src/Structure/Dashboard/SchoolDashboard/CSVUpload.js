@@ -33,7 +33,7 @@ export default function CSVUpload() {
             <SchoolHeader />
             <div className='container'    >
                 <h2 className='text-center'>CSV Upload</h2>
-                <h6>***Format Student: student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id </h6>
+                <h6>***Format Student: student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position,session_id,shift_id,class_id,section_id </h6>
                 <h6>***Format Teacher: teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id </h6>
                 <h6>***Format Routine: class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id </h6>
                 <div className='row mt-6'>

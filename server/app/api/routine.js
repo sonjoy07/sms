@@ -141,6 +141,13 @@ module.exports = (app) => {
   });
   app.get("/api/routine/school/filter", authenticateToken, (req, res) => {
     let condition = req.query.day !== undefined && req.query.day !== ""?` and day_id= ${req.query.day}`:``
+    condition += req.query.class_id !== undefined && req.query.class_id !== ""?` and routine.class_id= "${req.query.class_id}"`:``
+    condition += req.query.section_id !== undefined && req.query.section_id !== ""?` and routine.section_id= "${req.query.section_id}"`:``
+    condition += req.query.teacher_id !== undefined && req.query.teacher_id !== ""?` and routine.teacher_id= "${req.query.teacher_id}"`:``
+    condition += req.query.subject_id !== undefined && req.query.subject_id !== ""?` and routine.subject_id= "${req.query.subject_id}"`:``
+    condition += req.query.shift_id !== undefined && req.query.shift_id !== ""?` and routine.shift_id= "${req.query.shift_id}"`:``
+    condition += req.query.period_id !== undefined && req.query.period_id !== ""?` and routine.period_id= "${req.query.period_id}"`:``
+    condition += req.query.session_id !== undefined && req.query.session_id !== ""?` and routine.session_id= "${req.query.session_id}"`:``
     var sql = `select routine.session_id, routine.class_id,routine.id, routine.section_id,section.section_default_name, class.class_name,day.day, period.period_code, routine.period_id, routine.start_time, routine.end_time, routine.subject_id, subject.subject_name, teacher.initial, room, session.session_year, shift.shift_name,routine.shift_id,routine.teacher_id,routine.day_id,start_time,end_time
     from routine
     join class on routine.class_id=class.id 
