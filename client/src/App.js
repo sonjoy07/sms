@@ -126,7 +126,10 @@ import ChangeViewerPassword from "./Structure/Dashboard/ViewerDashboard/ViewerPr
 import SuperAdminProfileEdit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/SuperAdminProfileEdit";
 import ChangeSuperPassword from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminProfile/ChangeSuperPassword";
 import TeacherAttendanceReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/Attendance/TeacherAttendanceReport";
-
+import TeacherResources from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherResources';
+import TeacherEBook from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherEBook';
+import TeacherLibrary from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherLibrary';
+import TeacherImportantLink from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherImportantLink';
 function App(props) {
   const [user_code, setUser_code] = useState("");
   const [user_type, setUser_type] = useState(0);
@@ -134,7 +137,7 @@ function App(props) {
 
   return (
     <div className="App">
-      <ToastContainer/>
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -186,8 +189,9 @@ function App(props) {
           <Route path="/studentlibrary" element={<Library />} />
           <Route path="/studentebook" element={<EBook />} />
           <Route path="/studentimportantlink" element={<ImportantLink />} />
-          <Route path="/studentimport ViewActivities from './Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewActivities';
--eschool" element={<ESchool />} />
+          <Route path="/studentimport" element={<ESchool />}
+          />
+
           <Route path="/student-payment" element={<StudentPayment />} />
           <Route path="/studentprofileedit" element={<StudentProfileEdit />} />
           <Route path="/teacherprofileedit" element={<TeacherProfileEdit />} />
@@ -345,7 +349,7 @@ function App(props) {
           <Route
             path="/student-notice-list"
             element={<StudentNoticeList user={[user_code, user_type]} />}
-          />          
+          />
           <Route
             path="/student-notices"
             element={<StudentNotices user={[user_code, user_type]} />}
@@ -361,125 +365,141 @@ function App(props) {
           <Route
             path="/admin-sms-sent"
             element={<SMSsent user={[user_code, user_type]} />}
-          />          
+          />
           <Route
             path="/sms-report"
             element={<SMSreport user={[user_code, user_type]} />}
-          />   
+          />
           <Route
             path="/subjectregistration"
             element={<SubjectRegistration user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/admin-activities"
             element={<AdminActivites user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/super-admin-activities"
             element={<AdminViewActivities user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/csv-upload"
             element={<CSVUpload user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/create-mark-sheet"
             element={<ExamMarksSheetAll user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/csv-upload"
             element={<CSVUpload user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/teacherGradeSheet"
             element={<GradeSheetTeacher user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/school-grade-sheet"
             element={<GradeSheetSchool user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/evalutionScheduleTeacher"
             element={<EvalutionSchedule user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/evalutionScheduleStudent"
             element={<EvalutionScheduleStudent user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/viewerSubmissionDetails"
             element={<ViewerSubmissionDetails user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/viewerEvalutationSchedule"
             element={<ViewerEvalutationSchedule user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/newExamType"
             element={<CreateExamType user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/extraMarkEntry"
             element={<ExtraMarkentry user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/extraMarkReport"
             element={<ExtraReport user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/school-wise-sms-report"
             element={<SchoolSMSreport user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/school-wise-sms-limit"
             element={<CreateSmsLimit user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/sms-payment"
             element={<SmsPayment user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/teacherProfileById/:id"
             element={<TeacherProfilebyId user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/school-admin-profile"
             element={<SchoolProfile user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/schoolprofileedit"
             element={<SchoolProfileEdit user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/schoolpassword"
             element={<ChangeSchoolPassword user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/viewer-profile"
             element={<ViewerProfile user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/viewerprofileedit"
             element={<ViewerProfileEdit user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/viewerpassword"
             element={<ChangeViewerPassword user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/super-admin-profile"
             element={<SuperAdminProfile user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/superadminprofileedit"
             element={<SuperAdminProfileEdit user={[user_code, user_type]} />}
-          />        
+          />
           <Route
             path="/superadminpassword"
             element={<ChangeSuperPassword user={[user_code, user_type]} />}
-          />        
-              
-              
+          />
+          <Route
+            path="/teacherresources"
+            element={<TeacherResources user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/teacherlibrary"
+            element={<TeacherLibrary user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/teacherebook"
+            element={<TeacherEBook user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/teacherimportantlink"
+            element={<TeacherImportantLink user={[user_code, user_type]} />}
+          />
+
+
         </Routes>
 
       </BrowserRouter>

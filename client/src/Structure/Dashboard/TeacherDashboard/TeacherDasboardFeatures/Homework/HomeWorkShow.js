@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const HomeWorkShow = () => {
   const [homework, setHomework] = useState([]);
-  const [updateData, setUpdateData] = useState("");
+  const [updateData, setUpdateData] = useState([]);
   useEffect(() => {
     const home_work_id = localStorage.getItem("homeworkid")
     axios
@@ -25,7 +25,8 @@ const HomeWorkShow = () => {
       });
   }, []);
   
-  const updateMarks = (event,index) => {
+  const updateMarks = (event,index,key) => {
+    console.log(updateData.updateData);
     if (event.key === 'Enter') {
       fetch(`${process.env.REACT_APP_NODE_API}/api/homework_mark/update`, {
         method: "POST",
@@ -34,7 +35,7 @@ const HomeWorkShow = () => {
           authorization: "bearer " + localStorage.getItem("access_token"),
         },
         body: JSON.stringify({
-          updateData: updateData,
+          updateData: updateData.updateData[key],
           index: index,
         })
       })
@@ -50,6 +51,10 @@ const HomeWorkShow = () => {
           console.log(error);
         });
     }
+  }
+  const updateMarksData=(value,index)=>{
+    updateData[index]= value
+    setUpdateData({updateData})
   }
   return (
     <>
@@ -71,18 +76,18 @@ const HomeWorkShow = () => {
           </thead>
           <tbody>
 
-            {homework.map(student => {
+            {homework.map((student,index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{student.student_code}</td>
                   <td>{student.full_name}</td>
                   <td>Submit</td>
                   <td> {moment(student.submission_time).format("DD-MM-YYYY")}</td>
                   <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${student.attachment_link}`} download>{student.attachment_link}</Link></td>
-                  <td>{student.marks === null?<input type={'number'} value={updateData}
-                          onKeyDown={(e) => updateMarks(e,student.id)
+                  <td>{student.marks === null?<input type={'number'} value={updateData[index]}
+                          onKeyDown={(e) => updateMarks(e,student.id,index)
                           }
-                          onChange={(e) => setUpdateData(e.target.value)}/>:student.marks}</td>
+                          onChange={(e) => updateMarksData(e.target.value,index)}/>:student.marks}</td>
                 </tr>
               )
             })
