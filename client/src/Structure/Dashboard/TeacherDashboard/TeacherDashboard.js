@@ -251,7 +251,7 @@ const TeacherDashboard = (props) => {
               </div>
             </div>
           </a>
-          <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
+          <Link style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1" to={'/teacherresources'}>
             <div className="card bg-light shadow-sm">
               <div className="card-body py-4">
                 <div
@@ -276,7 +276,7 @@ const TeacherDashboard = (props) => {
                 </div>
               </div>
             </div>
-          </a>
+          </Link>
           <a style={{ textDecoration: "none" }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
               <div className="card-body py-4">
