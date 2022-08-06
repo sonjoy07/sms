@@ -2,32 +2,14 @@ import React from 'react'
 import book1 from '../../../images/books/book1.jpg'
 import book2 from '../../../images/books/book2.jpg'
 import book3 from '../../../images/books/book3.jpg'
-import profile from '../../../images/profile/profile.png';
+import TeacherHeader from './../TeacherHeader/TeacherHeader';
 
 
 const TeacherEBook = () => {
   return (
     <div>
-       <div style={{height: '80px', backgroundColor: ''}} className='bg-info'>
-         <div style={{display: 'flex' , justifyContent: 'space-between'}} className='container'>
-           {/* <div>
-             <img style={{ width: "50px" }} className='pt-3' src={profile} alt=""/>
-           </div> */}
-            <div class="dropdown">
-              <button style={{ padding: '0px' }} class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                 <img style={{ width: "50px" }} className='' src={profile} alt="profile"/>
-              </button>
-              <div class="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton">
-                 <a style={{color: 'tomato'}} class="dropdown-item " href="/teacherprofile">Profile</a>
-                 <a style={{color: 'tomato'}} class="dropdown-item" href="#">LogOut</a>
-            </div>
-           </div>
-           <div>
-              <h3 className='pt-1' style={{color: 'white', fontSize: '25px', fontWeight: 'bold'}}>Name: Teacher Name</h3>
-              <h4 className='' style={{color: 'white', fontSize: '25px', fontWeight: 'bold'}}>Id : Teacher Id</h4>
-           </div>
-        </div>
-       </div>
+       
+       <TeacherHeader/>
 
        <section className='container'>
       <div class="row my-5">

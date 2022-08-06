@@ -42,4 +42,10 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/schoolWiseInvoice", authenticateToken, (req, res) => {
+    con.query(`SELECT payment_invoice.*,school_name,sector_name,amount,last_date from payment_invoice left join school_info on school_info.id = payment_invoice.school_info_id left join sector on sector.id = payment_invoice.sector_id where school_info_id = ${req.query.school_id} and type = 1`, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
 };

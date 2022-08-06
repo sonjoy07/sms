@@ -646,7 +646,7 @@ module.exports = (app) => {
   });
   app.get("/api/sectorBySchool", (req, res) => {
     var sql
-    sql = `select * from sector where school_id="${req.query.school_id}" and class_id = ${req.query.class_id}`;
+    sql = `select * from sector where school_id="${req.query.school_id}" and class_id = ${req.query.class_id} and section_id=${req.query.section_id}`;
 
 
     con.query(sql, function (err, result, fields) {

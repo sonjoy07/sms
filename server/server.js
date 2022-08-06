@@ -3,7 +3,7 @@ const bodyparser = require("body-parser");
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const fileUpload = require('express-fileupload');
-
+console.log(process.env.PORT)
 const app = express();
 app.use('/uploads', express.static('uploads'));
 var corsOptions = {
@@ -48,6 +48,7 @@ require("./app/api/academicCalender")(app);
 require("./app/api/school_admin")(app);
 require("./app/api/super_admin")(app);
 require("./app/api/exam.marks")(app);
+require("./app/api/payment")(app);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

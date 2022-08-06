@@ -71,7 +71,7 @@ module.exports = (app) => {
       res.send(result);
     });
   });
-  function school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id) {
+  function school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
     console.log('all school ok')
 
     if (school_info_id === 'all') {
@@ -79,40 +79,40 @@ module.exports = (app) => {
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
         result.map(sch => {
-          class_info2(school_type, sch.id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+          class_info2(school_type, sch.id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
         })
       })
     } else {
-      class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+      class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
     }
   }
-  function class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id) {
+  function class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
     if (class_id === 'all') {
       console.log('all class ok')
       con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
         if (err) throw err;
         result.map(cls => {
-          class_info(school_type, school_info_id, cls.id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+          class_info(school_type, school_info_id, cls.id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
         })
       })
     } else {
-      class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+      class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
     }
   }
-  function class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id) {
+  function class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
     if (section_id === 'all') {
       console.log('all section ok')
       //all section if
       con.query(`select * from section`, function (err, result, fields) {
         if (err) throw err;
         result.map(sec => {
-          section_info(school_type, school_info_id, class_id, sec.id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+          section_info(school_type, school_info_id, class_id, sec.id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
 
         })
       })
     } else {
       //all section else
-      section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+      section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
       // if (session_id === 'all') {
       //   con.query(`select * from session`, function (err, result, fields) {
       //     if (err) throw err;
@@ -232,53 +232,37 @@ module.exports = (app) => {
 
     }
   }
-  function section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id) {
+  function section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
     if (session_id === 'all') {
       console.log('all session ok')
       //all session
       con.query(`select * from session`, function (err, result, fields) {
         if (err) throw err;
         result.map(ses => {
-          session_info(school_type, school_info_id, class_id, section_id, ses.id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+          session_info(school_type, school_info_id, class_id, section_id, ses.id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
         })
       })
 
     } else {
       //all session else
 
-      session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
-      // con.query(`select * from subject where school_type_id = ${type.id} and class_id = ${cls.id}`, function (err, result, fields) {
-      //   if (err) throw err;
-      //   result.map(sub => {
-      //     con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-      //       if (err) throw err;
-      //       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-      //       result.map(tec => {
-      //         sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-      //       })
-      //       sql = sql.slice(0, -1);
-      //       con.query(sql, function (err, result, fields) {
-      //         if (err) throw err;
-      //       });
-      //     })
-      //   })
-
-      // })
+      session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+     
     }
   }
-  function session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id) {
+  function session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
 
     if (subject_id === 'all') {
       console.log('all subject ok')
       con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
         if (err) throw err;
         result.map(sub => {
-          subject_info(school_type, school_info_id, class_id, section_id, session_id, sub.id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+          subject_info(school_type, school_info_id, class_id, section_id, session_id, sub.id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
         })
 
       })
     } else {
-      subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+      subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
       // if (school_teacher_id === 'all') {
       //   con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
       //     if (err) throw err;
@@ -305,16 +289,16 @@ module.exports = (app) => {
       // }
     }
   }
-  function subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id) {
+  function subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
 
     if (school_teacher_id === 'all') {
       console.log('all teacher ok')
       con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
         if (err) throw err;
         if (result.length > 0) {
-          let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
+          let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link,questions) VALUES `
           result.map(tec => {
-            sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
+            sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}","${attachment}","${questions}" ),`
           })
           sql = sql.slice(0, -1);
           console.log('query', sql);
@@ -326,7 +310,7 @@ module.exports = (app) => {
     } else {
       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
 
-      sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${school_teacher_id}",${attachment} ),`
+      sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${school_teacher_id}","${attachment}","${questions}" ),`
       sql = sql.slice(0, -1);
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
@@ -334,7 +318,6 @@ module.exports = (app) => {
 
     }
   }
-  function teacher_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id) { }
 
   app.post("/api/activities/teacher", authenticateToken, (req, res) => {
     var id = req.body.id;
@@ -348,6 +331,7 @@ module.exports = (app) => {
     var session_id = req.body.session_id;
     var topic = req.body.topic;
     var details = req.body.details;
+    var questions = req.body.questions;
     var issue_date = req.body.issue_date;
     var due_date = req.body.due_date;
     var attachment_link = req.body.fileName;
@@ -375,7 +359,7 @@ module.exports = (app) => {
           con.query(`select * from school_type`, function (err, result, fields) {
             if (err) throw err;
             result.map(type => {
-              school_info(type.id, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
+              school_info(type.id, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
               // if (school_info_id === 'all') {
               //   console.log('all school ok')
               //   let sql = `select * from school_info`
@@ -1250,867 +1234,7 @@ module.exports = (app) => {
             })
           })
         } else {
-          school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id)
-          //when school type is single
-          // if (school_info_id === 'all') {
-          //   let sql = `select * from school_info`
-          //   con.query(sql, function (err, result, fields) {
-          //     if (err) throw err;
-          //     result.map(sch => {
-          //       if (class_id === 'all') {
-          //         con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
-          //           result.map(cls => {
-
-          //             if (err) throw err;
-          //             if (section_id === 'all') {
-          //               //all section if
-          //               con.query(`select * from section`, function (err, result, fields) {
-          //                 if (err) throw err;
-          //                 result.map(sec => {
-          //                   if (session_id === 'all') {
-          //                     //all session
-          //                     con.query(`select * from session`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       result.map(ses => {
-          //                         if (subject_id === 'all') {
-          //                           con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                             result.map(sub => {
-          //                               if (school_teacher_id === 'all') {
-          //                                 con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                                   if (err) throw err;
-          //                                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                                   result.map(tec => {
-          //                                     sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                                   })
-          //                                   sql = sql.slice(0, -1);
-          //                                   con.query(sql, function (err, result, fields) {
-          //                                     if (err) throw err;
-          //                                   });
-          //                                 })
-          //                               } else {
-          //                                 let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                                 sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                                 sql = sql.slice(0, -1);
-          //                                 con.query(sql, function (err, result, fields) {
-          //                                   if (err) throw err;
-          //                                 });
-
-          //                               }
-          //                             })
-
-          //                           })
-          //                         } else {
-          //                           if (school_teacher_id === 'all') {
-          //                             con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                               result.map(tec => {
-          //                                 sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                               })
-          //                               sql = sql.slice(0, -1);
-          //                               con.query(sql, function (err, result, fields) {
-          //                                 if (err) throw err;
-          //                               });
-          //                             })
-          //                           } else {
-          //                             let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                             sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                             sql = sql.slice(0, -1);
-          //                             con.query(sql, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                             });
-
-          //                           }
-          //                         }
-          //                       })
-          //                     })
-
-          //                   } else {
-          //                     //all session else
-          //                     con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       result.map(sub => {
-          //                         con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${sch.id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       })
-
-          //                     })
-          //                   }
-          //                 })
-          //               })
-          //             } else {
-          //               //all section else
-          //               if (session_id === 'all') {
-          //                 con.query(`select * from session`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   result.map(ses => {
-          //                     if (subject_id === 'all') {
-          //                       con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                         result.map(sub => {
-          //                           if (school_teacher_id === 'all') {
-          //                             con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                               result.map(tec => {
-          //                                 sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                               })
-          //                               sql = sql.slice(0, -1);
-          //                               con.query(sql, function (err, result, fields) {
-          //                                 if (err) throw err;
-          //                               });
-          //                             })
-          //                           } else {
-          //                             let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                             sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                             sql = sql.slice(0, -1);
-          //                             con.query(sql, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                             });
-
-          //                           }
-          //                         })
-
-          //                       })
-          //                     } else {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     }
-          //                   })
-          //                 })
-
-          //               } else {
-          //                 if (subject_id === 'all') {
-          //                   con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                     result.map(sub => {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     })
-
-          //                   })
-          //                 } else {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${sch.id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 }
-
-          //               }
-
-          //             }
-          //           })
-          //         })
-          //       } else {
-          //         if (section_id === 'all') {
-          //           //all section if
-          //           con.query(`select * from section`, function (err, result, fields) {
-          //             if (err) throw err;
-          //             result.map(sec => {
-          //               if (session_id === 'all') {
-          //                 //all session
-          //                 con.query(`select * from session`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   result.map(ses => {
-          //                     if (subject_id === 'all') {
-          //                       con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                         result.map(sub => {
-          //                           if (school_teacher_id === 'all') {
-          //                             con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                               result.map(tec => {
-          //                                 sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                               })
-          //                               sql = sql.slice(0, -1);
-          //                               con.query(sql, function (err, result, fields) {
-          //                                 if (err) throw err;
-          //                               });
-          //                             })
-          //                           } else {
-          //                             let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                             sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                             sql = sql.slice(0, -1);
-          //                             con.query(sql, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                             });
-
-          //                           }
-          //                         })
-
-          //                       })
-          //                     } else {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     }
-          //                   })
-          //                 })
-
-          //               } else {
-          //                 //all session else
-          //                 con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   result.map(sub => {
-          //                     con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${sch.id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   })
-
-          //                 })
-          //               }
-          //             })
-          //           })
-          //         } else {
-          //           //all section else
-          //           if (session_id === 'all') {
-          //             con.query(`select * from session`, function (err, result, fields) {
-          //               if (err) throw err;
-          //               result.map(ses => {
-          //                 if (subject_id === 'all') {
-          //                   con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                     result.map(sub => {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     })
-
-          //                   })
-          //                 } else {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 }
-          //               })
-          //             })
-
-          //           } else {
-          //             if (subject_id === 'all') {
-          //               con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //                 if (err) throw err;
-          //                 result.map(sub => {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 })
-
-          //               })
-          //             } else {
-          //               if (school_teacher_id === 'all') {
-          //                 con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                   result.map(tec => {
-          //                     sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                   })
-          //                   sql = sql.slice(0, -1);
-          //                   con.query(sql, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                   });
-          //                 })
-          //               } else {
-          //                 let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                 sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                 sql = sql.slice(0, -1);
-          //                 con.query(sql, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                 });
-
-          //               }
-          //             }
-
-          //           }
-
-          //         }
-          //       }
-          //     })
-          //   });
-          // } else {
-          //   if (class_id === 'all') {
-          //     con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
-          //       result.map(cls => {
-
-          //         if (err) throw err;
-          //         if (section_id === 'all') {
-          //           //all section if
-          //           con.query(`select * from section`, function (err, result, fields) {
-          //             if (err) throw err;
-          //             result.map(sec => {
-          //               if (session_id === 'all') {
-          //                 //all session
-          //                 con.query(`select * from session`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   result.map(ses => {
-          //                     if (subject_id === 'all') {
-          //                       con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                         result.map(sub => {
-          //                           if (school_teacher_id === 'all') {
-          //                             con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                               result.map(tec => {
-          //                                 sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                               })
-          //                               sql = sql.slice(0, -1);
-          //                               con.query(sql, function (err, result, fields) {
-          //                                 if (err) throw err;
-          //                               });
-          //                             })
-          //                           } else {
-          //                             let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                             sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                             sql = sql.slice(0, -1);
-          //                             con.query(sql, function (err, result, fields) {
-          //                               if (err) throw err;
-          //                             });
-
-          //                           }
-          //                         })
-
-          //                       })
-          //                     } else {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     }
-          //                   })
-          //                 })
-
-          //               } else {
-          //                 //all session else
-          //                 con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   result.map(sub => {
-          //                     con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${school_info_id}", "${cls.id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   })
-
-          //                 })
-          //               }
-          //             })
-          //           })
-          //         } else {
-          //           //all section else
-          //           if (session_id === 'all') {
-          //             con.query(`select * from session`, function (err, result, fields) {
-          //               if (err) throw err;
-          //               result.map(ses => {
-          //                 if (subject_id === 'all') {
-          //                   con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                     result.map(sub => {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     })
-
-          //                   })
-          //                 } else {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 }
-          //               })
-          //             })
-
-          //           } else {
-          //             if (subject_id === 'all') {
-          //               con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${cls.id}`, function (err, result, fields) {
-          //                 if (err) throw err;
-          //                 result.map(sub => {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 })
-
-          //               })
-          //             } else {
-          //               if (school_teacher_id === 'all') {
-          //                 con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                   result.map(tec => {
-          //                     sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                   })
-          //                   sql = sql.slice(0, -1);
-          //                   con.query(sql, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                   });
-          //                 })
-          //               } else {
-          //                 let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                 sql += `("${school_info_id}", "${cls.id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                 sql = sql.slice(0, -1);
-          //                 con.query(sql, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                 });
-
-          //               }
-          //             }
-
-          //           }
-
-          //         }
-          //       })
-          //     })
-          //   } else {
-          //     if (section_id === 'all') {
-          //       //all section if
-          //       con.query(`select * from section`, function (err, result, fields) {
-          //         if (err) throw err;
-          //         result.map(sec => {
-          //           if (session_id === 'all') {
-          //             //all session
-          //             con.query(`select * from session`, function (err, result, fields) {
-          //               if (err) throw err;
-          //               result.map(ses => {
-          //                 if (subject_id === 'all') {
-          //                   con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                     result.map(sub => {
-          //                       if (school_teacher_id === 'all') {
-          //                         con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                           let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                           result.map(tec => {
-          //                             sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                           })
-          //                           sql = sql.slice(0, -1);
-          //                           con.query(sql, function (err, result, fields) {
-          //                             if (err) throw err;
-          //                           });
-          //                         })
-          //                       } else {
-          //                         let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                         sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                         sql = sql.slice(0, -1);
-          //                         con.query(sql, function (err, result, fields) {
-          //                           if (err) throw err;
-          //                         });
-
-          //                       }
-          //                     })
-
-          //                   })
-          //                 } else {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 }
-          //               })
-          //             })
-
-          //           } else {
-          //             //all session else
-          //             con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //               if (err) throw err;
-          //               result.map(sub => {
-          //                 con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                   result.map(tec => {
-          //                     sql += `("${school_info_id}", "${class_id}", "${sec.id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                   })
-          //                   sql = sql.slice(0, -1);
-          //                   con.query(sql, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                   });
-          //                 })
-          //               })
-
-          //             })
-          //           }
-          //         })
-          //       })
-          //     } else {
-          //       //all section else
-          //       if (session_id === 'all') {
-          //         con.query(`select * from session`, function (err, result, fields) {
-          //           if (err) throw err;
-          //           result.map(ses => {
-          //             if (subject_id === 'all') {
-          //               con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //                 if (err) throw err;
-          //                 result.map(sub => {
-          //                   if (school_teacher_id === 'all') {
-          //                     con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                       result.map(tec => {
-          //                         sql += `("${sch.id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                       })
-          //                       sql = sql.slice(0, -1);
-          //                       con.query(sql, function (err, result, fields) {
-          //                         if (err) throw err;
-          //                       });
-          //                     })
-          //                   } else {
-          //                     let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                     sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                     sql = sql.slice(0, -1);
-          //                     con.query(sql, function (err, result, fields) {
-          //                       if (err) throw err;
-          //                     });
-
-          //                   }
-          //                 })
-
-          //               })
-          //             } else {
-          //               if (school_teacher_id === 'all') {
-          //                 con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                   result.map(tec => {
-          //                     sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                   })
-          //                   sql = sql.slice(0, -1);
-          //                   con.query(sql, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                   });
-          //                 })
-          //               } else {
-          //                 let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                 sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${ses.id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                 sql = sql.slice(0, -1);
-          //                 con.query(sql, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                 });
-
-          //               }
-          //             }
-          //           })
-          //         })
-
-          //       } else {
-          //         if (subject_id === 'all') {
-          //           con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
-          //             if (err) throw err;
-          //             result.map(sub => {
-          //               if (school_teacher_id === 'all') {
-          //                 con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                   let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //                   result.map(tec => {
-          //                     sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //                   })
-          //                   sql = sql.slice(0, -1);
-          //                   con.query(sql, function (err, result, fields) {
-          //                     if (err) throw err;
-          //                   });
-          //                 })
-          //               } else {
-          //                 let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //                 sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${sub.id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //                 sql = sql.slice(0, -1);
-          //                 con.query(sql, function (err, result, fields) {
-          //                   if (err) throw err;
-          //                 });
-
-          //               }
-          //             })
-
-          //           })
-          //         } else {
-          //           if (school_teacher_id === 'all') {
-          //             con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
-          //               if (err) throw err;
-          //               let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-          //               result.map(tec => {
-          //                 sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${tec.id}",${attachment} ),`
-          //               })
-          //               sql = sql.slice(0, -1);
-          //               con.query(sql, function (err, result, fields) {
-          //                 if (err) throw err;
-          //               });
-          //             })
-          //           } else {
-          //             let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , topic, details, issue_date, due_date,school_teacher_id, attachment_link) VALUES `
-
-          //             sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${topic}", "${details}", "${issue_date}", "${due_date}","${teacher_id}",${attachment} ),`
-          //             sql = sql.slice(0, -1);
-          //             con.query(sql, function (err, result, fields) {
-          //               if (err) throw err;
-          //             });
-
-          //           }
-          //         }
-
-          //       }
-
-          //     }
-          //   }
-          // }
+          school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)         
         }
         res.json({ status: "success" });
       }

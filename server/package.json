@@ -26,6 +26,10 @@
     "nodemon": "^2.0.16",
     "path": "^0.12.7",
     "react-notifications": "^1.7.3",
-    "util": "^0.12.4"
+    "sslcommerz": "^1.7.0",
+    "sslcommerz-lts": "^1.1.0",
+    "sslcommerz-nodejs": "^1.0.8",
+    "util": "^0.12.4",
+    "uuid": "^8.3.2"
   }
 }

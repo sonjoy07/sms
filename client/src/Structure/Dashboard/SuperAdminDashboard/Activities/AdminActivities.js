@@ -57,6 +57,7 @@ const AdminActivities = (props) => {
   const [search_session_id, setSearchSession_id] = useState("");
   const [topic, setTopic] = useState("");
   const [details, setDetails] = useState("");
+  const [questions, setQuestions] = useState("");
   const [attachment, setAttachment] = useState("");
   const [issue_date, setIssue_date] = useState("");
   const [due_date, setDue_date] = useState("");
@@ -321,6 +322,9 @@ const AdminActivities = (props) => {
   let handleDetailsChange = (e) => {
     setDetails(e.target.value);
   };
+  let handleQuestionsChange = (e) => {
+    setQuestions(e.target.value);
+  };
   const handleAttachment = (e) => {
     setAttachment(e.target.files[0]);
   };
@@ -341,6 +345,7 @@ const AdminActivities = (props) => {
     formData.append("section_id", section_id);
     formData.append("subject_id", subject_id);
     formData.append("teacher_id", teacher_id);
+    formData.append("questions", questions);
     formData.append("school_teacher_id", school_teacher_id);
     formData.append("session_id", session_id);
     formData.append("topic", topic);
@@ -498,7 +503,7 @@ const AdminActivities = (props) => {
                 {/* id='list' */}
 
                 <div className="row">
-                  <div class={"col-sm-3 p-2 mx-auto"}>
+                  <div class={"col-sm-4 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className="pb-2" for="exampleInputEmail1">
                         Topic :{" "}
@@ -522,6 +527,21 @@ const AdminActivities = (props) => {
                         class="form-control"
                         value={details}
                         onChange={handleDetailsChange}
+                        rows="4"
+                        cols="50"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class={"col-sm-6 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleInputEmail1">
+                        Questions :{" "}
+                      </label>
+                      <textarea
+                        style={{ width: "100%", border: "1px solid blue" }}
+                        class="form-control"
+                        value={questions}
+                        onChange={handleQuestionsChange}
                         rows="4"
                         cols="50"
                       ></textarea>

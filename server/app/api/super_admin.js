@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 module.exports = (app) => {
 
     const con = require('../models/db')
@@ -78,6 +79,33 @@ module.exports = (app) => {
         });
     });
 
+    app.get("/api/all_invoice", (req, res) => {
+        let sql = `select payment_invoice.*,sector_name from payment_invoice left join sector on sector.id= payment_invoice.sector_id`
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result)
+        })
+    })
+    app.post("/api/create_invoice", (req, res) => {
+        var school_id = req.body.school_id;
+        var sector_id = req.body.sector_id;
+        var type_id = req.body.type_id;
+        var id = req.body.id;
+
+
+        var sql
+        if (id) {
+            sql = `update payment_invoice set school_info_id="${school_id}",sector_id="${sector_id}",type="${type_id}" where id =${id}`;
+        } else {
+            sql = `INSERT INTO payment_invoice (school_info_id,sector_id,type,invoice_no) VALUES ("${school_id}","${sector_id}","${type_id}","${uuid.v1()}")`;
+        }
+
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+
     app.delete("/api/school_type/delete", (req, res) => {
         con.query(`delete from school_type where id = ${req.query.id}`, function (err, result, fields) {
             if (err) throw err;
@@ -105,6 +133,12 @@ module.exports = (app) => {
     })
     app.delete("/api/exam_type/delete", (req, res) => {
         con.query(`delete from exam_name where id = ${req.query.id}`, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+        })
+    })
+    app.delete("/api/invoice/delete", (req, res) => {
+        con.query(`delete from payment_invoice where id = ${req.query.id}`, function (err, result, fields) {
             if (err) throw err;
             res.send(result);
         })

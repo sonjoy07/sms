@@ -178,6 +178,22 @@ const SuperAdminDashboard = () => {
                         </div>
                     </div>
                 </Link>
+                <Link style={{ textDecoration: 'none' }} to='/paymentInvoice' class="col-sm-12 col-md-6 my-4 col1">
+                    <div class="card bg-light shadow-sm">
+                        <div class="card-body py-4">
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                                <div className='px-3'>
+                                    <img style={{ width: '64px', height: '64px' }} src={subject} alt="" />
+                                </div>
+                                <div className='px-3'>
+                                    <h4 class="card-title">Payment Invoice</h4>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </Link>
                 <Link style={{ textDecoration: 'none' }} to='/school-wise-sms-report' class="col-sm-12 col-md-6 my-4 col1">
                     <div class="card bg-light shadow-sm">
                         <div class="card-body py-4">

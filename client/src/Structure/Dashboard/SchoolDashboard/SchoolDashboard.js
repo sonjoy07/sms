@@ -346,8 +346,8 @@ const SchoolDashboard = () => {
                           <img style={{width:'64px', height:'64px'}} src={accounts} alt=""/>
                        </div>
                        <div className='px-3'>
-                         <h4 class="card-title">Payment</h4>
-                         <p class="card-text">Create Payment Sector</p>
+                         <h4 class="card-title">Accounts</h4>
+                         <p class="card-text">Create Accounts Sector</p>
                        </div>
                    </div>
                  

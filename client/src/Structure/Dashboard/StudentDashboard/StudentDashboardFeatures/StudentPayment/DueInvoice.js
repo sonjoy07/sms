@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 const DueInvoice = () => {
     const [sectors, setSectors] = useState([])
     useEffect(()=>{
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/sectorBySchool?school_id=${localStorage.getItem("school_id")}&&class_id=${localStorage.getItem("class")}`, {
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/sectorBySchool?school_id=${localStorage.getItem("school_id")}&&class_id=${localStorage.getItem("class")}&&section_id=${localStorage.getItem('section_id')}`, {
             headers: {
               authorization: "bearer " + localStorage.getItem("access_token"),
             },

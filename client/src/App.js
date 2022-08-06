@@ -130,6 +130,7 @@ import TeacherResources from './Structure/Dashboard/TeacherDashboard/TeacherReso
 import TeacherEBook from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherEBook';
 import TeacherLibrary from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherLibrary';
 import TeacherImportantLink from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherImportantLink';
+import PaymentInvoice from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/PaymentInvoice";
 function App(props) {
   const [user_code, setUser_code] = useState("");
   const [user_type, setUser_type] = useState(0);
@@ -497,6 +498,10 @@ function App(props) {
           <Route
             path="/teacherimportantlink"
             element={<TeacherImportantLink user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/paymentInvoice"
+            element={<PaymentInvoice user={[user_code, user_type]} />}
           />
 
 
