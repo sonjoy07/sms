@@ -381,6 +381,7 @@ const AdminActivities = (props) => {
           setSchool_teacher_id("");
           setTopic("");
           setDetails("");
+          setQuestions("")
         })
         .then(() => getHWList());
   };
@@ -395,20 +396,23 @@ const AdminActivities = (props) => {
     setDue_date("");
     setTopic("");
     setDetails("");
+    setQuestions("")
   }
 
   const editHomeWork = (data) => {
     setId(data.id);
-    setClass_id(data.class_id);
-    setSection_id(data.section_id);
-    setSubject_id(data.subject_id);
-    setSession_id(data.session_id);
+    setSchoolType(data.type_id);
+    setClass_id(data.all_class === 1?'all':data.class_id);
+    setSection_id(data.all_section === 1?'all':data.section_id);
+    setSubject_id(data.all_subject === 1?'all':data.subject_id);
+    setSession_id(data.all_session === 1?'all':data.session_id);
     setIssue_date(moment(data.issue_date).format("YYYY-MM-DD"));
     setDue_date(moment(data.due_date).format("YYYY-MM-DD"));
     setTopic(data.topic);
     setDetails(data.details);
-    setSchool_info_id(data.school_info_id);
-    setSchool_teacher_id(data.school_teacher_id);
+    setSchool_info_id(data.all_school === 1?'all':data.school_info_id);
+    setSchool_teacher_id(data.all_teacher === 1?'all':data.school_teacher_id);    
+    setQuestions(data.questions);
   }
 
   const deleteHomework = async (id) => {
@@ -1040,19 +1044,19 @@ const AdminActivities = (props) => {
               {homework.map((homeworkJSON) => {
                 return (
                   <tr>
-                    <td>{homeworkJSON.school_name}</td>
-                    <td>{homeworkJSON.full_name}</td>
+                    <td>{homeworkJSON.all_school === 0?homeworkJSON.school_name:'All'}</td>
+                    <td>{homeworkJSON.all_teacher === 0?homeworkJSON.full_name:'All'}</td>
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
                     <td>{homeworkJSON.topic}</td>
                     <td>{homeworkJSON.details}</td>
-                    <td>{homeworkJSON.class_name}</td>
+                    <td>{homeworkJSON.all_class === 0?homeworkJSON.class_name:'All'}</td>
                     <td>
-                      {homeworkJSON.section_default_name}
+                      {homeworkJSON.all_section === 0?homeworkJSON.section_default_name:'All'}
                     </td>
-                    <td>{homeworkJSON.session_year}</td>
-                    <td>{homeworkJSON.subject_name}</td>
+                    <td>{homeworkJSON.all_session === 0?homeworkJSON.session_year:'All'}</td>
+                    <td>{homeworkJSON.all_subject === 0?homeworkJSON.subject_name:'All'}</td>
                     <td>
                       {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>

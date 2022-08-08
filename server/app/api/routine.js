@@ -45,15 +45,18 @@ module.exports = (app) => {
   app.post("/api/routine/deleteAll", authenticateToken, (req, res) => {
     var checkedStudent = req.body.checkedStudent;
     var routine = req.body.routine;
-    // console.log('checkdata',checkedStudent[0]);
+    console.log('checkdata',checkedStudent);
+    console.log('routine',routine);
     routine.forEach((res, index) => {
       if (checkedStudent[index] === true) {
         var sql = `delete from attendance where routine_id = "${res.id}"`
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
           var sql2 = `delete from routine where id ="${res.id}"`
+          console.log(sql,sql2);
           con.query(sql2, function (err, result, fields) {
             if (err) throw err;
+            console.log('result',result);
           });
         });
       }

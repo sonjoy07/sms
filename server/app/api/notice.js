@@ -213,11 +213,11 @@ module.exports = (app) => {
         notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
         res.json({ status: "success" });
       } else if (class_id === 0 && section_id !== 0) {
-        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,0)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
           res.json({ status: "success" });
       } else if (section_id === 0 && class_id !== 0) {
-        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values("${session_id}", "${school_info_id}", "${class_id}", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values("${session_id}", "${school_info_id}", "${class_id}", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",0,1)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
           res.json({ status: "success" });
       } else {
@@ -232,11 +232,11 @@ module.exports = (app) => {
         notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
         res.json({ status: "success" });
       } else if (class_id === 0 && section_id !== 0) {
-        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values ("${session_id}", "${school_info_id}", "0", "${section_id}", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,0)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
           res.json({ status: "success" });
       } else if (section_id === 0 && class_id !== 0) {
-        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values("${session_id}", "${school_info_id}", "${class_id}", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",1,1)`
+        sql = `Insert into notice (session_id,school_info_id,class_id,section_id,notice_headline,notice_description,publishing_date,user_code,type,all_class,all_section) values("${session_id}", "${school_info_id}", "${class_id}", "0", "${headline}", "${description}", "${date}", "${uid}", "${type}",0,1)`
           notice_users(con, sql, class_id, section_id, students, id, query, session_id, school_info_id)
           res.json({ status: "success" });
       } else {

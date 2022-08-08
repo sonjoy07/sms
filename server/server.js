@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyparser = require("body-parser");
+const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const fileUpload = require('express-fileupload');
@@ -12,8 +12,10 @@ var corsOptions = {
   optionSuccessStatus: 200,
 };
 
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
 app.use(cors(corsOptions));
-app.use(bodyparser.json());
 
 app.use(fileUpload({
   useTempFiles: true,

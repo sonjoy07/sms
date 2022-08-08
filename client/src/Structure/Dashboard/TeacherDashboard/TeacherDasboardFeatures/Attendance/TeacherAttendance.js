@@ -352,14 +352,16 @@ const TeacherAttendance = (props) => {
                             </h6>
                           </div>
                           <div>
-                          {routineJSON.is_taken !== null ?<button
+                          {routineJSON.is_taken === null ?
+                          <button
                               type="button"
                               class="btn btn-secondary"
                               onClick={() => {
                                 getStudentList(
                                   routineJSON.section_id,
                                   routineJSON.id,
-                                  routineJSON.class
+                                  routineJSON.class,
+                                  routineJSON.subject_id
                                 );
                                 // setClass(routineJSON.class);
                                 setLatest_attendance([]);

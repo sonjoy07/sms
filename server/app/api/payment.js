@@ -50,8 +50,8 @@ module.exports=(app)=>{
         //process the response that got from sslcommerz 
         //https://developer.sslcommerz.com/doc/v4/#returned-parameters
     
-        if (data?.GatewayPageURL) {
-          return res.status(200).redirect(data?.GatewayPageURL);
+        if (data.GatewayPageURL) {
+          return res.status(200).redirect(data.GatewayPageURL);
         }
         else {
           return res.status(400).json({
