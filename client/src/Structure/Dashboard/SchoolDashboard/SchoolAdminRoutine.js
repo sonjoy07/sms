@@ -58,7 +58,8 @@ const SchoolAdminRoutine = () => {
   const [search_session_id, setSearch_Session_id] = useState("");
   const [shift_id, setShift_id] = useState("");
   const [search_shift_id, setSearch_Shift_id] = useState("");
-
+  const [checkedStudentAll, setCheckedStudentAll] = useState(false);
+  const [checkedStudent, setCheckedStudent] = useState([]);
   //search
   const [school_info, setSchool_info] = useState('')
   const [searchClass, setSearchClass] = useState('')
@@ -74,7 +75,14 @@ const SchoolAdminRoutine = () => {
 
   const handleStart = (event) => {
     setStart(event.target.value)
-    console.log(event.target.value)
+  };
+
+  const toggleCheckStudent = (inputName) => {
+    setCheckedStudent((prevState) => {
+      const newState = { ...prevState };
+      newState[inputName] = !prevState[inputName];
+      return newState;
+    });
   };
   const handleEnd = (event) => {
     setend(event.target.value);
@@ -231,10 +239,24 @@ const SchoolAdminRoutine = () => {
         },
       })
       .then((response) => {
+        let list = []
+        for (const inputName in response.data) {
+          list[inputName] = false;
+        }
+        setCheckedStudent(list)
         setRoutine(response.data);
       });
   }, [school_id]);
-
+  const selectStudentAll = (value) => {
+    setCheckedStudentAll(value);
+    setCheckedStudent((prevState) => {
+      const newState = { ...prevState };
+      for (const inputName in newState) {
+        newState[inputName] = value;
+      }
+      return newState;
+    });
+  };
   const handleSearch = () => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/routine/school/filter?school_info_id=${school_id}&&day=${searchDay}&&class_id=${search_class_id}&&section_id=${search_section_id}&&teacher_id=${search_teacher_id}&&subject_id=${search_subject_id}&&shift_id=${search_shift_id}&&period_id=${search_period_id}&&session_id=${search_session_id}`, {
@@ -358,6 +380,34 @@ const SchoolAdminRoutine = () => {
         setReset(reset + 1)
         toast("Routine deleted successfully");
       }
+    }
+  }
+  const deleteAllRoutine = async () => {
+    console.log(checkedStudent);
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+      // axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+      // const result = await axios.get(`${process.env.REACT_APP_NODE_API}/api/routine/deleteAll?checkedStudent=${checkedStudent}`)
+      // if (result) {
+      //   setReset(reset + 1)
+      //   toast("Routine deleted successfully");
+      // }
+      fetch(`${process.env.REACT_APP_NODE_API}/api/routine/deleteAll`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "bearer " + localStorage.getItem("access_token"),
+        },
+        body: JSON.stringify({
+          checkedStudent: checkedStudent,
+          routine:routine
+        }),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          setReset(reset + 1)
+          toast("Routine deleted successfully");
+        })
     }
   }
 
@@ -617,7 +667,7 @@ const SchoolAdminRoutine = () => {
                     <select
                       className="form-control"
                       value={search_class_id}
-                      onChange={(e)=>setSearch_Class_id(e.target.value)}
+                      onChange={(e) => setSearch_Class_id(e.target.value)}
                     >
                       <option value="">Select Class</option>
                       {clses.map((classJSON) => {
@@ -634,8 +684,8 @@ const SchoolAdminRoutine = () => {
                   <div className="form-group">
                     <select
                       className="form-control"
-                      value={search_section_id}                      
-                      onChange={(e)=>setSearch_Section_id(e.target.value)}
+                      value={search_section_id}
+                      onChange={(e) => setSearch_Section_id(e.target.value)}
                     >
                       <option value="">Select Section</option>
                       {sections.map((sectionJSON) => {
@@ -652,8 +702,8 @@ const SchoolAdminRoutine = () => {
                   <div className="form-group">
                     <select
                       className="form-control"
-                      value={search_teacher_id}                      
-                      onChange={(e)=>setSearch_Teacher_id(e.target.value)}
+                      value={search_teacher_id}
+                      onChange={(e) => setSearch_Teacher_id(e.target.value)}
                     >
                       <option value="">Select Teacher</option>
                       {teachers.map((teacherJSON) => {
@@ -668,10 +718,10 @@ const SchoolAdminRoutine = () => {
                 </div>
                 <div className="col-sm-2">
                   <div className="form-group">
-                  <select
+                    <select
                       className="form-control"
                       value={search_subject_id}
-                      onChange={(e)=>setSearch_Subject_id(e.target.value)}
+                      onChange={(e) => setSearch_Subject_id(e.target.value)}
                     >
                       <option value="">Select Subject</option>
                       {search_subjects.map((subjectJSON) => {
@@ -686,10 +736,10 @@ const SchoolAdminRoutine = () => {
                 </div>
                 <div className="col-sm-2">
                   <div className="form-group">
-                  <select
+                    <select
                       className="form-control"
                       value={search_session_id}
-                      onChange={(e)=>setSearch_Session_id(e.target.value)}
+                      onChange={(e) => setSearch_Session_id(e.target.value)}
                     >
                       <option value="">Select Session</option>
                       {sessions.map((sessionJSON) => {
@@ -704,10 +754,10 @@ const SchoolAdminRoutine = () => {
                 </div>
                 <div className="col-sm-2">
                   <div className="form-group">
-                  <select
+                    <select
                       className="form-control"
                       value={search_period_id}
-                      onChange={(e)=>setSearch_Period_id(e.target.value)}
+                      onChange={(e) => setSearch_Period_id(e.target.value)}
                     >
                       <option value="">Select Period</option>
                       {periods.map((periodJSON) => {
@@ -722,10 +772,10 @@ const SchoolAdminRoutine = () => {
                 </div>
                 <div className="col-sm-2">
                   <div className="form-group">
-                  <select
+                    <select
                       className="form-control"
                       value={search_shift_id}
-                      onChange={(e)=>setSearch_Shift_id(e.target.value)}
+                      onChange={(e) => setSearch_Shift_id(e.target.value)}
                     >
                       <option value="">Select Shift</option>
                       {shifts.map((shiftJSON) => {
@@ -746,9 +796,22 @@ const SchoolAdminRoutine = () => {
             </div>
             {/* /.card-header */}
             <div className="card-body table-responsive p-0">
+              <a href="" className="btn btn-danger"
+                style={{ float: 'right' }}
+                onClick={() => deleteAllRoutine()}
+              >
+                Delete All
+              </a>
               <table className="table table-hover text-nowrap">
                 <thead>
                   <tr>
+                    <th>
+                      <label className="custom-control custom-switch mt-3">
+                        <input type="checkbox" onChange={(event) => selectStudentAll(event.target.checked)}
+                          checked={checkedStudentAll} />
+                        <span className="px-2">Select All</span>
+                      </label>
+                    </th>
                     <th>#</th>
                     <th>Class</th>
                     <th>Section</th>
@@ -765,9 +828,16 @@ const SchoolAdminRoutine = () => {
                 <tbody>
                   {routine.sort((a, b) => {
                     return b.id - a.id;
-                  }).map((routineJSON) => {
+                  }).map((routineJSON, index) => {
                     return (
-                      <tr>
+                      <tr><th>
+                        <label className="custom-control custom-switch mt-3">
+                          <input type="checkbox"
+                            onChange={() => toggleCheckStudent(index)}
+                            checked={checkedStudent[index]} />
+                          <span className=""></span>
+                        </label>
+                      </th>
                         <td>{routineJSON.id}</td>
                         <td>{routineJSON.class_name}</td>
                         <td>{routineJSON.section_default_name}</td>

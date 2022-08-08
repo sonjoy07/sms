@@ -79,7 +79,6 @@ const StudentActivities = (props) => {
         }
       )
       .then((response) => {
-        console.log(response.data[0].class_id);
         setClass_id(response.data[0].class_id)
         setSection_id(response.data[0].section_id)
         axios
@@ -271,6 +270,16 @@ const StudentActivities = (props) => {
                         >
                           {homeworkJSON.subject_name}
                         </h5>
+                        <h6
+                          style={{
+                            color: "LightSeaGreen",
+                            fontSize: "18px",
+                            fontWeight: "400",
+                          }}
+                          class="card-title pt-2"
+                        >
+                          Teacher Name: {homeworkJSON.teacher_name}
+                        </h6>
                       </div>
                     </div>
                   </div>

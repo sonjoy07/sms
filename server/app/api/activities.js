@@ -71,7 +71,7 @@ module.exports = (app) => {
       res.send(result);
     });
   });
-  function school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
+  function school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions) {
     console.log('all school ok')
 
     if (school_info_id === 'all') {
@@ -79,40 +79,40 @@ module.exports = (app) => {
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
         result.map(sch => {
-          class_info2(school_type, sch.id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+          class_info2(school_type, sch.id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
         })
       })
     } else {
-      class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+      class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
     }
   }
-  function class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
+  function class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions) {
     if (class_id === 'all') {
       console.log('all class ok')
       con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
         if (err) throw err;
         result.map(cls => {
-          class_info(school_type, school_info_id, cls.id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+          class_info(school_type, school_info_id, cls.id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
         })
       })
     } else {
-      class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+      class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
     }
   }
-  function class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
+  function class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions) {
     if (section_id === 'all') {
       console.log('all section ok')
       //all section if
       con.query(`select * from section`, function (err, result, fields) {
         if (err) throw err;
         result.map(sec => {
-          section_info(school_type, school_info_id, class_id, sec.id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+          section_info(school_type, school_info_id, class_id, sec.id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
 
         })
       })
     } else {
       //all section else
-      section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+      section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
       // if (session_id === 'all') {
       //   con.query(`select * from session`, function (err, result, fields) {
       //     if (err) throw err;
@@ -232,37 +232,37 @@ module.exports = (app) => {
 
     }
   }
-  function section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
+  function section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions) {
     if (session_id === 'all') {
       console.log('all session ok')
       //all session
       con.query(`select * from session`, function (err, result, fields) {
         if (err) throw err;
         result.map(ses => {
-          session_info(school_type, school_info_id, class_id, section_id, ses.id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+          session_info(school_type, school_info_id, class_id, section_id, ses.id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
         })
       })
 
     } else {
       //all session else
 
-      session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
-     
+      session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
+
     }
   }
-  function session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
+  function session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions) {
 
     if (subject_id === 'all') {
       console.log('all subject ok')
       con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
         if (err) throw err;
         result.map(sub => {
-          subject_info(school_type, school_info_id, class_id, section_id, session_id, sub.id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+          subject_info(school_type, school_info_id, class_id, section_id, session_id, sub.id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
         })
 
       })
     } else {
-      subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+      subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
       // if (school_teacher_id === 'all') {
       //   con.query(`select * from teacher where school_info_id = ${sch.id}`, function (err, result, fields) {
       //     if (err) throw err;
@@ -289,7 +289,7 @@ module.exports = (app) => {
       // }
     }
   }
-  function subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions) {
+  function subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions) {
 
     if (school_teacher_id === 'all') {
       console.log('all teacher ok')
@@ -359,7 +359,7 @@ module.exports = (app) => {
           con.query(`select * from school_type`, function (err, result, fields) {
             if (err) throw err;
             result.map(type => {
-              school_info(type.id, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)
+              school_info(type.id, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
               // if (school_info_id === 'all') {
               //   console.log('all school ok')
               //   let sql = `select * from school_info`
@@ -1234,7 +1234,7 @@ module.exports = (app) => {
             })
           })
         } else {
-          school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment,teacher_id,questions)         
+          school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, topic, details, issue_date, due_date, attachment, teacher_id, questions)
         }
         res.json({ status: "success" });
       }
@@ -1251,16 +1251,18 @@ module.exports = (app) => {
     var homework_id = req.body.homework_id;
     var submission_time = req.body.submission_time;
     var attachment_link = req.body.fileName;
-
-    const file = req.files.file
-    var uploadPath = path.resolve(__dirname, '../../uploads/');
-    file.mv(`${uploadPath}/${file.name}`, err => {
-      if (err) {
-        return res.status(500).send(err)
-      }
-    })
-
-    var sql = `INSERT INTO activities_submission (student_present_status_id, activities_id, submission_time, attachment_link) VALUES ("${student_id}", "${homework_id}", "${submission_time}", "${attachment_link}" )`;
+    var answer = req.body.answer;
+    console.log(req.files);
+    if (req.files !== null) {
+      const file = req.files.file
+      var uploadPath = path.resolve(__dirname, '../../uploads/');
+      file.mv(`${uploadPath}/${file.name}`, err => {
+        if (err) {
+          return res.status(500).send(err)
+        }
+      })
+    }
+    var sql = `INSERT INTO activities_submission (student_present_status_id, activities_id, submission_time, attachment_link,answer) VALUES ("${student_id}", "${homework_id}", "${submission_time}", "${attachment_link}","${answer}" )`;
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -1268,18 +1270,20 @@ module.exports = (app) => {
     });
   });
 
-  app.get("/api/activities/student/", authenticateToken, (req, res) => {
-    var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
+  app.get("/api/activities/student", authenticateToken, (req, res) => {
+    var sql = `select activities.id,questions, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from activities
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
     join subject on activities.subject_id=subject.id
-    join teacher on activities.teacher_id=teacher.id
+    join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
     where activities.section_id="${req.query.section_id}"
     and activities.class_id = "${req.query.class_id}"
     and activities.session_id = "${req.query.session_id}"
+    and activities.school_info_id = "${req.query.school_info_id}"
     order by activities.due_date;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
@@ -1345,12 +1349,12 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/student/id", authenticateToken, (req, res) => {
-    var sql = `select activities.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
+    var sql = `select activities.id, questions,class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from activities
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
     join subject on activities.subject_id=subject.id
-    join teacher on activities.teacher_id=teacher.id
+    join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
     where activities.id="${req.query.homework_id}";`;
     con.query(sql, function (err, result, fields) {
@@ -1380,7 +1384,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/teacher/submitlist", authenticateToken, (req, res) => {
-    var sql = `select student.student_code, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, activities_submission.submission_time, activities_submission.attachment_link 
+    var sql = `select student.student_code, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name, activities_submission.submission_time, activities_submission.attachment_link,answer 
     from activities_submission 
     join student_present_status on activities_submission.student_present_status_id=student_present_status.id
     join student on student_present_status.student_id=student.id

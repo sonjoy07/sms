@@ -23,6 +23,7 @@ const StudentActivitiesSubmit = (props) => {
   const [submission_time, setSubmission_time] = useState(moment().format());
 
   const [attachment_link, setAttachment_link] = useState("");
+  const [answer, setAnswer] = useState("");
   const [preview, setPreview] = useState()
 
   const [hw, setHw] = useState({});
@@ -84,6 +85,7 @@ const StudentActivitiesSubmit = (props) => {
     formData.append("student_id", student_id);
     formData.append("homework_id", homework_id);
     formData.append("submission_time", submission_time);
+    formData.append("answer", answer);
     fetch(`${process.env.REACT_APP_NODE_API}/api/activities/submit`, {
       method: "POST",
       headers: {
@@ -96,10 +98,10 @@ const StudentActivitiesSubmit = (props) => {
       .then((json) => {
         toast("Extra Curriculum submitted successfully");
         console.log("ok", json);
+        setAnswer("")
         // navigate("/studenthomework");
       });
   };
-  console.log(submissionList);
   return (
     <>
       <StudentHeader />
@@ -122,6 +124,16 @@ const StudentActivitiesSubmit = (props) => {
                     >
                       {hw.topic}
                     </h3>
+                    <h4
+                      style={{
+                        color: "LightSeaGreen",
+                        fontSize: "25px",
+                        fontWeight: "700",
+                      }}
+                      class="card-title pt-2"
+                    >
+                     Questions: {hw.questions}
+                    </h4>
                     <h5
                       style={{
                         color: "LightSeaGreen",
@@ -208,7 +220,7 @@ const StudentActivitiesSubmit = (props) => {
                                   className="pb-3"
                                   for="exampleInputEmail1"
                                 >
-                                  Assignment Attachment :{" "}
+                                  Assignment Answer :{" "}
                                 </label>
                                 {preview &&
                                   <p>{preview}
@@ -217,7 +229,7 @@ const StudentActivitiesSubmit = (props) => {
                                       class="fa-solid fa-times  pt-1"
                                       onClick={() => { setPreview(undefined); setAttachment_link("") }}
                                     ></i></p>}
-                                <input
+                                {/* <input
                                   style={{
                                     border: "1px solid blue",
                                     padding: "5px 10px",
@@ -228,7 +240,8 @@ const StudentActivitiesSubmit = (props) => {
                                   id="avatar"
                                   name="avatar"
                                   required
-                                />
+                                /> */}
+                                <textarea cols={6} rows={6} class="form-control" value={answer} onChange={(e)=>setAnswer(e.target.value)}></textarea>
                               </div>
                             </div>
                             {/* <input
@@ -257,7 +270,7 @@ const StudentActivitiesSubmit = (props) => {
                                 <th scope="col">Student Code</th>
                                 <th scope="col">Submission Time</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Attachment</th>
+                                <th scope="col">Answer</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -267,7 +280,8 @@ const StudentActivitiesSubmit = (props) => {
                                   <td>{res.student_code}</td>
                                   <td>{moment(res.submission_time).format("DD-MM-YYYY")}</td>
                                   <td>Submit</td>
-                                  <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
+                                  {/* <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td> */}
+                                  <td>{res.answer}</td>
                                 </tr>)
                               })}
                             </tbody>
