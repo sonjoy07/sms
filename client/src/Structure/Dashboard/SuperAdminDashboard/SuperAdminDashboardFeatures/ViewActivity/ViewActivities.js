@@ -40,6 +40,7 @@ const ViewActivities = () => {
     download_link.click();
   }
   const htmlToCSV = (html, filename) => {
+    debugger;
     var data = [];
     var rows = document.querySelectorAll("table tr");
 
@@ -60,7 +61,7 @@ const ViewActivities = () => {
   }
   return (<><SuperAdminHeader />
     <section className='py-3 container'>
-      <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Extra Curriculumdd : </h2>
+      <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Extra Curriculum : </h2>
       <button className='btn btn-primary' style={{float: 'right'}} onClick={handleCSv}>Download CSV</button>
       <table class="table table-striped">
         <thead>
@@ -88,7 +89,7 @@ const ViewActivities = () => {
               <td>{res.student_code}</td>
               <td>{res.full_name}</td>
               <td>{res.mobile_no}</td>
-              <td> {moment(res.submission_time).format("DD-MM-YYYY")}</td>
+              <td> {moment(res.submission_time).format("DD-MM-YYYY h:mm a")}</td>
               <td>{res.answer}</td>
               <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
               <td>Submit</td>

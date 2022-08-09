@@ -48,7 +48,7 @@ const ExtraDetails = () => {
                             {/* <td>{res.class_name}</td>
                             <td>{res.section_default_name}</td> */}
                             <td>Submit</td>
-                            <td> {moment(res.submission_time).format("DD-MM-YYYY")}</td>
+                            <td> {moment(res.submission_time).format("DD-MM-YYYY h:mm a")}</td>
                             <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
                         </tr>
                     })}

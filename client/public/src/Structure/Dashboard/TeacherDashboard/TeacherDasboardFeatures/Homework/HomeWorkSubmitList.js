@@ -58,7 +58,7 @@ const HomeWorkSubmitList = (props) => {
                 <td>{homeworkJSON.first_name}</td>
                 <td>Submit</td>
                 <td>
-                  {moment(homeworkJSON.submission_time).format("YYYY-MM-DD")}
+                  {moment(homeworkJSON.submission_time).format("YYYY-MM-DD h:mm a")}
                 </td>
                 <td style={{ color: "blue" }}><Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link></td>
               </tr>

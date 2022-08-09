@@ -22,6 +22,11 @@ const HomeWorkShow = () => {
       )
       .then((response) => {
         setHomework(response.data);
+        response.data.map((res,index)=>{
+          updateData[index]= res.marks
+        })
+        setUpdateData(updateData)
+
       });
   }, []);
   
@@ -56,6 +61,7 @@ const HomeWorkShow = () => {
     updateData[index]= value
     setUpdateData({updateData})
   }
+  console.log(updateData);
   return (
     <>
     <TeacherHeader/>
@@ -77,17 +83,18 @@ const HomeWorkShow = () => {
           <tbody>
 
             {homework.map((student,index) => {
+              console.log(updateData[index]);
               return (
                 <tr key={index}>
                   <td>{student.student_code}</td>
                   <td>{student.full_name}</td>
                   <td>Submit</td>
-                  <td> {moment(student.submission_time).format("DD-MM-YYYY")}</td>
+                  <td> {moment(student.submission_time).format("DD-MM-YYYY h:mm a")}</td>
                   <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${student.attachment_link}`} download>{student.attachment_link}</Link></td>
-                  <td>{student.marks === null?<input type={'number'} value={updateData[index]}
+                  <td>{<input type={'number'} value={updateData[index]}
                           onKeyDown={(e) => updateMarks(e,student.id,index)
                           }
-                          onChange={(e) => updateMarksData(e.target.value,index)}/>:student.marks}</td>
+                          onChange={(e) => updateMarksData(e.target.value,index)}/>}</td>
                 </tr>
               )
             })

@@ -197,6 +197,8 @@ module.exports = (app) => {
     var questions = req.body.questions;
     var issue_date = req.body.issue_date;
     var due_date = req.body.due_date;
+    var sub_start_date = req.body.sub_start_date;
+    var sub_start_time = req.body.sub_start_time;
     var attachment_link = req.body.fileName;
     if (req.files !== null) {
       const file = req.files.file
@@ -215,7 +217,7 @@ module.exports = (app) => {
           if (err) throw err
         })
         sql = `UPDATE activity
-        SET questions="${questions}", all_class=${class_id === 'all' ? 1 : 0},all_school=${school_info_id === 'all' ? 1 : 0},all_section=${section_id === 'all' ? 1 : 0},all_session=${session_id === 'all' ? 1 : 0},all_subject=${subject_id === 'all' ? 1 : 0},all_teacher=${teacher_id === 'all' ? 1 : 0},topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date}"${attachment}
+        SET questions="${questions}", all_class=${class_id === 'all' ? 1 : 0},all_school=${school_info_id === 'all' ? 1 : 0},all_section=${section_id === 'all' ? 1 : 0},all_session=${session_id === 'all' ? 1 : 0},all_subject=${subject_id === 'all' ? 1 : 0},all_teacher=${teacher_id === 'all' ? 1 : 0},topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date},sub_start_time="${sub_start_time}",sub_start_date="${sub_start_time}""${attachment}
         WHERE id=${id}`
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
@@ -233,7 +235,7 @@ module.exports = (app) => {
         })
       } else {
         const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
-        con.query(`insert into activity (topic,details,questions,attachment_link,issue_date,due_date,all_school,all_class,all_section,all_session,all_subject,all_teacher) values ("${topic}","${details}","${questions}",${attachment},"${issue_date}","${due_date}",${school_info_id === 'all' ? 1 : 0},${class_id === 'all' ? 1 : 0},${section_id === 'all' ? 1 : 0},${session_id === 'all' ? 1 : 0},${subject_id === 'all' ? 1 : 0},${school_teacher_id === 'all' ? 1 : 0})`, function (err, result, fields) {
+        con.query(`insert into activity (topic,details,questions,attachment_link,issue_date,due_date,all_school,all_class,all_section,all_session,all_subject,all_teacher,sub_start_time,sub_start_date) values ("${topic}","${details}","${questions}",${attachment},"${issue_date}","${due_date}",${school_info_id === 'all' ? 1 : 0},${class_id === 'all' ? 1 : 0},${section_id === 'all' ? 1 : 0},${session_id === 'all' ? 1 : 0},${subject_id === 'all' ? 1 : 0},${school_teacher_id === 'all' ? 1 : 0},"${sub_start_time}","${sub_start_date}")`, function (err, result, fields) {
           if (err) throw err;
           const activityId = result.insertId
           if (school_type === 'all') {
@@ -294,7 +296,7 @@ module.exports = (app) => {
     and activities.class_id = "${req.query.class_id}"
     and activities.session_id = "${req.query.session_id}"
     and activities.school_info_id = "${req.query.school_info_id}"
-    order by due_date;`;
+    order by due_date desc;`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

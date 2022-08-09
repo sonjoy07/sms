@@ -5,8 +5,8 @@ import moment from "moment";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./HomeWork.css";
-import profile from '../../../images/profile/profile.png';
 import SuperAdminHeader from "../SuperAdminHeader";
+import { DateTime } from 'react-datetime-bootstrap';
 
 
 const AdminActivities = (props) => {
@@ -61,8 +61,11 @@ const AdminActivities = (props) => {
   const [attachment, setAttachment] = useState("");
   const [issue_date, setIssue_date] = useState("");
   const [due_date, setDue_date] = useState("");
+  const [sub_start_date, setSub_start_date] = useState("");
+  const [sub_start_time, setSub_start_time] = useState("");
   const [search_issue_date, setSearch_Issue_date] = useState("");
   const [search_due_date, setSearch_Due_date] = useState("");
+  const [timeSe, setTime] = useState("");
   const [search_school_id, setSearchShool_id] = useState("");
   const [search_teachers, setSearch_Teachers] = useState([]);
   const [access_token, setAccess_token] = useState(
@@ -334,6 +337,15 @@ const AdminActivities = (props) => {
   let handleDueDateChange = (e) => {
     setDue_date(e.target.value);
   };
+  let handleSubStartDateChange = (e) => {
+    setSub_start_date(e.target.value);
+  };
+  let handleSubStartTimeChange = (e) => {
+    setSub_start_time(e.target.value);
+  };
+  let handleTimeChange = (e) => {
+    setTime(e.target.value);
+  };
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -352,6 +364,8 @@ const AdminActivities = (props) => {
     formData.append("details", details);
     formData.append("issue_date", issue_date);
     formData.append("due_date", due_date);
+    formData.append("sub_start_date", sub_start_date);
+    formData.append("sub_start_time", sub_start_time);
     formData.append("id", id);
     formData.name =
       fetch(`${process.env.REACT_APP_NODE_API}/api/activities/teacher`, {
@@ -382,6 +396,8 @@ const AdminActivities = (props) => {
           setTopic("");
           setDetails("");
           setQuestions("")
+          setSub_start_date("")
+          setSub_start_time("")
         })
         .then(() => getHWList());
   };
@@ -397,6 +413,8 @@ const AdminActivities = (props) => {
     setTopic("");
     setDetails("");
     setQuestions("")
+    setSub_start_date("")
+    setSub_start_time("")
   }
 
   const editHomeWork = (data) => {
@@ -413,6 +431,8 @@ const AdminActivities = (props) => {
     setSchool_info_id(data.all_school === 1?'all':data.school_info_id);
     setSchool_teacher_id(data.all_teacher === 1?'all':data.school_teacher_id);    
     setQuestions(data.questions);
+    setSub_start_date(data.sub_start_date)
+    setSub_start_time(data.sub_start_time)
   }
 
   const deleteHomework = async (id) => {
@@ -715,6 +735,7 @@ const AdminActivities = (props) => {
                             </option>
                           );
                         })}
+                        <option value="99999">Extra Curriculum</option>
                       </select>
                     </div>
                   </div>
@@ -760,7 +781,7 @@ const AdminActivities = (props) => {
                   <div class={"col-sm-2 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className="pb-2" for="exampleInputEmail1">
-                        Due Date :{" "}
+                        End Date :{" "}
                       </label>
                       <input
                         style={{ border: "1px solid blue" }}
@@ -771,6 +792,43 @@ const AdminActivities = (props) => {
                       />
                     </div>
                   </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleInputEmail1">
+                        Submission Start Date :{" "}
+                      </label>
+                      <input
+                        style={{ border: "1px solid blue" }}
+                        type="date"
+                        class="form-control"
+                        value={sub_start_date}
+                        onChange={handleSubStartDateChange}
+                      />
+                    </div>
+                  </div>
+                  <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleInputEmail1">
+                        Submission Start Time :{" "}
+                      </label>
+                      <input
+                        style={{ border: "1px solid blue" }}
+                        type="time"
+                        class="form-control"
+                        value={sub_start_time}
+                        onChange={handleSubStartTimeChange}
+                      />
+                    </div>
+                  </div>
+                  {/* <div class={"col-sm-2 p-2 mx-auto"}>
+                    <div class="form-group">
+                      <label className="pb-2" for="exampleInputEmail1">
+                        Time :{" "}
+                      </label>
+                      
+                      <DateTime pickerOptions={{format:"DD-MM-YYYY h:mm a"}} value={timeSe} onChange={handleTimeChange}/>
+                    </div>
+                  </div> */}
 
                   {/* <div style={{paddingTop: '20px'}} class={"col-sm-2 mx-auto"}>
                    <button  type="button" class="btn btn-primary">Primary</button>
@@ -1056,7 +1114,7 @@ const AdminActivities = (props) => {
                       {homeworkJSON.all_section === 0?homeworkJSON.section_default_name:'All'}
                     </td>
                     <td>{homeworkJSON.all_session === 0?homeworkJSON.session_year:'All'}</td>
-                    <td>{homeworkJSON.all_subject === 0?homeworkJSON.subject_name:'All'}</td>
+                    <td>{homeworkJSON.all_subject === 0?homeworkJSON.subject_name:homeworkJSON.all_subject === 99999?'Extra Curriculum':'All'}</td>
                     <td>
                       {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>

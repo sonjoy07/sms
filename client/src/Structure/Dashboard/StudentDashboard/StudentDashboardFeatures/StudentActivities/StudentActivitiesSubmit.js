@@ -220,7 +220,7 @@ const StudentActivitiesSubmit = (props) => {
                                   className="pb-3"
                                   for="exampleInputEmail1"
                                 >
-                                  Assignment Answer :{" "}
+                                  Assignment Attachment :{" "}
                                 </label>
                                 {preview &&
                                   <p>{preview}
@@ -229,7 +229,7 @@ const StudentActivitiesSubmit = (props) => {
                                       class="fa-solid fa-times  pt-1"
                                       onClick={() => { setPreview(undefined); setAttachment_link("") }}
                                     ></i></p>}
-                                {/* <input
+                                <input
                                   style={{
                                     border: "1px solid blue",
                                     padding: "5px 10px",
@@ -240,7 +240,16 @@ const StudentActivitiesSubmit = (props) => {
                                   id="avatar"
                                   name="avatar"
                                   required
-                                /> */}
+                                />
+                                </div>
+                                <div class="form-group p-5">
+                                <label
+                                  style={{ fontSize: "20px", fontWeight: "700" }}
+                                  className="pb-3"
+                                  for="exampleInputEmail1"
+                                >
+                                  Assignment Answer :{" "}
+                                </label>
                                 <textarea cols={6} rows={6} class="form-control" value={answer} onChange={(e)=>setAnswer(e.target.value)}></textarea>
                               </div>
                             </div>
