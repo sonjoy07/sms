@@ -87,7 +87,7 @@ const Teacherpassword = () => {
                                 <div class={"col-sm-3 mx-auto p-2"}>
                                     <div class="form-group">
                                         <label className='pb-2' for="exampleSelect">Type Old Password </label>
-                                        <input onChange={handleOld} value={old} type="password" />
+                                        <input onChange={handleOld} value={old} type="password" className='form-control'/>
                                     </div>
                                 </div>
 
@@ -95,7 +95,7 @@ const Teacherpassword = () => {
                                 <div class={"col-sm-3 mx-auto p-2"}>
                                     <div class="form-group">
                                         <label className='pb-2' for="exampleSelect">New Password </label>
-                                        <input value={pass} onChange={handlechange} type="password" />
+                                        <input value={pass} onChange={handlechange} type="password" className='form-control'/>
                                     </div>
                                 </div>
 

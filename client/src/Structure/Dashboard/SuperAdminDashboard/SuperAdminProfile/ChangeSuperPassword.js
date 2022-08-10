@@ -15,7 +15,7 @@ const ChangeSuperPassword = () => {
     useEffect(() => {
         axios
             .get(
-                `${process.env.REACT_APP_NODE_API}/api/student/profile?student_id=${user_code}`,
+                `${process.env.REACT_APP_NODE_API}/api/super-admin/profile?admin_id=${user_code}`,
                 {
                     headers: {
                         authorization: "bearer " + localStorage.getItem("access_token"),
@@ -29,7 +29,7 @@ const ChangeSuperPassword = () => {
             .catch((e) => console.log(e));
     }, []);
     const handleSubmit = () => {
-        fetch(`${process.env.REACT_APP_NODE_API}/api/update_user?user_code=${student[0].student_code}`, {
+        fetch(`${process.env.REACT_APP_NODE_API}/api/update_user?user_code=${student[0].super_admin_code}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

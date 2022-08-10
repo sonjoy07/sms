@@ -218,6 +218,7 @@ const TeacherAttendanceReport = (props) => {
                                 <th scope="col">Class</th>
                                 <th scope="col">Section</th>
                                 <th scope="col">Student Name</th>
+                                <th scope="col">Student ID</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Class Time</th>
                                 <th scope="col">Status</th>
@@ -236,6 +237,9 @@ const TeacherAttendanceReport = (props) => {
                                         </td>
                                         <td style={{ color: "blue" }}>
                                             {noticeJSON.full_name}
+                                        </td>
+                                        <td style={{ color: "blue" }}>
+                                            {noticeJSON.student_code}
                                         </td>
                                         <td style={{ color: "blue" }}>
                                             {moment(noticeJSON.date).format('DD-MM-YYYY')}

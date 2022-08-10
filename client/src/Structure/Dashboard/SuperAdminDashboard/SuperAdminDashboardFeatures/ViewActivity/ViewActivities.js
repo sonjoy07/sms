@@ -87,6 +87,7 @@ const ViewActivities = () => {
             <th scope="col">Short Answer</th>
             <th scope="col">Beyond The School File</th>
             <th scope="col">Status</th>
+            <th scope="col">Marks</th>
           </tr>
         </thead>
         <tbody>
@@ -103,6 +104,7 @@ const ViewActivities = () => {
               <td>{res.answer}</td>
               <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
               <td>Submit</td>
+              <td>{res.marks_obtained}</td>
             </tr>
           })}
 

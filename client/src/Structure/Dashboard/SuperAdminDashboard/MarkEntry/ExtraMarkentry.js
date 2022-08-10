@@ -8,8 +8,7 @@ const ExtraMarkentry = () => {
   let student_mark = [];
   let latest_mark = [];
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
-  const [school_id, setSchool_type] = useState(localStorage.getItem("school_id"));
-  const [school_type, setSchool_type_id] = useState(localStorage.getItem("school_type"));
+ 
   const [sections, setSections] = useState([]);
   const [present_mark, setPresent_marks] = useState([])
   const [showData, setShowData] = useState([])
@@ -26,8 +25,10 @@ const ExtraMarkentry = () => {
   const [index, setIndex] = useState("");
   const [updateData, setUpdateData] = useState("");
   const [session_id, setSession_id] = useState("");
+  const [school_id, setSchool_id] = useState("");
   const [session, setSession] = useState("");
   const [clses, setClses] = useState([]);
+  const [schools, setSchools] = useState([]);
 
   const [class_input, setClass_Input] = useState('')
   const [exam_id, setExam_id] = useState("");
@@ -274,15 +275,23 @@ const ExtraMarkentry = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${school_type}`, {
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/school_type/all`, {
+      headers: {
+        authorization: "bearer " + localStorage.getItem("access_token"),
+      },
+    }).then((response) => {
+      setSchools(response.data);
+    });
+  }, []);
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${school_id}`, {
       headers: {
         authorization: "bearer " + localStorage.getItem("access_token"),
       },
     }).then((response) => {
       setClses(response.data);
-      console.log(clses)
     });
-  }, []);
+  }, [school_id]);
 
   const handleMarks = () => {
 
@@ -400,7 +409,25 @@ const ExtraMarkentry = () => {
                       </select>
                     </div>
                   </div>
-
+                  <div class={"col-sm-4 mx-auto p-2"}>
+                    <div class="form-group">
+                      <label className='pb-2' for="exampleSelect">School Type : </label>
+                      <select
+                        className="form-control"
+                        value={school_id}
+                        onChange={(e)=>setSchool_id(e.target.value)}
+                      >
+                        <option value="">Select</option>
+                        {schools.map((classJSON) => {
+                          return (
+                            <option value={classJSON.id}>
+                              {classJSON.type_name}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  </div>
                   <div class={"col-sm-4 mx-auto p-2"}>
                     <div class="form-group">
                       <label className='pb-2' for="exampleSelect">Class : </label>
@@ -420,6 +447,7 @@ const ExtraMarkentry = () => {
                       </select>
                     </div>
                   </div>
+                  
 
 
                   <div class={"col-sm-4 mx-auto p-2"}>

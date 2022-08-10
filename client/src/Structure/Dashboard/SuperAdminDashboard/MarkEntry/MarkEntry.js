@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import evaluation from "../../../../images/icons/evaluation.png";
 import axios from "axios";
 import TeacherHeader from "../../TeacherHeader/TeacherHeader";
-import EvalutionSchedule from './EvalutionSchedule';
 const MarkentryPage = () => {
     let navigate = useNavigate();
     const [teacher, setTeacher] = useState({});

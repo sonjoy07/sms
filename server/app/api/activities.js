@@ -633,11 +633,12 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/teacher/submitlist", authenticateToken, (req, res) => {
-    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer 
+    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer ,marks_obtained
     from activities_submission 
     join student_present_status on activities_submission.student_present_status_id=student_present_status.id
     join student_info on student_present_status.student_id=student_info.id
-    where activities_id="${req.query.home_work_id}";`;
+    join extra_curriculum_marks on activities_submission.activities_id=extra_curriculum_marks.activities_id
+    where activities_submission.activities_id="${req.query.home_work_id}";`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
