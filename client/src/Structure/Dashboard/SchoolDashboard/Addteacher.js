@@ -9,6 +9,8 @@ const Addteacher = () => {
     const [teachers, setTeachers] = useState([])
 
     const [teacher_id, setteacher_id] = useState('')
+    const [searchClassID, setSearchClassID] = useState('')
+    const [searchSectionID, setSearchSectionID] = useState('')
     const [title, settitle] = useState('')
     const [fname, setFname] = useState('')
     const [middle, setMiddle] = useState('')
@@ -26,9 +28,11 @@ const Addteacher = () => {
     const [reset, setReset] = useState(0)
     const [id, setId] = useState('')
     const [filter, setFilter] = useState('')
+    const [classes, setClasses] = useState([])
+    const [sections, setSections] = useState([])
 
-    const searchTeacher =()=>{
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}&&teacher_id=${filter}`, {
+    const searchTeacher = () => {
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}&&teacher_id=${filter}&&searchSectionID=${searchSectionID}&&searchClassID=${searchClassID}`, {
             headers: {
                 authorization: "bearer " + localStorage.getItem("access_token"),
             },
@@ -36,6 +40,23 @@ const Addteacher = () => {
             setTeachers(response.data);
         });
     }
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${localStorage.getItem('school_type')}`, {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }).then((response) => {
+            setClasses(response.data);
+        });
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/section/all`, {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }).then((response) => {
+            setSections(response.data);
+        });
+    }, []);
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/teacher/filter?school_info_id=${school_id}`, {
@@ -98,59 +119,59 @@ const Addteacher = () => {
         settitle(e.target.value)
     }
     const handleSubmit = () => {
-        if(teacher_id !== '' && subject_code !== ''&& mpo !== "" && index !== "" && mobile_no !== "") {
-            console.log('asdfas',index);
-        fetch(`${process.env.REACT_APP_NODE_API}/api/add_teacher`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", authorization: "bearer " + localStorage.getItem("access_token"), },
-            body: JSON.stringify({
-                teacher_code: teacher_id,
-                title: title,
-                first_name: fname,
-                middle_name: middle,
-                last_name: lname,
-                mobile: mobile_no,
-                initial: initial,
-                designation: designation,
-                department: department,
-                mpo_status: mpo,
-                index_no: index,
-                blood_group: blood,
-                email: email,
-                dob: dob,
-                subject_code: subject_code,
-                school_info_id: school_id,
-                id: id
-            }),
-        })
-            .then((res) => res.json())
-            .then((json) => {
-                setReset(reset + 1)
-                if (id === '') {
-                    toast('New Teacher saved successfully')
-                } else {
-                    toast('Teacher updated successfully')
-                }
-            });
-        setteacher_id('')
-        setFname('')
-        setMiddle('')
-        setLLname('')
-        setMobile('')
-        setDob('')
-        setBlood('')
-        setDesignation('')
-        setsubject('')
-        setInitial('')
-        setMpo('')
-        setIndex('')
-        settitle('')
-        setId('')
-        }else{
+        if (teacher_id !== '' && subject_code !== '' && mpo !== "" && index !== "" && mobile_no !== "") {
+            console.log('asdfas', index);
+            fetch(`${process.env.REACT_APP_NODE_API}/api/add_teacher`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", authorization: "bearer " + localStorage.getItem("access_token"), },
+                body: JSON.stringify({
+                    teacher_code: teacher_id,
+                    title: title,
+                    first_name: fname,
+                    middle_name: middle,
+                    last_name: lname,
+                    mobile: mobile_no,
+                    initial: initial,
+                    designation: designation,
+                    department: department,
+                    mpo_status: mpo,
+                    index_no: index,
+                    blood_group: blood,
+                    email: email,
+                    dob: dob,
+                    subject_code: subject_code,
+                    school_info_id: school_id,
+                    id: id
+                }),
+            })
+                .then((res) => res.json())
+                .then((json) => {
+                    setReset(reset + 1)
+                    if (id === '') {
+                        toast('New Teacher saved successfully')
+                    } else {
+                        toast('Teacher updated successfully')
+                    }
+                });
+            setteacher_id('')
+            setFname('')
+            setMiddle('')
+            setLLname('')
+            setMobile('')
+            setDob('')
+            setBlood('')
+            setDesignation('')
+            setsubject('')
+            setInitial('')
+            setMpo('')
+            setIndex('')
+            settitle('')
+            setId('')
+        } else {
             toast("Please fill up the required field!!")
         }
     }
-    const addTeacher = ()=>{
+    const addTeacher = () => {
         setteacher_id('')
         setFname('')
         setMiddle('')
@@ -212,7 +233,7 @@ const Addteacher = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
 
@@ -338,24 +359,49 @@ const Addteacher = () => {
 
             <section className='py-5'>
                 <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Teacher List</h2>
-<div className='row'>
-            <div class={"col-sm-4 p-2 mx-auto"}>
-              <div class="form-group">
-                <input
-                  placeholder='Teacher ID'
-                  onChange={(e) => setFilter(e.target.value)}
-                  type="text"
-                  value={filter}
-                  class="form-control" />
-              </div>
-            </div>
-           
-            <div class={"col-sm-4"}>
-              <div class="form-group">
-                <button className='btn btn-success mt-2' onClick={searchTeacher}>Search</button>
-              </div>
-            </div>
-          </div>
+                <p style={{ float: 'right' }}>Teacher Count: {teachers.length}</p>
+                <div className='row'>
+                    <div class={"col-sm-3 mx-auto"}>
+                        <div class="form-group">
+                            <input
+                                placeholder='Teacher ID'
+                                onChange={(e) => setFilter(e.target.value)}
+                                type="text"
+                                value={filter}
+                                class="form-control" />
+                        </div>
+                    </div>
+                        <div className='col-sm-3'>
+                            <select className='form-control' value={searchClassID} onChange={(e) => setSearchClassID(e.target.value)}>
+                                <option value="">Select Class</option>
+                                {classes.map((classJSON) => {
+                                    return (
+                                        <option value={classJSON.id}>
+                                            {classJSON.class_name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </div>
+                        <div className='col-sm-3'>
+                            <select className='form-control' value={searchSectionID} onChange={(e) => setSearchSectionID(e.target.value)}>
+                                <option value="">Select Section</option>
+                                {sections.map((sectionJSON) => {
+                                    return (
+                                        <option value={sectionJSON.id}>
+                                            {sectionJSON.section_default_name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </div>
+
+                    <div class={"col-sm-3"}>
+                        <div class="form-group">
+                            <button className='btn btn-success mt-2' onClick={searchTeacher}>Search</button>
+                        </div>
+                    </div>
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <tr style={{ textAlign: 'center' }}>

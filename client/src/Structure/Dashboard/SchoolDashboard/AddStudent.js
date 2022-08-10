@@ -22,6 +22,8 @@ const AddStudent = () => {
     const [mother, setMother] = useState('')
     const [mother_no, setMotherNo] = useState('')
     const [searchStudentID, setSearchStudentID] = useState('')
+    const [searchClassID, setSearchClassID] = useState('')
+    const [searchSectionID, setSearchSectionID] = useState('')
     const [dob, setDob] = useState('')
     const [blood, setBlood] = useState('')
     const [photo, setphoto] = useState('')
@@ -29,7 +31,9 @@ const AddStudent = () => {
     const [students, setStudents] = useState([])
     const [genders, setGenders] = useState([])
     const [divisions, setDivisions] = useState([])
-    const [reset,setReset] = useState(0)
+    const [classes, setClasses] = useState([])
+    const [sections, setSections] = useState([])
+    const [reset, setReset] = useState(0)
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/student/all?school_info_id=${school_id}`, {
@@ -39,10 +43,10 @@ const AddStudent = () => {
         }).then((response) => {
             setStudents(response.data);
         });
-    }, [student_id,reset]);
+    }, [student_id, reset]);
 
-    const handleSearch= ()=>{
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/student/all?school_info_id=${school_id}&&student_id=${searchStudentID}`, {
+    const handleSearch = () => {
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/student/all?school_info_id=${school_id}&&student_id=${searchStudentID}&&searchSectionID=${searchSectionID}&&searchClassID=${searchClassID}`, {
             headers: {
                 authorization: "bearer " + localStorage.getItem("access_token"),
             },
@@ -58,6 +62,20 @@ const AddStudent = () => {
             },
         }).then((response) => {
             setGenders(response.data);
+        });
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${localStorage.getItem('school_type')}`, {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }).then((response) => {
+            setClasses(response.data);
+        });
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/section/all`, {
+            headers: {
+                authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+        }).then((response) => {
+            setSections(response.data);
         });
     }, []);
     useEffect(() => {
@@ -152,11 +170,11 @@ const AddStudent = () => {
         })
             .then((res) => res.json())
             .then((json) => {
-                setReset(reset+1)
+                setReset(reset + 1)
                 if (id === '') {
-                  toast('New Student saved successfully')
+                    toast('New Student saved successfully')
                 } else {
-                  toast('New Student updated successfully')
+                    toast('New Student updated successfully')
                 }
             });
         setStudent_id('')
@@ -203,18 +221,18 @@ const AddStudent = () => {
     const deleteRoutine = async (id) => {
         const check = window.confirm('Are you sure to delete?');
         if (check) {
-               axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
-               const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/student/delete?id=${id}`)
-               if (result) {
-                setReset(reset+1)
-                  toast("Student deleted successfully");
-               }
+            axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+            const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/student/delete?id=${id}`)
+            if (result) {
+                setReset(reset + 1)
+                toast("Student deleted successfully");
+            }
         }
     }
 
     return (
         <>
-        <SchoolHeader/>
+            <SchoolHeader />
 
             <div className='container pt-4'>
                 <div className='row'>
@@ -318,7 +336,7 @@ const AddStudent = () => {
 
                                     </div>
                                     <div className='row'>
-                                        
+
                                         <div className={"col-sm-3 p-2 mx-auto"}>
                                             <div className="form-group">
                                                 <label className='pb-2' for="exampleInputEmail1">Father Name : </label>
@@ -381,12 +399,6 @@ const AddStudent = () => {
                                             <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px', backgroundColor: '#008B8B' }} type="button" className="btn  bg-gradient px-5">Add Student</button>
                                         </div>
                                     </div>
-
-
-
-
-
-
                                 </div>
                             </div>
 
@@ -396,11 +408,36 @@ const AddStudent = () => {
 
                 <section className='py-5'>
                     <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Student List</h2>
+                    <p style={{ float: 'right' }}>Student Count: {students.length}</p>
                     <div className='row'>
-                        <div className='col-sm-6'>
-                            <input onChange={(e)=>setSearchStudentID(e.target.value)} className='form-control' placeholder='Student ID'/>
+                        <div className='col-sm-3'>
+                            <input onChange={(e) => setSearchStudentID(e.target.value)} className='form-control' placeholder='Student ID' />
                         </div>
-                        <div className='col-sm-6 '>
+                        <div className='col-sm-3'>
+                            <select className='form-control' value={searchClassID} onChange={(e) => setSearchClassID(e.target.value)}>
+                                <option value="">Select Class</option>
+                                {classes.map((classJSON) => {
+                                    return (
+                                        <option value={classJSON.id}>
+                                            {classJSON.class_name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </div>
+                        <div className='col-sm-3'>
+                            <select className='form-control' value={searchSectionID} onChange={(e) => setSearchSectionID(e.target.value)}>
+                                <option value="">Select Section</option>
+                                {sections.map((sectionJSON) => {
+                                    return (
+                                        <option value={sectionJSON.id}>
+                                            {sectionJSON.section_default_name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </div>
+                        <div className='col-sm-3 '>
                             <button onClick={handleSearch} className='btn btn-success mt-1'>Search</button>
                         </div>
                     </div>

@@ -39,8 +39,10 @@ module.exports = (app) => {
     );
   });
   app.get("/api/student/all", authenticateToken, (req, res) => {
-    let condition = req.query.student_id !== undefined && req.query.student_id !== "" ? ` and student.student_code= "${req.query.student_id}"` : ``
-    con.query(`SELECT student.*, CONCAT( student.first_name, ' ', student.middle_name, ' ', student.last_name ) AS full_name FROM student where student.school_info_id="${req.query.school_info_id}"${condition}`, function (err, result, fields) {
+    let condition = req.query.student_id !== undefined && req.query.student_id !== "" ? ` and student_info.student_code= "${req.query.student_id}"` : ``
+    condition += req.query.searchSectionID !== undefined && req.query.searchSectionID !== "" ? ` and student_info.section_id= "${req.query.searchSectionID}"` : ``
+    condition += req.query.searchClassID !== undefined && req.query.searchClassID !== "" ? ` and student_info.class_id= "${req.query.searchClassID}"` : ``
+    con.query(`SELECT student_info.* FROM student_info where student_info.school_info_id="${req.query.school_info_id}"${condition}`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

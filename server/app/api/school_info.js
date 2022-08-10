@@ -6,6 +6,14 @@ module.exports = (app) => {
       `SELECT id, school_name, type_id FROM school_info where administrator_id="${req.query.admin_id}"`,
       function (err, result, fields) {
         if (err) throw err;
+        // const schools = result
+        // const scho = schools.forEach((element, index) => {
+        //   const res = con.query(`SELECT COUNT(*) AS total FROM student WHERE school_info_id = ${element.id}`, function (err, result, fields) {
+        //     schools[index].students = result.total
+        //   })
+        // })
+        // const res = Promise.all(scho)
+        // console.log("schools",schools);
         res.send(result);
       }
     );
