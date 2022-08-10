@@ -379,9 +379,9 @@ const AdminActivities = (props) => {
         .then((res) => res.json())
         .then((json) => {
           if (id) {
-            toast("Extra Curriculum updated successfully");
+            toast("Beyond The School updated successfully");
           } else {
-            toast("Extra Curriculum submited successfully");
+            toast("Beyond The School submited successfully");
           }
           setId("");
           setClass_id("");
@@ -441,7 +441,7 @@ const AdminActivities = (props) => {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/activities/student/delete?id=${id}`)
       if (result) {
-        toast("Extra Curriculum deleted successfully");
+        toast("Beyond The School deleted successfully");
         getHWList()
       }
     }
@@ -504,7 +504,7 @@ const AdminActivities = (props) => {
                       }}
                       class="card-title pt-2"
                     >
-                      Create Extra Curriculum{" "}
+                      Create Beyond The School{" "}
                     </h3>
                   </div>
                   <div className="card-tools">
@@ -735,7 +735,7 @@ const AdminActivities = (props) => {
                             </option>
                           );
                         })}
-                        <option value="99999">Extra Curriculum</option>
+                        <option value="99999">Beyond The School</option>
                       </select>
                     </div>
                   </div>
@@ -1085,7 +1085,7 @@ const AdminActivities = (props) => {
               <tr>
                 <th scope="col">School Name</th>
                 <th scope="col">Teacher Name</th>
-                <th scope="col">Extra Curriculum Material</th>
+                <th scope="col">Beyond The School Material</th>
                 <th scope="col">Topic</th>
                 <th scope="col">Assignment Details</th>
                 <th scope="col">Class</th>
@@ -1094,7 +1094,7 @@ const AdminActivities = (props) => {
                 <th scope="col">Subject </th>
                 <th scope="col">Start Date </th>
                 <th scope="col">Due Date</th>
-                <th scope="col">View Extra Curriculum</th>
+                <th scope="col">View Beyond The School</th>
                 <th scope="col">Edit/Delete</th>
               </tr>
             </thead>
@@ -1114,7 +1114,7 @@ const AdminActivities = (props) => {
                       {homeworkJSON.all_section === 0?homeworkJSON.section_default_name:'All'}
                     </td>
                     <td>{homeworkJSON.all_session === 0?homeworkJSON.session_year:'All'}</td>
-                    <td>{homeworkJSON.all_subject === 0?homeworkJSON.subject_name:homeworkJSON.all_subject === 99999?'Extra Curriculum':'All'}</td>
+                    <td>{homeworkJSON.all_subject === 0?homeworkJSON.subject_name:homeworkJSON.all_subject === 99999?'Beyond The School':'All'}</td>
                     <td>
                       {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>
@@ -1131,7 +1131,7 @@ const AdminActivities = (props) => {
                         style={{ textDecoration: "none", color: "blue" }}
                       >
                         {" "}
-                        View Extra Curriculum
+                        View Beyond The School
                       </a>
                     </td>
                     <td>

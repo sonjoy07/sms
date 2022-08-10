@@ -146,7 +146,7 @@ const AdminViewActivities = () => {
                       }}
                       class="card-title py-2"
                     >
-                      Student Extra Curriculum
+                      Student Beyond The School
                     </h3>
                   </div>
                 </div>
@@ -301,7 +301,7 @@ const AdminViewActivities = () => {
           style={{ color: "white", backgroundColor: "gray" }}
           className="px-2 py-2"
         >
-          Student Extra Curriculum
+          Student Beyond The School
         </h2>
 
         <table class="table table-striped">

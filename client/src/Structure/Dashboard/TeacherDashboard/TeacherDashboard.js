@@ -351,6 +351,34 @@ const TeacherDashboard = (props) => {
                     />
                   </div>
                   <div className="px-3">
+                    <h4 className="card-title">Beyond The School</h4>
+                    <p className="card-text">Student Beyond The School</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <a style={{ textDecoration: "none" }}  onClick={() => {
+                        navigate("/teacher-activities");
+                    }} className="col-sm-6 my-4 col1">
+            <div className="card bg-light shadow-sm">
+              <div className="card-body py-4">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className=""
+                >
+                  <div className="px-3">
+                    <img
+                      style={{ width: "64px", height: "64px" }}
+                      src={activities}
+                      alt=""
+                    />
+                  </div>
+                  <div className="px-3">
                     <h4 className="card-title">Extra Curriculum</h4>
                     <p className="card-text">Student Extra Curriculum</p>
                   </div>
@@ -359,7 +387,7 @@ const TeacherDashboard = (props) => {
             </div>
           </a>
           <a style={{ textDecoration: "none" }}  onClick={() => {
-                        navigate("/extraMarkEntry");
+                        navigate("/teacherextraMarkEntry");
                     }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
               <div className="card-body py-4">

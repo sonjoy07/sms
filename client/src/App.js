@@ -94,6 +94,7 @@ import SMSsent from "./Structure/Dashboard/SchoolDashboard/Notice/SMSsent";
 import SubjectRegistration from "./Structure/Dashboard/SchoolDashboard/StudentRegistration/SubjectRegistration";
 import SMSreport from "./Structure/Dashboard/SchoolDashboard/Notice/SMSreport";
 import AdminActivites from "./Structure/Dashboard/SuperAdminDashboard/Activities/AdminActivities";
+import TeacherActivites from "./Structure/Dashboard/TeacherDashboard/Activities/AdminActivities";
 import StudentActivities from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivities";
 import StudentActivitiesSubmit from "./Structure/Dashboard/StudentDashboard/StudentDashboardFeatures/StudentActivities/StudentActivitiesSubmit";
 import ListNotice from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Viewer Notice/ListNotice";
@@ -107,7 +108,7 @@ import EvalutionSchedule from "./Structure/Dashboard/TeacherDashboard/TeacherDas
 import ViewerSubmissionDetails from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewerSubmissionDetails";
 import ViewerEvalutationSchedule from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/ViewEvalutaion/ViewerEvalutationSchedule";
 import CreateExamType from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateExamType/CreateExamType";
-import ExtraMarkentry from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraMarkentry";
+
 import ExtraReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraReport";
 import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfileEdit";
 import SchoolSMSreport from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/SchoolSMSreport";
@@ -131,6 +132,8 @@ import TeacherEBook from './Structure/Dashboard/TeacherDashboard/TeacherResource
 import TeacherLibrary from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherLibrary';
 import TeacherImportantLink from './Structure/Dashboard/TeacherDashboard/TeacherResources/TeacherImportantLink';
 import PaymentInvoice from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/PaymentInvoice";
+import ExtraMarkentry from "./Structure/Dashboard/SuperAdminDashboard/MarkEntry/ExtraMarkentry";
+import ExtraTeacherMarkentry from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraMarkentry";
 function App(props) {
   const [user_code, setUser_code] = useState("");
   const [user_type, setUser_type] = useState(0);
@@ -380,6 +383,10 @@ function App(props) {
             element={<AdminActivites user={[user_code, user_type]} />}
           />
           <Route
+            path="/teacher-activities"
+            element={<TeacherActivites user={[user_code, user_type]} />}
+          />
+          <Route
             path="/super-admin-activities"
             element={<AdminViewActivities user={[user_code, user_type]} />}
           />
@@ -426,6 +433,10 @@ function App(props) {
           <Route
             path="/extraMarkEntry"
             element={<ExtraMarkentry user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/teacherextraMarkEntry"
+            element={<ExtraTeacherMarkentry user={[user_code, user_type]} />}
           />
           <Route
             path="/extraMarkReport"

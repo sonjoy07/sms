@@ -306,8 +306,8 @@ const ViewerDashboard = () => {
                   />
                 </div>
                 <div className="px-3">
-                  <h4 class="card-title">Extra Curriculum</h4>
-                  <p class="card-text">Student Extra Curriculum</p>
+                  <h4 class="card-title">Beyond The School</h4>
+                  <p class="card-text">Student Beyond The School</p>
                 </div>
               </div>
             </div>

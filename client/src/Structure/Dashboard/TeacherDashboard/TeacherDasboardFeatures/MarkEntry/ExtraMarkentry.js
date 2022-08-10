@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import profile from "../../../../images/profile/profile.png";
 import TeacherHeader from '../../TeacherHeader/TeacherHeader';
 const ExtraMarkentry = () => {
   let navigate = useNavigate();
@@ -86,7 +85,7 @@ const ExtraMarkentry = () => {
       setInserted(false)
       axios
         .get(
-          `${process.env.REACT_APP_NODE_API}/api/extra_marks_exist?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&teacher_id=${user_code}&&exam_id=${exam_id}&&subject_id=${subject_id}`,
+          `${process.env.REACT_APP_NODE_API}/api/teacher_extra_marks_exist?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&teacher_id=${user_code}&&exam_id=${exam_id}&&subject_id=${subject_id}`,
           {
             headers: { authorization: "bearer " + access_token },
           }
@@ -106,17 +105,15 @@ const ExtraMarkentry = () => {
 
   let handleExamType = (e) => {
     setExam_id(e.target.value)
-    console.log(e.target.value)
   }
 
   let handleSubjectChange = (e) => {
     setSubject_id(e.target.value);
-    console.log(e.target.value)
   };
 
   const updateMarks = (event) => {
     if (event.key === 'Enter') {
-      fetch(`${process.env.REACT_APP_NODE_API}/api/exam_curi_mark/update`, {
+      fetch(`${process.env.REACT_APP_NODE_API}/api/teacher_exam_curi_mark/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,7 +168,6 @@ const ExtraMarkentry = () => {
       }
     })
 
-    console.log(present_mark)
 
     setShowData(present_mark)
 
@@ -196,7 +192,7 @@ const ExtraMarkentry = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/extra-mark-entry-list?teacher_id=${user_code}&&exam_type=${search_exam_type}&&student_code=${search_student_code}&&school_id=${localStorage.getItem('school_id')}`,
+        `${process.env.REACT_APP_NODE_API}/api/teacher_extra-mark-entry-list?teacher_id=${user_code}&&exam_type=${search_exam_type}&&student_code=${search_student_code}&&school_id=${localStorage.getItem('school_id')}`,
         {
           headers: { authorization: "bearer " + access_token },
         }
@@ -264,7 +260,7 @@ const ExtraMarkentry = () => {
       });
   }, []);
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/activities/byTeacher?teacher_id=${localStorage.getItem('user_code')}`,
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/activities/extraByTeacher?teacher_id=${localStorage.getItem('user_code')}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -290,7 +286,7 @@ const ExtraMarkentry = () => {
     const results = present_mark.filter(obj => {
       return obj.mark_obtained !== '' || null;
     });
-    fetch(`${process.env.REACT_APP_NODE_API}/api/extra_curriculum_marks`, {
+    fetch(`${process.env.REACT_APP_NODE_API}/api/teacher_extra_curriculum_marks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -329,9 +325,9 @@ const ExtraMarkentry = () => {
     const check = window.confirm('Are you sure to delete?');
     if (check) {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
-      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/extra-exam-mark/delete?id=${id}`)
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/teacher_extra-exam-mark/delete?id=${id}`)
       if (result) {
-        toast("Extra Curriculum Mark deleted successfully");
+        toast("Extra Curriculam deleted successfully");
         window.location.reload()
       }
     }
@@ -384,7 +380,7 @@ const ExtraMarkentry = () => {
 
                   <div class={"col-sm-4 mx-auto p-2"}>
                     <div class="form-group">
-                      <label className='pb-2' for="exampleSelect">Extra Curriculum : </label>
+                      <label className='pb-2' for="exampleSelect">Beyond The School : </label>
                       <select
                         className="form-control"
                         value={exam_id}
@@ -525,7 +521,7 @@ const ExtraMarkentry = () => {
           <div className='row'>
             <div class={"col-sm-4"}>
               <div class="form-group">
-                <label className='pb-2' for="exampleSelect">Extra Curriculum : </label>
+                <label className='pb-2' for="exampleSelect">Beyond The School : </label>
                 <select
                   className="form-control"
                   value={search_exam_type}

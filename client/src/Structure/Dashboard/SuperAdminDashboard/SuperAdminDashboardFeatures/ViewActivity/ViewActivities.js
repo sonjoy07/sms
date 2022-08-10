@@ -3,6 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import SuperAdminHeader from '../../SuperAdminHeader';
+import { CSVLink, CSVDownload } from "react-csv";
 
 const ViewActivities = () => {
   const [homework, setHomework] = useState([]);
@@ -57,12 +58,21 @@ const ViewActivities = () => {
   }
   const handleCSv = () => {
     var html = document.querySelector("table").outerHTML;
-    htmlToCSV(html, "students.csv");
+    // htmlToCSV(html, "students.csv");
+    
   }
+  const data = homework.map(res => { return[res.school_name, res.shift_name, res.class_name,res.section_default_name,res.student_code,res.full_name,res.mobile_no,moment(res.submission_time).format("DD-MM-YYYY h:mm a"),JSON.stringify(res.answer),"","submit"]})
+    const csvData = [
+      ["School Name", "Shift", "Class","Section","Student ID","Name","Mobile Number","Submission Date","Short Answer","Beyond The School File","Status"],  
+      ...data    
+    ];
+    console.log(csvData);
+
   return (<><SuperAdminHeader />
     <section className='py-3 container'>
-      <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Extra Curriculum : </h2>
-      <button className='btn btn-primary' style={{float: 'right'}} onClick={handleCSv}>Download CSV</button>
+      <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Beyond The School : </h2>
+      {/* <button className='btn btn-primary' style={{float: 'right'}} onClick={handleCSv}>Download CSV</button>     */}
+      <CSVLink filename={"my-file.csv"} className="btn btn-primary" style={{float: 'right'}} data={csvData}>Download CSV</CSVLink>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -75,7 +85,7 @@ const ViewActivities = () => {
             <th scope="col">Mobile Number</th>
             <th scope="col">Submission Date</th>
             <th scope="col">Short Answer</th>
-            <th scope="col">Extra Curriculum File</th>
+            <th scope="col">Beyond The School File</th>
             <th scope="col">Status</th>
           </tr>
         </thead>

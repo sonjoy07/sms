@@ -88,6 +88,30 @@ module.exports = (app) => {
             res.send(result);
         });
     });
+    app.get("/api/teacher_extra_marks_exist", authenticateToken, (req, res) => {
+        var exam_info_id = req.query.exam_id;
+        var subject_id = req.query.subject_id;
+        var teacher_id = req.query.teacher_id;
+        var class_id = req.query.class_id;
+        var section_id = req.query.section_id;
+        var session_id = req.query.session_id;
+
+        let condition = teacher_id !== '' && teacher_id !== undefined ? ` and teacher_id="${teacher_id}"` : ``
+        condition += exam_info_id !== '' && exam_info_id !== undefined ? ` and activities_id="${exam_info_id}"` : ``
+        condition += subject_id !== '' && subject_id !== undefined ? ` and subject_id="${subject_id}"` : ``
+        condition += section_id !== '' && section_id !== undefined ? ` and section_id="${section_id}"` : ``
+        condition += class_id !== '' && class_id !== undefined ? ` and class_id="${class_id}"` : ``
+        condition += session_id !== '' && session_id !== undefined ? ` and session_id="${session_id}"` : ``
+
+
+
+        var sql = `select teacher_extra_curriculum_marks.* from teacher_extra_curriculum_marks left join student_present_status sps on sps.student_id = teacher_extra_curriculum_marks.student_id where 1=1${condition}`
+        console.log(sql);
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.send(result);
+        });
+    });
     app.post("/api/extra_curriculum_marks", authenticateToken, (req, res) => {
         var exam_info_id = req.body.exam_info_id;
         var subject_id = req.body.subject_id;
@@ -103,6 +127,28 @@ module.exports = (app) => {
             if (err) throw err;
             mark_update.filter(res => res.mark_id !== '').map(res => {
                 var sql = `update extra_curriculum_marks set marks_obtained = ${res.mark_obtained} where  id = ${res.mark_id}`
+                con.query(sql, function (err, result, fields) {
+                    if (err) throw err;
+                })
+            })
+            res.json({ status: "success" });
+        });
+    });
+    app.post("/api/teacher_extra_curriculum_marks", authenticateToken, (req, res) => {
+        var exam_info_id = req.body.exam_info_id;
+        var subject_id = req.body.subject_id;
+        var mark_update = req.body.mark_update;
+        var teacher_id = req.body.teacher_id;
+
+        var sql = `INSERT INTO teacher_extra_curriculum_marks (activities_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
+        mark_update.filter(res => res.mark_id === '').map((sts) => {
+            sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+        });
+        sql = sql.slice(0, -1);
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            mark_update.filter(res => res.mark_id !== '').map(res => {
+                var sql = `update teacher_extra_curriculum_marks set marks_obtained = ${res.mark_obtained} where  id = ${res.mark_id}`
                 con.query(sql, function (err, result, fields) {
                     if (err) throw err;
                 })
@@ -132,6 +178,17 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+    app.post("/api/teacher_exam_curi_mark/update", authenticateToken, (req, res) => {
+        var updateData = req.body.updateData;
+        var index = req.body.index;
+
+        var sql = `Update teacher_extra_curriculum_marks set marks_obtained = ${updateData}  where id = ${index}`
+        console.log(sql);
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
     app.delete("/api/exam-mark/delete", authenticateToken, (req, res) => {
         var id = req.query.id
 
@@ -145,6 +202,15 @@ module.exports = (app) => {
         var id = req.query.id
 
         var sql = `delete from  extra_curriculum_marks where id = ${id}`
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
+    app.delete("/api/teacher_extra-exam-mark/delete", authenticateToken, (req, res) => {
+        var id = req.query.id
+
+        var sql = `delete from  teacher_extra_curriculum_marks where id = ${id}`
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.json({ status: "success" });

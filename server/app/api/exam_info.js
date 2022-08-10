@@ -87,7 +87,23 @@ module.exports = (app) => {
     condition += req.query.student_code !== '' && req.query.student_code !== undefined?` and student_code="${req.query.student_code}"`: ``
     condition += req.query.school_id !== '' && req.query.school_id !== undefined?` and activities.school_info_id="${req.query.school_id}"`: ``
         
-        var sql = `select full_name, extra_curriculum_marks.*,student_code,class_name, subject_name,section_default_name,topic as exam_name from extra_curriculum_marks left join student_info on student_info.id = extra_curriculum_marks.student_id left join activities on activities.id = extra_curriculum_marks.activities_id left join subject on subject.id = extra_curriculum_marks.subject_id where 1=1${condition}`;
+        var sql = `select full_name, extra_curriculum_marks.*,student_code,class_name, subject_name,section_default_name,topic as exam_name from extra_curriculum_marks left join student_info on student_info.id = extra_curriculum_marks.student_id left join activity on activity.id = extra_curriculum_marks.activities_id join activities on activities.activity_id = activity.id left join subject on subject.id = extra_curriculum_marks.subject_id where 1=1${condition}`;
+        console.log(sql);
+        con.query(
+            sql,
+            function (err, result, fields) {
+                if (err) throw err;
+                res.send(result);
+            }
+        );
+    });
+    app.get("/api/teacher_extra-mark-entry-list", authenticateToken, (req, res) => {
+        let condition = req.query.teacher_id !== '' && req.query.teacher_id !== undefined?` and teacher_extra_curriculum_marks.teacher_id="${req.query.teacher_id}"`:``
+    condition += req.query.exam_type !== '' && req.query.exam_type !== undefined?` and teacher_extra_curriculum_marks.activities_id="${req.query.exam_type}"`: ``
+    condition += req.query.student_code !== '' && req.query.student_code !== undefined?` and student_code="${req.query.student_code}"`: ``
+    condition += req.query.school_id !== '' && req.query.school_id !== undefined?` and curriculam_child.school_info_id="${req.query.school_id}"`: ``
+        
+        var sql = `select full_name, teacher_extra_curriculum_marks.*,student_code,class_name, subject_name,section_default_name,topic as exam_name from teacher_extra_curriculum_marks left join student_info on student_info.id = teacher_extra_curriculum_marks.student_id left join curriculam on curriculam.id = teacher_extra_curriculum_marks.activities_id join curriculam_child on curriculam_child.activity_id = curriculam.id left join subject on subject.id = teacher_extra_curriculum_marks.subject_id where 1=1${condition}`;
         console.log(sql);
         con.query(
             sql,

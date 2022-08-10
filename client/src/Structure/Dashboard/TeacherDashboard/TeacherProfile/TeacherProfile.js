@@ -124,7 +124,7 @@ const TeacherProfile = () => {
                     </div>
                     <div class="row mx-1 p-2">
                       <div class="col-sm-12">
-                        <Link class="btn btn-info" to="/studentpassword">Reset Password</Link>
+                        <Link class="btn btn-info" to="/teacherpassword">Reset Password</Link>
                       </div>
                     </div>
                   </div>

@@ -34,7 +34,7 @@ const ViewerSubmissionDetails = () => {
         style={{ color: "white", backgroundColor: "gray" }}
         className="px-2 py-2"
       >
-        Extra Curriculum Submitted Details:{" "}
+        Beyond The School Submitted Details:{" "}
       </h2>
 
       <table class="table table-striped">

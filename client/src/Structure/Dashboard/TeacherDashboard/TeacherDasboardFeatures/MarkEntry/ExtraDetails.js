@@ -24,7 +24,7 @@ const ExtraDetails = () => {
     }, []);
     return (<><TeacherHeader/>
         <section className='py-3 container'>
-            <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Extra Curriculum : </h2>
+            <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Beyond The School : </h2>
 
             <table class="table table-striped">
                 <thead>
@@ -36,7 +36,7 @@ const ExtraDetails = () => {
                         {/* <th scope="col">Section</th> */}
                         <th scope="col">Status</th>
                         <th scope="col">Submission Date</th>
-                        <th scope="col">Extra Curriculum File</th>
+                        <th scope="col">Beyond The School File</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -176,7 +176,7 @@ const ViewEvaluation = () => {
 
                               <th style={{ textAlign: 'center' }} scope="col-2">Converted Marks (half+final)/2 (70%)</th>
                               <th style={{ textAlign: 'center' }} scope="col-2">Attendance (5%)</th>
-                              <th style={{ textAlign: 'center' }} scope="col-2">Extra Curriculum (5%)</th>
+                              <th style={{ textAlign: 'center' }} scope="col-2">Beyond The School (5%)</th>
                               <th style={{ textAlign: 'center' }} scope="col-2">Total Marks (100%)</th>
                               <th style={{ textAlign: 'center' }} scope="col-2">Grade</th>
                               <th style={{ textAlign: 'center' }} scope="col-2">Grade Point</th>

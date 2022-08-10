@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TeacherHeader from '../TeacherHeader/TeacherHeader';
 
 const Teacherpassword = () => {
 
@@ -63,53 +64,56 @@ const Teacherpassword = () => {
         checkLoggedIn()
     }, [])
     return (
-        <section className='container'>
-            <div className='row mt-4'>
-                <div className=' col-md-12'>
-                    <div className="card card-dark collapsed-card">
-                        <div className="card-header">
-                            <div className='d-flex justify-content-between px-4'>
-                                <div>
-                                    <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Reset Password</h3>
-                                </div>
+        <>
+            <TeacherHeader />
+            <section className='container'>
+                <div className='row mt-4'>
+                    <div className=' col-md-12'>
+                        <div className="card card-dark collapsed-card">
+                            <div className="card-header">
+                                <div className='d-flex justify-content-between px-4'>
+                                    <div>
+                                        <h3 style={{ color: 'LightSeaGreen', fontSize: '25px', fontWeight: 'bold' }} class="card-title pt-2">Reset Password</h3>
+                                    </div>
 
-                            </div>
-                        </div>
-
-                        <div className='card-body' >
-                            {/* id='list' */}
-
-
-
-                            <div class={"col-sm-3 mx-auto p-2"}>
-                                <div class="form-group">
-                                    <label className='pb-2' for="exampleSelect">Type Old Password </label>
-                                    <input onChange={handleOld} value={old} type="password" />
                                 </div>
                             </div>
 
+                            <div className='card-body' >
+                                {/* id='list' */}
 
-                            <div class={"col-sm-3 mx-auto p-2"}>
-                                <div class="form-group">
-                                    <label className='pb-2' for="exampleSelect">New Password </label>
-                                    <input value={pass} onChange={handlechange} type="password" />
+
+
+                                <div class={"col-sm-3 mx-auto p-2"}>
+                                    <div class="form-group">
+                                        <label className='pb-2' for="exampleSelect">Type Old Password </label>
+                                        <input onChange={handleOld} value={old} type="password" />
+                                    </div>
                                 </div>
-                            </div>
 
 
-                            <div class={"col-sm-3 p-4 mx-auto"}>
-                                <div className='pt-2 mx-auto'>
-                                    <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>
+                                <div class={"col-sm-3 mx-auto p-2"}>
+                                    <div class="form-group">
+                                        <label className='pb-2' for="exampleSelect">New Password </label>
+                                        <input value={pass} onChange={handlechange} type="password" />
+                                    </div>
+                                </div>
+
+
+                                <div class={"col-sm-3 p-4 mx-auto"}>
+                                    <div className='pt-2 mx-auto'>
+                                        <button onClick={handleSubmit} style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5">Submit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
 
-        </section>
+            </section>
+        </>
     );
 
 };

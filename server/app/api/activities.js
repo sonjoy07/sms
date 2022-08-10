@@ -70,6 +70,25 @@ module.exports = (app) => {
     join session on activities.session_id=session.id
     where activities.teacher_id="${req.query.teacher_id}"
     group by activity.id order by activities.id `;
+    console.log(sql);
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/activities/extra_teacher/individual", authenticateToken, (req, res) => {
+    var sql = `select curriculam.id,class.class_name, subject.subject_name, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,curriculam_child.class_id,curriculam_child.section_id,curriculam_child.subject_id,curriculam_child.session_id,section_default_name,school_name,curriculam_child.school_info_id,school_info.type_id,curriculam_child.school_teacher_id,all_school,all_class,all_section,all_session,all_subject
+    from curriculam
+    join curriculam_child on curriculam_child.activity_id=curriculam.id 
+    join class on curriculam_child.class_id=class.id 
+    join school_info on curriculam_child.school_info_id=school_info.id 
+    join section on curriculam_child.section_id=section.id
+    join subject on curriculam_child.subject_id=subject.id
+    join teacher on curriculam_child.school_teacher_id=teacher.id
+    join session on curriculam_child.session_id=session.id
+    where curriculam_child.teacher_id="${req.query.teacher_id}"
+    group by curriculam.id order by curriculam.id `;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
@@ -89,6 +108,20 @@ module.exports = (app) => {
       class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
     }
   }
+  function school_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
+
+    if (school_info_id === 'all') {
+      let sql = `select * from school_info`
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        result.map(sch => {
+          class_info2_extra(school_type, sch.id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+        })
+      })
+    } else {
+      class_info2_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+    }
+  }
   function class_info2(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
     if (class_id === 'all') {
       console.log('all class ok')
@@ -100,6 +133,19 @@ module.exports = (app) => {
       })
     } else {
       class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+    }
+  }
+  function class_info2_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
+    if (class_id === 'all') {
+      console.log('all class ok')
+      con.query(`select * from class where school_type_id = ${school_type}`, function (err, result, fields) {
+        if (err) throw err;
+        result.map(cls => {
+          class_info_extra(school_type, school_info_id, cls.id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+        })
+      })
+    } else {
+      class_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
     }
   }
   function class_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
@@ -116,6 +162,23 @@ module.exports = (app) => {
     } else {
       //all section else
       section_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+
+    }
+  }
+  function class_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
+    if (section_id === 'all') {
+      console.log('all section ok')
+      //all section if
+      con.query(`select * from section`, function (err, result, fields) {
+        if (err) throw err;
+        result.map(sec => {
+          section_info_extra(school_type, school_info_id, class_id, sec.id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+
+        })
+      })
+    } else {
+      //all section else
+      section_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
 
     }
   }
@@ -137,6 +200,24 @@ module.exports = (app) => {
 
     }
   }
+  function section_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
+    if (session_id === 'all') {
+      console.log('all session ok')
+      //all session
+      con.query(`select * from session`, function (err, result, fields) {
+        if (err) throw err;
+        result.map(ses => {
+          session_info_extra(school_type, school_info_id, class_id, section_id, ses.id, subject_id, school_teacher_id, activityId, teacher_id)
+        })
+      })
+
+    } else {
+      //all session else
+
+      session_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+
+    }
+  }
   function session_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
 
     if (subject_id === 'all') {
@@ -150,6 +231,21 @@ module.exports = (app) => {
       })
     } else {
       subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+    }
+  }
+  function session_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
+
+    if (subject_id === 'all') {
+      console.log('all subject ok')
+      con.query(`select * from subject where school_type_id = ${school_type} and class_id = ${class_id}`, function (err, result, fields) {
+        if (err) throw err;
+        result.map(sub => {
+          subject_info_extra(school_type, school_info_id, class_id, section_id, session_id, sub.id, school_teacher_id, activityId, teacher_id)
+        })
+
+      })
+    } else {
+      subject_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
     }
   }
   function subject_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
@@ -172,6 +268,35 @@ module.exports = (app) => {
       })
     } else {
       let sql = `INSERT INTO activities (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , activity_id, school_teacher_id) VALUES `
+
+      sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${activityId}", "${school_teacher_id}"),`
+      sql = sql.slice(0, -1);
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+      });
+
+    }
+  }
+  function subject_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
+
+    if (school_teacher_id === 'all') {
+      console.log('all teacher ok')
+      con.query(`select * from teacher where school_info_id = ${school_info_id}`, function (err, result, fields) {
+        if (err) throw err;
+        if (result.length > 0) {
+          let sql = `INSERT INTO curriculam_child (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , activity_id, school_teacher_id) VALUES `
+          result.map(tec => {
+            sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${activityId}","${tec.id}" ),`
+          })
+          sql = sql.slice(0, -1);
+          console.log('query', sql);
+          con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+          });
+        }
+      })
+    } else {
+      let sql = `INSERT INTO curriculam_child (school_info_id, class_id, section_id, teacher_id, subject_id, session_id , activity_id, school_teacher_id) VALUES `
 
       sql += `("${school_info_id}", "${class_id}", "${section_id}", "${teacher_id}", "${subject_id}", "${session_id}", "${activityId}", "${school_teacher_id}"),`
       sql = sql.slice(0, -1);
@@ -257,6 +382,78 @@ module.exports = (app) => {
       res.status(500).json({ msg: "Please fill any field" })
     }
   });
+  app.post("/api/activities/extra_teacher", authenticateToken, (req, res) => {
+    var id = req.body.id;
+    var school_info_id = req.body.school_info_id;
+    var school_type = req.body.school_type;
+    var class_id = req.body.class_id;
+    var section_id = req.body.section_id;
+    var teacher_id = req.body.teacher_id;
+    var school_teacher_id = req.body.school_teacher_id;
+    var subject_id = req.body.subject_id;
+    var session_id = req.body.session_id;
+    var topic = req.body.topic;
+    var details = req.body.details;
+    var issue_date = req.body.issue_date;
+    var due_date = req.body.due_date;
+    var attachment_link = req.body.fileName;
+    if (req.files !== null) {
+      const file = req.files.file
+      var uploadPath = path.resolve(__dirname, '../../uploads/');
+      file.mv(`${uploadPath}/${file.name}`, err => {
+        if (err) {
+          return res.status(500).send(err)
+        }
+      })
+    }
+    if (class_id !== '' || section_id !== '' || teacher_id !== '' || subject_id !== '' || session_id !== '' || topic !== '' || issue_date !== '' || due_date !== '') {
+      var sql = ''
+      if (id) {
+        const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}"` : ``
+        con.query(`delete from activities where activity_id = ${id}`,function(err,result,fields){
+          if (err) throw err
+        })
+        sql = `UPDATE curriculam
+        SET all_class=${class_id === 'all' ? 1 : 0},all_school=${school_info_id === 'all' ? 1 : 0},all_section=${section_id === 'all' ? 1 : 0},all_session=${session_id === 'all' ? 1 : 0},all_subject=${subject_id === 'all' ? 1 : 0},topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date}"${attachment}
+        WHERE id=${id}`
+        con.query(sql, function (err, result, fields) {
+          if (err) throw err;
+          const activityId = id
+          if (school_type === 'all') {
+            con.query(`select * from school_type`, function (err, result, fields) {
+              if (err) throw err;
+              result.map(type => {
+                school_info_extra(type.id, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+              })
+            })
+          } else {
+            school_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+          }
+        })
+      } else {
+        const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
+        con.query(`insert into curriculam (topic,details,attachment_link,issue_date,due_date,all_school,all_class,all_section,all_session,all_subject) values ("${topic}","${details}",${attachment},"${issue_date}","${due_date}",${school_info_id === 'all' ? 1 : 0},${class_id === 'all' ? 1 : 0},${section_id === 'all' ? 1 : 0},${session_id === 'all' ? 1 : 0},${subject_id === 'all' ? 1 : 0})`, function (err, result, fields) {
+          if (err) throw err;
+          const activityId = result.insertId
+          if (school_type === 'all') {
+            con.query(`select * from school_type`, function (err, result, fields) {
+              if (err) throw err;
+              result.map(type => {
+                school_info_extra(type.id, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+              })
+            })
+          } else {
+            school_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
+          }
+        })
+        res.json({ status: "success" });
+      }
+
+
+    } else {
+      res.status(500).json({ msg: "Please fill any field" })
+    }
+  });
 
   //Home Mark Submission
   app.post("/api/activities/submit", authenticateToken, (req, res) => {
@@ -289,13 +486,15 @@ module.exports = (app) => {
     join activity on activities.activity_id=activity.id 
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
-    join subject on activities.subject_id=subject.id
+    left join subject on activities.subject_id=subject.id
     join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
     where activities.section_id="${req.query.section_id}"
     and activities.class_id = "${req.query.class_id}"
     and activities.session_id = "${req.query.session_id}"
     and activities.school_info_id = "${req.query.school_info_id}"
+    and sub_start_date >=  "${moment().format('YYYY-MM-DD')}"
+    and TIME_FORMAT(sub_start_time, '%r') <=  "${moment().format('LTS')}"
     order by due_date desc;`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
@@ -364,6 +563,38 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/activities/extra_teacher/filter", authenticateToken, (req, res) => {
+    const section_id = req.query.section_id
+    const session_id = req.query.session_id
+    const class_id = req.query.class_id
+    const subject_id = req.query.subject_id
+    const school_info_id = req.query.school_info_id
+    const search_school_teacher_id = req.query.search_school_teacher_id
+    const issue_date = req.query.issue_date !== "" ? moment(req.query.issue_date).format("YYYY-MM-DD") : ""
+    const due_date = req.query.due_date !== "" ? moment(req.query.due_date).format("YYYY-MM-DD") : ""
+    let condition = section_id !== '' ? ` and curriculam_child.section_id="${section_id}"` : ``
+    condition += class_id !== '' ? ` and curriculam_child.class_id="${class_id}"` : ``
+    condition += subject_id !== '' ? ` and curriculam_child.subject_id="${subject_id}"` : ``
+    condition += session_id !== '' ? ` and curriculam_child.session_id="${session_id}"` : ``
+    condition += school_info_id !== '' ? ` and curriculam_child.school_info_id="${school_info_id}"` : ``
+    condition += search_school_teacher_id !== '' ? ` and curriculam_child.school_teacher_id="${search_school_teacher_id}"` : ``
+    condition += issue_date !== '' ? ` and due_date BETWEEN "${issue_date}" AND "${due_date}"` : ``
+    var sql = `select curriculam.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,school_name,all_school,all_class,all_section,all_session,all_subject
+    from curriculam
+    join curriculam_child on curriculam_child.activity_id=curriculam.id 
+    join class on curriculam_child.class_id=class.id 
+    join section on curriculam_child.section_id=section.id
+    join subject on curriculam_child.subject_id=subject.id
+    join teacher on curriculam_child.school_teacher_id=teacher.id
+    join school_info on curriculam_child.school_info_id=school_info.id 
+    join session on curriculam_child.session_id=session.id
+    where 1=1 ${condition} group by curriculam.id
+    order by due_date;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
   app.get("/api/activities/student/id", authenticateToken, (req, res) => {
     var sql = `select activities.id, questions,class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from activities
@@ -413,7 +644,14 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/byTeacher", authenticateToken, (req, res) => {
-    var sql = `select * from activities where school_teacher_id = ${req.query.teacher_id};`;
+    var sql = `select activity.* from activity join activities on activities.activity_id = activity.id group by activity.id;`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/activities/extraByTeacher", authenticateToken, (req, res) => {
+    var sql = `select curriculam.* from curriculam join curriculam_child on curriculam_child.activity_id = curriculam.id group by curriculam.id;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

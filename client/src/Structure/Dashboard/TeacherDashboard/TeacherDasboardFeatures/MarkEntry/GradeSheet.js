@@ -219,7 +219,7 @@ const GradeSheetTeacher = () => {
                       <th style={{ textAlign: 'center' }} className='' scope="col-2">CT Marks (15)</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Half Yearly Marks</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Final Exam</th>
-                      <th style={{ textAlign: 'center' }} scope="col-2">Extra Curriculum (5%)</th>
+                      <th style={{ textAlign: 'center' }} scope="col-2">Beyond The School (5%)</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Total Marks (100%)</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Grade</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Grade Point</th>
