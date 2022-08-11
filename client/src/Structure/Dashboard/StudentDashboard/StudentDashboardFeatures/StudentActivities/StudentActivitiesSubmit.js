@@ -27,6 +27,7 @@ const StudentActivitiesSubmit = (props) => {
   const [preview, setPreview] = useState()
 
   const [hw, setHw] = useState({});
+  const [reset, setReset] = useState(0);
 
   const [submissionList, setSubmissionList] = useState([])
 
@@ -57,7 +58,7 @@ const StudentActivitiesSubmit = (props) => {
         setSubmissionList(response.data.filter(res => res.student_code == localStorage.getItem('u_id')));
 
       });
-  }, []);
+  }, [reset]);
 
   const fileUpload = (e) => {
     setAttachment_link(e.target.files[0])
@@ -97,8 +98,9 @@ const StudentActivitiesSubmit = (props) => {
       .then((res) => res.json())
       .then((json) => {
         toast("Beyond The School submitted successfully");
-        console.log("ok", json);
         setAnswer("")
+        setReset(reset+1)
+        
         // navigate("/studenthomework");
       });
   };
@@ -279,6 +281,7 @@ const StudentActivitiesSubmit = (props) => {
                                 <th scope="col">Student Code</th>
                                 <th scope="col">Submission Time</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Attachment</th>
                                 <th scope="col">Answer</th>
                               </tr>
                             </thead>
@@ -287,10 +290,9 @@ const StudentActivitiesSubmit = (props) => {
                                 return (<tr>
                                   <td>{res.full_name}</td>
                                   <td>{res.student_code}</td>
-                                  <td>{moment(res.submission_time).format("DD-MM-YYYY")}</td>
+                                  <td>{moment(res.submission_time).format("DD-MM-YYYY h:mm a")}</td>
                                   <td>Submit</td>
-                                  {/* <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td> */}
-                                  <td>{res.answer}</td>
+                                  <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
                                 </tr>)
                               })}
                             </tbody>

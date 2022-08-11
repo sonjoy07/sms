@@ -42,7 +42,7 @@ module.exports = (app) => {
     condition += req.query.subject_id !== '' && req.query.subject_id !== undefined ? ` and activities.subject_id="${req.query.subject_id}"` : ``
     condition += req.query.school_teacher_id !== '' && req.query.school_teacher_id !== undefined ? ` and activities.school_teacher_id="${req.query.school_teacher_id}"` : ``
     condition += req.query.date !== '' && req.query.date !== undefined ? ` and activities.issue_date="${req.query.date}"` : ``
-    var sql = `select activities.id, class.class_name, subject.subject_name, activities.school_teacher_id as teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
+    var sql = `select activity.id, class.class_name, subject.subject_name, activities.school_teacher_id as teacher_id, teacher.first_name, teacher.initial, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
     from activities
     join activity on activities.activity_id=activity.id 
     join class on activities.class_id=class.id 
@@ -50,8 +50,8 @@ module.exports = (app) => {
     join subject on activities.subject_id=subject.id
     join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
-    where 1=1 ${condition}
-    order by activities.id desc`;
+    where 1=1 ${condition} group by activity.id
+    order by activity.id desc`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -338,7 +338,7 @@ module.exports = (app) => {
       var sql = ''
       if (id) {
         const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}"` : ``
-        con.query(`delete from activities where activity_id = ${id}`,function(err,result,fields){
+        con.query(`delete from activities where activity_id = ${id}`, function (err, result, fields) {
           if (err) throw err
         })
         sql = `UPDATE activity
@@ -410,7 +410,7 @@ module.exports = (app) => {
       var sql = ''
       if (id) {
         const attachment = attachment_link !== 'undefined' ? `,attachment_link="${attachment_link}"` : ``
-        con.query(`delete from activities where activity_id = ${id}`,function(err,result,fields){
+        con.query(`delete from activities where activity_id = ${id}`, function (err, result, fields) {
           if (err) throw err
         })
         sql = `UPDATE curriculam
@@ -460,7 +460,7 @@ module.exports = (app) => {
     var student_id = req.body.student_id;
     var homework_id = req.body.homework_id;
     var submission_time = req.body.submission_time;
-    // var attachment_link = req.body.fileName;
+    var attachment_link = req.body.fileName;
     var answer = req.body.answer;
     console.log(req.files);
     if (req.files !== null) {
@@ -472,7 +472,7 @@ module.exports = (app) => {
         }
       })
     }
-    var sql = `INSERT INTO activities_submission (student_present_status_id, activities_id, submission_time, answer) VALUES ("${student_id}", "${homework_id}", "${submission_time}", "${answer}" )`;
+    var sql = `INSERT INTO activities_submission (student_present_status_id, activities_id, submission_time, answer,attachment_link) VALUES ("${student_id}", "${homework_id}", "${submission_time}", "${answer}","${attachment_link}" )`;
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -597,14 +597,15 @@ module.exports = (app) => {
   });
   app.get("/api/activities/student/id", authenticateToken, (req, res) => {
     var sql = `select activities.id, questions,class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
-    from activities
-    join activity on activities.activity_id=activity.id 
-    join class on activities.class_id=class.id 
+    from activity
+    join activities on activities.activity_id=activity.id
+    join class on activities.class_id=class.id
     join section on activities.section_id=section.id
     join subject on activities.subject_id=subject.id
     join teacher on activities.school_teacher_id=teacher.id
     join session on activities.session_id=session.id
-    where activities.id="${req.query.homework_id}";`;
+    where activity.id="${req.query.homework_id}";`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       if (result.length > 0) {
@@ -632,12 +633,18 @@ module.exports = (app) => {
       });
     });
   });
+  app.delete("/api/subMission/delete", authenticateToken, (req, res) => {
+    var sql = `delete from activities_submission where id = ${req.query.id};`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
   app.get("/api/activities/teacher/submitlist", authenticateToken, (req, res) => {
-    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer ,marks_obtained
+    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer,marks_obtained,activities_submission.id as sub_id
     from activities_submission 
-    join student_present_status on activities_submission.student_present_status_id=student_present_status.id
-    join student_info on student_present_status.student_id=student_info.id
-    join extra_curriculum_marks on activities_submission.activities_id=extra_curriculum_marks.activities_id
+    left join student_info on activities_submission.student_present_status_id=student_info.student_present_status_id
+    left join extra_curriculum_marks on activities_submission.activities_id=extra_curriculum_marks.activities_id
     where activities_submission.activities_id="${req.query.home_work_id}";`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

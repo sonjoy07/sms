@@ -327,7 +327,7 @@ const ExtraMarkentry = () => {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
       const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/teacher_extra-exam-mark/delete?id=${id}`)
       if (result) {
-        toast("Extra Curriculam deleted successfully");
+        toast("Extra Curriculum deleted successfully");
         window.location.reload()
       }
     }
@@ -380,7 +380,7 @@ const ExtraMarkentry = () => {
 
                   <div class={"col-sm-4 mx-auto p-2"}>
                     <div class="form-group">
-                      <label className='pb-2' for="exampleSelect">Beyond The School : </label>
+                      <label className='pb-2' for="exampleSelect">Extra Curriculum: </label>
                       <select
                         className="form-control"
                         value={exam_id}
@@ -521,7 +521,7 @@ const ExtraMarkentry = () => {
           <div className='row'>
             <div class={"col-sm-4"}>
               <div class="form-group">
-                <label className='pb-2' for="exampleSelect">Beyond The School : </label>
+                <label className='pb-2' for="exampleSelect">Extra Curriculum: </label>
                 <select
                   className="form-control"
                   value={search_exam_type}

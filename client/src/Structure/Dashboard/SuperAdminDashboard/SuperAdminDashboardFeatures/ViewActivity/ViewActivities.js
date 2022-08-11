@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import SuperAdminHeader from '../../SuperAdminHeader';
 import { CSVLink, CSVDownload } from "react-csv";
+import { toast } from 'react-toastify';
 
 const ViewActivities = () => {
   const [homework, setHomework] = useState([]);
+  const [reset, setReset] = useState(0);
   useEffect(() => {
     const home_work_id = localStorage.getItem("activityid")
     axios
@@ -21,58 +23,48 @@ const ViewActivities = () => {
       .then((response) => {
         setHomework(response.data);
       });
-  }, []);
+  }, [reset]);
 
-  const downloadCSVFile = (csv, filename) => {
-    var csv_file, download_link;
+  homework.map(res => res.submission_time = moment(res.submission_time).format("DD-MM-YYYY h:mm a"))
+  homework.map(res => res.status = "submit")
 
-    csv_file = new Blob([csv], { type: "text/csv" });
+  const headers = [
+    { label: "School Name", key: 'school_name' },
+    { label: "Shift", key: 'shift_name' },
+    { label: "Class", key: 'class_name' },
+    { label: "Section", key: 'section_default_name' },
+    { label: "Student ID", key: 'student_code' },
+    { label: "Name", key: 'full_name' },
+    { label: "Mobile Number", key: 'mobile_no' },
+    { label: "Submission Date", key: 'submission_time' },
+    { label: "Short Answer", key: 'answer' },
+    // {label:"Beyond The School File",key:'attachment_link'},
+    { label: "Status", key: 'status' }
+  ]
 
-    download_link = document.createElement("a");
-
-    download_link.download = filename;
-
-    download_link.href = window.URL.createObjectURL(csv_file);
-
-    download_link.style.display = "none";
-
-    document.body.appendChild(download_link);
-
-    download_link.click();
+  const csvReport = {
+    filename: 'Report.csv',
+    headers: headers,
+    data: homework
   }
-  const htmlToCSV = (html, filename) => {
-    debugger;
-    var data = [];
-    var rows = document.querySelectorAll("table tr");
 
-    for (var i = 0; i < rows.length; i++) {
-      var row = [], cols = rows[i].querySelectorAll("td, th");
-
-      for (var j = 0; j < cols.length; j++) {
-        row.push(cols[j].innerText);
+  const deleteSubmission = async (id) => {
+    const check = window.confirm('Are you sure to delete?');
+    if (check) {
+      axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/subMission/delete?id=${id}`)
+      if (result) {
+        setReset(reset+1)
+        toast("Submission deleted successfully");
       }
-
-      data.push(row.join(","));
     }
-    downloadCSVFile(data.join("\n"), filename);
   }
-  const handleCSv = () => {
-    var html = document.querySelector("table").outerHTML;
-    // htmlToCSV(html, "students.csv");
-    
-  }
-  const data = homework.map(res => { return[res.school_name, res.shift_name, res.class_name,res.section_default_name,res.student_code,res.full_name,res.mobile_no,moment(res.submission_time).format("DD-MM-YYYY h:mm a"),JSON.stringify(res.answer),"","submit"]})
-    const csvData = [
-      ["School Name", "Shift", "Class","Section","Student ID","Name","Mobile Number","Submission Date","Short Answer","Beyond The School File","Status"],  
-      ...data    
-    ];
-    console.log(csvData);
 
   return (<><SuperAdminHeader />
     <section className='py-3 container'>
       <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-2 py-2 bg-gradient'>Student Beyond The School : </h2>
       {/* <button className='btn btn-primary' style={{float: 'right'}} onClick={handleCSv}>Download CSV</button>     */}
-      <CSVLink filename={"my-file.csv"} className="btn btn-primary" style={{float: 'right'}} data={csvData}>Download CSV</CSVLink>
+      <CSVLink className="btn btn-primary" style={{ float: 'right' }} {...csvReport}>Download CSV</CSVLink>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -88,6 +80,7 @@ const ViewActivities = () => {
             <th scope="col">Beyond The School File</th>
             <th scope="col">Status</th>
             <th scope="col">Marks</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -105,6 +98,8 @@ const ViewActivities = () => {
               <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
               <td>Submit</td>
               <td>{res.marks_obtained}</td>
+              <td>{res.answer}</td>
+              <td><button onClick={() => deleteSubmission(res.sub_id)} style={{ color: 'white', border: 'none' }} className='bg-danger p-1'>Delete</button></td>
             </tr>
           })}
 

@@ -13,7 +13,7 @@ const AdminActivities = (props) => {
   /*
   const [user_code, setUser_code] = useState(localStorage.getItem('user_code'))
   */
-  const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
+  const [user_type] = useState(localStorage.getItem("user_type"));
 
   const [clses, setClses] = useState([]);
   const [searchClses, setSearchClses] = useState([]);
@@ -21,7 +21,6 @@ const AdminActivities = (props) => {
   const [id, setId] = useState("");
 
   const [sections, setSections] = useState([]);
-  const [schoolTypes, setSchoolTypes] = useState([]);
   const [section, setSection] = useState("");
   const [status, setStatus] = useState("")
 
@@ -35,14 +34,13 @@ const AdminActivities = (props) => {
   const [sessions, setSessions] = useState([]);
   const [session, setSession] = useState("");
 
-  const [school_teacher_id, setSchool_teacher_id] = useState("");
-  const [search_school_teacher_id, setSearch_School_teacher_id] = useState("");
+  const [search_school_teacher_id, setSearch_School_teacher_id] = useState(localStorage.getItem("user_code"));
   const [school_info_id, setSchool_info_id] = useState("");
   const [teacher_id, setTeacher_id] = useState(
     localStorage.getItem("user_code")
   );
-  const [school_type, setSchoolType] = useState("")
-  const [school_type_search, setSchoolTypeSearch] = useState("")
+  const [school_type] = useState(localStorage.getItem("school_type"))
+  const [school_type_search] = useState(localStorage.getItem("school_type"))
 
 
 
@@ -176,16 +174,6 @@ const AdminActivities = (props) => {
 
   useEffect(() => {
     checkLoggedIn();
-
-    axios
-      .get(`${process.env.REACT_APP_NODE_API}/api/school_type/all`, {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      })
-      .then((response) => {
-        setSchoolTypes(response.data);
-      });
   }, []);
 
   useEffect(() => {
@@ -365,14 +353,12 @@ const AdminActivities = (props) => {
           }
           setId("");
           setClass_id("");
-          setSchoolType("")
           setSchool_info_id("")
           setSection_id("");
           setSubject_id("");
           setSession_id("");
           setIssue_date("");
           setDue_date("");
-          setSchool_teacher_id("");
           setTopic("");
           setDetails("");
         })
@@ -402,7 +388,6 @@ const AdminActivities = (props) => {
     setTopic(data.topic);
     setDetails(data.details);
     setSchool_info_id(data.school_info_id);
-    setSchool_teacher_id(data.school_teacher_id);
   }
 
   const deleteHomework = async (id) => {
@@ -539,31 +524,6 @@ const AdminActivities = (props) => {
                         name="avatar"
                         onChange={handleAttachment}
                       />
-                    </div>
-                  </div>
-                  <div class={"col-sm-2 mx-auto p-2"}>
-                    <div class="form-group">
-                      <label className="pb-2" for="exampleSelect">
-                        School Type :{" "}
-                      </label>
-                      <select
-                        style={{ border: "1px solid blue" }}
-                        class="form-control"
-                        value={school_type}
-                        onChange={(e) => setSchoolType(e.target.value)}
-                        id="class"
-                        name="class"
-                      >
-                        <option value="">Select School Type</option>
-                        <option value="all">All</option>
-                        {schoolTypes.map((classJSON) => {
-                          return (
-                            <option value={classJSON.id}>
-                              {classJSON.type_name}
-                            </option>
-                          );
-                        })}
-                      </select>
                     </div>
                   </div>
                   <div class={"col-sm-2 mx-auto p-2"}>
@@ -766,30 +726,6 @@ const AdminActivities = (props) => {
                     <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
-                          School Type :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={school_type_search}
-                          onChange={(e) => setSchoolTypeSearch(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select School Type</option>
-                          {schoolTypes.map((classJSON) => {
-                            return (
-                              <option value={classJSON.id}>
-                                {classJSON.type_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                    <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
                           School :{" "}
                         </label>
                         <select
@@ -907,30 +843,6 @@ const AdminActivities = (props) => {
                         </select>
                       </div>
                     </div>
-                    <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
-                          Teacher :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={search_school_teacher_id}
-                          onChange={(e) => setSearch_School_teacher_id(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select Teacher</option>
-                          {search_teachers.map((subjectJSON) => {
-                            return (
-                              <option value={subjectJSON.id}>
-                                {subjectJSON.full_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
                     <div class={"col-sm-2 p-2 mx-auto"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleInputEmail1">
@@ -977,7 +889,6 @@ const AdminActivities = (props) => {
               <tr>
                 <th scope="col">School Name</th>
                 <th scope="col">Teacher Name</th>
-                <th scope="col">Extra Curriculum Material</th>
                 <th scope="col">Topic</th>
                 <th scope="col">Assignment Details</th>
                 <th scope="col">Class</th>
@@ -986,7 +897,6 @@ const AdminActivities = (props) => {
                 <th scope="col">Subject </th>
                 <th scope="col">Start Date </th>
                 <th scope="col">Due Date</th>
-                <th scope="col">View Extra Curriculum</th>
                 <th scope="col">Edit/Delete</th>
               </tr>
             </thead>
@@ -995,10 +905,7 @@ const AdminActivities = (props) => {
                 return (
                   <tr>
                     <td>{homeworkJSON.school_name}</td>
-                    <td>{homeworkJSON.full_name}</td>
-                    <td>
-                      <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
-                    </td>
+                    <td>{homeworkJSON.full_name}</td>                    
                     <td>{homeworkJSON.topic}</td>
                     <td>{homeworkJSON.details}</td>
                     <td>{homeworkJSON.class_name}</td>
@@ -1013,19 +920,7 @@ const AdminActivities = (props) => {
                     <td>
                       {moment(homeworkJSON.due_date).format("DD-MM-YYYY")}
                     </td>
-                    <td>
-                      {" "}
-                      <a
-                        onClick={() => {
-                          localStorage.setItem("activityid", homeworkJSON.id);
-                          navigate("/activityshow");
-                        }}
-                        style={{ textDecoration: "none", color: "blue" }}
-                      >
-                        {" "}
-                        View Extra Curriculum
-                      </a>
-                    </td>
+                    
                     <td>
                       <div className=".d-flex">
                         <div>
