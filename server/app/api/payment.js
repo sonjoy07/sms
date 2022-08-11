@@ -24,8 +24,8 @@ module.exports = (app) => {
             currency: 'BDT',
             tran_id: 'REF123',
             success_url: `${process.env.ROOT}/ssl-payment-success?invoice=${req.query.invoice}&&redirect=${req.query.redirect}`,
-            fail_url: `${process.env.ROOT}/ssl-payment-fail`,
-            cancel_url: `${process.env.ROOT}/ssl-payment-cancel`,
+            fail_url: `${process.env.ROOT}/ssl-payment-fail?invoice=${req.query.invoice}&&redirect=${req.query.redirect}`,
+            cancel_url: `${process.env.ROOT}/ssl-payment-cancel?invoice=${req.query.invoice}&&redirect=${req.query.redirect}`,
             shipping_method: 'No',
             product_name: req.query.product,
             product_category: 'Electronic',
@@ -84,12 +84,11 @@ module.exports = (app) => {
         /** 
         * If payment successful 
         */
-        console.log(req.body.bank_tran_id);
         con.query(`select * from payment where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
             if (err) throw err;
             if (result.length === 0) {
                 con.query(`select sector.* from payment_invoice left join sector on sector.id = payment_invoice.sector_id where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
-                    console.log(result);
+                    
                     const data = result[0]
                     var sql = `INSERT INTO payment (sector_id, student_id, invoice_no, transaction_id, paid_date) VALUES ("${data.id}", "${data.student_id}", "${req.query.invoice}", "${req.body.bank_tran_id}", "${moment().format('YYYY-MM-DD')}")`;
 
@@ -110,7 +109,6 @@ module.exports = (app) => {
         * If payment failed 
         */
 
-        
          return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=false`)
     })
 

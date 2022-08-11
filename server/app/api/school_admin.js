@@ -427,6 +427,36 @@ module.exports = (app) => {
     //     res.json({ status: "success" });
     // });
   });
+
+  function student_info(){
+    if (studentId === 'all') {
+      con.query(`select * from student_info where school_info_id = ${school_id} and class_id = ${cls.id} and section_id = ${sec.id}`, function (err, result, fields) {
+        if (err) throw err;
+
+
+        if (result.length > 0) {
+          sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allstudent,allsection,allclass) VALUES `
+          result.map(stu => {
+            sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${stu.id}",1,1,1),`
+          })
+          sql = sql.slice(0, -1);
+          console.log(sql);
+          con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            // res.json({ status: "success" });
+          });
+        }
+      })
+    } else {
+      sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allsection,allclass) VALUES `
+      sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${studentId}",1,1),`
+      sql = sql.slice(0, -1);
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        // res.json({ status: "success" });
+      });
+    }
+  }
   app.post("/api/add_sector", (req, res) => {
     var sector_code = req.body.sector_code;
     var sector_name = req.body.sector_name;
@@ -450,33 +480,8 @@ module.exports = (app) => {
               con.query(`select * from section`, function (err, result, fields) {
                 if (err) throw err;
                 result.map(sec => {
-                  if (studentId === 'all') {
-                    con.query(`select * from student_info where school_info_id = ${school_id} and class_id = ${cls.id} and section_id = ${sec.id}`, function (err, result, fields) {
-                      if (err) throw err;
-
-
-                      if (result.length > 0) {
-                        sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allstudent,allsection,allclass) VALUES `
-                        result.map(stu => {
-                          sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${stu.id}",1,1,1),`
-                        })
-                        sql = sql.slice(0, -1);
-                        console.log(sql);
-                        con.query(sql, function (err, result, fields) {
-                          if (err) throw err;
-                          // res.json({ status: "success" });
-                        });
-                      }
-                    })
-                  } else {
-                    sql = `INSERT INTO sector (sector_code,sector_name,last_date,amount,class_id,school_id,section_id,student_id,allsection,allclass) VALUES `
-                    sql += `("${sector_code}","${sector_name}","${lastDate}","${amount}","${cls.id}","${school_id}","${sec.id}","${studentId}",1,1),`
-                    sql = sql.slice(0, -1);
-                    con.query(sql, function (err, result, fields) {
-                      if (err) throw err;
-                      // res.json({ status: "success" });
-                    });
-                  }
+                  student_info(studentId,school_id,cls.id,)
+                  
                 })
               })
             } else {

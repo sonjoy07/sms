@@ -115,7 +115,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/allPayment", authenticateToken, (req, res) => {
-    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where student_id = ${req.query.student_code} order by payment.id desc`, function (err, result, fields) {
+    con.query(`SELECT payment.*,sector_name,amount FROM payment left join sector on sector.id = payment.sector_id where payment.student_id = ${req.query.student_code} order by payment.id desc`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
