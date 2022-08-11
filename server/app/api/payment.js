@@ -23,7 +23,7 @@ module.exports = (app) => {
             total_amount: req.query.amount,
             currency: 'BDT',
             tran_id: 'REF123',
-            success_url: `${process.env.ROOT}/ssl-payment-success?invoice=${req.query.invoice}&&redirect=${req.query.redirect}`,
+            success_url: `${process.env.ROOT}/ssl-payment-success?invoice=${req.query.invoice}&&redirect=${req.query.redirect}&&user=${req.query.user}`,
             fail_url: `${process.env.ROOT}/ssl-payment-fail?invoice=${req.query.invoice}&&redirect=${req.query.redirect}`,
             cancel_url: `${process.env.ROOT}/ssl-payment-cancel?invoice=${req.query.invoice}&&redirect=${req.query.redirect}`,
             shipping_method: 'No',
@@ -87,17 +87,24 @@ module.exports = (app) => {
         con.query(`select * from payment where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
             if (err) throw err;
             if (result.length === 0) {
-                con.query(`select sector.* from payment_invoice left join sector on sector.id = payment_invoice.sector_id where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
-                    
+                con.query(`select sector.*,type,school_info_id from payment_invoice left join sector on sector.id = payment_invoice.sector_id where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
+
                     const data = result[0]
-                    var sql = `INSERT INTO payment (sector_id, student_id, invoice_no, transaction_id, paid_date) VALUES ("${data.id}", "${data.student_id}", "${req.query.invoice}", "${req.body.bank_tran_id}", "${moment().format('YYYY-MM-DD')}")`;
+
+                    con.query(`update payment_invoice set status = 1 where invoice_no = "${req.query.invoice}"`)
+                    if (data.type === 2) {
+                        sql = `INSERT INTO payment (sector_id, user_id, invoice_no, transaction_id, paid_date) VALUES ("${data.id}", "${req.query.user}", "${req.query.invoice}", "${req.body.bank_tran_id}", "${moment().format('YYYY-MM-DD')}")`;
+                    } else {
+                        sql = `INSERT INTO sms_payment (user_id,school_info_id,amount, invoice_no, transaction_id, payment_date) VALUES ("${req.query.user}","${data.school_info_id}","${data.amount}", "${req.query.invoice}", "${req.body.bank_tran_id}", "${moment().format('YYYY-MM-DD')}")`;
+                    }
 
                     con.query(sql, function (err, result, fields) {
                         if (err) throw err;
-                        return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=true`)
+                        return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}`)
                     });
                 });
             } else {
+                return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}`)
             }
         });
 
@@ -109,7 +116,7 @@ module.exports = (app) => {
         * If payment failed 
         */
 
-         return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=false`)
+        return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}`)
     })
 
     app.post("/ssl-payment-cancel", async (req, res) => {
@@ -118,8 +125,8 @@ module.exports = (app) => {
         * If payment cancelled 
         */
 
-        
-         return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=false`)
+
+        return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=false`)
     })
 
 }

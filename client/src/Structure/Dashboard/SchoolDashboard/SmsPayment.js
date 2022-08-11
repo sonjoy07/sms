@@ -127,7 +127,7 @@ const SmsPayment = () => {
                                     <td>
                                         <div className='.d-flex'>
                                             <div>
-                                            {res.status === 0?<a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=sms&&redirect=sms-payment&&invoice=${res.invoice_no}`
+                                            {res.status === 0?<a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=sms&&redirect=sms-payment&&invoice=${res.invoice_no}&&user=${localStorage.getItem('user_code')}`
                                                     // payment(res.invoice_no,res.amount)
                                                     } style={{ color: 'white' }} className='btn btn-success mt-1'>Pay</a>:'Paid'}
                                             </div>

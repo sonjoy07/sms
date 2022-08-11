@@ -88,6 +88,8 @@ const Payment = () => {
     setSector_code(res.sector_code)
     setAmount(res.amount)
     setClassId(res.class_id)
+    setStudentId(res.student_id)
+    setSectionId(res.section_id)
     setLastDate(moment(res.last_date).format('YYYY-MM-DD'))
     setSector_name(res.sector_name)
     setId(res.id)

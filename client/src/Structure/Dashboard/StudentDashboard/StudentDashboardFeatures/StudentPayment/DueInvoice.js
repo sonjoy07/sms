@@ -3,19 +3,19 @@ import axios from 'axios'
 import moment from 'moment'
 import StudentHeader from '../../StudentHeader'
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useSearchParams } from 'react-router-dom';
+// import { toast } from 'react-toastify';
+// import { useSearchParams } from 'react-router-dom';
 
 const DueInvoice = () => {
     const [sectors, setSectors] = useState([])
-    let [searchParams] = useSearchParams();
-    const success = searchParams.get('success')
+    // let [searchParams] = useSearchParams();
+    // const success = searchParams.get('success')
     useEffect(() => {
-        if (success === "true") {
-            toast('Payment Successfully Completed')
-        }else if(success === "false"){
-            toast('Payment Failed.Please Try again')
-        }
+        // if (success === "true") {
+        //     toast('Payment Successfully Completed')
+        // }else if(success === "false"){
+        //     toast('Payment Failed.Please Try again')
+        // }
         axios.get(`${process.env.REACT_APP_NODE_API}/api/student/profile?student_id=${localStorage.getItem("user_code")}`, {
             headers: {
                 authorization: "bearer " + localStorage.getItem("access_token"),
@@ -56,7 +56,7 @@ const DueInvoice = () => {
                                 <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
                                 <td>
                                     {/* <button onClick={()=>payment(invoice,res)} className='btn btn-danger mt-1' style={{ backgroundColor: 'tomato'}}>Pay Now</button> */}
-                                    {res.status === 0 ? <a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=payment&&redirect=dueinvoice&&invoice=${res.invoice_no}`
+                                    {res.status === 0 ? <a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=payment&&redirect=dueinvoice&&invoice=${res.invoice_no}&&user=${localStorage.getItem('user_code')}`
                                     } style={{ color: 'white' }} className='btn btn-success mt-1'>Pay Now</a> : 'Paid'}
                                 </td>
                             </tr>
