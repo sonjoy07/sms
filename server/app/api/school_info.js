@@ -3,17 +3,10 @@ module.exports = (app) => {
   const authenticateToken = require("../middleware/middleware");
   app.get("/api/school_info", (req, res) => {
     con.query(
-      `SELECT id, school_name, type_id FROM school_info where administrator_id="${req.query.admin_id}"`,
-      function (err, result, fields) {
+      `SELECT id, school_name, type_id,(SELECT COUNT(*) AS total FROM student WHERE school_info_id = school_info.id) as total_student,(SELECT COUNT(*) AS total FROM teacher WHERE school_info_id = school_info.id) as total_teacher FROM school_info where administrator_id="${req.query.admin_id}"`,
+     async function (err, result, fields) {
         if (err) throw err;
-        // const schools = result
-        // const scho = schools.forEach((element, index) => {
-        //   const res = con.query(`SELECT COUNT(*) AS total FROM student WHERE school_info_id = ${element.id}`, function (err, result, fields) {
-        //     schools[index].students = result.total
-        //   })
-        // })
-        // const res = Promise.all(scho)
-        // console.log("schools",schools);
+       
         res.send(result);
       }
     );

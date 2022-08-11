@@ -4,11 +4,18 @@ import moment from 'moment'
 import StudentHeader from '../../StudentHeader'
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSearchParams } from 'react-router-dom';
 
 const DueInvoice = () => {
     const [sectors, setSectors] = useState([])
+    let [searchParams] = useSearchParams();
+    const success = searchParams.get('success')
     useEffect(() => {
-        
+        if (success === "true") {
+            toast('Payment Successfully Completed')
+        }else if(success === "false"){
+            toast('Payment Failed.Please Try again')
+        }
         axios.get(`${process.env.REACT_APP_NODE_API}/api/student/profile?student_id=${localStorage.getItem("user_code")}`, {
             headers: {
                 authorization: "bearer " + localStorage.getItem("access_token"),
@@ -23,33 +30,6 @@ const DueInvoice = () => {
             });
         });
     }, [])
-    const payment = (invoice, res) => {
-        const check = window.confirm('Are you sure to Pay?');
-        if (check) {
-            fetch(`${process.env.REACT_APP_NODE_API}/api/create_payment`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        authorization: "bearer " + localStorage.getItem("access_token"),
-                    },
-
-                    body: JSON.stringify({
-                        invoice: invoice,
-                        sector_id: res.id,
-                        student_id: localStorage.getItem("user_code"),
-                        transaction_id: "e7f4s54ad8d2d47c52e7",
-                        paidDate: moment().format('YYYY-MM-DD')
-                    }),
-                })
-                .then((res) => res.json())
-                .then((json) => {
-                    toast(json.status)
-                });
-            // }else{
-
-        }
-    }
     return (
         <>
             <StudentHeader />
@@ -76,8 +56,8 @@ const DueInvoice = () => {
                                 <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
                                 <td>
                                     {/* <button onClick={()=>payment(invoice,res)} className='btn btn-danger mt-1' style={{ backgroundColor: 'tomato'}}>Pay Now</button> */}
-                                    {res.status === 0?<a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=payment&&redirect=dueinvoice&&invoice=${res.invoice_no}`
-                                    } style={{ color: 'white' }} className='btn btn-success mt-1'>Pay Now</a>:'Paid'}
+                                    {res.status === 0 ? <a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=payment&&redirect=dueinvoice&&invoice=${res.invoice_no}`
+                                    } style={{ color: 'white' }} className='btn btn-success mt-1'>Pay Now</a> : 'Paid'}
                                 </td>
                             </tr>
                         })}

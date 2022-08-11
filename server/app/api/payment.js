@@ -1,5 +1,6 @@
 const SSLCommerzPayment = require("sslcommerz-lts");
 const bodyParser = require('body-parser')
+const moment = require('moment')
 const con = require("../models/db");
 require('dotenv').config()
 console.log(process.env.STORE_ID);
@@ -45,10 +46,9 @@ module.exports = (app) => {
             value_d: 'ref004_D',
             ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
         };
-
-        const sslcommerz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASSWORD, true) //true for live default false for sandbox
+        const sslcommerz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASSWORD, false) //true for live default false for sandbox
         sslcommerz.init(data).then(data => {
-            console.log(data)
+            // console.log(data)
 
             //process the response that got from sslcommerz 
             //https://developer.sslcommerz.com/doc/v4/#returned-parameters
@@ -84,23 +84,24 @@ module.exports = (app) => {
         /** 
         * If payment successful 
         */
-        console.log(req, res);
-        con.query(`select * from payment where invoice_no=${req.query.invoice}`, function (err, result, fields) {
+        console.log(req.body.bank_tran_id);
+        con.query(`select * from payment where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
             if (err) throw err;
             if (result.length === 0) {
-                con.query(`select sector.* from payment_invoice left join sector on sector.id = payment_invoice.sector_id where invoice_no=${req.query.invoice}`, function (err, result, fields) {
+                con.query(`select sector.* from payment_invoice left join sector on sector.id = payment_invoice.sector_id where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
+                    console.log(result);
                     const data = result[0]
-                    var sql = `INSERT INTO payment (sector_id, student_id, invoice_no, transaction_id, paid_date) VALUES ("${data.id}", "${data.student_id}", "${req.query.invoice}", "${transaction_id}", "${moment().format('YYYY-MM-DD')}")`;
+                    var sql = `INSERT INTO payment (sector_id, student_id, invoice_no, transaction_id, paid_date) VALUES ("${data.id}", "${data.student_id}", "${req.query.invoice}", "${req.body.bank_tran_id}", "${moment().format('YYYY-MM-DD')}")`;
 
                     con.query(sql, function (err, result, fields) {
                         if (err) throw err;
-                        return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}`)
+                        return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=true`)
                     });
                 });
             } else {
             }
         });
-       
+
     })
 
     app.post("/ssl-payment-fail", async (req, res) => {
@@ -109,12 +110,8 @@ module.exports = (app) => {
         * If payment failed 
         */
 
-        return res.status(200).json(
-            {
-                data: req.body,
-                message: 'Payment failed'
-            }
-        );
+        
+         return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=false`)
     })
 
     app.post("/ssl-payment-cancel", async (req, res) => {
@@ -123,12 +120,8 @@ module.exports = (app) => {
         * If payment cancelled 
         */
 
-        return res.status(200).json(
-            {
-                data: req.body,
-                message: 'Payment cancelled'
-            }
-        );
+        
+         return res.status(200).redirect(`${process.env.FRONT_ROOT}/${req.query.redirect}?success=false`)
     })
 
 }

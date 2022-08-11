@@ -73,13 +73,15 @@ const ViewerSchoolViewList = () => {
                           borderRadius: "5px",
                         }}
                       >
-                        <div className="col-10">
+                        <div className="col-12">
                           <h4
                             className="ml-3 py-5 text-primary"
-                            style={{ textAlign: "left" }}
+                            style={{ textAlign: "left",float:"left",width:'60%' }}
                           >
                             {schoolJSON.school_name}
+
                           </h4>
+                            <h4 style={{float: 'right',width:'40%'}} className="py-5"> Total Student: {schoolJSON.total_student} , Total Teacher: {schoolJSON.total_teacher}</h4>
 
 
                         </div>
