@@ -243,7 +243,7 @@ const AdminActivities = (props) => {
       .then((response) => {
         setSections(response.data);
       });
-  }, [class_id]);
+  }, []);
 
   useEffect(() => {
     axios

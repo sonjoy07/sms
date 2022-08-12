@@ -641,11 +641,15 @@ module.exports = (app) => {
     });
   });
   app.get("/api/activities/teacher/submitlist", authenticateToken, (req, res) => {
-    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer,marks_obtained,activities_submission.id as sub_id
+    let cond = req.query.school_id !== '' && req.query.school_id !== undefined?` and student_info.school_info_id = ${req.query.school_id}`:''
+    cond += req.query.section_id !== '' && req.query.section_id !== undefined?` and student_info.section_id = ${req.query.section_id}`:''
+    cond += req.query.class_id !== '' && req.query.class_id !== undefined?` and student_info.class_id = ${req.query.class_id}`:''
+    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer,marks_obtained,activities_submission.id as sub_id,activities.subject_id,student_info.id as student_id,activities_submission.activities_id
     from activities_submission 
     left join student_info on activities_submission.student_present_status_id=student_info.student_present_status_id
+    left join activities on activities.activity_id=activities_submission.activities_id
     left join extra_curriculum_marks on activities_submission.activities_id=extra_curriculum_marks.activities_id
-    where activities_submission.activities_id="${req.query.home_work_id}";`;
+    where activities_submission.activities_id="${req.query.home_work_id}" ${cond} order by marks_obtained desc;`;
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

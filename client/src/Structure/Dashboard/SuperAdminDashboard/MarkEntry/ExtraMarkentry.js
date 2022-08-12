@@ -344,6 +344,11 @@ const ExtraMarkentry = () => {
       }
     }
   }
+
+  const updateMarksData=(value,index)=>{
+    updateData[index]= value
+    setUpdateData({updateData})
+  }
   return (
     <div>
       <SuperAdminHeader />
@@ -618,7 +623,7 @@ const ExtraMarkentry = () => {
                         />}
                       </td>
                       <td>
-                        <button type='button' className="btn btn-success mr-3" onClick={() => { setIndex(info.id); setUpdateData(info.marks_obtained) }}>
+                        <button type='button' className="btn btn-success mr-3" onClick={() => { setIndex(info.id); updateMarksData(info.marks_obtained,key) }}>
                           Edit
                         </button>
                         <button type='button' className="btn btn-danger" onClick={() => deleteMark(info.id)}>

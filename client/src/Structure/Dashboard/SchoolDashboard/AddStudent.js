@@ -33,6 +33,8 @@ const AddStudent = () => {
     const [divisions, setDivisions] = useState([])
     const [classes, setClasses] = useState([])
     const [sections, setSections] = useState([])
+    const [checkedAll, setCheckedAll] = useState(false);
+    const [checked, setChecked] = useState([]);
     const [reset, setReset] = useState(0)
 
     useEffect(() => {
@@ -42,6 +44,11 @@ const AddStudent = () => {
             },
         }).then((response) => {
             setStudents(response.data);
+            let list = []
+            for (const inputName in response.data) {
+                list[inputName] = false;
+            }
+            setChecked(list)
         });
     }, [student_id, reset]);
 
@@ -229,7 +236,44 @@ const AddStudent = () => {
             }
         }
     }
-
+    const deleteAll = async () => {
+        const check = window.confirm('Are you sure to delete?');
+        if (check) {
+          fetch(`${process.env.REACT_APP_NODE_API}/api/student/deleteAll`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: "bearer " + localStorage.getItem("access_token"),
+            },
+            body: JSON.stringify({
+              checkedStudent: checked,
+              students:students
+            }),
+          })
+            .then((res) => res.json())
+            .then((json) => {
+              setReset(reset + 1)
+              toast("Please wait a while to Delete Student successfully");
+            })
+        }
+      }
+    const selectAll = (value) => {
+        setCheckedAll(value);
+        setChecked((prevState) => {
+            const newState = { ...prevState };
+            for (const inputName in newState) {
+                newState[inputName] = value;
+            }
+            return newState;
+        });
+    };
+    const toggleCheck = (inputName) => {
+        setChecked((prevState) => {
+            const newState = { ...prevState };
+            newState[inputName] = !prevState[inputName];
+            return newState;
+        });
+    };
     return (
         <>
             <SchoolHeader />
@@ -409,6 +453,12 @@ const AddStudent = () => {
                 <section className='py-5'>
                     <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Student List</h2>
                     <p style={{ float: 'right' }}>Student Count: {students.length}</p>
+                    <a href="" className="btn btn-danger"
+                style={{ float: 'right' }}
+                onClick={() => deleteAll()}
+              >
+                Delete All
+              </a>
                     <div className='row'>
                         <div className='col-sm-3'>
                             <input onChange={(e) => setSearchStudentID(e.target.value)} className='form-control' placeholder='Student ID' />
@@ -444,6 +494,13 @@ const AddStudent = () => {
                     <table className="table table-striped">
                         <thead>
                             <tr style={{ textAlign: 'center' }}>
+                                <th scope="col">
+                                    <label className="custom-control custom-switch mt-3">
+                                        <input type="checkbox" onChange={(event) => selectAll(event.target.checked)}
+                                            checked={checkedAll} />
+                                        <span className="px-2">Select All</span>
+                                    </label>
+                                </th>
                                 <th scope="col">Student Id</th>
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Mobile number</th>
@@ -456,11 +513,19 @@ const AddStudent = () => {
                             {
                                 students.sort((a, b) => {
                                     return b.id - a.id;
-                                }).map((student) => {
+                                }).map((student, index) => {
 
 
                                     return (
                                         <tr>
+                                            <th scope="col">
+                                                <label className="custom-control custom-switch mt-3">
+                                                    <input type="checkbox"
+                                                        onChange={() => toggleCheck(index)}
+                                                        checked={checked[index]} />
+                                                    <span className=""></span>
+                                                </label>
+                                            </th>
                                             <td style={{ textAlign: 'center' }}>{student.student_code}</td>
                                             <td style={{ textAlign: 'center' }}>{student.full_name}</td>
                                             <td style={{ textAlign: 'center' }}>{student.mobile_no}</td>

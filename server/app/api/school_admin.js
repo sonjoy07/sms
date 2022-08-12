@@ -428,7 +428,7 @@ module.exports = (app) => {
     // });
   });
 
-  function student_info(class_id, sectionId, studentId, school_id, school_type,sector_id) {
+  function student_info(class_id, sectionId, studentId, school_id, school_type, sector_id) {
     if (studentId === 'all') {
       con.query(`select * from student_info where school_info_id = ${school_id} and class_id = ${class_id} and section_id = ${sectionId}`, function (err, result, fields) {
         if (err) throw err;
@@ -456,17 +456,17 @@ module.exports = (app) => {
       });
     }
   }
-  function section_info(class_id, sectionId, studentId, school_id, school_type,sector_id) {
+  function section_info(class_id, sectionId, studentId, school_id, school_type, sector_id) {
     if (sectionId === 'all') {
       con.query(`select * from section`, function (err, result, fields) {
         if (err) throw err;
         result.map(sec => {
-          student_info(class_id, sec.id, studentId, school_id, school_type,sector_id)
+          student_info(class_id, sec.id, studentId, school_id, school_type, sector_id)
 
         })
       })
     } else {
-      student_info(class_id, sectionId, studentId, school_id, school_type,sector_id)
+      student_info(class_id, sectionId, studentId, school_id, school_type, sector_id)
     }
   }
   app.post("/api/add_sector", (req, res) => {
@@ -604,15 +604,42 @@ module.exports = (app) => {
 
   app.delete("/api/student/delete", authenticateToken, (req, res) => {
     var id = req.query.id;
-    var sql = `delete from student_present_status where student_id ="${id}"`
-    con.query(sql, function (err, result, fields) {
+    con.query(`delete from notice_user where student_id ="${id}"`)
+    con.query(`select id from student_present_status where student_id ="${id}"`, function (err, result, fields) {
       if (err) throw err;
+      console.log(result[0].id);
+      con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
+
+      con.query(`delete from subject_registration where student_id ="${id}"`)
+      con.query(`delete from student_present_status where student_id ="${id}"`)
       var sql = `delete from student where id ="${id}"`
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
         res.json({ status: "success" });
       });
     });
+  });
+  app.post("/api/student/deleteAll", authenticateToken, (req, res1) => {
+    var checkedStudent = req.body.checkedStudent;
+    var students = req.body.students;
+    students.forEach((res, index) => {
+      if (checkedStudent[index] === true) {
+        con.query(`delete from notice_user where student_id ="${res.id}"`)
+        con.query(`select id from student_present_status where student_id ="${res.id}"`, function (err, result, fields) {
+          if (err) throw err;
+          console.log(result[0].id);
+          con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
+
+          con.query(`delete from subject_registration where student_id ="${res.id}"`)
+          con.query(`delete from student_present_status where student_id ="${res.id}"`)
+          var sql = `delete from student where id ="${res.id}"`
+          con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res1.json({ status: "success" });
+          });
+        });
+      }
+    })
   });
   app.delete("/api/section/delete", authenticateToken, (req, res) => {
     var id = req.query.id;

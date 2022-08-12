@@ -178,6 +178,20 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
+    app.post("/api/exam_curi_mark/insert", authenticateToken, (req, res) => {
+        var updateData = req.body.updateData;
+        var subject_id = req.body.subject_id;
+        var student_id = req.body.student_id;
+        var teacher_id = req.body.teacher_id;
+        var index = req.body.index;
+
+        var sql = `Insert into extra_curriculum_marks (student_id,subject_id,activities_id,teacher_id,marks_obtained) value ("${student_id}","${subject_id}","${index}","${teacher_id}","${updateData}")`
+        console.log(sql);
+        con.query(sql, function (err, result, fields) {
+            if (err) throw err;
+            res.json({ status: "success" });
+        });
+    });
     app.post("/api/teacher_exam_curi_mark/update", authenticateToken, (req, res) => {
         var updateData = req.body.updateData;
         var index = req.body.index;
