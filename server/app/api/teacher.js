@@ -26,7 +26,7 @@ module.exports = (app) => {
     condition += req.query.searchSectionID !== undefined && req.query.searchSectionID !== "" ? ` and routine.section_id = ${req.query.searchSectionID}` : ``
     condition += req.query.searchClassID !== undefined && req.query.searchClassID !== "" ? ` and routine.class_id = ${req.query.searchClassID}` : ``
     con.query(
-      `SELECT teacher.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,first_name,last_name,middle_name,title, initial, teacher_code,dob,blood_group, mobile,designation, email, subject_code,mpo_status,index_no,teacher.school_info_id FROM teacher left join routine on routine.teacher_id= teacher.id where teacher.school_info_id="${req.query.school_info_id}"${condition}`,
+      `SELECT teacher.id, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,first_name,last_name,middle_name,title, initial, teacher_code,dob,blood_group, mobile,designation, email, subject_code,mpo_status,index_no,teacher.school_info_id FROM teacher left join routine on routine.teacher_id= teacher.id where teacher.school_info_id="${req.query.school_info_id}"${condition} group by teacher.id`,
       function (err, result, fields) {
         if (err) throw err;
         res.send(result);

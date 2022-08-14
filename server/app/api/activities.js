@@ -462,7 +462,6 @@ module.exports = (app) => {
     var submission_time = req.body.submission_time;
     var attachment_link = req.body.fileName;
     var answer = req.body.answer;
-    console.log(req.files);
     if (req.files !== null) {
       const file = req.files.file
       var uploadPath = path.resolve(__dirname, '../../uploads/');
@@ -473,11 +472,13 @@ module.exports = (app) => {
       })
     }
     var sql = `INSERT INTO activities_submission (student_present_status_id, activities_id, submission_time, answer,attachment_link) VALUES ("${student_id}", "${homework_id}", "${submission_time}", "${answer}","${attachment_link}" )`;
-
-    con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      res.json({ status: "success" });
-    });
+    con.query(sql);
+    res.json({ status: "success" });
+    // con.query(sql, function (err, result, fields) {
+      // console.log(sql);
+      // if (err) throw err;
+      
+    // });
   });
 
   app.get("/api/activities/student", authenticateToken, (req, res) => {
@@ -650,6 +651,7 @@ module.exports = (app) => {
     left join activities on activities.activity_id=activities_submission.activities_id
     left join extra_curriculum_marks on activities_submission.activities_id=extra_curriculum_marks.activities_id
     where activities_submission.activities_id="${req.query.home_work_id}" ${cond} order by marks_obtained desc;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

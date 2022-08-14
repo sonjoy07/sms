@@ -306,7 +306,7 @@ module.exports = (app) => {
             })
           }
           if (option === "teacher") {
-            const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}")`;
+            const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6] === ''?0:res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]=== ''?0:res[10]}","${res[11]=== ''?0:res[11]}","${res[12]=== ''?0:res[12]}","${res[13]=== ''?0:res[13]}","${res[14]}","${res[15]}")`;
             con.query(sql, function (err, result, fields) {
               if (err) throw err;
             });
@@ -398,18 +398,26 @@ module.exports = (app) => {
 
     const inserData = await Promise.all(studentChecked.map(res => {
       subjectChecked.length > 0 && subjectChecked.map(resSub => {
-        sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
+            con.query(`select id from subject_registration where school_info_id="${school_info_id}" and student_id= "${res.student_id}" and subject_id= "${resSub.subject_id}" and section_id = "${res.section_id}"`, function (err, result, fields) {
+              if (result.length === 0) {
+            sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
-        con.query(sql, function (err, result, fields) {
-          if (err) throw err;
-        });
+            con.query(sql, function (err, result, fields) {
+              if (err) throw err;
+            });
+          }
+          })
       })
       forthChecked.length > 0 && forthChecked.map(resSub => {
-        sql = `insert into subject_4th_registration (school_info_id,student_id,session_id,group_id,class_id,subject_4th_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
+        con.query(`select id from subject_registration where school_info_id="${school_info_id}" and student_id= "${res.student_id}" and subject_id= "${resSub.subject_id}" and section_id = "${res.section_id}"`, function (err, result, fields) {
+          if (result.length === 0) {
+            sql = `insert into subject_4th_registration (school_info_id,student_id,session_id,group_id,class_id,subject_4th_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
-        con.query(sql, function (err, result, fields) {
-          if (err) throw err;
-        });
+            con.query(sql, function (err, result, fields) {
+              if (err) throw err;
+            });
+          }
+        })
       })
     }))
     res.json({ status: "success" });
@@ -574,7 +582,7 @@ module.exports = (app) => {
   app.get("/api/sector/all", (req, res) => {
     var sql
     // if (id === '') {
-    sql = `select * from sector left join sector_child on sector_child.sector_id = sector.id  where school_id = ${req.query.school_id} group by sector.id order by sector.id desc`;
+    sql = `select sector.* from sector left join sector_child on sector_child.sector_id = sector.id  where school_id = ${req.query.school_id} group by sector.id order by sector.id desc`;
 
 
     con.query(sql, function (err, result, fields) {
@@ -605,14 +613,17 @@ module.exports = (app) => {
   app.delete("/api/student/delete", authenticateToken, (req, res) => {
     var id = req.query.id;
     con.query(`delete from notice_user where student_id ="${id}"`)
-    con.query(`select id from student_present_status where student_id ="${id}"`, function (err, result, fields) {
+    con.query(`select student_present_status.id,student_code from student_present_status left join student on student.id = student_present_status.student_id where student_id ="${res.id}"`, function (err, result, fields) {
       if (err) throw err;
-      console.log(result[0].id);
-      con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
+      if (result.length > 0) {
+        con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
+        con.query(`delete from users where user_code ="${result[0].student_code}"`)
+      }
 
       con.query(`delete from subject_registration where student_id ="${id}"`)
       con.query(`delete from student_present_status where student_id ="${id}"`)
       var sql = `delete from student where id ="${id}"`
+      console.log(sql)
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
         res.json({ status: "success" });
@@ -625,14 +636,18 @@ module.exports = (app) => {
     students.forEach((res, index) => {
       if (checkedStudent[index] === true) {
         con.query(`delete from notice_user where student_id ="${res.id}"`)
-        con.query(`select id from student_present_status where student_id ="${res.id}"`, function (err, result, fields) {
-          if (err) throw err;
-          console.log(result[0].id);
-          con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
+        con.query(`select student_present_status.id,student_code from student_present_status left join student on student.id = student_present_status.student_id where student_id ="${res.id}"`, function (err, result, fields) {
+          // if (err) throw err;
+          if (result.length > 0) {
+            // console.log(result[0].id);
+            con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
+            con.query(`delete from users where user_code ="${result[0].student_code}"`)
+          }
 
           con.query(`delete from subject_registration where student_id ="${res.id}"`)
           con.query(`delete from student_present_status where student_id ="${res.id}"`)
           var sql = `delete from student where id ="${res.id}"`
+          console.log(sql)
           con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res1.json({ status: "success" });

@@ -1,2 +1,96 @@
 student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address,permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position,session_id,shift_id,class_id,section_id
-1001222060132    ,Sandip,,Saha,1748616364    ,2,0,,,,,,,,,,,1,1,1,1,2,1
+3005221210101,Mifta Hu,jannat,Driste,,1,0,,,,Md. Mucklashur Rahman,1797975444,,,,,,7,1,1,1,16,1
+3005221210102,Safayat,Ibna,Bari,,2,0,,,,A.A.M Fazlul Bari,1718840925,,,,,,7,2,1,1,16,1
+3005221210103,Protyusha,Sarkar,Nishpa,,1,0,,,,Likhan Chandra Sarker,1786898020,,,,,,7,3,1,1,16,1
+3005221210104,Drupad,Guha,Karmakar,,2,0,,,,Liton karmakar,1738146660,,,,,,7,4,1,1,16,1
+3005221210105,Zarar,Tawhid,Galib,,2,0,,,,K.M. Zinas Galib,1765377773,,,,,,7,5,1,1,16,1
+3005221210106,Md.,Yusuf,Rana,,2,0,,,,Md. Shohel Rana Manik,1719544777,,,,,,7,6,1,1,16,1
+3005221210107,Md. Sarwar,Jahan,Nadim,,2,0,,,,Md. Samsul Alam,1712774589,,,,,,7,7,1,1,16,1
+3005221210108,Ayshorjo Tabinda,Ahmed,(Taron),,2,0,,,,Tanvir Ahmed,,,,,,,7,8,1,1,16,1
+3005221210109,Maryam,Binte,Abdullah,,1,0,,,,Md. Abdullah Al Mamun,1711381334,,,,,,7,9,1,1,16,1
+3005221210110,Mahroz,Binte,Mehfuz,,1,0,,,,Md. Mehfuzul Shahid,1720999416,,,,,,7,10,1,1,16,1
+3005221210111,Rukaiya,,Farzi,,1,0,,,,DR. Reza Taufiq,1837082240,,,,,,7,11,1,1,16,1
+3005221210112,Ruaida,,,,1,0,,,,Md. Ashraful Alam,1712847697,,,,,,7,12,1,1,16,1
+3005221210113,Md. Tawhid,Ibne,Hassain,,2,0,,,,Md. Jahangir Hossan,1731923355,,,,,,7,13,1,1,16,1
+3005221210114,Areeb,,Rahman,,1,0,,,,Md. Mostafizur Rahman,1894270053,,,,,,7,14,1,1,16,1
+3005221220101,Md.Redwan,Shayan,Mubin,,2,0,,,,Md. Abdur Razzak,1734925126,,,,,,7,1,1,1,17,1
+3005221220102,Syada,Maharukh,Arefsana,,1,0,,,,Syed Aref Hossen,1727227499,,,,,,7,2,1,1,17,1
+3005221220103,Umme,,Adiyat,,2,0,,,,Md. Atiquzzaman Sarker,1710214298,,,,,,7,3,1,1,17,1
+3005221220104,Rahian,Islam,Rafi,,1,0,,,,Md. Shahenur Islam Shahin,1858303705,,,,,,7,4,1,1,17,1
+3005221220105,Faija,Jannat,Nuja,,1,0,,,,Firoj Ahmaed,1919801618,,,,,,7,5,1,1,17,1
+3005221220106,Suwaibah,Shahriar,Alvi,,2,0,,,,Sadat Shahriar,1913426818,,,,,,7,6,1,1,17,1
+3005221220107,Md.,Shayan,Rahman,,2,0,,,,Mustafizur Rahman Shally,1770880952,,,,,,7,7,1,1,17,1
+3005221220108,Most. Shayan,husna,Sinha,,1,0,,,,Md. Sazzad Islam,1726286477,,,,,,7,8,1,1,17,1
+3005221220109,Md. Alif,hasan,Sadik,,2,0,,,,Md. Sazzad Islam,1726286477,,,,,,7,9,1,1,17,1
+3005221220110,Mst.,Nowsinin,Jahan,,1,0,,,,Mosharraf Hosan,1744803139,,,,,,7,10,1,1,17,1
+3005221220111,Most. Sidratul,Muntaha,Afifa,,1,0,,,,Md. Abu Bakkar Siddik,1721917176,,,,,,7,11,1,1,17,1
+3005221220112,Chowdhury,Nabhan,Tamir,,2,0,,,,Md. Jahedula Islam,1712370791,,,,,,7,12,1,1,17,1
+3005221220113,Md.,Aowsaf,Rayan,,2,0,,,,Md. Morshed Alam,1816582345,,,,,,7,13,1,1,17,1
+3005221220114,Farhana,Fabiha,Full,,1,0,,,,,,,,,,,7,14,1,1,17,1
+3005221220115,Kudsia,,Kadima,,1,0,,,,Md. Golam Kibria,1916792031,,,,,,7,15,1,1,17,1
+3005221220116,Abrar,,Rehan,,2,0,,,,Md. Lutfor Rahman,1710453461,,,,,,7,16,1,1,17,1
+3005221220117,Md. Rohikim,Matum,Rumman,,2,0,,,,Md. Shaha Alam,1310188249,,,,,,7,17,1,1,17,1
+3005221220118,Farahulfat,Binte,Sany,,1,0,,,,Md. Alfasany,1730462804,,,,,,7,18,1,1,17,1
+3005221220119,Md.,Rokan,Uddin,,2,0,,,,Md. Mainuddin,1717786429,,,,,,7,19,1,1,17,1
+3005221220120,Sadat,Tahmid,Jayed,,2,0,,,,Md. Saiful Islam,1738133860,,,,,,7,20,1,1,17,1
+3005221220121,Aanika,,Hasan,,1,0,,,,Md. Rashedul Hasan,1704935543,,,,,,7,21,1,1,17,1
+3005221220122,Manha,Binte,Arif,,1,0,,,,Md. Ariful Islam,1712213313,,,,,,7,22,1,1,17,1
+3005221220123,Most.,,Mariom,,1,0,,,,Md. Helal Uddin,1625281992,,,,,,7,23,1,1,17,1
+3005221230101,Sajid,Ibn,Zakir,,2,0,,,,Md. Zakir Hossain,1788800346,,,,,,7,1,1,1,18,1
+3005221230102,Mst.,Nusiaba,Hassan,,1,0,,,,Md. Nahid hassan,1712970935,,,,,,7,2,1,1,18,1
+3005221230103,Saraf,Nawar,Taha,,1,0,,,,Md. Rana masud,1718660867,,,,,,7,3,1,1,18,1
+3005221230104,Abrar,,Hasin,,2,0,,,,Md. Azam Ali,1718645510,,,,,,7,4,1,1,18,1
+3005221230105,Afiya,Rufaita,Roop,,1,0,,,,,,,,,,,7,5,1,1,18,1
+3005221230106,Most. Subhana,Ahad,Maliha,,1,0,,,,Md. Nura Ahad Saden,1768943909,,,,,,7,6,1,1,18,1
+3005221230107,Ahil,All,Laam,,2,0,,,,Akhshanul hasan,1931881953,,,,,,7,7,1,1,18,1
+3005221230108,Mohammad Musfikur,Rahman,Maan,,2,0,,,,Md. Mizanur Rahman,1303749564,,,,,,7,8,1,1,18,1
+3005221230109,Safwa,binte,Alam,,1,0,,,,Md. Shafiul Alam,1675424079,,,,,,7,9,1,1,18,1
+3005221010101,Md.,Faruk,Hossain,,2,0,,,,Md. Faruk Hossain,1716935048,,,,,,7,1,1,1,19,1
+3005221010102,Md.,Golam,Sorwar,,2,0,,,,Md. Golam Sorwar,1744479731,,,,,,7,2,1,1,19,1
+3005221010103,Md.,Shohel,Rana,,2,0,,,,Md. Shohel Rana,1712932768,,,,,,7,3,1,1,19,1
+3005221010104,Md. Abu,Bakar,Siddque,,1,0,,,,Md. Abu Bakar Siddque,1721700015,,,,,,7,4,1,1,19,1
+3005221010105,Md.,,Akteruzzaman,,2,0,,,,Md. Akteruzzaman,1794866999,,,,,,7,5,1,1,19,1
+3005221010106,Md.,Anisul,Islam,,2,0,,,,Md. Anisul Islam,1796581226,,,,,,7,6,1,1,19,1
+3005221010107,K.M.,Zenus,Galib,,1,0,,,,K.M. Zenus Galib,1765377773,,,,,,7,7,1,1,19,1
+3005221010108,Md.,Shakhawat,Hossain,,2,0,,,,Md. Shakhawat Hossain,1754172200,,,,,,7,8,1,1,19,1
+3005221020101,Aswoad,,Siddique,,2,0,,,,Solaiman Ahomed Siddik,1723106645,,,,,,7,1,1,1,20,1
+3005221020102,Md.,Nayeem,islam,,2,0,,,,Md. Mahmudul islam,1314141451,,,,,,7,2,1,1,20,1
+3005221020103,Mst. Habiba,Akhter,Hiya,,1,0,,,,Md. Harun-Ur-Rashid,1780903364,,,,,,7,3,1,1,20,1
+3005221020104,Ishraq,,Mubassir,,2,0,,,,A.H.M Jakerul Islam,1712885488,,,,,,7,4,1,1,20,1
+3005221020105,Mst.,Miftaha,Zannat,,1,0,,,,Md. Mosharraf Hossain,1765965013,,,,,,7,5,1,1,20,1
+3005221020106,Rubaita,,Tasbhi,,1,0,,,,Md. Shariful islam,1736816044,,,,,,7,6,1,1,20,1
+3005221020107,Faria,,Ferdous,,1,0,,,,Md. Ferdousur Rahman,1317117747,,,,,,7,7,1,1,20,1
+3005221020108,Md. Mazharul,Islam,Tanvir,,2,0,,,,Hossian Md. Shajjad,1715553023,,,,,,7,8,1,1,20,1
+3005221020109,Swastika,Sarkar,Snighdha,,1,0,,,,Shree Sushanto Kumar Sarkar,1738534745,,,,,,7,9,1,1,20,1
+3005221020110,Labib,,Ahmmed,,2,0,,,,Md. Shamim Alam,1712772791,,,,,,7,10,1,1,20,1
+3005221020111,Mst.,Wasfiyah,Zaman,,1,0,,,,Md. Wahiduzzman,1718788201,,,,,,7,11,1,1,20,1
+3005221020112,Fariha,Jannat,Nuha,,1,0,,,,Md. Firoz Ahmed,1712350489,,,,,,7,12,1,1,20,1
+3005221020113,Sirazum,,Munira,,1,0,,,,Md. Maydul Islam,1718910559,,,,,,7,13,1,1,20,1
+3005221020114,Aahnaf,Ali,Ayan,,2,0,,,,Md. Rowshan Ali,1921436637,,,,,,7,14,1,1,20,1
+3005221030101,Raisha,Akter,Mim,,1,0,,,,Mohoshena,1955240047,,,,,,7,1,1,1,21,1
+3005221030102,Md.,Fardin,Ahmed,,2,0,,,,Md. Faruk Ahmed,1730983939,,,,,,7,2,1,1,21,1
+3005221030103,Tasmia,Jahan,Sara,,1,0,,,,Khandakar Sohel Azom,1738156497,,,,,,7,3,1,1,21,1
+3005221030104,Rimus,Benedict,Pandey,,2,0,,,,Edward pandy,1716325929,,,,,,7,4,1,1,21,1
+3005221030105,Neola,Scholastica,Pandy,,1,0,,,,Edward pandy,1716325929,,,,,,7,5,1,1,21,1
+3005221030106,Sree Shubroto,Roy,Shuvo,,2,0,,,,Khokon Kumar,1767300802,,,,,,7,6,1,1,21,1
+3005221040101,Rahib,,Abid,,2,0,,,,Md. Motiar Rahman,1717591760,,,,,,7,7,1,1,21,1
+3005221040102,Mohona,Akter,Mim,,1,0,,,,Md. Jafor Howladar,1797852792,,,,,,7,8,1,1,21,1
+3005221040103,Al,Fahim,Howlader,,2,0,,,,Vuttu Mia,1710871503,,,,,,7,9,1,1,21,1
+3005221040104,Nure,,Jannat,,1,0,,,,Md. Shohag Babu,1751077585,,,,,,7,10,1,1,21,1
+3005221040105,Ahnaf,Adi,Arosh,,2,0,,,,,,,,,,,7,11,1,1,21,1
+3005221040106,Most. Nowrin,Islam,Maymuna,,1,0,,,,Md. Nur Islam,,,,,,,7,12,1,1,21,1
+3005221040107,Alishba,,Nawar,,1,0,,,,Akshanul Hasan,1931881953,,,,,,7,13,1,1,21,1
+3005221040108,Amena,,Akhter,,1,0,,,,Md. Shamimur Rahman,1735980122,,,,,,7,14,1,1,21,1
+3005221050101,Md.,Sadman,Arik,,2,0,,,,Md. Rejaul karim,1721216233,,,,,,7,1,1,1,22,1
+3005221050102,Md. Eftakher,Dener,Toufik,,2,0,,,,Md. Motlubar Rahman,1793938163,,,,,,7,2,1,1,22,1
+3005221050103,Shimanto,,Roy,,2,0,,,,Prokas Chondro,1767300802,,,,,,7,3,1,1,22,1
+3005221050104,Md.,Sirajan,Monir,,2,0,,,,Md. Faruq Ferdous,1740632262,,,,,,7,4,1,1,22,1
+3005221060101,Abdulla,Ahnaf,Rafi,,2,0,,,,Md. Gousul Azam,1712560758,,,,,,7,1,1,1,23,1
+3005221060102,Sheikh Muhammad,Sadman,Arefin,,2,0,,,,Md. Sheikh Farid Ali,1717525466,,,,,,7,2,1,1,23,1
+3005221060103,Sarah Tasnim,Binte,Sany,,1,0,,,,Md. Alfasany,1730462804,,,,,,7,3,1,1,23,1
+3005221060104,Abulla,Bin,Mehedi,,2,0,,,,Md. Mehedi Hasan,1704247272,,,,,,7,4,1,1,23,1
+3005221070101,Abdullah,Jawad,(Wafi),,2,0,,,,Md. Gausul Azam,1712560758,,,,,,7,1,1,1,24,1
+3005221070102,Md. Faijul,Islam,(Fuad),,2,0,,,,Md. Motiar Rahman,1797852792,,,,,,7,2,1,1,24,1
+3005221070103,Most. Ishrat,Jahan,Jannati,,1,0,,,,Md. Moshear Rahman,1797852792,,,,,,7,3,1,1,24,1
+3005221070104,Aysha,,Akter,,1,0,,,,Md. Shamimmur Rahman,1735980122,,,,,,7,4,1,1,24,1
+3005221080101,Md.,Abu,Sayed,,2,0,,,,Md. Kabir Hossain,1794297900,,,,,,7,1,1,1,25,1

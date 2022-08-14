@@ -3,8 +3,6 @@ const bodyParser = require('body-parser')
 const moment = require('moment')
 const con = require("../models/db");
 require('dotenv').config()
-console.log(process.env.STORE_ID);
-console.log(process.env.STORE_PASSWORD);
 module.exports = (app) => {
     // parse application/x-www-form-urlencoded
     app.use(bodyParser.urlencoded({ extended: false }))
