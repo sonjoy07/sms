@@ -33,20 +33,20 @@ const SchoolDashboard = () => {
     checkLoggedIn();
   }, []);
 
-  const generateRank =()=>{
+  const generateRank = () => {
     axios
-    .get(`${process.env.REACT_APP_NODE_API}/api/student-rank/${localStorage.getItem('school_id')}`, {
+      .get(`${process.env.REACT_APP_NODE_API}/api/student-rank/${localStorage.getItem('school_id')}`, {
         headers: {
-            authorization: "bearer " + localStorage.getItem("access_token"),
+          authorization: "bearer " + localStorage.getItem("access_token"),
         },
-    })
-    .then((response) => {
+      })
+      .then((response) => {
         toast('Student Position updated')
-    });
+      });
   }
   return (
     <>
-      <SchoolHeader/>
+      <SchoolHeader />
       <section className="container">
         <h2 style={{ textAlign: 'center', color: 'blue' }} className='mt-4'>{school_name}</h2>
         <h1 style={{ textAlign: "center", color: "blue" }} className="mt-4">
@@ -116,7 +116,7 @@ const SchoolDashboard = () => {
             </div>
           </a>
 
-         
+
           <a onClick={() => {
             navigate('/create-exam')
           }
@@ -262,55 +262,55 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div> */}
-          <a href='/subjectregistration' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
+          <a href='/subjectregistration' style={{ textDecoration: 'none' }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
-               <div className="card-body py-4">
-               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
-                       <div className='px-3'>
-                          <img style={{width:'64px', height:'64px'}} src={student} alt=""/>
-                       </div>
-                       <div className='px-3'>
-                         <h4 className="card-title">Student Registration</h4>
-                         <p className="card-text">Add Student Subject</p>
-                       </div>
-                   </div>
-                 
-               </div>
+              <div className="card-body py-4">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                  <div className='px-3'>
+                    <img style={{ width: '64px', height: '64px' }} src={student} alt="" />
+                  </div>
+                  <div className='px-3'>
+                    <h4 className="card-title">Student Registration</h4>
+                    <p className="card-text">Add Student Subject</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-        </a>
-          <Link to='/sms-report' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
+          </a>
+          <Link to='/sms-report' style={{ textDecoration: 'none' }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
-               <div className="card-body py-4">
-               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
-                       <div className='px-3'>
-                          <img style={{width:'64px', height:'64px'}} src={ebook} alt=""/>
-                       </div>
-                       <div className='px-3'>
-                         <h4 className="card-title">SMS Report</h4>
-                         <p className="card-text">SMS details</p>
-                       </div>
-                   </div>
-                 
-               </div>
+              <div className="card-body py-4">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                  <div className='px-3'>
+                    <img style={{ width: '64px', height: '64px' }} src={ebook} alt="" />
+                  </div>
+                  <div className='px-3'>
+                    <h4 className="card-title">SMS Report</h4>
+                    <p className="card-text">SMS details</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-        </Link> 
-        <Link to='/csv-upload' style={{textDecoration: 'none'}} className="col-sm-6 my-4 col1">
+          </Link>
+          <Link to='/csv-upload' style={{ textDecoration: 'none' }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
-               <div className="card-body py-4">
-               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
-                       <div className='px-3'>
-                          <img style={{width:'64px', height:'64px'}} src={csv} alt=""/>
-                       </div>
-                       <div className='px-3'>
-                         <h4 className="card-title">CSV Upload</h4>
-                         <p className="card-text">CSV upload for teacher student routine</p>
-                       </div>
-                   </div>
-                 
-               </div>
+              <div className="card-body py-4">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                  <div className='px-3'>
+                    <img style={{ width: '64px', height: '64px' }} src={csv} alt="" />
+                  </div>
+                  <div className='px-3'>
+                    <h4 className="card-title">CSV Upload</h4>
+                    <p className="card-text">CSV upload for teacher student routine</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-        </Link>
-        <div onClick={() => {
+          </Link>
+          <div onClick={() => {
             navigate("/school-admin")
           }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
@@ -338,23 +338,23 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div>
-          <Link to='/payment' style={{textDecoration: 'none'}} class="col-sm-6 my-4 col1">
+          <Link to='/payment' style={{ textDecoration: 'none' }} class="col-sm-6 my-4 col1">
             <div class="card bg-light shadow-sm">
-               <div class="card-body py-4">
-               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
-                       <div className='px-3'>
-                          <img style={{width:'64px', height:'64px'}} src={accounts} alt=""/>
-                       </div>
-                       <div className='px-3'>
-                         <h4 class="card-title">Accounts</h4>
-                         <p class="card-text">Create Accounts Sector</p>
-                       </div>
-                   </div>
-                 
-               </div>
+              <div class="card-body py-4">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                  <div className='px-3'>
+                    <img style={{ width: '64px', height: '64px' }} src={accounts} alt="" />
+                  </div>
+                  <div className='px-3'>
+                    <h4 class="card-title">Accounts</h4>
+                    <p class="card-text">Create Accounts Sector</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-        </Link>
-        <div onClick={() => {
+          </Link>
+          <div onClick={() => {
             generateRank()
           }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
@@ -382,22 +382,22 @@ const SchoolDashboard = () => {
               </div>
             </div>
           </div>
-          <Link to='/sms-payment' style={{textDecoration: 'none'}} class="col-sm-6 my-4 col1">
+          <Link to='/sms-payment' style={{ textDecoration: 'none' }} class="col-sm-6 my-4 col1">
             <div class="card bg-light shadow-sm">
-               <div class="card-body py-4">
-               <div style={{display: 'flex', justifyContent:'center',alignItems:'center'}} className=''> 
-                       <div className='px-3'>
-                          <img style={{width:'64px', height:'64px'}} src={accounts} alt=""/>
-                       </div>
-                       <div className='px-3'>
-                         <h4 class="card-title">SMS Payment</h4>
-                         <p class="card-text">Create SMS Payment</p>
-                       </div>
-                   </div>
-                 
-               </div>
+              <div class="card-body py-4">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                  <div className='px-3'>
+                    <img style={{ width: '64px', height: '64px' }} src={accounts} alt="" />
+                  </div>
+                  <div className='px-3'>
+                    <h4 class="card-title">SMS Payment</h4>
+                    <p class="card-text">Create SMS Payment</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-        </Link>
+          </Link>
 
         </div>
       </section>

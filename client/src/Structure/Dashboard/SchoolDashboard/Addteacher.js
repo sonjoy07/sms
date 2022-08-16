@@ -227,9 +227,9 @@ const Addteacher = () => {
                                     <div>
                                         <h3 style={{ color: '#008B8B', fontSize: '25px', fontWeight: 'bold' }} class="card-title py-2"> Add Teacher</h3>
                                     </div>
-                                </div>
                                 <div className='float-right' onClick={addTeacher}>
-                                    <i className='fa fa-plus'></i>
+                                </div>
+                                    <i className='fa fa-plus mt-2'></i>
                                 </div>
                             </div>
                         </div>

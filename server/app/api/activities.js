@@ -94,6 +94,23 @@ module.exports = (app) => {
       res.send(result);
     });
   });
+  app.get("/api/activities/extra_teacher/individual/all", authenticateToken, (req, res) => {
+    var sql = `select curriculam.id,class.class_name, subject.subject_name, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,curriculam_child.class_id,curriculam_child.section_id,curriculam_child.subject_id,curriculam_child.session_id,section_default_name,school_name,curriculam_child.school_info_id,school_info.type_id,curriculam_child.school_teacher_id,all_school,all_class,all_section,all_session,all_subject
+    from curriculam
+    join curriculam_child on curriculam_child.activity_id=curriculam.id 
+    join class on curriculam_child.class_id=class.id 
+    join school_info on curriculam_child.school_info_id=school_info.id 
+    join section on curriculam_child.section_id=section.id
+    join subject on curriculam_child.subject_id=subject.id
+    join teacher on curriculam_child.school_teacher_id=teacher.id
+    join session on curriculam_child.session_id=session.id
+    group by curriculam.id order by curriculam.id `;
+    console.log(sql);
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
   function school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id) {
 
     if (school_info_id === 'all') {
@@ -578,7 +595,6 @@ module.exports = (app) => {
     condition += subject_id !== '' ? ` and curriculam_child.subject_id="${subject_id}"` : ``
     condition += session_id !== '' ? ` and curriculam_child.session_id="${session_id}"` : ``
     condition += school_info_id !== '' ? ` and curriculam_child.school_info_id="${school_info_id}"` : ``
-    condition += search_school_teacher_id !== '' ? ` and curriculam_child.school_teacher_id="${search_school_teacher_id}"` : ``
     condition += issue_date !== '' ? ` and due_date BETWEEN "${issue_date}" AND "${due_date}"` : ``
     var sql = `select curriculam.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS full_name, topic, details, issue_date, due_date, session.session_year,attachment_link,school_name,all_school,all_class,all_section,all_session,all_subject
     from curriculam
@@ -591,6 +607,7 @@ module.exports = (app) => {
     join session on curriculam_child.session_id=session.id
     where 1=1 ${condition} group by curriculam.id
     order by due_date;`;
+    console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

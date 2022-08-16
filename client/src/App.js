@@ -134,6 +134,7 @@ import TeacherImportantLink from './Structure/Dashboard/TeacherDashboard/Teacher
 import PaymentInvoice from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/PaymentInvoice";
 import ExtraMarkentry from "./Structure/Dashboard/SuperAdminDashboard/MarkEntry/ExtraMarkentry";
 import ExtraTeacherMarkentry from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraMarkentry";
+import ViewerAdminActivities from "./Structure/Dashboard/ViewerDashboard/Activities/AdminActivities";
 function App(props) {
   const [user_code, setUser_code] = useState("");
   const [user_type, setUser_type] = useState(0);
@@ -513,6 +514,10 @@ function App(props) {
           <Route
             path="/paymentInvoice"
             element={<PaymentInvoice user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/extra-view"
+            element={<ViewerAdminActivities user={[user_code, user_type]} />}
           />
 
 

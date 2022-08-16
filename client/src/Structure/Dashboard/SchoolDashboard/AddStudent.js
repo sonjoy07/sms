@@ -253,7 +253,7 @@ const AddStudent = () => {
             .then((res) => res.json())
             .then((json) => {
               setReset(reset + 1)
-              toast("Please wait a while to Delete Student successfully");
+              toast("Deleted Student successfully");
             })
         }
       }
@@ -453,12 +453,12 @@ const AddStudent = () => {
                 <section className='py-5'>
                     <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2  bg-gradient'>Student List</h2>
                     <p style={{ float: 'right' }}>Student Count: {students.length}</p>
-                    <a href="" className="btn btn-danger"
+                    <button type='button' className="btn btn-danger"
                 style={{ float: 'right' }}
                 onClick={() => deleteAll()}
               >
                 Delete All
-              </a>
+              </button>
                     <div className='row'>
                         <div className='col-sm-3'>
                             <input onChange={(e) => setSearchStudentID(e.target.value)} className='form-control' placeholder='Student ID' />
