@@ -2,11 +2,13 @@ const moment = require('moment')
 const axios = require('axios')
 const csv = require('csv-parser');
 const fs = require('fs');
+const util = require('util');
 var path = require('path');
 const csv2 = require('fast-csv');
 const { ignore } = require('nodemon/lib/rules');
 module.exports = (app) => {
   const con = require('../models/db')
+  const query = util.promisify(con.query).bind(con);
   const authenticateToken = require("../middleware/middleware");
   app.post("/api/create_class", authenticateToken, (req, res) => {
     var school_type_id = req.body.school_type_id;
@@ -285,46 +287,76 @@ module.exports = (app) => {
       .on("data", function (data) {
         csvDataR.push(data);
       })
-      .on("end", function () {
+      .on("end", async function () {
         // console.log('csvDataR',csvDataR);
         // Remove Header ROW
         csvDataR.shift();
-        csvDataR.map(res => {
-          if (option === 'student') {
-            let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position) values ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}","${res[16]}","${res[17]}","${res[18]}")`
-            con.query(sql, (err, result, fields) => {
+        let students = []
+        let presents = []
+        let users = []
+        if (option === 'student') {
+          await csvDataR.filter(res => (res[0] !== '') && students.push([res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7], res[8], res[9], res[10], res[11], res[12], res[13], res[14], res[15], res[16], res[17], res[18]]))
+          let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position) values ?`
+          con.query(sql, [students], async (err, result, fields) => {
+            if (err) throw err
+            let codes = []
+            await csvDataR.filter(res => codes.push([res[0]]))
+            con.query(`select id from student where (student_code) in (?)`, [codes], async (err, result, fields) => {
               if (err) throw err
-              sql = `insert into student_present_status (school_info_id,session_id,shift_id,student_id,class_id,section_id,class_roll_no) values ("${res[17]}","${res[19]}","${res[20]}","${result.insertId}","${res[21]}","${res[22]}",0)`
-              con.query(sql, (err, result, fields) => {
-                if (err) throw err
-              })
-
+              console.log(result);
+              await csvDataR.filter((res, index) => (res[0] !== '') && presents.push([res[17], res[19], res[20], result[index].id, res[21], res[22], 0]))
+              await csvDataR.filter(res => (res[0] !== '') && users.push([1, res[0], "12345", 1]))
+              await query(`insert into student_present_status (school_info_id,session_id,shift_id,student_id,class_id,section_id,class_roll_no) values ?`, [presents])
+              await query(`insert into users (user_type_id,user_code,password,status) values ?`, [users])
             })
-            let sql2 = `insert into users (user_type_id,user_code,password,status) values(1,"${res[0]}","12345",1)`
-            con.query(sql2, (err, result, fields) => {
-              if (err) throw err
-            })
-          }
-          if (option === "teacher") {
-            const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6] === ''?0:res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]=== ''?0:res[10]}","${res[11]=== ''?0:res[11]}","${res[12]=== ''?0:res[12]}","${res[13]=== ''?0:res[13]}","${res[14]}","${res[15]}")`;
-            con.query(sql, function (err, result, fields) {
-              if (err) throw err;
-            });
+          })
 
-            let sql2 = `insert into users (user_type_id,user_code,password,status) values(2,"${res[0]}","12345",1)`
-            con.query(sql2, (err, result, fields) => {
-              if (err) throw err
-            })
-          }
-          if (option === "routine") {
-            let splitInsertData = res[0].replaceAll('"', '').split(';')
-            const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${splitInsertData[0]}", "${splitInsertData[1]}", "${splitInsertData[2]}", "${splitInsertData[3]}","${splitInsertData[4]}","${splitInsertData[5]}", "${splitInsertData[6]}", "${splitInsertData[7]}", "${splitInsertData[8]}", "${splitInsertData[9]}", "${splitInsertData[10]}", "${splitInsertData[11]}" )`;
+        }
+        if (option === "teacher") {
+          let teachers = []
+          let users = []
+          
+        }
+        // csvDataR.map(res => {
+        //   if (option === 'student') {
+        //     if (res[0] !== '') {
+        //       let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position) values ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}","${res[16]}","${res[17]}","${res[18]}")`
+        //       con.query(sql, (err, result, fields) => {
+        //         if (err) throw err
+        //         sql = `insert into student_present_status (school_info_id,session_id,shift_id,student_id,class_id,section_id,class_roll_no) values ("${res[17]}","${res[19]}","${res[20]}","${result.insertId}","${res[21]}","${res[22]}",0)`
+        //         con.query(sql, (err, result, fields) => {
+        //           if (err) throw err
+        //         })
 
-            con.query(sql, function (err, result, fields) {
-              if (err) throw err;
-            });
-          }
-        })
+        //       })
+        //       let sql2 = `insert into users (user_type_id,user_code,password,status) values(1,"${res[0]}","12345",1)`
+        //       con.query(sql2, (err, result, fields) => {
+        //         if (err) throw err
+        //       })
+        //     }
+        //   }
+        //   if (option === "teacher") {
+        //     if (res[0] !== '') {
+        //       const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6] === '' ? 0 : res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10] === '' ? 0 : res[10]}","${res[11] === '' ? 0 : res[11]}","${res[12] === '' ? 0 : res[12]}","${res[13] === '' ? 0 : res[13]}","${res[14]}","${res[15]}")`;
+        //       con.query(sql, function (err, result, fields) {
+        //         if (err) throw err;
+        //       });
+
+        //       let sql2 = `insert into users (user_type_id,user_code,password,status) values(2,"${res[0]}","12345",1)`
+        //       con.query(sql2, (err, result, fields) => {
+        //         if (err) throw err
+        //       })
+        //     }
+        //   }
+        //   if (option === "routine") {
+        //     let splitInsertData = res[0].replaceAll('"', '').split(';')
+        //     const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${splitInsertData[0]}", "${splitInsertData[1]}", "${splitInsertData[2]}", "${splitInsertData[3]}","${splitInsertData[4]}","${splitInsertData[5]}", "${splitInsertData[6]}", "${splitInsertData[7]}", "${splitInsertData[8]}", "${splitInsertData[9]}", "${splitInsertData[10]}", "${splitInsertData[11]}" )`;
+
+        //     con.query(sql, function (err, result, fields) {
+        //       if (err) throw err;
+        //     });
+        //   }
+        // })
       })
     streamR.pipe(csvStream);
     res.json({ status: "success" });
@@ -398,15 +430,15 @@ module.exports = (app) => {
 
     const inserData = await Promise.all(studentChecked.map(res => {
       subjectChecked.length > 0 && subjectChecked.map(resSub => {
-            con.query(`select id from subject_registration where school_info_id="${school_info_id}" and student_id= "${res.student_id}" and subject_id= "${resSub.subject_id}" and section_id = "${res.section_id}"`, function (err, result, fields) {
-              if (result.length === 0) {
+        con.query(`select id from subject_registration where school_info_id="${school_info_id}" and student_id= "${res.student_id}" and subject_id= "${resSub.subject_id}" and section_id = "${res.section_id}"`, function (err, result, fields) {
+          if (result.length === 0) {
             sql = `insert into subject_registration (school_info_id,student_id,session_id,group_id,class_id,subject_id,section_id,created_at) values ("${school_info_id}","${res.student_id}","${res.session_id}","${group_id}","${res.class_id}","${resSub.subject_id}","${res.section_id}","${date}")`
 
             con.query(sql, function (err, result, fields) {
               if (err) throw err;
             });
           }
-          })
+        })
       })
       forthChecked.length > 0 && forthChecked.map(resSub => {
         con.query(`select id from subject_registration where school_info_id="${school_info_id}" and student_id= "${res.student_id}" and subject_id= "${resSub.subject_id}" and section_id = "${res.section_id}"`, function (err, result, fields) {
@@ -630,31 +662,24 @@ module.exports = (app) => {
       });
     });
   });
-  app.post("/api/student/deleteAll", authenticateToken, (req, res1) => {
+  app.post("/api/student/deleteAll", authenticateToken, async (req, res1) => {
     var checkedStudent = req.body.checkedStudent;
     var students = req.body.students;
-    students.forEach((res, index) => {
-      if (checkedStudent[index] === true) {
-        con.query(`delete from notice_user where student_id ="${res.id}"`)
-        con.query(`select student_present_status.id,student_code from student_present_status left join student on student.id = student_present_status.student_id where student_id ="${res.id}"`, function (err, result, fields) {
-          // if (err) throw err;
-          if (result.length > 0) {
-            // console.log(result[0].id);
-            con.query(`delete from attendance where student_present_status_id ="${result[0].id}"`)
-            con.query(`delete from users where user_code ="${result[0].student_code}"`)
-          }
+    let ids = []
+    let stud = []
+    let codes = []
+    await students.filter((res, index) => { if (checkedStudent[index] === true) ids.push([res.id]) })
+    await students.filter((res, index) => { if (checkedStudent[index] === true) stud.push([res.student_present_status_id]) })
+    await students.filter((res, index) => { if (checkedStudent[index] === true) codes.push([res.student_code]) })
+    await query(`delete from notice_user where (student_id) in (?)`, [ids])
+    await query(`delete from attendance where (student_present_status_id) in (?)`, [stud])
+    await query(`delete from users where (user_code) in (?)`, [codes])
+    await query(`delete from subject_registration where (student_id) in (?)`, [ids])
+    await query(`delete from student_present_status where (student_id) in (?)`, [ids])
+    await query(`delete from student where (id) in (?)`, [ids])
 
-          con.query(`delete from subject_registration where student_id ="${res.id}"`)
-          con.query(`delete from student_present_status where student_id ="${res.id}"`)
-          var sql = `delete from student where id ="${res.id}"`
-          console.log(sql)
-          con.query(sql, function (err, result, fields) {
-            if (err) throw err;
-            res1.json({ status: "success" });
-          });
-        });
-      }
-    })
+    res1.json({ status: "success" });
+
   });
   app.delete("/api/section/delete", authenticateToken, (req, res) => {
     var id = req.query.id;
