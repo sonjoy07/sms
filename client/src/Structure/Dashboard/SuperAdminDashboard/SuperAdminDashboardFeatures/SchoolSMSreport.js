@@ -9,8 +9,9 @@ const SchoolSMSreport = () => {
     const [totalUsed, setTotalUsed] = useState([])
     const [schools, setSchools] = useState([])
     const [school_id, setSchool_id] = useState("")
+    const [type_id, setType_id] = useState("")
 
-    useEffect(() => {        
+    useEffect(() => {
         axios.get(`${process.env.REACT_APP_NODE_API}/api/school_info/all`,
             {
                 headers: {
@@ -27,8 +28,8 @@ const SchoolSMSreport = () => {
 
         // setTotal(totalData)
     }, [])
-    const handleSearch=()=>{
-        axios.get(`${process.env.REACT_APP_NODE_API}/api/sms/count_report?school_info_id=${school_id}`,
+    const handleSearch = () => {
+        axios.get(`${process.env.REACT_APP_NODE_API}/api/sms/count_report?school_info_id=${school_id}&&type_id=${type_id}`,
             {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
@@ -39,26 +40,26 @@ const SchoolSMSreport = () => {
             setTotal(response.data.data);
         });
     }
-    const payNow =(id)=>{
+    const payNow = (id) => {
         const check = window.confirm('Are you sure to Pay?');
         if (check) {
             fetch(`${process.env.REACT_APP_NODE_API}/api/update_sms_payment`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                authorization: "bearer " + localStorage.getItem("access_token"),
-              },
-      
-              body: JSON.stringify({
-                id: id,
-              }),
-            })
-            .then((res) => res.json())
-            .then((json) => {
-                  toast(json.status)
-              });
-        // }else{
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: "bearer " + localStorage.getItem("access_token"),
+                    },
+
+                    body: JSON.stringify({
+                        id: id,
+                    }),
+                })
+                .then((res) => res.json())
+                .then((json) => {
+                    toast(json.status)
+                });
+            // }else{
 
         }
     }
@@ -69,16 +70,23 @@ const SchoolSMSreport = () => {
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>
                     <div className='row mb-3'>
-                        <div className='col-sm-6'>
-                            <select onChange={(e)=>setSchool_id(e.target.value)} className='form-control'>
-                                <option>Select</option>
-                                {schools?.map(res=>{
+                        <div className='col-sm-4'>
+                            <select onChange={(e) => setSchool_id(e.target.value)} className='form-control'>
+                                <option>Select School</option>
+                                {schools?.map(res => {
                                     return <option value={res.id}>{res.school_name}</option>
                                 })}
                             </select>
                         </div>
-                        <div className='col-sm-6'>
-                           <button onClick={handleSearch} className='btn btn-success mt-1'>Search</button>
+                        <div className='col-sm-4'>
+                            <select onChange={(e) => setType_id(e.target.value)} className='form-control'>
+                                <option>Select Type</option>
+                                <option value={1}>SMS</option>
+                                <option value={2}>Payment</option>
+                            </select>
+                        </div>
+                        <div className='col-sm-4'>
+                            <button onClick={handleSearch} className='btn btn-success mt-1'>Search</button>
                         </div>
                     </div>
                     <div className='row mb-3'>
@@ -99,6 +107,7 @@ const SchoolSMSreport = () => {
                             <tr>
                                 <th scope="col">School Name</th>
                                 <th scope="col">User</th>
+                                {type_id === '2' && <th scope="col">User code</th>}
                                 <th scope="col">Invoice No</th>
                                 <th scope="col">Transaction ID</th>
                                 <th scope="col">Amount</th>
@@ -112,12 +121,13 @@ const SchoolSMSreport = () => {
                                 return <tr>
                                     <td>{res.school_name}</td>
                                     <td>{res.full_name}</td>
+                                    {type_id === '2' && <td>{res.student_code}</td>}
                                     <td>{res.invoice_no}</td>
                                     <td>{res.transaction_id}</td>
                                     <td>{res.amount}</td>
                                     <td>{moment(res.payment_date).format('DD-MM-YYYY')}</td>
-                                    <td>{res.status === 1?"Pending":"Paid"}</td>
-                                    <td>{res.status === 1?<button onClick={()=>payNow(res.id)} className='btn btn-success mt-1'>Update Now</button>:''}</td>
+                                    <td>{res.status === 1 ? "Pending" : "Paid"}</td>
+                                    <td>{res.status === 1 ? <button onClick={() => payNow(res.id)} className='btn btn-success mt-1'>Update Now</button> : ''}</td>
                                 </tr>
                             })}
 

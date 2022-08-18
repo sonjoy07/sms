@@ -41,7 +41,7 @@ module.exports = (app) => {
   });
   app.get("/api/teacher/schoolWise", authenticateToken, (req, res) => {
     let condition = req.query.school_info_id === 'all'?'':` and school_info_id="${req.query.school_info_id}"`
-    con.query(`SELECT id,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name FROM teacher where 1=1 ${condition}`, function (err, result, fields) {
+    con.query(`SELECT id,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,teacher_code,mobile as mobile_no FROM teacher where 1=1 ${condition}`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });

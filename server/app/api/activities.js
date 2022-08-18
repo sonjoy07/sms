@@ -499,7 +499,7 @@ module.exports = (app) => {
   });
 
   app.get("/api/activities/student", authenticateToken, (req, res) => {
-    var sql = `select activity.id,questions, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
+    var sql = `select activities.id,questions, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link
     from activities
     join activity on activities.activity_id=activity.id 
     join class on activities.class_id=class.id 
@@ -511,7 +511,7 @@ module.exports = (app) => {
     and activities.class_id = "${req.query.class_id}"
     and activities.session_id = "${req.query.session_id}"
     and activities.school_info_id = "${req.query.school_info_id}"
-    and sub_start_date >=  "${moment().format('YYYY-MM-DD')}"
+    and sub_start_date <=  "${moment().format('YYYY-MM-DD')}"
     and TIME_FORMAT(sub_start_time, '%r') <=  "${moment().format('LTS')}"
     order by due_date desc;`;
     console.log(sql);
@@ -663,11 +663,27 @@ module.exports = (app) => {
     cond += req.query.section_id !== '' && req.query.section_id !== undefined?` and student_info.section_id = ${req.query.section_id}`:''
     cond += req.query.class_id !== '' && req.query.class_id !== undefined?` and student_info.class_id = ${req.query.class_id}`:''
     cond += req.query.user_id !== '' && req.query.user_id !== undefined?` and student_info.id = ${req.query.user_id}`:''
-    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer,activities_submission.id as sub_id,activities.subject_id,student_info.id as student_id,activities_submission.activities_id,(select marks_obtained from  extra_curriculum_marks where activities_submission.activities_id=extra_curriculum_marks.activities_id) marks_obtained    
+    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer,activities_submission.id as sub_id,activities.subject_id,student_info.id as student_id,activities_submission.activities_id,(select marks_obtained from  extra_curriculum_marks where activities_submission.activities_id=extra_curriculum_marks.activities_id and student_info.id = extra_curriculum_marks.student_id order by extra_curriculum_marks.id desc limit 1) marks_obtained    
     from activities_submission
     join student_info on activities_submission.student_present_status_id=student_info.student_present_status_id
-    join activities on activities.activity_id=activities_submission.activities_id
+    join activities on activities.id=activities_submission.activities_id
     where activities_submission.activities_id="${req.query.home_work_id}" ${cond} group by activities_submission.id order by marks_obtained desc`;
+    console.log(sql);
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
+  app.get("/api/activities/admin/submitlist", authenticateToken, (req, res) => {
+    let cond = req.query.school_id !== '' && req.query.school_id !== undefined?` and student_info.school_info_id = ${req.query.school_id}`:''
+    cond += req.query.section_id !== '' && req.query.section_id !== undefined?` and student_info.section_id = ${req.query.section_id}`:''
+    cond += req.query.class_id !== '' && req.query.class_id !== undefined?` and student_info.class_id = ${req.query.class_id}`:''
+    cond += req.query.user_id !== '' && req.query.user_id !== undefined?` and student_info.id = ${req.query.user_id}`:''
+    var sql = `select student_info.*,activities_submission.submission_time, activities_submission.attachment_link,answer,activities_submission.id as sub_id,activities.subject_id,student_info.id as student_id,activities_submission.activities_id,(select marks_obtained from  extra_curriculum_marks where activities_submission.activities_id=extra_curriculum_marks.activities_id and student_info.id = extra_curriculum_marks.student_id order by extra_curriculum_marks.id desc limit 1) marks_obtained    
+    from activities_submission
+    join student_info on activities_submission.student_present_status_id=student_info.student_present_status_id
+    join activities on activities.id=activities_submission.activities_id
+    where activities.activity_id="${req.query.home_work_id}" ${cond} group by activities_submission.id order by marks_obtained desc`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

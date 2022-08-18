@@ -10,7 +10,7 @@ const ExtraDetails = () => {
       const home_work_id = localStorage.getItem("activityid")
       axios
         .get(
-          `${process.env.REACT_APP_NODE_API}/api/activities/teacher/submitlist?home_work_id=${home_work_id}`,
+          `${process.env.REACT_APP_NODE_API}/api/activities/admin/submitlist?home_work_id=${home_work_id}`,
           {
             headers: {
               authorization: "bearer " + localStorage.getItem("access_token"),

@@ -14,7 +14,7 @@ const ViewerSubmissionDetails = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/activities/teacher/submitlist?home_work_id=${homeworkid}`,
+        `${process.env.REACT_APP_NODE_API}/api/activities/admin/submitlist?home_work_id=${homeworkid}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),

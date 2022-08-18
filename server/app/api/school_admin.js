@@ -315,107 +315,28 @@ module.exports = (app) => {
         if (option === "teacher") {
           let teachers = []
           let users = []
-          
+          await csvDataR.filter(res => (res[0] !== '') && teachers.push([res[0], res[1], res[2], res[3], res[4], res[5], res[6] === '' ? 0 : res[6], res[7], res[8], res[9], res[10] === '' ? 0 : res[10], res[11] === '' ? 0 : res[11], res[12] === '' ? 0 : res[12], res[13] === '' ? 0 : res[13], res[14], res[15]]))
+          await csvDataR.filter(res => (res[0] !== '') && users.push([2, res[0], "12345", 1]))
+
+          const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ?`;
+          await query(sql, [teachers])
+          await query(`insert into users (user_type_id,user_code,password,status) values ?`, [users])
         }
-        // csvDataR.map(res => {
-        //   if (option === 'student') {
-        //     if (res[0] !== '') {
-        //       let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id,position) values ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10]}","${res[11]}","${res[12]}","${res[13]}","${res[14]}","${res[15]}","${res[16]}","${res[17]}","${res[18]}")`
-        //       con.query(sql, (err, result, fields) => {
-        //         if (err) throw err
-        //         sql = `insert into student_present_status (school_info_id,session_id,shift_id,student_id,class_id,section_id,class_roll_no) values ("${res[17]}","${res[19]}","${res[20]}","${result.insertId}","${res[21]}","${res[22]}",0)`
-        //         con.query(sql, (err, result, fields) => {
-        //           if (err) throw err
-        //         })
+        if (option === "routine") {
+          let routines = []
+          await csvDataR.filter(res => {
+            if (res[0] !== '') {
+              let splitInsertData = res[0].replaceAll('"', '').split(';')
+              routines.push([splitInsertData[0], splitInsertData[1], splitInsertData[2], splitInsertData[3], splitInsertData[4], splitInsertData[5], splitInsertData[6], splitInsertData[7], splitInsertData[8], splitInsertData[9], splitInsertData[10], splitInsertData[11]])
 
-        //       })
-        //       let sql2 = `insert into users (user_type_id,user_code,password,status) values(1,"${res[0]}","12345",1)`
-        //       con.query(sql2, (err, result, fields) => {
-        //         if (err) throw err
-        //       })
-        //     }
-        //   }
-        //   if (option === "teacher") {
-        //     if (res[0] !== '') {
-        //       const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${res[0]}","${res[1]}","${res[2]}","${res[3]}","${res[4]}","${res[5]}","${res[6] === '' ? 0 : res[6]}","${res[7]}","${res[8]}","${res[9]}","${res[10] === '' ? 0 : res[10]}","${res[11] === '' ? 0 : res[11]}","${res[12] === '' ? 0 : res[12]}","${res[13] === '' ? 0 : res[13]}","${res[14]}","${res[15]}")`;
-        //       con.query(sql, function (err, result, fields) {
-        //         if (err) throw err;
-        //       });
-
-        //       let sql2 = `insert into users (user_type_id,user_code,password,status) values(2,"${res[0]}","12345",1)`
-        //       con.query(sql2, (err, result, fields) => {
-        //         if (err) throw err
-        //       })
-        //     }
-        //   }
-        //   if (option === "routine") {
-        //     let splitInsertData = res[0].replaceAll('"', '').split(';')
-        //     const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${splitInsertData[0]}", "${splitInsertData[1]}", "${splitInsertData[2]}", "${splitInsertData[3]}","${splitInsertData[4]}","${splitInsertData[5]}", "${splitInsertData[6]}", "${splitInsertData[7]}", "${splitInsertData[8]}", "${splitInsertData[9]}", "${splitInsertData[10]}", "${splitInsertData[11]}" )`;
-
-        //     con.query(sql, function (err, result, fields) {
-        //       if (err) throw err;
-        //     });
-        //   }
-        // })
+            }
+          })
+          const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ?`
+          await query(sql, [routines])
+        }
       })
     streamR.pipe(csvStream);
     res.json({ status: "success" });
-
-
-
-    // let csvData = [];
-    // let stream = fs.createReadStream(`${uploadPath}/${file.name}`).pipe(csv({})).on('data', (data => csvData.push(data))).on('end', () => {
-    //     // csvData.shift()
-    //     csvData.map(res => {
-    //         let newD= JSON.stringify(res).replace(/[{()}]/g, '').split(":")
-    //         const newInsertData = newD[1].replaceAll('\\', '').replaceAll('"','')
-    //         const insertArray = newInsertData.split(";")
-    //         if (option === 'student') {
-    //             let sql = `insert into student(student_code,first_name,middle_name,last_name,mobile_no,gender_id,group_id,email,present_address, permanent_address,father_name,father_phone_number,mother_name,mother_phone_number,dob,blood_group,photo_id,school_info_id) values ("${insertArray[0]}","${insertArray[1]}","${insertArray[2]}","${insertArray[3]}","${insertArray[4]}","${insertArray[5]}","${insertArray[6]}","${insertArray[7]}","${insertArray[8]}","${insertArray[9]}","${insertArray[10]}","${insertArray[11]}","${insertArray[12]}","${insertArray[13]}","${insertArray[14]}","${insertArray[15]}","${insertArray[16]}","${insertArray[17]}")`
-    //             con.query(sql, (err, result, fields) => {
-    //                 if (err) throw err
-    //             })
-    //         }
-    //         if(option === "teacher"){
-    //            const sql = `INSERT INTO teacher (teacher_code,title,first_name,middle_name,last_name,initial,subject_code,designation,department,dob,blood_group,mpo_status,index_no,mobile,email,school_info_id) VALUES ("${insertArray[0]}","${insertArray[1]}","${insertArray[2]}","${insertArray[3]}","${insertArray[4]}","${insertArray[5]}","${insertArray[6]}","${insertArray[7]}","${insertArray[8]}","${insertArray[9]}","${insertArray[10]}","${insertArray[11]}","${insertArray[12]}","${insertArray[13]}","${insertArray[14]}","${insertArray[15]}")`;
-    //            con.query(sql, function (err, result, fields) {
-    //             if (err) throw err;
-    //           });
-    //         }
-    //         if(option === "routine"){
-    //         //     let newDR= JSON.stringify(res).replace(/[{()}]/g, '')
-    //         //     const newInsertDataR = newD[1].replace(/\\/g, '')
-    //         //     console.log("newInsertDataR",newInsertDataR);
-    //         //   const sql = `INSERT INTO routine (class_id, section_id, day_id, period_id,start_time,end_time, subject_id, teacher_id, room, school_info_id, session_id, shift_id) VALUES ("${insertArray[0]}", "${insertArray[1]}", "${insertArray[2]}", "${insertArray[3]}","${insertArray[4]}","${insertArray[5]}", "${insertArray[6]}", "${insertArray[7]}", "${insertArray[8]}", "${insertArray[9]}", "${insertArray[10]}", "${insertArray[11]}" )`;
-
-    //         //   con.query(sql, function (err, result, fields) {
-    //         //     if (err) throw err;
-    //         //   });
-    //         }
-    //         // if()
-    //     })
-    //     res.json({ status: "success" });
-    // });
-
-
-    // let csvStream = csv.parse()
-    // .on("data", function (data) {
-    //     console.log(csvData);
-    //     csvData.push(data);
-    // }).on("end", function () {
-    //     // Remove Header ROW
-    //     csvData.shift();
-    // })
-    // csv.fromStream(stream,{headers:["id","student_code","first_name"],ignoreEmpty:true})
-    // .on("data",function(data){
-    //     console.log(data);
-    // }).on("end",function(){
-
-    // console.log("ddone");
-    // })
-
-    // let test = stream.pipe(csvStream);
-    // console.log(test);
 
   });
   app.post("/api/save/subjectRegistration", async (req, res) => {
@@ -605,7 +526,14 @@ module.exports = (app) => {
   })
   app.get('/api/sms/count_report', async (req, res) => {
     const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
-    var sql = `select sms_payment.*,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,school_name from sms_payment left join school_info on school_info.id = sms_payment.school_info_id left join school_admin on school_admin.id =sms_payment.user_id where sms_payment.school_info_id = ${req.query.school_info_id}`
+    let type_id= req.query.type_id
+    var sql
+    if(type_id === '1'){
+    sql = `select sms_payment.*,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,school_name from sms_payment left join school_info on school_info.id = sms_payment.school_info_id left join school_admin on school_admin.id =sms_payment.user_id where sms_payment.school_info_id = ${req.query.school_info_id}`
+    }else{
+      sql = `select payment.*,full_name,student_code,school_name,amount from payment  left join student_info on student_info.id =payment.user_id left join sector on sector.id = payment.sector_id where student_info.school_info_id = ${req.query.school_info_id}`
+    }
+    // var 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send({ result: result, data: test.data });

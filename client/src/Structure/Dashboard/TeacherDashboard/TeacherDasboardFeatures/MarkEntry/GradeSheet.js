@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import TeacherHeader from "../../TeacherHeader/TeacherHeader";
+import { toast } from 'react-toastify';
 const GradeSheetTeacher = () => {
   const [info, setInfo] = useState([])
   const [allExam, setAllExam] = useState([])
@@ -68,6 +69,8 @@ const GradeSheetTeacher = () => {
       })
 
       .then((response) => {
+        debugger
+        if(response.data !== ''){
         axios.get(`${process.env.REACT_APP_NODE_API}/api/mark?student_code=${response.data.id}&session_id=${session}&&school_id=${localStorage.getItem('school_id')}`,
           {
             headers: {
@@ -88,6 +91,9 @@ const GradeSheetTeacher = () => {
           .then((response) => {
             setSchoolInfo(response.data)
           })
+        }else{
+          toast('Invalid Student Code')
+        }
       })
 
 

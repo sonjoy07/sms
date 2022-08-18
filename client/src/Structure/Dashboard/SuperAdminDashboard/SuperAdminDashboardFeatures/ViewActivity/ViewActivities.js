@@ -23,7 +23,7 @@ const ViewActivities = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/activities/teacher/submitlist?home_work_id=${home_work_id}`,
+        `${process.env.REACT_APP_NODE_API}/api/activities/admin/submitlist?home_work_id=${home_work_id}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -112,7 +112,7 @@ const ViewActivities = () => {
     }
   }
 
-  homework.map(res => res.submission_time = moment(res.submission_time).format("DD-MM-YYYY h:mm a"))
+  homework.map(res => res.submission_time = moment(Date(res.submission_time)).format("DD-MM-YYYY h:mm a"))
   homework.map(res => res.status = "submit")
 
   const headers = [
@@ -151,7 +151,7 @@ const ViewActivities = () => {
     debugger
     axios
     .get(
-      `${process.env.REACT_APP_NODE_API}/api/activities/teacher/submitlist?home_work_id=${home_work_id}&&class_id=${class_id}&&section_id=${section_id}&&school_id=${school_id}`,
+      `${process.env.REACT_APP_NODE_API}/api/activities/admin/submitlist?home_work_id=${home_work_id}&&class_id=${class_id}&&section_id=${section_id}&&school_id=${school_id}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -297,6 +297,7 @@ const ViewActivities = () => {
         </thead>
         <tbody>
           {homework.map(res => {
+            console.log(res);
             return <tr>
               <td>{res.school_name}</td>
               <td>{res.shift_name}</td>
@@ -305,7 +306,7 @@ const ViewActivities = () => {
               <td>{res.student_code}</td>
               <td>{res.full_name}</td>
               <td>{res.mobile_no}</td>
-              <td> {moment(res.submission_time).format("DD-MM-YYYY h:mm a")}</td>
+              <td>{moment(Date(res.submission_time)).format("DD-MM-YYYY h:mm a")}</td>
               <td>{res.answer}</td>
               <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
               <td>Submit</td>

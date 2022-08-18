@@ -35,7 +35,7 @@ const AdminActivities = (props) => {
   const [session, setSession] = useState("");
 
   const [search_school_teacher_id, setSearch_School_teacher_id] = useState(localStorage.getItem("user_code"));
-  const [school_info_id, setSchool_info_id] = useState("");
+  const [school_info_id, setSchool_info_id] = useState(localStorage.getItem('school_id'));
   const [teacher_id, setTeacher_id] = useState(
     localStorage.getItem("user_code")
   );
@@ -353,7 +353,6 @@ const AdminActivities = (props) => {
           }
           setId("");
           setClass_id("");
-          setSchool_info_id("")
           setSection_id("");
           setSubject_id("");
           setSession_id("");
@@ -387,7 +386,6 @@ const AdminActivities = (props) => {
     setDue_date(moment(data.due_date).format("YYYY-MM-DD"));
     setTopic(data.topic);
     setDetails(data.details);
-    setSchool_info_id(data.school_info_id);
   }
 
   const deleteHomework = async (id) => {
@@ -524,31 +522,6 @@ const AdminActivities = (props) => {
                         name="avatar"
                         onChange={handleAttachment}
                       />
-                    </div>
-                  </div>
-                  <div class={"col-sm-2 mx-auto p-2"}>
-                    <div class="form-group">
-                      <label className="pb-2" for="exampleSelect">
-                        School :{" "}
-                      </label>
-                      <select
-                        style={{ border: "1px solid blue" }}
-                        class="form-control"
-                        value={school_info_id}
-                        onChange={(e) => setSchool_info_id(e.target.value)}
-                        id="class"
-                        name="class"
-                      >
-                        <option value="">Select School</option>
-                        <option value="all">All</option>
-                        {schools.map((classJSON) => {
-                          return (
-                            <option value={classJSON.id}>
-                              {classJSON.school_name}
-                            </option>
-                          );
-                        })}
-                      </select>
                     </div>
                   </div>
 
@@ -908,12 +881,12 @@ const AdminActivities = (props) => {
                     <td>{homeworkJSON.full_name}</td>                    
                     <td>{homeworkJSON.topic}</td>
                     <td>{homeworkJSON.details}</td>
-                    <td>{homeworkJSON.class_name}</td>
+                    <td>{homeworkJSON.all_class===1?'All':homeworkJSON.class_name}</td>
                     <td>
-                      {homeworkJSON.section_default_name}
+                      {homeworkJSON.all_section===1?'All':homeworkJSON.section_default_name}
                     </td>
-                    <td>{homeworkJSON.session_year}</td>
-                    <td>{homeworkJSON.subject_name}</td>
+                    <td>{homeworkJSON.all_session===1?'All':homeworkJSON.session_year}</td>
+                    <td>{homeworkJSON.all_subject===1?'All':homeworkJSON.subject_name}</td>
                     <td>
                       {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>

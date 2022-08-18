@@ -68,7 +68,7 @@ const SMSreport = () => {
                                     <td>{res.purpose === 1?res.school_admin_full_name:res.teacher_full_name}</td>
                                     <td>{moment(res.created_at).format('MMMM Do YYYY, h:mm:ss a')}</td>
                                     <td>{res.text}</td>
-                                    <td>{res.purpose === 1?'notice':'absent'}</td>
+                                    <td>{res.purpose === 1?'notice':res.purpose === 2?'absent':'welcome'}</td>
                                 </tr>
                             })}
 

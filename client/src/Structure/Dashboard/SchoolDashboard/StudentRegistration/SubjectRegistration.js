@@ -25,7 +25,6 @@ const SubjectRegistration = () => {
   const [forthSubjectsList, setForthSubjectsList] = useState([]);
   const [subjectsList, setSubjectsList] = useState([]);
   const [start_date, setStart_date] = useState(null);
-  const [end_date, setEnd_date] = useState(null);
   const [reset, setReset] = useState(0)
   const [id, setId] = useState(0)
   const [start_forth_date, setStart_forth_date] = useState("");

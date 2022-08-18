@@ -10,8 +10,6 @@ const SMSsent = (props) => {
   const [clses, setClses] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [sections, setSections] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [teachers, setTeachers] = useState([]);
   const [checkedAll, setCheckedAll] = useState(false);
   const [checked, setChecked] = useState([]);
   const [smsText, setSmsText] = useState("");
@@ -26,7 +24,6 @@ const SMSsent = (props) => {
       return newState;
     });
   };
-
   const selectAll = (value) => {
     setCheckedAll(value);
     setChecked((prevState) => {
@@ -37,19 +34,6 @@ const SMSsent = (props) => {
       return newState;
     });
   };
-  // useEffect(() => {
-  //     let allChecked = false;
-  //     for (const inputName in checked) {
-  //         if (checked[inputName] === false) {
-  //             allChecked = false;
-  //         }
-  //     }
-  //     if (allChecked) {
-  //         setCheckedAll(true);
-  //     } else {
-  //         setCheckedAll(false);
-  //     }
-  // }, [checked]);
 
   useEffect(() => {
 
@@ -66,36 +50,8 @@ const SMSsent = (props) => {
         setSections(response.data);
       });
   }, [search_class_id]);
-  useEffect(() => {
-    if (option_id === '1') {
-      axios
-        .get(
-          `${process.env.REACT_APP_NODE_API}/api/student/all?school_info_id=${localStorage.getItem('school_id')}`,
-          {
-            headers: {
-              authorization: "bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .then((response) => {
-          setStudents(response.data);
-        });
-    }
-    if (option_id === '2') {
-      axios
-        .get(
-          `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${localStorage.getItem('school_id')}`,
-          {
-            headers: {
-              authorization: "bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .then((response) => {
-          setTeachers(response.data);
-        });
-    }
-  }, [option_id]);
+
+ 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/class?school_type_id=${localStorage.getItem('school_type')}`, {
@@ -128,7 +84,8 @@ const SMSsent = (props) => {
   };
 
   const handleSearch = () => {
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/student/filter?class_id=${search_class_id}&&section_id=${search_section_id}&&session_id=${search_session_id}`,
+    let link = option_id=== '2'?`${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${localStorage.getItem('school_id')}`:`${process.env.REACT_APP_NODE_API}/api/student/filter?class_id=${search_class_id}&&section_id=${search_section_id}&&session_id=${search_session_id}`
+    axios.get(link,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -148,7 +105,6 @@ const SMSsent = (props) => {
     });
   };
   const handleSmsSend = async () => {
-    console.log(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`);
     const checksms = await axios.get(`${process.env.REACT_APP_NODE_API}/api/smsCheck?school_id=${localStorage.getItem('school_id')}`,
       {
         headers: {
@@ -157,10 +113,16 @@ const SMSsent = (props) => {
       }
     )
     if (checksms.data !== '' && checksms.data.sms_limit > 0) {
+
       let items = [...absentList];
       absentList.forEach((res, index) => {
         if (checked[index] === true) {
-          fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg="${smsText}"`)
+          let text = `Dear ${option_id==='1'?'Student':'Teacher'}, welcome to ePathshala, your ID is ${option_id==='1'?res.student_code:res.teacher_code}. Temporary password: 12345. Thank you`
+          if(type_id === '1'){
+            fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg=${text}`)
+          }else{
+            fetch(`http://202.164.208.226/smsapi?api_key=C200164162b496a4b069b1.94693919&type=text&contacts=+880${res.mobile_no}&senderid=8809612441008&msg="${smsText}"`)
+          }
 
           fetch(`${process.env.REACT_APP_NODE_API}/api/save/smsReport`, {
             method: "POST",
@@ -169,9 +131,9 @@ const SMSsent = (props) => {
               authorization: "bearer " + localStorage.getItem("access_token"),
             },
             body: JSON.stringify({
-              smsText: smsText,
+              smsText: type_id === '1'?text:smsText,
               user_id: localStorage.getItem('u_id'),
-              purpose: 1,
+              purpose: type_id === '1'?3:1,
               school_info_id: localStorage.getItem('school_info_id')
             }),
           })
@@ -361,44 +323,9 @@ const SMSsent = (props) => {
 
                       </div>
                     </div>}
-                    {option_id === 1&&<table className="table table-striped">
-                      <thead>
-                        <tr>
-                          <th scope="col">
-                            <label className="custom-control custom-switch mt-3">
-                              <input type="checkbox"
-                              //  onChange={(event) => selectStudentAll(event.target.checked)}
-                              // checked={checkedStudentAll}
-                              />
-                              <span className="px-2">Select All</span>
-                            </label>
-                          </th>
-                          <th scope="col">Student ID</th>
-                          <th scope="col">Student Name</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                        {students.map((res, index) => {
-                          return <tr>
-                            <th scope="col">
-                              <label className="custom-control custom-switch mt-3">
-                                <input type="checkbox"
-                                // onChange={() => toggleCheckStudent(index)}
-                                // checked={checkedStudent[index]} 
-                                />
-                                <span className=""></span>
-                              </label>
-                            </th>
-                            <td>{res.student_code}</td>
-                            <td>{res.full_name}</td>
-                          </tr>
-                        })}
-                      </tbody>
-                    </table>}
                     <div class={"col-sm-2 p-2 mx-auto"}>
                       <div className='pt-2 mx-auto'>
-                        <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
+                        <button style={{ color: 'white', fontSize: '20px' }} type="button" onClick={handleSmsSend} disabled={smsText === "" ? type_id === '1'?false: true : false} class="btn bg-secondary bg-gradient px-5">Submit</button>
                       </div>
                     </div>
 
@@ -419,9 +346,9 @@ const SMSsent = (props) => {
                     <span class="px-2">Select All</span>
                   </label>
                 </th>
-                <th scope="col">Student ID</th>
-                <th scope="col">Student Name</th>
-                <th scope="col">Student Mobile</th>
+                <th scope="col">{option_id === '2'?'Teacher':'Student'} ID</th>
+                <th scope="col">{option_id === '2'?'Teacher':'Student'} Name</th>
+                <th scope="col">{option_id === '2'?'Teacher':'Student'} Mobile</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -442,7 +369,7 @@ const SMSsent = (props) => {
                       </label>
                     </th>
                   </td>
-                  <td>{res.student_code}</td>
+                  <td>{option_id === '2'?res.teacher_code:res.student_code}</td>
                   <td>{res.full_name}</td>
                   <td>{res.mobile_no}</td>
                   <td>{res.status === 0 ? 'pending' : 'send'}</td>
