@@ -29,23 +29,18 @@ const AdminActivities = (props) => {
   const [schools, setSchools] = useState([]);
   const [searchSchools, setSearchSchools] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [teachers, setTeachers] = useState([]);
   const [search_subjects, setSearch_Subjects] = useState([]);
   const [subject, setSubject] = useState("");
 
   const [sessions, setSessions] = useState([]);
   const [session, setSession] = useState("");
 
-  const [school_teacher_id, setSchool_teacher_id] = useState("");
-  const [search_school_teacher_id, setSearch_School_teacher_id] = useState("");
   const [school_info_id, setSchool_info_id] = useState("");
   const [teacher_id, setTeacher_id] = useState(
     localStorage.getItem("user_code")
   );
   const [school_type, setSchoolType] = useState("")
   const [school_type_search, setSchoolTypeSearch] = useState("")
-
-
 
   const [class_id, setClass_id] = useState("");
   const [search_class_id, setSearchClass_id] = useState("");
@@ -67,7 +62,6 @@ const AdminActivities = (props) => {
   const [search_due_date, setSearch_Due_date] = useState("");
   const [timeSe, setTime] = useState("");
   const [search_school_id, setSearchShool_id] = useState("");
-  const [search_teachers, setSearch_Teachers] = useState([]);
   const [access_token, setAccess_token] = useState(
     localStorage.getItem("access_token")
   );
@@ -123,44 +117,12 @@ const AdminActivities = (props) => {
       });
   }, [teacher_id]);
 
-  useEffect(() => {
-    if (school_info_id !== '') {
-      axios
-        .get(
-          `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${school_info_id}`,
-          {
-            headers: {
-              authorization: "bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .then((response) => {
-          setTeachers(response.data)
-        });
-    }
-  }, [school_info_id]);
 
-  useEffect(() => {
-    if (search_school_id !== '') {
-      axios
-        .get(
-          `${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${search_school_id}`,
-          {
-            headers: {
-              authorization: "bearer " + localStorage.getItem("access_token"),
-            },
-          }
-        )
-        .then((response) => {
-          setSearch_Teachers(response.data)
-        });
-    }
-  }, [search_school_id]);
 
   const handleSearch = () => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}&&search_school_teacher_id=${search_school_teacher_id}`,
+        `${process.env.REACT_APP_NODE_API}/api/activities/teacher/filter?section_id=${search_section_id}&&class_id=${search_class_id}&&subject_id=${search_subject_id}&&issue_date=${search_issue_date}&&due_date=${search_due_date}&&session_id=${search_session_id}&&school_info_id=${search_school_id}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -358,7 +320,6 @@ const AdminActivities = (props) => {
     formData.append("subject_id", subject_id);
     formData.append("teacher_id", teacher_id);
     formData.append("questions", questions);
-    formData.append("school_teacher_id", school_teacher_id);
     formData.append("session_id", session_id);
     formData.append("topic", topic);
     formData.append("details", details);
@@ -392,7 +353,6 @@ const AdminActivities = (props) => {
           setSession_id("");
           setIssue_date("");
           setDue_date("");
-          setSchool_teacher_id("");
           setTopic("");
           setDetails("");
           setQuestions("")
@@ -429,7 +389,6 @@ const AdminActivities = (props) => {
     setTopic(data.topic);
     setDetails(data.details);
     setSchool_info_id(data.all_school === 1?'all':data.school_info_id);
-    setSchool_teacher_id(data.all_teacher === 1?'all':data.school_teacher_id);    
     setQuestions(data.questions);
     setSub_start_date(data.sub_start_date)
     setSub_start_time(data.sub_start_time)
@@ -739,31 +698,6 @@ const AdminActivities = (props) => {
                       </select>
                     </div>
                   </div>
-                  <div class={"col-sm-2 mx-auto p-2"}>
-                    <div class="form-group">
-                      <label className="pb-2" for="exampleSelect">
-                        Teacher :{" "}
-                      </label>
-                      <select
-                        style={{ border: "1px solid blue" }}
-                        class="form-control"
-                        value={school_teacher_id}
-                        onChange={(e) => setSchool_teacher_id(e.target.value)}
-                        id="class"
-                        name="class"
-                      >
-                        <option value="">Select Teacher</option>
-                        <option value="all">All</option>
-                        {teachers.map((subjectJSON) => {
-                          return (
-                            <option value={subjectJSON.id}>
-                              {subjectJSON.full_name}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </div>
                   <div class={"col-sm-2 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className="pb-2" for="exampleInputEmail1">
@@ -1015,30 +949,6 @@ const AdminActivities = (props) => {
                         </select>
                       </div>
                     </div>
-                    <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
-                          Teacher :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={search_school_teacher_id}
-                          onChange={(e) => setSearch_School_teacher_id(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select Teacher</option>
-                          {search_teachers.map((subjectJSON) => {
-                            return (
-                              <option value={subjectJSON.id}>
-                                {subjectJSON.full_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
                     <div class={"col-sm-2 p-2 mx-auto"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleInputEmail1">
@@ -1084,9 +994,9 @@ const AdminActivities = (props) => {
             <thead>
               <tr>
                 <th scope="col">School Name</th>
-                <th scope="col">Teacher Name</th>
                 <th scope="col">Beyond The School Material</th>
                 <th scope="col">Topic</th>
+                <th scope="col">Question</th>
                 <th scope="col">Assignment Details</th>
                 <th scope="col">Class</th>
                 <th scope="col">Section</th>
@@ -1103,11 +1013,11 @@ const AdminActivities = (props) => {
                 return (
                   <tr>
                     <td>{homeworkJSON.all_school === 0?homeworkJSON.school_name:'All'}</td>
-                    <td>{homeworkJSON.all_teacher === 0?homeworkJSON.full_name:'All'}</td>
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
                     <td>{homeworkJSON.topic}</td>
+                    <td>{homeworkJSON.questions}</td>
                     <td>{homeworkJSON.details}</td>
                     <td>{homeworkJSON.all_class === 0?homeworkJSON.class_name:'All'}</td>
                     <td>

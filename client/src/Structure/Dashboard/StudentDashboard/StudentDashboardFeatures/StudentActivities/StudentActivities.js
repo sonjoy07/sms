@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import profile from '../../../../images/profile/profile.png';
 import StudentHeader from "../../StudentHeader";
 
 const StudentActivities = (props) => {
@@ -13,7 +12,6 @@ const StudentActivities = (props) => {
   const [homework, setHomework] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [class_id, setClass_id] = useState("");
-  const [teacher_id, setTeacher_id] = useState("");
   const [section_id, setSection_id] = useState("");
   const [subject_id, setSubject_id] = useState("");
   const [issue_date, setIssue_date] = useState("");
@@ -98,7 +96,7 @@ const StudentActivities = (props) => {
   const handleSearch = () => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/activities/student/filter?section_id=${section_id}&&class_id=${class_id}&&subject_id=${subject_id}&&issue_date=${issue_date}&&due_date=${due_date}&&teacher_id=${teacher_id}&&status=${status}`,
+        `${process.env.REACT_APP_NODE_API}/api/activities/student/filter?section_id=${section_id}&&class_id=${class_id}&&subject_id=${subject_id}&&issue_date=${issue_date}&&due_date=${due_date}&&status=${status}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),
@@ -116,9 +114,6 @@ const StudentActivities = (props) => {
         }
       });
   }
-  let handleTeacherChange = (e) => {
-    setTeacher_id(e.target.value);
-  };
 
   let handleSubjectChange = (e) => {
     setSubject_id(e.target.value);
@@ -192,30 +187,6 @@ const StudentActivities = (props) => {
                         value={due_date}
                         onChange={handleDueDateChange}
                       />
-                    </div>
-                  </div>
-                  <div class={"col-sm-2 p-2"}>
-                    <div class="form-group">
-                      <label className="pb-2" for="exampleSelect">
-                        Teacher :{" "}
-                      </label>
-                      <select
-                        style={{ border: "1px solid blue" }}
-                        class="form-control"
-                        value={teacher_id}
-                        onChange={handleTeacherChange}
-                        id="class"
-                        name="class"
-                      >
-                        <option value="">Select Teacher</option>
-                        {teachers.map((sectionJSON) => {
-                          return (
-                            <option value={sectionJSON.id}>
-                              {sectionJSON.full_name}
-                            </option>
-                          );
-                        })}
-                      </select>
                     </div>
                   </div>
                   <div class={"col-sm-2 p-2"}>
@@ -302,6 +273,10 @@ const StudentActivities = (props) => {
                                   localStorage.setItem(
                                     "homeworkid",
                                     homeworkJSON.id
+                                  );
+                                  localStorage.setItem(
+                                    "homeworkactivityid",
+                                    homeworkJSON.activity_id
                                   );
                                   navigate("/studentActivitiesSubmit");
                                 }}

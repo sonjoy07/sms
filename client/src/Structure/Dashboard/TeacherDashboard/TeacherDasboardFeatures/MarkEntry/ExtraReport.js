@@ -123,7 +123,6 @@ const ExtraReport = () => {
         }
       )
       .then((response) => {
-        console.log(response.data)
         setHomework(response.data);
       });
   };
@@ -317,10 +316,10 @@ const ExtraReport = () => {
                 Section
               </th>
               <th style={{ textAlign: "center" }} scope="col">
-                Teacher Initial
+                Topic
               </th>
               <th style={{ textAlign: "center" }} scope="col">
-                Topic
+                Question
               </th>
               <th style={{ textAlign: "center" }} scope="col">
                 Home Work
@@ -351,22 +350,11 @@ const ExtraReport = () => {
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.section_default_name}
                     </td>
-                    <td style={{ textAlign: "center", color: "blue" }}>
-                      <a
-                        onClick={() => {
-                          // localStorage.setItem(
-                          //   "user_code",
-                          //   homeworkJSON.teacher_id
-                          // );
-                          navigate(`/teacherProfileById/${homeworkJSON.teacher_id}`);
-                        }}
-                        style={{ textDecoration: "none" }}
-                      >
-                        {homeworkJSON.initial}
-                      </a>
-                    </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {homeworkJSON.questions}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                     <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>

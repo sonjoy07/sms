@@ -317,9 +317,6 @@ const ExtraReport = () => {
                 Section
               </th>
               <th style={{ textAlign: "center" }} scope="col">
-                Teacher Initial
-              </th>
-              <th style={{ textAlign: "center" }} scope="col">
                 Topic
               </th>
               <th style={{ textAlign: "center" }} scope="col">
@@ -350,20 +347,6 @@ const ExtraReport = () => {
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.section_default_name}
-                    </td>
-                    <td style={{ textAlign: "center", color: "blue" }}>
-                      <a
-                        onClick={() => {
-                          // localStorage.setItem(
-                          //   "user_code",
-                          //   homeworkJSON.teacher_id
-                          // );
-                          navigate(`/teacherProfileById/${homeworkJSON.teacher_id}`);
-                        }}
-                        style={{ textDecoration: "none" }}
-                      >
-                        {homeworkJSON.initial}
-                      </a>
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}

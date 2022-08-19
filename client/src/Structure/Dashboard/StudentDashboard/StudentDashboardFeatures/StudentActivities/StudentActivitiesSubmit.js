@@ -34,7 +34,7 @@ const StudentActivitiesSubmit = (props) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/activities/student/id?homework_id=${homework_id}`,
+        `${process.env.REACT_APP_NODE_API}/api/activities/student/id?homework_id=${localStorage.getItem('homeworkactivityid')}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),

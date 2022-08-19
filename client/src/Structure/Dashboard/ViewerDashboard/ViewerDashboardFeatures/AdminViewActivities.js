@@ -317,9 +317,6 @@ const AdminViewActivities = () => {
                 Section
               </th>
               <th style={{ textAlign: "center" }} scope="col">
-                Teacher Initial
-              </th>
-              <th style={{ textAlign: "center" }} scope="col">
                 Topic
               </th>
               <th style={{ textAlign: "center" }} scope="col">
@@ -351,20 +348,7 @@ const AdminViewActivities = () => {
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.section_default_name}
                     </td>
-                    <td style={{ textAlign: "center", color: "blue" }}>
-                      <a
-                        onClick={() => {
-                          localStorage.setItem(
-                            "user_code",
-                            homeworkJSON.teacher_id
-                          );
-                          navigate("/teacherprofile");
-                        }}
-                        style={{ textDecoration: "none" }}
-                      >
-                        {homeworkJSON.initial}
-                      </a>
-                    </td>
+                    
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}
                     </td>
