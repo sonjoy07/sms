@@ -17,6 +17,9 @@ const PaidList = () => {
       setPayments(response.data);
     });
   }, [])
+  
+  let total = 0 ;
+  payments.forEach(res=>total+=res.amount)
   return (
     <>
       <ViewerHeader />
@@ -24,6 +27,7 @@ const PaidList = () => {
       <section className='container mt-4'>
         <h2 style={{ color: 'white', backgroundColor: '#008B8B' }} className='px-3 py-2 bg-gradient'>Paid Invoice</h2>
 
+        <h4 style={{textAlign: 'center'}}>Total Paid: {total}</h4>
         <table class="table table-striped">
           <thead>
             <tr>

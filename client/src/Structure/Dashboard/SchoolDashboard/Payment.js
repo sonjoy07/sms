@@ -215,6 +215,8 @@ const Payment = () => {
                 <th scope="col">Sector Code</th>
                 <th scope="col">Sector Name</th>
                 <th scope="col">Class</th>
+                <th scope="col">Section</th>
+                <th scope="col">Student</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Last Date</th>
                 <th scope="col">Action</th>
@@ -226,8 +228,10 @@ const Payment = () => {
                 let cls = classes.find(resc=>resc.id === res.class_id)
                 return <tr style={{ textAlign: 'center' }}>
                   <td>{res.sector_code}</td>
-                  <td>{res.allsection===1?"All":res.sector_name}</td>
-                  <td>{res.allclass===1?"All":cls?.class_name}</td>
+                  <td>{res.sector_name}</td>
+                  <td>{res.allclass===1?"All":res?.class_name}</td>
+                  <td>{res.allsection===1?"All":res?.section_default_name}</td>
+                  <td>{res.allstudent===1?"All":res?.student_name}</td>
                   <td>{res.amount}</td>
                   <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
                   <td><div className='.d-flex'>

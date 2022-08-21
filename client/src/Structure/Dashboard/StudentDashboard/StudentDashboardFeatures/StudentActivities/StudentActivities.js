@@ -158,6 +158,7 @@ const StudentActivities = (props) => {
                             </option>
                           );
                         })}
+                        <option value="99999">Beyond The School</option>
                       </select>
                     </div>
                   </div>
@@ -241,16 +242,6 @@ const StudentActivities = (props) => {
                         >
                           {homeworkJSON.subject_name}
                         </h5>
-                        <h6
-                          style={{
-                            color: "LightSeaGreen",
-                            fontSize: "18px",
-                            fontWeight: "400",
-                          }}
-                          class="card-title pt-2"
-                        >
-                          Teacher Name: {homeworkJSON.teacher_name}
-                        </h6>
                       </div>
                     </div>
                   </div>

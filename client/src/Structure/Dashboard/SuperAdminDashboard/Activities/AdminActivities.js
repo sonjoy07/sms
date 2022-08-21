@@ -84,7 +84,7 @@ const AdminActivities = (props) => {
         .then((response) => {
           setSchools(response.data);
         });
-    }else{
+    } else {
       setSchools([]);
     }
   }, [school_type])
@@ -188,7 +188,7 @@ const AdminActivities = (props) => {
         .then((response) => {
           setClses(response.data);
         });
-    }else{      
+    } else {
       setClses([]);
     }
   }, [school_type]);
@@ -380,15 +380,15 @@ const AdminActivities = (props) => {
   const editHomeWork = (data) => {
     setId(data.id);
     setSchoolType(data.type_id);
-    setClass_id(data.all_class === 1?'all':data.class_id);
-    setSection_id(data.all_section === 1?'all':data.section_id);
-    setSubject_id(data.all_subject === 1?'all':data.subject_id);
-    setSession_id(data.all_session === 1?'all':data.session_id);
+    setClass_id(data.all_class === 1 ? 'all' : data.class_id);
+    setSection_id(data.all_section === 1 ? 'all' : data.section_id);
+    setSubject_id(data.all_subject === 1 ? 'all' : data.subject_id);
+    setSession_id(data.all_session === 1 ? 'all' : data.session_id);
     setIssue_date(moment(data.issue_date).format("YYYY-MM-DD"));
     setDue_date(moment(data.due_date).format("YYYY-MM-DD"));
     setTopic(data.topic);
     setDetails(data.details);
-    setSchool_info_id(data.all_school === 1?'all':data.school_info_id);
+    setSchool_info_id(data.all_school === 1 ? 'all' : data.school_info_id);
     setQuestions(data.questions);
     setSub_start_date(data.sub_start_date)
     setSub_start_time(data.sub_start_time)
@@ -819,6 +819,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select School Type</option>
+                          <option value="all">All</option>
                           {schoolTypes.map((classJSON) => {
                             return (
                               <option value={classJSON.id}>
@@ -843,6 +844,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select School</option>
+                          <option value="all">All</option>
                           {searchSchools.map((classJSON) => {
                             return (
                               <option value={classJSON.id}>
@@ -867,6 +869,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Class</option>
+                          <option value="all">All</option>
                           {searchClses.map((classJSON) => {
                             return (
                               <option value={classJSON.id}>
@@ -891,6 +894,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Section</option>
+                          <option value="all">All</option>
                           {sections.map((sectionJSON) => {
                             return (
                               <option value={sectionJSON.id}>
@@ -915,6 +919,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Session</option>
+                          <option value="all">All</option>
                           {sessions.map((sessionJSON) => {
                             return (
                               <option value={sessionJSON.id}>
@@ -939,6 +944,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Subject</option>
+                          <option value="all">All</option>
                           {search_subjects.map((subjectJSON) => {
                             return (
                               <option value={subjectJSON.id}>
@@ -1012,19 +1018,19 @@ const AdminActivities = (props) => {
               {homework.map((homeworkJSON) => {
                 return (
                   <tr>
-                    <td>{homeworkJSON.all_school === 0?homeworkJSON.school_name:'All'}</td>
+                    <td>{homeworkJSON.all_school === 0 ? homeworkJSON.school_name : 'All'}</td>
                     <td>
                       <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
                     </td>
                     <td>{homeworkJSON.topic}</td>
                     <td>{homeworkJSON.questions}</td>
                     <td>{homeworkJSON.details}</td>
-                    <td>{homeworkJSON.all_class === 0?homeworkJSON.class_name:'All'}</td>
+                    <td>{homeworkJSON.all_class === 0 ? homeworkJSON.class_name : 'All'}</td>
                     <td>
-                      {homeworkJSON.all_section === 0?homeworkJSON.section_default_name:'All'}
+                      {homeworkJSON.all_section === 0 ? homeworkJSON.section_default_name : 'All'}
                     </td>
-                    <td>{homeworkJSON.all_session === 0?homeworkJSON.session_year:'All'}</td>
-                    <td>{homeworkJSON.all_subject === 0?homeworkJSON.subject_name:homeworkJSON.all_subject === 99999?'Beyond The School':'All'}</td>
+                    <td>{homeworkJSON.all_session === 0 ? homeworkJSON.session_year : 'All'}</td>
+                    <td>{homeworkJSON.all_subject === 0 ? homeworkJSON.subject_id === 99999 ? 'Beyond The School' : homeworkJSON.subject_name : 'All'}</td>
                     <td>
                       {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>

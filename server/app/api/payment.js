@@ -44,7 +44,7 @@ module.exports = (app) => {
             value_d: 'ref004_D',
             ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
         };
-        const sslcommerz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASSWORD, false) //true for live default false for sandbox
+        const sslcommerz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASSWORD, process.env.STORE_ENABLE) //true for live default false for sandbox
         sslcommerz.init(data).then(data => {
             // console.log(data)
 

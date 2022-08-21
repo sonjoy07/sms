@@ -152,7 +152,7 @@ module.exports = (app) => {
     let condition = secton_id !== '' ? ` and student_present_status.section_id="${secton_id}"` : ``
     condition += class_id !== '' ? ` and student_present_status.class_id="${class_id}"` : ``
     condition += session_id !== '' && session_id !== undefined ? ` and student_present_status.session_id="${session_id}"` : ``
-    console.log(`SELECT student.student_code, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, mobile_no FROM student left join student_present_status on student_present_status.student_id = student.id where 1=1 ${condition}`);
+    console.log(`SELECT student.student_code, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, mobile_no,student.id FROM student left join student_present_status on student_present_status.student_id = student.id where 1=1 ${condition}`);
     con.query(
       `SELECT student.student_code, CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name, mobile_no FROM student left join student_present_status on student_present_status.student_id = student.id where 1=1 ${condition}`,
       function (err, result, fields) {
@@ -247,6 +247,10 @@ module.exports = (app) => {
     var email = req.body.email;
     var school_info_id = req.body.school_info_id;
     var division_id = req.body.division_id;
+    var classID = req.body.classID;
+    var sectionID = req.body.sectionID;
+    var sessionID = req.body.sessionID;
+    var shiftID = req.body.shiftID;
     var id = req.body.id;
 
 
@@ -260,6 +264,8 @@ module.exports = (app) => {
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       if (id === '') {
+        let sql3 = `insert into student_present_status (school_info_id,session_id,shift_id,student_id,class_id,section_id,class_roll_no) values("${school_info_id}","${sessionID}","${shiftID}","${result.insertId}","${classID}","${sectionID}",0)`
+        con.query(sql3)
         let sql2 = `insert into users (user_type_id,user_code,password,status) values(1,"${student_code}","12345",1)`
         con.query(sql2, (err, result, fields) => {
           if (err) throw err
@@ -487,12 +493,13 @@ module.exports = (app) => {
     var user_id = req.body.user_id;
     var purpose = req.body.purpose;
     var school_info_id = req.body.school_info_id;
+    var receive_id = req.body.receive_id;
     // var id = req.body.id;
 
 
     var sql
     // if (id === '') { 
-    sql = `INSERT INTO smsReport (user_id,text,purpose,school_info_id) VALUES ("${user_id}","${smsText}","${purpose}","${school_info_id}")`;
+    sql = `INSERT INTO smsReport (user_id,text,purpose,school_info_id,receive_id) VALUES ("${user_id}","${smsText}","${purpose}","${school_info_id}","${receive_id}")`;
     // } else {
     //     sql = `update student set student_code = "${student_code}",first_name = "${first_name}",middle_name = "${middle_name}",last_name = "${last_name}",mobile_no = "${mobile_no}",gender_id = "${gender_id}",email = "${email}",present_address = "${present_address}",father_name = "${father_name}",father_phone_number = "${father_phone_number}",mother_name = "${mother_name}",mother_phone_number = "${mother_phone_number}",dob = "${dob}",blood_group = "${blood_group}",photo_id = "${photo_id}",school_info_id = "${school_info_id}" where id = ${id}`
     // }
@@ -517,7 +524,17 @@ module.exports = (app) => {
 
   app.get('/api/sms/count', async (req, res) => {
     const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
-    var sql = `select smsReport.*,CONCAT( teacher.first_name, ' ', teacher.middle_name, ' ', teacher.last_name ) AS teacher_full_name,CONCAT( school_admin.first_name, ' ', school_admin.middle_name, ' ', school_admin.last_name ) AS school_admin_full_name from smsReport left join teacher on teacher.teacher_code = smsReport.user_id left join school_admin on school_admin.admin_code = smsReport.user_id where smsReport.school_info_id = ${req.query.school_info_id}`
+    var sql = `SELECT smsReport.*, CONCAT(teacher.first_name, ' ', teacher.middle_name, ' ',
+    teacher.last_name) AS teacher_full_name, CONCAT(school_admin.first_name, ' ', 
+    school_admin.middle_name, ' ', school_admin.last_name) AS school_admin_full_name,
+     CONCAT(t.first_name, ' ', t.middle_name, ' ',
+    t.last_name) AS teacher_receiver_name,student_info.full_name AS student_receiver_name 
+   FROM smsReport
+   LEFT JOIN teacher ON teacher.teacher_code = smsReport.user_id
+   LEFT JOIN school_admin ON school_admin.admin_code = smsReport.user_id
+   LEFT JOIN teacher t ON t.id = smsReport.receive_id
+   LEFT JOIN student_info ON student_info.id = smsReport.receive_id
+   WHERE smsReport.school_info_id = ${req.query.school_info_id} order by created_at desc`
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send({ result: result, data: test.data });
@@ -526,23 +543,26 @@ module.exports = (app) => {
   })
   app.get('/api/sms/count_report', async (req, res) => {
     const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
-    let type_id= req.query.type_id
+    let type_id = req.query.type_id
+    let payment = 0
     var sql
-    if(type_id === '1'){
-    sql = `select sms_payment.*,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,school_name from sms_payment left join school_info on school_info.id = sms_payment.school_info_id left join school_admin on school_admin.id =sms_payment.user_id where sms_payment.school_info_id = ${req.query.school_info_id}`
-    }else{
-      sql = `select payment.*,full_name,student_code,school_name,amount from payment  left join student_info on student_info.id =payment.user_id left join sector on sector.id = payment.sector_id where student_info.school_info_id = ${req.query.school_info_id}`
+    if (type_id === '1') {
+      sql = `select sms_payment.*,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,school_name from sms_payment left join school_info on school_info.id = sms_payment.school_info_id left join school_admin on school_admin.id =sms_payment.user_id where sms_payment.school_info_id = ${req.query.school_info_id}`
+    } else {
+      sql = `select payment.*,full_name,student_code,school_name,amount,sector_name from payment  left join student_info on student_info.id =payment.user_id join sector on sector.id = payment.sector_id left join payment_invoice on payment_invoice.invoice_no=payment.invoice_no where student_info.school_info_id = ${req.query.school_info_id} and status = 1 group BY payment.invoice_no`
+      let data = await query(`select sum(amount) as total_amount from payment  left join student_info on student_info.id =payment.user_id join sector on sector.id = payment.sector_id left join payment_invoice on payment_invoice.invoice_no=payment.invoice_no where student_info.school_info_id = ${req.query.school_info_id} and status = 1`)
+      payment = data[0].total_amount
     }
     // var 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
-      res.send({ result: result, data: test.data });
+      res.send({ result: result, data: test.data, payment: payment });
     });
   })
   app.get("/api/sector/all", (req, res) => {
     var sql
     // if (id === '') {
-    sql = `select sector.* from sector left join sector_child on sector_child.sector_id = sector.id  where school_id = ${req.query.school_id} group by sector.id order by sector.id desc`;
+    sql = `select sector.*,class_name,section_default_name,full_name from sector left join sector_child on sector_child.sector_id = sector.id left join student_info on student_info.id = sector_child.student_id where school_id = ${req.query.school_id} group by sector.id order by sector.id desc`;
 
 
     con.query(sql, function (err, result, fields) {

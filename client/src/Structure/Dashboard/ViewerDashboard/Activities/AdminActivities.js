@@ -317,7 +317,7 @@ const AdminActivities = (props) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_NODE_API}/api/activities/extra_teacher/individual/all`,
+        `${process.env.REACT_APP_NODE_API}/api/activities/extra_teacher/individual/all?school_id=${localStorage.getItem('school_id')}`,
         {
           headers: {
             authorization: "bearer " + localStorage.getItem("access_token"),

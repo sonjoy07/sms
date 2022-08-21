@@ -55,6 +55,9 @@ module.exports = (app) => {
     var middleName = req.body.middleName;
     var dob = req.body.dob;
     var bloodGroup = req.body.bloodGroup;
+    var initial = req.body.initial;
+    var designation = req.body.designation;
+    var department = req.body.department;
     const file = req.files === null ? undefined : req.files.file
     var attachment_link = req.body.fileName;
     if (file !== undefined) {
@@ -65,7 +68,7 @@ module.exports = (app) => {
         }
       })
     }
-    var sql = `update teacher set first_name = "${firstName}",middle_name = "${middleName}",last_name = "${lastName}",dob = "${dob}",blood_group = "${bloodGroup}",mobile = "${mobile}",email = "${email}",photo_id="${attachment_link}" where id = "${req.query.student_code}"`
+    var sql = `update teacher set first_name = "${firstName}",middle_name = "${middleName}",last_name = "${lastName}",dob = "${dob}",blood_group = "${bloodGroup}",mobile = "${mobile}",email = "${email}",photo_id="${attachment_link}",initial = "${initial}",department="${department}",designation="${designation}" where id = "${req.query.student_code}"`
 
     con.query(sql, function (err, result, fields) {
       if (err) throw err;

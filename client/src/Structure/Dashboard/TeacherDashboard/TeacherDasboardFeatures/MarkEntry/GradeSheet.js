@@ -225,7 +225,7 @@ const GradeSheetTeacher = () => {
                       <th style={{ textAlign: 'center' }} className='' scope="col-2">CT Marks (15)</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Half Yearly Marks</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Final Exam</th>
-                      <th style={{ textAlign: 'center' }} scope="col-2">Beyond The School (5%)</th>
+                      <th style={{ textAlign: 'center' }} scope="col-2">Extra Curriculum (5%)</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Total Marks (100%)</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Grade</th>
                       <th style={{ textAlign: 'center' }} scope="col-2">Grade Point</th>
@@ -236,9 +236,8 @@ const GradeSheetTeacher = () => {
                     {info.map((student, index) => {
                       let ctTotal = (student.ct1 + student.ct2 + student.ct3 + student.ct4) / 4
 
-                      const attendance = student.total_school_day > 0 ? (student.total_present / student.total_school_day) * 5 : 5
+                      const attendance = student.total_school_day > 0 ?Math.ceil((student.total_present*100/ student.total_school_day)*5)/100 : 5
                       const activities = student.extra_mark > 0 ? student.extra_mark : 0
-
                       const total = attendance + ctTotal + (student.half / 2) + (student.full / 2) + activities
                       const grade = resultCalculation(total)
                       grandTotal += total

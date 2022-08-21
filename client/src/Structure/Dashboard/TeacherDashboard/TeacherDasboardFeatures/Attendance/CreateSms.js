@@ -59,7 +59,8 @@ const CreateSms = (props) => {
                         smsText: smsText,
                         user_id: localStorage.getItem('u_id'),
                         purpose: 2,
-                        school_info_id: localStorage.getItem('school_id')
+                        school_info_id: localStorage.getItem('school_id'),
+                        receive_id:res.student_code
                     }),
                 })
                     .then((res) => res.json())

@@ -215,7 +215,7 @@ const CreateNewSubject = () => {
 
              <td>{res.subject_code}</td>
              <td>{res.subject_name}</td>
-             <td>{className?.class_name}</td>
+             <td>{res?.class_name}</td>
              <td>{typeName?.type_name}</td>
              <td>
                <div className='.d-flex'>

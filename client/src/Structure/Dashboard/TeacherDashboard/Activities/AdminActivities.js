@@ -59,7 +59,7 @@ const AdminActivities = (props) => {
   const [due_date, setDue_date] = useState("");
   const [search_issue_date, setSearch_Issue_date] = useState("");
   const [search_due_date, setSearch_Due_date] = useState("");
-  const [search_school_id, setSearchShool_id] = useState("");
+  const [search_school_id, setSearchShool_id] = useState(localStorage.getItem('school_id'));
   const [search_teachers, setSearch_Teachers] = useState([]);
   const [access_token, setAccess_token] = useState(
     localStorage.getItem("access_token")
@@ -83,7 +83,7 @@ const AdminActivities = (props) => {
         .then((response) => {
           setSchools(response.data);
         });
-    }else{
+    } else {
       setSchools([]);
     }
   }, [school_type])
@@ -209,7 +209,7 @@ const AdminActivities = (props) => {
         .then((response) => {
           setClses(response.data);
         });
-    }else{      
+    } else {
       setClses([]);
     }
   }, [school_type]);
@@ -699,30 +699,6 @@ const AdminActivities = (props) => {
                     <div class={"col-sm-2 mx-auto p-2"}>
                       <div class="form-group">
                         <label className="pb-2" for="exampleSelect">
-                          School :{" "}
-                        </label>
-                        <select
-                          style={{ border: "1px solid blue" }}
-                          class="form-control"
-                          value={search_school_id}
-                          onChange={(e) => setSearchShool_id(e.target.value)}
-                          id="class"
-                          name="class"
-                        >
-                          <option value="">Select School</option>
-                          {searchSchools.map((classJSON) => {
-                            return (
-                              <option value={classJSON.id}>
-                                {classJSON.school_name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </div>
-                    <div class={"col-sm-2 mx-auto p-2"}>
-                      <div class="form-group">
-                        <label className="pb-2" for="exampleSelect">
                           Class :{" "}
                         </label>
                         <select
@@ -734,6 +710,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Class</option>
+                          <option value="all">All</option>
                           {searchClses.map((classJSON) => {
                             return (
                               <option value={classJSON.id}>
@@ -758,6 +735,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Section</option>
+                          <option value="all">All</option>
                           {sections.map((sectionJSON) => {
                             return (
                               <option value={sectionJSON.id}>
@@ -782,6 +760,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Session</option>
+                          <option value="all">All</option>
                           {sessions.map((sessionJSON) => {
                             return (
                               <option value={sessionJSON.id}>
@@ -806,6 +785,7 @@ const AdminActivities = (props) => {
                           name="class"
                         >
                           <option value="">Select Subject</option>
+                        <option value="all">All</option>
                           {search_subjects.map((subjectJSON) => {
                             return (
                               <option value={subjectJSON.id}>
@@ -878,22 +858,22 @@ const AdminActivities = (props) => {
                 return (
                   <tr>
                     <td>{homeworkJSON.school_name}</td>
-                    <td>{homeworkJSON.full_name}</td>                    
+                    <td>{homeworkJSON.full_name}</td>
                     <td>{homeworkJSON.topic}</td>
                     <td>{homeworkJSON.details}</td>
-                    <td>{homeworkJSON.all_class===1?'All':homeworkJSON.class_name}</td>
+                    <td>{homeworkJSON.all_class === 1 ? 'All' : homeworkJSON.class_name}</td>
                     <td>
-                      {homeworkJSON.all_section===1?'All':homeworkJSON.section_default_name}
+                      {homeworkJSON.all_section === 1 ? 'All' : homeworkJSON.section_default_name}
                     </td>
-                    <td>{homeworkJSON.all_session===1?'All':homeworkJSON.session_year}</td>
-                    <td>{homeworkJSON.all_subject===1?'All':homeworkJSON.subject_name}</td>
+                    <td>{homeworkJSON.all_session === 1 ? 'All' : homeworkJSON.session_year}</td>
+                    <td>{homeworkJSON.all_subject === 1 ? 'All' : homeworkJSON.subject_name}</td>
                     <td>
                       {moment(homeworkJSON.issue_date).format("DD-MM-YYYY")}
                     </td>
                     <td>
                       {moment(homeworkJSON.due_date).format("DD-MM-YYYY")}
                     </td>
-                    
+
                     <td>
                       <div className=".d-flex">
                         <div>

@@ -185,6 +185,11 @@ const PaymentInvoice = () => {
             <tr>
               <th scope="col">School Name</th>
               <th scope="col">Sector Name</th>
+              <th scope="col">Sector Code</th>
+              <th scope="col">Class Name</th>
+              <th scope="col">Section Name</th>
+              <th scope="col">Student Name</th>
+              <th scope="col">Amount</th>
               <th scope="col">Type</th>
               <th scope="col">Invoice No</th>
               <th scope="col">Edit/Delete</th>
@@ -198,6 +203,11 @@ const PaymentInvoice = () => {
 
                 <td>{className?.school_name}</td>
                 <td>{res?.sector_name}</td>
+                <td>{res?.sector_code}</td>
+                <td>{res?.class_name}</td>
+                <td>{res?.section_default_name}</td>
+                <td>{res?.full_name}</td>
+                <td>{res?.amount}</td>
                 <td>{res.type===1?'SMS':'Payment' }</td>
                 <td>{res.invoice_no}</td>
                 <td>

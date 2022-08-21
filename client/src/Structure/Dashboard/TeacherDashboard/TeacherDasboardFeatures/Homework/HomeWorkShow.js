@@ -31,7 +31,6 @@ const HomeWorkShow = () => {
   }, []);
   
   const updateMarks = (event,index,key) => {
-    console.log(updateData.updateData);
     if (event.key === 'Enter') {
       fetch(`${process.env.REACT_APP_NODE_API}/api/homework_mark/update`, {
         method: "POST",
@@ -61,7 +60,6 @@ const HomeWorkShow = () => {
     updateData[index]= value
     setUpdateData({updateData})
   }
-  console.log(updateData);
   return (
     <>
     <TeacherHeader/>

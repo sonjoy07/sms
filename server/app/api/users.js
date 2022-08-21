@@ -56,7 +56,7 @@ module.exports = (app) => {
 
     switch (table_name) {
       case "student_present_status":
-        sql = `select student_present_status.id ,class.id as class,school_info.school_name, student.school_info_id as school_id from student_present_status 
+        sql = `select student.id ,class.id as class,school_info.school_name, student.school_info_id as school_id from student_present_status 
         inner join student on student_present_status.student_id=student.id
         join class on student_present_status.class_id=class.id
        inner join school_info on student_present_status.school_info_id=school_info.id

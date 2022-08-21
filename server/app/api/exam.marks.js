@@ -1,7 +1,9 @@
 
+const util = require('util');
 module.exports = (app) => {
     const con = require("../models/db");
     const authenticateToken = require("../middleware/middleware");
+    const query = util.promisify(con.query).bind(con);
     app.get('/api/student_mark', authenticateToken, (req, res) => {
 
         var sql = `SELECT student.student_code,section.section_default_name,concat(student.first_name," " ,student.middle_name," ",student.last_name) as name, session.session_year,student_present_status.student_id,student_present_status.class_id,student_present_status.session_id,class.class_name,student_present_status.shift_id,student_present_status.class_roll_no,student_present_status.school_info_id
@@ -178,19 +180,30 @@ module.exports = (app) => {
             res.json({ status: "success" });
         });
     });
-    app.post("/api/exam_curi_mark/insert", authenticateToken, (req, res) => {
+    app.post("/api/exam_curi_mark/insert", authenticateToken, async (req, res) => {
         var updateData = req.body.updateData;
         var subject_id = req.body.subject_id;
         var student_id = req.body.student_id;
         var teacher_id = req.body.teacher_id;
         var index = req.body.index;
+        let finalre = await query(`select id from extra_curriculum_marks where student_id = ${student_id} and subject_id=${subject_id} and activities_id = ${index} and teacher_id = ${teacher_id}`);
+        console.log(finalre);
+        if (finalre.length > 0) {
+            var sql = `update extra_curriculum_marks set student_id = "${student_id}",subject_id="${subject_id}",activities_id="${index}",teacher_id="${teacher_id}",marks_obtained="${updateData}" where id = ${finalre[0].id}`
+            console.log(sql);
+            con.query(sql, function (err, result, fields) {
+                if (err) throw err;
+                res.json({ status: "success" });
+            });
+        }else{
+            var sql = `Insert into extra_curriculum_marks (student_id,subject_id,activities_id,teacher_id,marks_obtained) value ("${student_id}","${subject_id}","${index}","${teacher_id}","${updateData}")`
+            console.log(sql);
+            con.query(sql, function (err, result, fields) {
+                if (err) throw err;
+                res.json({ status: "success" });
+            });
+        }
 
-        var sql = `Insert into extra_curriculum_marks (student_id,subject_id,activities_id,teacher_id,marks_obtained) value ("${student_id}","${subject_id}","${index}","${teacher_id}","${updateData}")`
-        console.log(sql);
-        con.query(sql, function (err, result, fields) {
-            if (err) throw err;
-            res.json({ status: "success" });
-        });
     });
     app.post("/api/teacher_exam_curi_mark/update", authenticateToken, (req, res) => {
         var updateData = req.body.updateData;

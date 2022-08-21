@@ -6,6 +6,7 @@ import SuperAdminHeader from '../SuperAdminHeader'
 
 const SchoolSMSreport = () => {
     const [total, setTotal] = useState("")
+    const [totalPayment, setTotalPayment] = useState(0)
     const [totalUsed, setTotalUsed] = useState([])
     const [schools, setSchools] = useState([])
     const [school_id, setSchool_id] = useState("")
@@ -38,6 +39,7 @@ const SchoolSMSreport = () => {
         ).then((response) => {
             setTotalUsed(response.data.result);
             setTotal(response.data.data);
+            setTotalPayment(response.data.payment);
         });
     }
     const payNow = (id) => {
@@ -92,7 +94,7 @@ const SchoolSMSreport = () => {
                     <div className='row mb-3'>
                         <div className='card col-sm-12'>
                             <div className='card-body'>
-                                <h4 style={{ textAlign: 'center' }}>{total}</h4>
+                                {type_id ==='1'?<h4 style={{ textAlign: 'center' }}>{total}</h4>:type_id ==='2'?<h4  style={{ textAlign: 'center' }}>Total Payment: {totalPayment}</h4>:''}
                             </div>
                         </div>
                         {/* <div className='card col-sm-6'>
@@ -108,6 +110,7 @@ const SchoolSMSreport = () => {
                                 <th scope="col">School Name</th>
                                 <th scope="col">User</th>
                                 {type_id === '2' && <th scope="col">User code</th>}
+                                <th scope="col">Sector Name</th>
                                 <th scope="col">Invoice No</th>
                                 <th scope="col">Transaction ID</th>
                                 <th scope="col">Amount</th>
@@ -122,6 +125,7 @@ const SchoolSMSreport = () => {
                                     <td>{res.school_name}</td>
                                     <td>{res.full_name}</td>
                                     {type_id === '2' && <td>{res.student_code}</td>}
+                                    <td>{res.sector_name}</td>
                                     <td>{res.invoice_no}</td>
                                     <td>{res.transaction_id}</td>
                                     <td>{res.amount}</td>

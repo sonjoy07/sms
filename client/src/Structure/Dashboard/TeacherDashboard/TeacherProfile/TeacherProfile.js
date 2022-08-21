@@ -83,6 +83,14 @@ const TeacherProfile = () => {
                       {teacher.school_name}
                     </div>
                   </div>
+                  <div class="row py-2">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Initial : </h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {teacher?.initial}
+                    </div>
+                  </div>
 
                   <div class="row py-2">
                     <div class="col-sm-3">

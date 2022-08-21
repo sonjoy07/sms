@@ -134,7 +134,8 @@ const SMSsent = (props) => {
               smsText: type_id === '1'?text:smsText,
               user_id: localStorage.getItem('u_id'),
               purpose: type_id === '1'?3:1,
-              school_info_id: localStorage.getItem('school_info_id')
+              school_info_id: localStorage.getItem('school_info_id'),
+              receive_id: res.id
             }),
           })
             .then((res) => res.json())
