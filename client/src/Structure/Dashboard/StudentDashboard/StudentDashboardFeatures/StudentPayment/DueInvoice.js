@@ -21,7 +21,7 @@ const DueInvoice = () => {
                 authorization: "bearer " + localStorage.getItem("access_token"),
             },
         }).then((response) => {
-            axios.get(`${process.env.REACT_APP_NODE_API}/api/studentsDue?school_info_id=${localStorage.getItem("school_id")}&&class_id=${localStorage.getItem("class")}&&section_id=${response.data[0].section_id}`, {
+            axios.get(`${process.env.REACT_APP_NODE_API}/api/studentsDue?school_info_id=${localStorage.getItem("school_id")}&&class_id=${localStorage.getItem("class")}&&section_id=${response.data[0].section_id}&&user_id=${localStorage.getItem('user_code')}`, {
                 headers: {
                     authorization: "bearer " + localStorage.getItem("access_token"),
                 },
@@ -56,7 +56,7 @@ const DueInvoice = () => {
                                 <td>{moment(res.last_date).format("DD-MM-YYYY")}</td>
                                 <td>
                                     {/* <button onClick={()=>payment(invoice,res)} className='btn btn-danger mt-1' style={{ backgroundColor: 'tomato'}}>Pay Now</button> */}
-                                    {res.status === 0 ? <a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=payment&&redirect=dueinvoice&&invoice=${res.invoice_no}&&user=${localStorage.getItem('user_code')}`
+                                    {res.paid === null ? <a href={`${process.env.REACT_APP_NODE_API}/api/ssl-request?amount=${res.amount}&&product=payment&&redirect=dueinvoice&&invoice=${res.invoice_no}&&user=${localStorage.getItem('user_code')}`
                                     } style={{ color: 'white' }} className='btn btn-success mt-1'>Pay Now</a> : 'Paid'}
                                 </td>
                             </tr>

@@ -51,7 +51,7 @@ module.exports = (app) => {
     });
   });
   app.get("/api/studentsDue", authenticateToken, (req, res) => {
-    con.query(`SELECT payment_invoice.*,school_name,sector_name,amount,last_date from payment_invoice join school_info on school_info.id = payment_invoice.school_info_id join sector on sector.id = payment_invoice.sector_id left join sector_child on sector_child.sector_id = sector.id where school_info_id = ${req.query.school_info_id} and type = 2 and class_id=${req.query.class_id} and section_id=${req.query.section_id} group by payment_invoice.id`, function (err, result, fields) {
+    con.query(`SELECT payment_invoice.*,school_name,sector_name,amount,last_date,(select id from payment where user_id = "${req.query.user_id}" and invoice_no = payment_invoice.invoice_no) as paid from payment_invoice join school_info on school_info.id = payment_invoice.school_info_id join sector on sector.id = payment_invoice.sector_id left join sector_child on sector_child.sector_id = sector.id where school_info_id = ${req.query.school_info_id} and type = 2 and class_id=${req.query.class_id} and section_id=${req.query.section_id} group by payment_invoice.id`, function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
