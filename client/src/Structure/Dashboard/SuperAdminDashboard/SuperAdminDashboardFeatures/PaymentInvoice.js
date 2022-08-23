@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Navigate } from 'react-router-dom';
+import moment from 'moment';
 
 const PaymentInvoice = () => {
   const [subjectList, setSubjectList] = useState([])
@@ -192,6 +193,7 @@ const PaymentInvoice = () => {
               <th scope="col">Amount</th>
               <th scope="col">Type</th>
               <th scope="col">Invoice No</th>
+              <th scope="col">Last Date</th>
               <th scope="col">Edit/Delete</th>
             </tr>
           </thead>
@@ -204,12 +206,15 @@ const PaymentInvoice = () => {
                 <td>{className?.school_name}</td>
                 <td>{res?.sector_name}</td>
                 <td>{res?.sector_code}</td>
-                <td>{res?.class_name}</td>
-                <td>{res?.section_default_name}</td>
-                <td>{res?.full_name}</td>
+                <td>{res.allclass === 1?'All':res?.class_name}</td>
+                <td>{res.allsection === 1?'All':res?.section_default_name}</td>
+                <td>{res.allstudent === 1?'All':res?.full_name}</td>
                 <td>{res?.amount}</td>
                 <td>{res.type===1?'SMS':'Payment' }</td>
                 <td>{res.invoice_no}</td>
+                <td>{moment(res.last_date).format(
+                                      "YYYY-MM-DD"
+                                    )}</td>
                 <td>
                   <div className='.d-flex'>
                     <div>

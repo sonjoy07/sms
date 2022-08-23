@@ -236,7 +236,8 @@ const GradeSheetTeacher = () => {
                     {info.map((student, index) => {
                       let ctTotal = (student.ct1 + student.ct2 + student.ct3 + student.ct4) / 4
 
-                      const attendance = student.total_school_day > 0 ?Math.ceil((student.total_present*100/ student.total_school_day)*5)/100 : 5
+                      const attendance = student.total_school_day > 0 ? Math.round(Math.ceil((student.total_present * 100 / student.total_school_day) * 5) / 100) : 5
+                      
                       const activities = student.extra_mark > 0 ? student.extra_mark : 0
                       const total = attendance + ctTotal + (student.half / 2) + (student.full / 2) + activities
                       const grade = resultCalculation(total)

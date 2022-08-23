@@ -37,16 +37,16 @@ module.exports = (app) => {
   });
   app.get("/api/activities/all/filter", authenticateToken, (req, res) => {
     let condition = req.query.school_info_id !== '' && req.query.school_info_id !== undefined ? ` and activities.school_info_id="${req.query.school_info_id}"` : ``
-    condition += req.query.section_id !== '' && req.query.section_id !== undefined ? ` and activities.section_id="${req.query.section_id}"` : ``
-    condition += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and activities.class_id="${req.query.class_id}"` : ``
-    condition += req.query.subject_id !== '' && req.query.subject_id !== undefined ? ` and activities.subject_id="${req.query.subject_id}"` : ``
+    condition += req.query.section_id !== '' && req.query.section_id !== undefined ? req.query.section_id ==='all'?` and all_section =1`:` and activities.section_id="${req.query.section_id}"` : ``
+    condition += req.query.class_id !== '' && req.query.class_id !== undefined ? req.query.class_id ==='all'?` and all_class =1`:` and activities.class_id="${req.query.class_id}"` : ``
+    condition += req.query.subject_id !== '' && req.query.subject_id !== undefined ? req.query.subject_id ==='all'?` and all_subject =1`:` and activities.subject_id="${req.query.subject_id}"` : ``
     condition += req.query.date !== '' && req.query.date !== undefined ? ` and activities.issue_date="${req.query.date}"` : ``
-    var sql = `select activity.id, class.class_name, subject.subject_name,questions, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name
+    var sql = `select activity.id, class.class_name, subject.subject_name,questions, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name,all_subject,subject_id,all_class,all_section,all_session
     from activities
     join activity on activities.activity_id=activity.id 
     join class on activities.class_id=class.id 
     join section on activities.section_id=section.id
-    join subject on activities.subject_id=subject.id
+    left join subject on activities.subject_id=subject.id
     join session on activities.session_id=session.id
     where 1=1 ${condition} group by activity.id
     order by activity.id desc`;
@@ -600,7 +600,7 @@ module.exports = (app) => {
     join activities on activities.activity_id=activity.id
     join class on activities.class_id=class.id
     join section on activities.section_id=section.id
-    join subject on activities.subject_id=subject.id
+    left join subject on activities.subject_id=subject.id
     join session on activities.session_id=session.id
     where activity.id="${req.query.homework_id}";`;
     console.log(sql);

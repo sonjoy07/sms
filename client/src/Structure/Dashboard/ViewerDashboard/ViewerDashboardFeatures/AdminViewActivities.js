@@ -166,7 +166,8 @@ const AdminViewActivities = () => {
                         id="class"
                         name="class"
                       >
-                        <option>Select Class</option>
+                        <option value={''}>Select Class</option>
+                        <option value={'all'}>All</option>
                         {clses.map((classJSON) => {
                           return (
                             <option value={classJSON.id}>
@@ -190,7 +191,8 @@ const AdminViewActivities = () => {
                         id="class"
                         name="class"
                       >
-                        <option>Select Subject</option>
+                        <option value={''}>Select Subject</option>
+                        <option value={'all'}>All</option>
                         {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
@@ -198,6 +200,7 @@ const AdminViewActivities = () => {
                             </option>
                           );
                         })}
+                        <option value={'99999'}>Beyond the school</option>
                       </select>
                     </div>
                   </div>
@@ -214,35 +217,12 @@ const AdminViewActivities = () => {
                         id="class"
                         name="class"
                       >
-                        <option>Select Section</option>
+                        <option value={''}>Select Section</option>
+                        <option value={'all'}>All</option>
                         {sections.map((sectionJSON) => {
                           return (
                             <option value={sectionJSON.id}>
                               {sectionJSON.section_default_name}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </div>
-                  <div class={"col-sm-6 mx-auto p-2"}>
-                    <div class="form-group">
-                      <label className="pb-2" for="exampleSelect">
-                        Teacher Initial:{" "}
-                      </label>
-                      <select
-                        style={{ border: "1px solid blue" }}
-                        className="form-control"
-                        value={teacher_id}
-                        onChange={handleTeacherChange}
-                        id="class"
-                        name="class"
-                      >
-                        <option>Select Initial</option>
-                        {teachers.map((teacherJSON) => {
-                          return (
-                            <option value={teacherJSON.id}>
-                              {teacherJSON.full_name}
                             </option>
                           );
                         })}
@@ -339,14 +319,14 @@ const AdminViewActivities = () => {
               homework.map((homeworkJSON) => {
                 return (
                   <tr>
+                  <td style={{ textAlign: "center" }}>
+                    {homeworkJSON.all_class === 1?'All':homeworkJSON.class_name}
+                  </td>
                     <td style={{ textAlign: "center" }}>
-                      {homeworkJSON.class_name}
+                      {homeworkJSON.all_subject === 1?'All':homeworkJSON.subject_id=== 99999?'Beyond the school':homeworkJSON.subject_name}
                     </td>
                     <td style={{ textAlign: "center" }}>
-                      {homeworkJSON.subject_name}
-                    </td>
-                    <td style={{ textAlign: "center" }}>
-                      {homeworkJSON.section_default_name}
+                      {homeworkJSON.all_section === 1?'All':homeworkJSON.section_default_name}
                     </td>
                     
                     <td style={{ textAlign: "center" }}>

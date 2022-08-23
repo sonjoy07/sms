@@ -5,14 +5,16 @@ module.exports = (app) => {
     const authenticateToken = require("../middleware/middleware");
     const query = util.promisify(con.query).bind(con);
     app.get('/api/student_mark', authenticateToken, (req, res) => {
-
+        let condition =req.query.section_id !== '' && req.query.section_id !== undefined?  ` and section_id = "${req.query.section_id}"`:''
+         condition +=req.query.session_id !== '' && req.query.session_id !== undefined?  ` and session_id = "${req.query.session_id}"`:''
+         condition +=req.query.class_id !== '' && req.query.class_id !== undefined?  ` and class.id = "${req.query.class_id}"`:''
         var sql = `SELECT student.student_code,section.section_default_name,concat(student.first_name," " ,student.middle_name," ",student.last_name) as name, session.session_year,student_present_status.student_id,student_present_status.class_id,student_present_status.session_id,class.class_name,student_present_status.shift_id,student_present_status.class_roll_no,student_present_status.school_info_id
          from student 
          JOIN student_present_status ON student.id = student_present_status.student_id
          JOIN school_info ON school_info.id = student_present_status.school_info_id INNER JOIN session ON session.id = student_present_status.session_id 
          JOIN class ON class.id = student_present_status.class_id 
          JOIN section ON section.id = student_present_status.section_id 
-        WHERE section_id = "${req.query.section_id}"  and session_id = "${req.query.session_id}" and class.id = "${req.query.class_id}" and student_present_status.school_info_id="${req.query.school_info_id}" `
+        WHERE student_present_status.school_info_id="${req.query.school_info_id}" ${condition}`
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.send(result);

@@ -80,7 +80,7 @@ module.exports = (app) => {
     });
 
     app.get("/api/all_invoice", (req, res) => {
-        let sql = `select payment_invoice.*,sector_name,sector_code,amount,full_name,class_name,section_default_name from payment_invoice left join sector on sector.id= payment_invoice.sector_id left join sector_child on sector_child.sector_id = sector.id left join student_info on student_info.id = sector_child.student_id group by payment_invoice.id`
+        let sql = `select payment_invoice.*,sector_name,sector_code,amount,full_name,class_name,section_default_name,allsection,allclass,allstudent,last_date from payment_invoice left join sector on sector.id= payment_invoice.sector_id left join sector_child on sector_child.sector_id = sector.id left join student_info on student_info.id = sector_child.student_id group by payment_invoice.id`
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.send(result)
