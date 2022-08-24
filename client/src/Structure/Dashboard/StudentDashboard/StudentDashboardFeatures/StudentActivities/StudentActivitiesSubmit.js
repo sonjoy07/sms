@@ -124,7 +124,7 @@ const StudentActivitiesSubmit = (props) => {
                       }}
                       class="card-title pt-2"
                     >
-                      {hw.topic}
+                     <span style={{color: "black"}}>Topic:</span> {hw.topic}
                     </h3>
                     <h4
                       style={{
@@ -134,8 +134,19 @@ const StudentActivitiesSubmit = (props) => {
                       }}
                       class="card-title pt-2"
                     >
-                     Questions: {hw.questions}
+                     <span style={{color: "black"}}>Questions:</span> {hw.questions}
                     </h4>
+                    <h4
+                      style={{
+                        color: "LightSeaGreen",
+                        fontSize: "25px",
+                        fontWeight: "700",
+                      }}
+                      class="card-title pt-2"
+                    >
+                     <span style={{color: "black"}}>Details:</span> {hw.details}
+                    </h4>
+                   
                     <h5
                       style={{
                         color: "LightSeaGreen",

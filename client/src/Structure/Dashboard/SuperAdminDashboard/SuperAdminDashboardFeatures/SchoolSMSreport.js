@@ -113,8 +113,10 @@ const SchoolSMSreport = () => {
                             <tr>
                                 <th scope="col">School Name</th>
                                 <th scope="col">User</th>
+                                {type_id === '2' && <th scope="col">Class</th>}
+                                {type_id === '2' &&<th scope="col">Section</th>}
                                 {type_id === '2' && <th scope="col">User code</th>}
-                                <th scope="col">Sector Name</th>
+                                {type_id === '2' &&<th scope="col">Sector Name</th>}
                                 <th scope="col">Invoice No</th>
                                 <th scope="col">Transaction ID</th>
                                 <th scope="col">Amount</th>
@@ -128,8 +130,10 @@ const SchoolSMSreport = () => {
                                 return <tr>
                                     <td>{res.school_name}</td>
                                     <td>{res.full_name}</td>
+                                    {type_id === '2' && <td>{res.class_name}</td>}
+                                    {type_id === '2' && <td>{res.section_default_name}</td>}
                                     {type_id === '2' && <td>{res.student_code}</td>}
-                                    <td>{res.sector_name}</td>
+                                    {type_id === '2' &&<td>{res.sector_name}</td>}
                                     <td>{res.invoice_no}</td>
                                     <td>{res.transaction_id}</td>
                                     <td>{res.amount}</td>

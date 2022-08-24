@@ -1,7 +1,9 @@
 const moment = require('moment')
+const util = require('util');
 module.exports = (app) => {
   const con = require("../models/db");
   const authenticateToken = require("../middleware/middleware");
+  const query = util.promisify(con.query).bind(con);
   app.get("/api/attendance", authenticateToken, (req, res) => {
     con.query(
       "SELECT id, attendance FROM attendance",
@@ -68,29 +70,38 @@ module.exports = (app) => {
       });
     });
   });
-  app.post("/api/attendance/student", authenticateToken, (req, res) => {
+  app.post("/api/attendance/student", authenticateToken, async(req, res) => {
     var date = req.body.date;
     var time = req.body.time;
 
     var routine_id = req.body.routine_id;
     var attendance = req.body.attendance;
     var sql = `INSERT INTO attendance (date, time, student_present_status_id, routine_id, attendance) VALUES `;
-    attendance.map((att) => {
-      sql += `("${date}", "${time}", "${att.student_id}", "${routine_id}", "${att.attendance_status}" ),`;
-    });
-    sql = sql.slice(0, -1);
-    sql += `on duplicate key 
+    await Promise.all(attendance.map(async (att) => {
+      let exist = await query(`select * from attendance where date= "${date}" and time="${time}" and student_present_status_id = "${att.student_id}" and routine_id="${routine_id}"`)
+      if (exist.length === 0) {
+        sql += `("${date}", "${time}", "${att.student_id}", "${routine_id}", "${att.attendance_status}" ),`;
+      }
+    }));
+    let sqlArray = sql.split(' ')
+    if (sqlArray[9] !== '') {
+      sql = sql.slice(0, -1);
+      sql += ` on duplicate key 
     update 
     time = values(time),
     attendance = values(attendance)
     `;
 
-    // console.log(sql);
 
-    con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      res.json({ status: "success" });
-    });
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.json({ status: "success" });
+      });
+    } else {
+      return res.status(400).send({
+        message: 'This is an error!'
+     });
+    }
     //console.log(attendance);
   });
 
@@ -115,17 +126,17 @@ module.exports = (app) => {
 
   app.get("/api/attendance/summary/school", (req, res) => {
     var sql = `SELECT
-    school_info.id, school_info.school_name,section.section_default_name,class.class_name,student_present_status.section_id,
-      COUNT(*) as 'all', 
+    school_info.id, school_info.school_name,section.section_default_name,class.class_name,student_info.section_id,
+      COUNT(student_info.id) as 'all', 
       COUNT(IF(attendance.attendance = 1, 1, NULL)) as 'present',
       COUNT(IF(attendance.attendance = 0, 1, NULL)) as 'absent',
       round( ( COUNT(IF(attendance.attendance = 1, 1, NULL)) / COUNT(*) ) * 100 ) as 'present_rate'
       FROM
       attendance
-      join student_present_status on attendance.student_present_status_id=student_present_status.id
-      join school_info on student_present_status.school_info_id=school_info.id
-      join section on student_present_status.section_id=section.id
-      join class on student_present_status.class_id=class.id
+      join student_info on attendance.student_present_status_id=student_info.student_present_status_id
+      join school_info on student_info.school_info_id=school_info.id
+      join section on student_info.section_id=section.id
+      join class on student_info.class_id=class.id
       where school_info.id="${req.query.school_info_id}" and attendance.date="${req.query.date}"
       group by section.id,school_info.id,class.id;`;
     con.query(sql, function (err, result, fields) {

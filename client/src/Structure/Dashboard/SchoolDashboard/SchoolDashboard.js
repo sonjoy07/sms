@@ -67,6 +67,7 @@ const SchoolDashboard = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: '#0d6efd'
                   }}
                   className=""
                 >
@@ -139,7 +140,7 @@ const SchoolDashboard = () => {
                     />
                   </div>
                   <div className="px-3">
-                    <h4 className="text-dark card-title">Evaluation</h4>
+                    <h4 className="card-title" style={{color: '#0d6efd'}}>Evaluation</h4>
                     <p className="card-text">Make Students Evaluation</p>
                   </div>
                 </div>
@@ -159,6 +160,7 @@ const SchoolDashboard = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: '#0d6efd'
                   }}
                   className=""
                 >
@@ -187,6 +189,7 @@ const SchoolDashboard = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: '#0d6efd'
                   }}
                   className=""
                 >
@@ -215,6 +218,7 @@ const SchoolDashboard = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: '#0d6efd'
                   }}
                   className=""
                 >
@@ -281,7 +285,8 @@ const SchoolDashboard = () => {
           <Link to='/sms-report' style={{ textDecoration: 'none' }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
               <div className="card-body py-4">
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    color: '#0d6efd' }} className=''>
                   <div className='px-3'>
                     <img style={{ width: '64px', height: '64px' }} src={ebook} alt="" />
                   </div>
@@ -297,7 +302,8 @@ const SchoolDashboard = () => {
           <Link to='/csv-upload' style={{ textDecoration: 'none' }} className="col-sm-6 my-4 col1">
             <div className="card bg-light shadow-sm">
               <div className="card-body py-4">
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    color: '#0d6efd' }} className=''>
                   <div className='px-3'>
                     <img style={{ width: '64px', height: '64px' }} src={csv} alt="" />
                   </div>
@@ -320,6 +326,7 @@ const SchoolDashboard = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: '#0d6efd'
                   }}
                   className=""
                 >
@@ -341,7 +348,8 @@ const SchoolDashboard = () => {
           <Link to='/payment' style={{ textDecoration: 'none' }} class="col-sm-6 my-4 col1">
             <div class="card bg-light shadow-sm">
               <div class="card-body py-4">
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className=''>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    color: '#0d6efd' }} className=''>
                   <div className='px-3'>
                     <img style={{ width: '64px', height: '64px' }} src={accounts} alt="" />
                   </div>
@@ -364,6 +372,7 @@ const SchoolDashboard = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: '#0d6efd'
                   }}
                   className=""
                 >

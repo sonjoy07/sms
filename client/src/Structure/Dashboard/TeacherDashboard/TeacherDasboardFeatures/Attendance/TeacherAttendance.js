@@ -9,6 +9,7 @@ import moment from "moment";
 import profile from "../../../../images/profile/profile.png";
 import TeacherHeader from "../../TeacherHeader/TeacherHeader";
 import CreateSms from "./CreateSms";
+import { toast } from 'react-toastify';
 
 const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop);
 
@@ -175,12 +176,12 @@ const TeacherAttendance = (props) => {
     setAttendance(att_list);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (date === null || routine_id === null) {
       return;
     }
 
-    fetch(`${process.env.REACT_APP_NODE_API}/api/attendance/student`, {
+    let result = await fetch(`${process.env.REACT_APP_NODE_API}/api/attendance/student`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -193,13 +194,14 @@ const TeacherAttendance = (props) => {
         attendance: attendance,
       }),
     })
-      .then((res) => res.json())
-      .then(() => setStudent([]))
-      .then(() => {
-        getAttendanceSummary();
+    if(result.status === 400){
+      toast('Already Taken the attendance')
+    }else{
+      setStudent([])
+      getAttendanceSummary();
         var st_list = [];
         var st_list_latest = [];
-        student.map((studentJSON, index) => {
+      await Promise.all( student.map((studentJSON, index) => {
           var st = {
             name: studentJSON.full_name,
             roll: studentJSON.class_roll_no,
@@ -211,13 +213,37 @@ const TeacherAttendance = (props) => {
           }
           st_list.push(st);
           st_list_latest.push(latestSt);
-        });
+        }));
         setLatest_attendance(st_list);        
         setLatestStudent(st_list_latest)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        toast('Successfully Taken the attendance')
+    }
+      // .then((res) => res.json())
+      // .then((res) => setStudent([]))
+      // .then(res => {
+      //   debugger;
+      //   getAttendanceSummary();
+      //   var st_list = [];
+      //   var st_list_latest = [];
+      //   student.map((studentJSON, index) => {
+      //     var st = {
+      //       name: studentJSON.full_name,
+      //       roll: studentJSON.class_roll_no,
+      //       attendance: attendance[index].attendance_status === 1 ? "P" : "A",
+      //     };
+      //     var latestSt ={
+      //       ...studentJSON,          
+      //       attendance: attendance[index].attendance_status === 1 ? "P" : "A",
+      //     }
+      //     st_list.push(st);
+      //     st_list_latest.push(latestSt);
+      //   });
+      //   setLatest_attendance(st_list);        
+      //   setLatestStudent(st_list_latest)
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // });
   };
   return (
     <>

@@ -299,6 +299,9 @@ const ExtraReport = () => {
                 Topic
               </th>
               <th style={{ textAlign: "center" }} scope="col">
+                Details
+              </th>
+              <th style={{ textAlign: "center" }} scope="col">
                 Question
               </th>
               <th style={{ textAlign: "center" }} scope="col">
@@ -332,6 +335,12 @@ const ExtraReport = () => {
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {homeworkJSON.details}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {homeworkJSON.details}
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.questions}

@@ -292,6 +292,9 @@ const AdminViewActivities = () => {
                 Topic
               </th>
               <th style={{ textAlign: "center" }} scope="col">
+                Details
+              </th>
+              <th style={{ textAlign: "center" }} scope="col">
                 Home Work
               </th>
               <th style={{ textAlign: "center" }} scope="col">
@@ -326,6 +329,9 @@ const AdminViewActivities = () => {
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {homeworkJSON.details}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                     <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>

@@ -172,7 +172,8 @@ const TeacherAttendance = (props) => {
     })
       .then((res) => res.json())
       .then(() => setStudent([]))
-      .then(() => {
+      .then((res) => {
+        debugger;
         getAttendanceSummary();
         var st_list = [];
         student.map((studentJSON, index) => {
