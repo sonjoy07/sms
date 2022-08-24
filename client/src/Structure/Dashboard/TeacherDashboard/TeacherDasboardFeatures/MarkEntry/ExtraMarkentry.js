@@ -78,21 +78,25 @@ const ExtraMarkentry = () => {
 
   let handleSearch = () => {
     if (exam_id !== '') {
-      setClass_Input(class_id)
-      setSection(section_id)
-      setSession(session_id)
-      setShow(true)
-      setInserted(false)
-      axios
-        .get(
-          `${process.env.REACT_APP_NODE_API}/api/teacher_extra_marks_exist?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&teacher_id=${user_code}&&exam_id=${exam_id}&&subject_id=${subject_id}`,
-          {
-            headers: { authorization: "bearer " + access_token },
-          }
-        )
-        .then((response) => {
-          setMarkExists(response.data);
-        });
+      if (subject_id !== '') {
+        setClass_Input(class_id)
+        setSection(section_id)
+        setSession(session_id)
+        setShow(true)
+        setInserted(false)
+        axios
+          .get(
+            `${process.env.REACT_APP_NODE_API}/api/teacher_extra_marks_exist?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&teacher_id=${user_code}&&exam_id=${exam_id}&&subject_id=${subject_id}`,
+            {
+              headers: { authorization: "bearer " + access_token },
+            }
+          )
+          .then((response) => {
+            setMarkExists(response.data);
+          });
+      } else {
+        toast('please select Subject')
+      }
     } else {
       toast('please select extra curriculum')
     }
@@ -223,7 +227,8 @@ const ExtraMarkentry = () => {
   }, [section, session, class_input, subject_id])
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/subjects?class_id=${class_id}`,
+    if (exam_id !== '') {
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/subjectsCurriculum?exam_id=${exam_id}&&school_id=${localStorage.getItem('school_id')}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -231,7 +236,8 @@ const ExtraMarkentry = () => {
       }).then((response) => {
         setSubjects(response.data);
       });
-  }, [class_id]);
+    }
+  }, [exam_id]);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/section/all`,
@@ -296,7 +302,8 @@ const ExtraMarkentry = () => {
         exam_info_id: exam_id,
         subject_id: subject_id,
         mark_update: results,
-        teacher_id: user_code
+        teacher_id: user_code,
+        subjects:subjects
       })
     })
       .then((res) => {
@@ -451,10 +458,11 @@ const ExtraMarkentry = () => {
                         {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
-                              {subjectJSON.subject_name}
+                              {subjectJSON.subject_name}({subjectJSON.subject_code})
                             </option>
                           );
                         })}
+                        <option value="all">All</option>
                       </select>
                     </div>
                   </div>
@@ -485,7 +493,7 @@ const ExtraMarkentry = () => {
                 </thead>
                 <tbody>
                   {students.map((info) => {
-                    let marks = markExists.find(res=>res.student_id === info.student_id )
+                    let marks = markExists.find(res => res.student_id === info.student_id)
                     // new_list.push({ student_id: info.student_id, session_id: session, class_id: classInfo, class_roll_no: newRoll });
                     // console.log(new_list)
                     return (

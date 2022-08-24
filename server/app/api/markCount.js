@@ -132,4 +132,11 @@ module.exports = (app) => {
         res.send('done')
     })
 
+    app.get('/api/subjectsCurriculum',(req,res)=>{
+        con.query(`select * from curriculam_child left join subject on subject.id = curriculam_child.subject_id where activity_id = ${req.query.exam_id} and school_info_id =${req.query.school_id} group by subject_id`,(err,result,fields)=>{
+            if (err) throw err;
+            res.json(result);
+        })
+    })
+
 } 

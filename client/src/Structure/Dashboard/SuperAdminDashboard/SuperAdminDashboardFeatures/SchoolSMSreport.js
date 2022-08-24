@@ -65,13 +65,17 @@ const SchoolSMSreport = () => {
 
         }
     }
+    let totalPaid  = 0
+    totalUsed.map(res=>totalPaid +=res.amount)
     return (
         <>
             <SuperAdminHeader />
             <div className='container'>
+                
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>
-                    <div className='row mb-3'>
+                    <h4 style={{ textAlign: 'center' }}>{total}</h4>
+                    <div className='row mb-3 mt-4'>
                         <div className='col-sm-4'>
                             <select onChange={(e) => setSchool_id(e.target.value)} className='form-control'>
                                 <option>Select School</option>
@@ -94,7 +98,7 @@ const SchoolSMSreport = () => {
                     <div className='row mb-3'>
                         <div className='card col-sm-12'>
                             <div className='card-body'>
-                                {type_id ==='1'?<h4 style={{ textAlign: 'center' }}>{total}</h4>:type_id ==='2'?<h4  style={{ textAlign: 'center' }}>Total Payment: {totalPayment}</h4>:''}
+                                {type_id ==='1'?<h4 style={{ textAlign: 'center' }}>Total Payment:{totalPaid}</h4>:type_id ==='2'?<h4  style={{ textAlign: 'center' }}>Total Payment: {totalPayment}</h4>:''}
                             </div>
                         </div>
                         {/* <div className='card col-sm-6'>

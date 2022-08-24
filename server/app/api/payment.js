@@ -44,7 +44,7 @@ module.exports = (app) => {
             value_d: 'ref004_D',
             ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
         };
-        const sslcommerz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASSWORD, process.env.STORE_ENABLE) //true for live default false for sandbox
+        const sslcommerz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASSWORD, true) //true for live default false for sandbox
         sslcommerz.init(data).then(data => {
             // console.log(data)
 
@@ -82,7 +82,7 @@ module.exports = (app) => {
         /** 
         * If payment successful 
         */
-        con.query(`select * from payment where invoice_no="${req.query.invoice}"`, function (err, result, fields) {
+        con.query(`select * from payment where invoice_no="${req.query.invoice}" and user_id ="${req.query.user}"`, function (err, result, fields) {
             if (err) throw err;
             if (result.length === 0) {
                 con.query(`select sector.*,type,school_info_id from payment_invoice left join sector on sector.id = payment_invoice.sector_id where invoice_no="${req.query.invoice}"`, function (err, result, fields) {

@@ -104,7 +104,7 @@ module.exports = (app) => {
     condition += req.query.student_code !== '' && req.query.student_code !== undefined?` and student_code="${req.query.student_code}"`: ``
     condition += req.query.school_id !== '' && req.query.school_id !== undefined?` and curriculam_child.school_info_id="${req.query.school_id}"`: ``
         
-        var sql = `select full_name, teacher_extra_curriculum_marks.*,student_code,class_name, subject_name,section_default_name,topic as exam_name from teacher_extra_curriculum_marks left join student_info on student_info.id = teacher_extra_curriculum_marks.student_id left join curriculam on curriculam.id = teacher_extra_curriculum_marks.activities_id join curriculam_child on curriculam_child.activity_id = curriculam.id left join subject on subject.id = teacher_extra_curriculum_marks.subject_id where 1=1${condition} group by curriculam.id,student_info.id`;
+        var sql = `select full_name, teacher_extra_curriculum_marks.*,student_code,class_name, subject_name,section_default_name,topic as exam_name from teacher_extra_curriculum_marks left join student_info on student_info.id = teacher_extra_curriculum_marks.student_id left join curriculam on curriculam.id = teacher_extra_curriculum_marks.activities_id join curriculam_child on curriculam_child.activity_id = curriculam.id left join subject on subject.id = teacher_extra_curriculum_marks.subject_id where 1=1${condition} group by curriculam.id,student_info.id,subject_id`;
         console.log(sql);
         con.query(
             sql,

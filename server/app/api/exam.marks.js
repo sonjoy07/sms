@@ -143,10 +143,17 @@ module.exports = (app) => {
         var subject_id = req.body.subject_id;
         var mark_update = req.body.mark_update;
         var teacher_id = req.body.teacher_id;
+        var subjects = req.body.subjects;
 
         var sql = `INSERT INTO teacher_extra_curriculum_marks (activities_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
         mark_update.filter(res => res.mark_id === '').map((sts) => {
-            sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+            if(subject_id === 'all'){
+                subjects.map(res=>{
+                    sql += ` ('${exam_info_id}','${res.id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+                })
+            }else{
+                sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+            }
         });
         sql = sql.slice(0, -1);
         con.query(sql, function (err, result, fields) {

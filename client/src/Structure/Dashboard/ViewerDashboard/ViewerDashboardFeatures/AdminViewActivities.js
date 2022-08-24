@@ -8,49 +8,38 @@ import ViewerHeader from "../ViewerHeader";
 const AdminViewActivities = () => {
   let navigate = useNavigate();
 
-  const [school_info_id, setSchool_info_id] = useState(
+  const [school_info_id] = useState(
     localStorage.getItem("school_id")
   );
-  const [school_type, setSchool_type] = useState(localStorage.getItem("school_type"))
-  const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
+  const [school_type] = useState(localStorage.getItem("school_type"))
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [homework, setHomework] = useState([]);
 
   const [class_id, setClass_id] = useState("");
   const [section_id, setSection_id] = useState("");
-  const [teacher_id, setTeacher_id] = useState("");
   const [subject_id, setSubject_id] = useState("");
 
   const [clses, setClses] = useState([]);
-  const [cls, setCls] = useState("");
 
   const [sections, setSections] = useState([]);
-  const [section, setSection] = useState("");
 
   const [subjects, setSubjects] = useState([]);
   const [subject, setSubject] = useState("");
 
   const [teachers, setTeachers] = useState([]);
-  const [teacher, setTeacher] = useState("");
 
 
   let handleClassChange = (e) => {
-    setCls(e.target.value);
     setClass_id(e.target.value);
   };
   let handleSectionChange = (e) => {
-    setSection(e.target.value);
     setSection_id(e.target.value);
   };
 
   let handleSubjectChange = (e) => {
     setSubject(e.target.value);
     setSubject_id(e.target.value);
-  };
-  let handleTeacherChange = (e) => {
-    setTeacher(e.target.value);
-    setTeacher_id(e.target.value);
   };
   let handleDateChange = (e) => {
     setStartDate(e.target.value);
@@ -297,6 +286,9 @@ const AdminViewActivities = () => {
                 Section
               </th>
               <th style={{ textAlign: "center" }} scope="col">
+                Questions
+              </th>
+              <th style={{ textAlign: "center" }} scope="col">
                 Topic
               </th>
               <th style={{ textAlign: "center" }} scope="col">
@@ -329,6 +321,9 @@ const AdminViewActivities = () => {
                       {homeworkJSON.all_section === 1?'All':homeworkJSON.section_default_name}
                     </td>
                     
+                    <td style={{ textAlign: "center" }}>
+                      {homeworkJSON.questions}
+                    </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}
                     </td>

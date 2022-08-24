@@ -549,7 +549,7 @@ module.exports = (app) => {
     if (type_id === '1') {
       sql = `select sms_payment.*,CONCAT( first_name, ' ', middle_name, ' ', last_name ) AS full_name,school_name from sms_payment left join school_info on school_info.id = sms_payment.school_info_id left join school_admin on school_admin.id =sms_payment.user_id where sms_payment.school_info_id = ${req.query.school_info_id}`
     } else {
-      sql = `select payment.*,full_name,student_code,school_name,amount,sector_name from payment  left join student_info on student_info.id =payment.user_id join sector on sector.id = payment.sector_id left join payment_invoice on payment_invoice.invoice_no=payment.invoice_no where student_info.school_info_id = ${req.query.school_info_id} and status = 1 group BY payment.invoice_no`
+      sql = `select payment.*,full_name,student_code,school_name,amount,sector_name from payment  left join student_info on student_info.id =payment.user_id join sector on sector.id = payment.sector_id left join payment_invoice on payment_invoice.invoice_no=payment.invoice_no where student_info.school_info_id = ${req.query.school_info_id} and status = 1 group BY payment.user_id`
       let data = await query(`select sum(amount) as total_amount from payment  left join student_info on student_info.id =payment.user_id join sector on sector.id = payment.sector_id left join payment_invoice on payment_invoice.invoice_no=payment.invoice_no where student_info.school_info_id = ${req.query.school_info_id} and status = 1`)
       payment = data[0].total_amount
     }
