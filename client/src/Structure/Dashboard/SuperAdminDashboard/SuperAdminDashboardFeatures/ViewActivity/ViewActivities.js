@@ -294,6 +294,7 @@ const ViewActivities = () => {
         <thead>
           <tr>
             <th scope="col">School Name</th>
+            <th scope="col">Topic</th>
             <th scope="col">Shift</th>
             <th scope="col">Class</th>
             <th scope="col">Section</th>
@@ -305,14 +306,15 @@ const ViewActivities = () => {
             <th scope="col">Beyond The School File</th>
             <th scope="col">Status</th>
             <th scope="col">Marks</th>
+            <th scope="col">Answer</th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           {homework.map((res,index) => {
-            console.log(updateData);
             return <tr key={index}>
               <td>{res.school_name}</td>
+              <td>{res.topic}</td>
               <td>{res.shift_name}</td>
               <td>{res.class_name}</td>
               <td>{res.section_default_name}</td>
