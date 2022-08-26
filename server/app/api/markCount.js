@@ -138,5 +138,11 @@ module.exports = (app) => {
             res.json(result);
         })
     })
+    app.get('/api/subjectsExtra',(req,res)=>{
+        con.query(`select * from activities left join subject on subject.id = activities.subject_id where activity_id = ${req.query.exam_id} group by subject_id`,(err,result,fields)=>{
+            if (err) throw err;
+            res.json(result);
+        })
+    })
 
 } 

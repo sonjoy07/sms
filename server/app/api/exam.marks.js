@@ -8,13 +8,25 @@ module.exports = (app) => {
         let condition =req.query.section_id !== '' && req.query.section_id !== undefined?  ` and section_id = "${req.query.section_id}"`:''
          condition +=req.query.session_id !== '' && req.query.session_id !== undefined?  ` and session_id = "${req.query.session_id}"`:''
          condition +=req.query.class_id !== '' && req.query.class_id !== undefined?  ` and class.id = "${req.query.class_id}"`:''
-        var sql = `SELECT student.student_code,section.section_default_name,concat(student.first_name," " ,student.middle_name," ",student.last_name) as name, session.session_year,student_present_status.student_id,student_present_status.class_id,student_present_status.session_id,class.class_name,student_present_status.shift_id,student_present_status.class_roll_no,student_present_status.school_info_id
+        //  condition +=req.query.subject_id !== '' && req.query.subject_id !== undefined?  ` and class.id = "${req.query.subject_id}"`:''
+        var sql = `SELECT student.student_code,section.section_default_name,concat(student.first_name," " ,student.middle_name," ",student.last_name) as name, session.session_year,student_present_status.student_id,student_present_status.class_id,student_present_status.session_id,class.class_name,student_present_status.shift_id,student_present_status.class_roll_no,student_present_status.school_info_id,(
+            SELECT marks_obtained
+            FROM extra_curriculum_marks
+            LEFT JOIN student_present_status sps ON sps.student_id = extra_curriculum_marks.student_id
+            LEFT JOIN activities ON activities.id = extra_curriculum_marks.activities_id
+            WHERE activities.activity_id="${req.query.exam_id}" and sps.student_id = student_present_status.student_id ) AS marks,(
+                SELECT extra_curriculum_marks.id
+                FROM extra_curriculum_marks
+                LEFT JOIN student_present_status sps ON sps.student_id = extra_curriculum_marks.student_id
+                LEFT JOIN activities ON activities.id = extra_curriculum_marks.activities_id
+                WHERE activities.activity_id="${req.query.exam_id}" and sps.student_id = student_present_status.student_id ) AS mark_id
          from student 
          JOIN student_present_status ON student.id = student_present_status.student_id
          JOIN school_info ON school_info.id = student_present_status.school_info_id INNER JOIN session ON session.id = student_present_status.session_id 
          JOIN class ON class.id = student_present_status.class_id 
          JOIN section ON section.id = student_present_status.section_id 
-        WHERE student_present_status.school_info_id="${req.query.school_info_id}" ${condition}`
+        WHERE 1=1 ${condition}`
+        console.log(sql);
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
             res.send(result);
@@ -76,16 +88,15 @@ module.exports = (app) => {
         var section_id = req.query.section_id;
         var session_id = req.query.session_id;
 
-        let condition = teacher_id !== '' && teacher_id !== undefined ? ` and teacher_id="${teacher_id}"` : ``
-        condition += exam_info_id !== '' && exam_info_id !== undefined ? ` and activities_id="${exam_info_id}"` : ``
-        condition += subject_id !== '' && subject_id !== undefined ? ` and subject_id="${subject_id}"` : ``
-        condition += section_id !== '' && section_id !== undefined ? ` and section_id="${section_id}"` : ``
-        condition += class_id !== '' && class_id !== undefined ? ` and class_id="${class_id}"` : ``
-        condition += session_id !== '' && session_id !== undefined ? ` and session_id="${session_id}"` : ``
+        let condition = exam_info_id !== '' && exam_info_id !== undefined ? ` and activities.activity_id="${exam_info_id}"` : ``
+        condition += subject_id !== '' && subject_id !== undefined ? ` and extra_curriculum_marks.subject_id="${subject_id}"` : ``
+        condition += section_id !== '' && section_id !== undefined ? ` and sps.section_id="${section_id}"` : ``
+        condition += class_id !== '' && class_id !== undefined ? ` and sps.class_id="${class_id}"` : ``
+        condition += session_id !== '' && session_id !== undefined ? ` and sps.session_id="${session_id}"` : ``
 
 
 
-        var sql = `select extra_curriculum_marks.* from extra_curriculum_marks left join student_present_status sps on sps.student_id = extra_curriculum_marks.student_id where 1=1${condition}`
+        var sql = `select extra_curriculum_marks.* from extra_curriculum_marks left join student_present_status sps on sps.student_id = extra_curriculum_marks.student_id left join activities on activities.id = extra_curriculum_marks.activities_id where 1=1${condition}`
         console.log(sql);
         con.query(sql, function (err, result, fields) {
             if (err) throw err;
@@ -121,10 +132,18 @@ module.exports = (app) => {
         var subject_id = req.body.subject_id;
         var mark_update = req.body.mark_update;
         var teacher_id = req.body.teacher_id;
+        var subjects = req.body.subjects;
 
         var sql = `INSERT INTO extra_curriculum_marks (activities_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
         mark_update.filter(res => res.mark_id === '').map((sts) => {
-            sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+            
+            if(subject_id === 'all'){
+                subjects.map(res=>{
+                    sql += ` ('${exam_info_id}','${res.id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+                })
+            }else{
+                sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+            }
         });
         sql = sql.slice(0, -1);
         con.query(sql, function (err, result, fields) {
@@ -181,8 +200,9 @@ module.exports = (app) => {
     app.post("/api/exam_curi_mark/update", authenticateToken, (req, res) => {
         var updateData = req.body.updateData;
         var index = req.body.index;
+        console.log(updateData[0]);
 
-        var sql = `Update extra_curriculum_marks set marks_obtained = ${updateData}  where id = ${index}`
+        var sql = `Update extra_curriculum_marks set marks_obtained = ${updateData[0]}  where id = ${index}`
         console.log(sql);
         con.query(sql, function (err, result, fields) {
             if (err) throw err;

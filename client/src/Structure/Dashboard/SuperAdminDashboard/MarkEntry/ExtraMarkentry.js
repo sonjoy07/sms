@@ -8,7 +8,7 @@ const ExtraMarkentry = () => {
   let student_mark = [];
   let latest_mark = [];
   const [user_type, setUser_type] = useState(localStorage.getItem("user_type"));
- 
+
   const [sections, setSections] = useState([]);
   const [present_mark, setPresent_marks] = useState([])
   const [showData, setShowData] = useState([])
@@ -23,7 +23,7 @@ const ExtraMarkentry = () => {
 
   const [subject_id, setSubject_id] = useState("");
   const [index, setIndex] = useState("");
-  const [updateData, setUpdateData] = useState("");
+  const [updateData, setUpdateData] = useState([]);
   const [session_id, setSession_id] = useState("");
   const [school_id, setSchool_id] = useState("");
   const [session, setSession] = useState("");
@@ -209,7 +209,7 @@ const ExtraMarkentry = () => {
 
   //get student
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/student_mark?session_id=${session_id}&class_id=${class_input}&section_id=${section}&school_info_id=${school_id}`,
+    axios.get(`${process.env.REACT_APP_NODE_API}/api/student_mark?session_id=${session_id}&class_id=${class_input}&section_id=${section}&school_info_id=${school_id}&exam_id=${exam_id}`,
       {
         headers: {
           authorization: "bearer " + localStorage.getItem("access_token"),
@@ -217,25 +217,26 @@ const ExtraMarkentry = () => {
       })
       .then((response) => {
         setStudents(response.data);
-        console.log(response.data)
         response.data.map((stu) => {
           // console.log(stu)
-          student_mark.push({ student_id: stu.student_id, student_name: stu.name, student_code: stu.student_code, mark_obtained: '', mark_id: '' });
+          student_mark.push({ student_id: stu.student_id, student_name: stu.name, student_code: stu.student_code, mark_obtained: stu.marks !== null?stu.marks:'', mark_id: stu.mark_id !== null?stu.mark_id:'' });
         });
         setPresent_marks(student_mark);
       });
   }, [section, session, class_input, subject_id])
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_NODE_API}/api/subjects?class_id=${class_id}`,
-      {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      }).then((response) => {
-        setSubjects(response.data);
-      });
-  }, [class_id]);
+    if (exam_id !== '') {
+      axios.get(`${process.env.REACT_APP_NODE_API}/api/subjectsExtra?exam_id=${exam_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }).then((response) => {
+          setSubjects(response.data);
+        });
+    }
+  }, [exam_id]);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_NODE_API}/api/section/all`,
@@ -294,44 +295,53 @@ const ExtraMarkentry = () => {
   }, [school_id]);
 
   const handleMarks = () => {
-
+    console.log(present_mark);
     const results = present_mark.filter(obj => {
-      return obj.mark_obtained !== '' || null;
+      return obj.mark_obtained !==  '';
     });
-    fetch(`${process.env.REACT_APP_NODE_API}/api/extra_curriculum_marks`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: "bearer " + localStorage.getItem("access_token"),
-      },
-      body: JSON.stringify({
-        exam_info_id: exam_id,
-        subject_id: subject_id,
-        mark_update: results,
-        teacher_id: user_code
-      })
-    })
-      .then((res) => {
-        res.json()
-      })
-      .then((json) => {
-        toast(`${results.length} students Mark entry successful!!`)
-        setReset(reset + 1)
-      })
-      .then(() => setPresent_marks([]))
-      .catch((error) => {
-        console.log(error);
-      });
+    debugger;
+    if (exam_id !== '') {
+      if (subject_id !== '') {
+        fetch(`${process.env.REACT_APP_NODE_API}/api/extra_curriculum_marks`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+          body: JSON.stringify({
+            exam_info_id: exam_id,
+            subject_id: subject_id,
+            mark_update: results,
+            subjects: subjects,
+            teacher_id: user_code
+          })
+        })
+          .then((res) => {
+            res.json()
+          })
+          .then((json) => {
+            toast(`${results.length} students Mark entry successful!!`)
+            setReset(reset + 1)
+          })
+          .then(() => setPresent_marks([]))
+          .catch((error) => {
+            console.log(error);
+          });
 
-    setClass_id('')
-    setExam_id('')
-    setPresent_marks('')
-    setSection_id('')
-    setSession_id('')
-    setSubject_id('')
-    setShow(false);
-    setInserted(true);
-
+        setClass_id('')
+        setExam_id('')
+        setPresent_marks('')
+        setSection_id('')
+        setSession_id('')
+        setSubject_id('')
+        setShow(false);
+        setInserted(true);
+      } else {
+        toast('Please Select Subject')
+      }
+    } else {
+      toast('Please Select Beyond the school')
+    }
   }
   const deleteMark = async (id) => {
     const check = window.confirm('Are you sure to delete?');
@@ -345,10 +355,11 @@ const ExtraMarkentry = () => {
     }
   }
 
-  const updateMarksData=(value,index)=>{
-    updateData[index]= value
-    setUpdateData({updateData})
+  const updateMarksData = (value, index) => {
+    updateData[index] = value
+    setUpdateData([...updateData])
   }
+  console.log(updateData);
   return (
     <div>
       <SuperAdminHeader />
@@ -420,7 +431,7 @@ const ExtraMarkentry = () => {
                       <select
                         className="form-control"
                         value={school_id}
-                        onChange={(e)=>setSchool_id(e.target.value)}
+                        onChange={(e) => setSchool_id(e.target.value)}
                       >
                         <option value="">Select</option>
                         {schools.map((classJSON) => {
@@ -452,7 +463,7 @@ const ExtraMarkentry = () => {
                       </select>
                     </div>
                   </div>
-                  
+
 
 
                   <div class={"col-sm-4 mx-auto p-2"}>
@@ -484,12 +495,15 @@ const ExtraMarkentry = () => {
                         onChange={handleSubjectChange}
                       >
                         <option value="">Select</option>
+                        <option value="all">All</option>
                         {subjects.map((subjectJSON) => {
-                          return (
-                            <option value={subjectJSON.id}>
-                              {subjectJSON.subject_name}
-                            </option>
-                          );
+                          if (subjectJSON.subject_id !== 99999) {
+                            return (
+                              <option value={subjectJSON.subject_id}>
+                                {subjectJSON.subject_name}
+                              </option>
+                            );
+                          }
                         })}
                         <option value="99999">Beyond The School</option>
                       </select>
@@ -522,7 +536,7 @@ const ExtraMarkentry = () => {
                 </thead>
                 <tbody>
                   {students.map((info) => {
-                    let marks = markExists.find(res=>res.student_id === info.student_id )
+                    let marks = markExists.find(res => res.student_id === info.student_id)
                     // new_list.push({ student_id: info.student_id, session_id: session, class_id: classInfo, class_roll_no: newRoll });
                     // console.log(new_list)
                     return (
@@ -608,7 +622,7 @@ const ExtraMarkentry = () => {
                     <tr key={key}>
                       <td>{info.student_code}</td>
                       <td>{info.exam_name}</td>
-                      <td>{info.subject_name}</td>
+                      <td>{info.subject_id === 99999 ? 'Beyond the school' : info.subject_name}</td>
                       <td>{info.full_name}</td>
                       <td>{info.class_name}</td>
                       <td>{info.section_default_name}</td>
@@ -617,14 +631,14 @@ const ExtraMarkentry = () => {
                         {index === info.id && <input
                           type="text"
                           name="mark"
-                          value={updateData}
+                          value={updateData[key]}
                           onKeyDown={(e) => updateMarks(e)
                           }
-                          onChange={(e) => setUpdateData(e.target.value)}
+                          onChange={(e) => updateMarksData(e.target.value, key)}
                         />}
                       </td>
                       <td>
-                        <button type='button' className="btn btn-success mr-3" onClick={() => { setIndex(info.id); updateMarksData(info.marks_obtained,key) }}>
+                        <button type='button' className="btn btn-success mr-3" onClick={() => { setIndex(info.id); updateMarksData(info.marks_obtained, key) }}>
                           Edit
                         </button>
                         <button type='button' className="btn btn-danger" onClick={() => deleteMark(info.id)}>

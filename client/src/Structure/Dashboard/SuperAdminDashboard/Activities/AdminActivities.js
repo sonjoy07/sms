@@ -952,6 +952,7 @@ const AdminActivities = (props) => {
                               </option>
                             );
                           })}
+                          <option value="99999">Beyond the school</option>
                         </select>
                       </div>
                     </div>

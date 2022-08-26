@@ -545,7 +545,7 @@ module.exports = (app) => {
     condition += school_info_id !== '' ? school_info_id === 'all' ? ` and all_school =1` : ` and activities.school_info_id="${school_info_id}"` : ``
 
     condition += issue_date !== '' ? ` and due_date BETWEEN "${issue_date}" AND "${due_date}"` : ``
-    var sql = `select activity.id, class.class_name, subject.subject_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission,school_name,questions,all_school,all_class,all_section,all_session,all_subject
+    var sql = `select activity.id,subject_id, class.class_name, subject.subject_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from activities_submission where activities_id = activities.id) submission,school_name,questions,all_school,all_class,all_section,all_session,all_subject
     from activity
     join activities on activities.activity_id=activity.id 
     join class on activities.class_id=class.id 
