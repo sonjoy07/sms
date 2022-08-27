@@ -458,7 +458,7 @@ const ExtraMarkentry = () => {
                         {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
-                              {subjectJSON.subject_name}({subjectJSON.subject_code})
+                              {subjectJSON.subject_name}({subjectJSON.class_name})
                             </option>
                           );
                         })}

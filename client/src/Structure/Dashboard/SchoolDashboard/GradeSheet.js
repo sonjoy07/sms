@@ -232,7 +232,7 @@ const GradeSheetTeacher = () => {
                       const attendance = student.total_school_day > 0 ? Math.round(Math.ceil((student.total_present * 100 / student.total_school_day) * 5) / 100) : 5
                       const activities = student.extra_mark > 0 ? student.extra_mark : 0
 
-                      const total = attendance + ctTotal + (student.half / 2) + (student.full / 2) + activities
+                      const total = attendance + ctTotal + (student.half / 2) + (student.full / 2) + Math.around(activities)
                       const grade = resultCalculation(total)
                       grandTotal += total
                       return (
@@ -247,7 +247,7 @@ const GradeSheetTeacher = () => {
                           <td style={{ textAlign: 'center' }}>{ctTotal}</td>
                           <td style={{ textAlign: 'center' }}>{student.half / 2}</td>
                           <td style={{ textAlign: 'center' }}>{student.full / 2}</td>
-                          <td style={{ textAlign: 'center' }}>{activities}</td>
+                          <td style={{ textAlign: 'center' }}>{Math.round(activities)}</td>
                           <td style={{ textAlign: 'center' }}>{total}</td>
                           <td style={{ textAlign: 'center' }}>{grade?.grade}</td>
                           <td style={{ textAlign: 'center' }}>{grade?.point}</td>

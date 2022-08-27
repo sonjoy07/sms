@@ -690,14 +690,13 @@ const AdminActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Subject</option>
-                        <option value="all">All</option>
-                        {subjects.map((subjectJSON) => {
+                        {/* {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
                               {subjectJSON.subject_name}
                             </option>
                           );
-                        })}
+                        })} */}
                         <option value="99999">Beyond The School</option>
                       </select>
                     </div>

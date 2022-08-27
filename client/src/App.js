@@ -112,6 +112,7 @@ import CreateExamType from "./Structure/Dashboard/SuperAdminDashboard/SuperAdmin
 import ExtraReport from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraReport";
 import TeacherProfileEdit from "./Structure/Dashboard/TeacherDashboard/TeacherProfile/TeacherProfileEdit";
 import SchoolSMSreport from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/SchoolSMSreport";
+import SchoolAdminSMSreport from "./Structure/Dashboard/SchoolDashboard/SchoolSMSreport";
 import ExtraDetails from "./Structure/Dashboard/TeacherDashboard/TeacherDasboardFeatures/MarkEntry/ExtraDetails";
 import PaidList from "./Structure/Dashboard/ViewerDashboard/ViewerDashboardFeatures/Payment/PaidList";
 import CreateSmsLimit from "./Structure/Dashboard/SuperAdminDashboard/SuperAdminDashboardFeatures/CreateSmsLimit/CreateSmsLimit";
@@ -446,6 +447,10 @@ function App(props) {
           <Route
             path="/school-wise-sms-report"
             element={<SchoolSMSreport user={[user_code, user_type]} />}
+          />
+          <Route
+            path="/school-admin-sms-report"
+            element={<SchoolAdminSMSreport user={[user_code, user_type]} />}
           />
           <Route
             path="/school-wise-sms-limit"

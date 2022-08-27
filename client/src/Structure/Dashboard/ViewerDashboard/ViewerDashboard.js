@@ -231,7 +231,7 @@ const ViewerDashboard = () => {
             </div>
           </div>
         </a>
-        <a
+        {/* <a
           href="/paidList"
           style={{ textDecoration: "none" }}
           class="col-sm-6 my-4 col1"
@@ -260,7 +260,7 @@ const ViewerDashboard = () => {
               </div>
             </div>
           </div>
-        </a>
+        </a> */}
         <a style={{ textDecoration: "none" }} class="col-sm-6 my-4 col1">
           <div class="card bg-light shadow-sm">
             <div class="card-body py-4">

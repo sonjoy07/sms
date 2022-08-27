@@ -2,14 +2,14 @@ import axios from 'axios'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import SuperAdminHeader from '../SuperAdminHeader'
+import SchoolHeader from './schoolHeader/SchoolHeader';
 
 const SchoolSMSreport = () => {
     const [total, setTotal] = useState("")
     const [totalPayment, setTotalPayment] = useState(0)
     const [totalUsed, setTotalUsed] = useState([])
     const [schools, setSchools] = useState([])
-    const [school_id, setSchool_id] = useState("")
+    const [school_id, setSchool_id] = useState(localStorage.getItem('school_id'))
     const [type_id, setType_id] = useState("")
 
     useEffect(() => {
@@ -65,27 +65,25 @@ const SchoolSMSreport = () => {
 
         }
     }
-    let totalPaid = 0
-    totalUsed.map(res => totalPaid += res.amount)
-    const smsTotal = total.split(' ')
-    debugger;
+    let totalPaid  = 0
+    totalUsed.map(res=>totalPaid +=res.amount)
     return (
         <>
-            <SuperAdminHeader />
+            <SchoolHeader />
             <div className='container'>
-
+                
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>
-                    {smsTotal.length > 1 && <h4 style={{ textAlign: 'center' }}>Your SMS balance is: BDT {smsTotal[3]}</h4>}
+                    <h4 style={{ textAlign: 'center' }}>{total}</h4>
                     <div className='row mb-3 mt-4'>
-                        <div className='col-sm-4'>
+                        {/* <div className='col-sm-4'>
                             <select onChange={(e) => setSchool_id(e.target.value)} className='form-control'>
                                 <option>Select School</option>
                                 {schools?.map(res => {
                                     return <option value={res.id}>{res.school_name}</option>
                                 })}
                             </select>
-                        </div>
+                        </div> */}
                         <div className='col-sm-4'>
                             <select onChange={(e) => setType_id(e.target.value)} className='form-control'>
                                 <option>Select Type</option>
@@ -100,7 +98,7 @@ const SchoolSMSreport = () => {
                     <div className='row mb-3'>
                         <div className='card col-sm-12'>
                             <div className='card-body'>
-                                {type_id === '1' ? <h4 style={{ textAlign: 'center' }}>Total Payment: {totalPaid}</h4> : type_id === '2' ? <h4 style={{ textAlign: 'center' }}>Total Payment: {totalPayment}</h4> : ''}
+                                {type_id ==='1'?<h4 style={{ textAlign: 'center' }}>Total Payment:{totalPaid}</h4>:type_id ==='2'?<h4  style={{ textAlign: 'center' }}>Total Payment: {totalPayment}</h4>:''}
                             </div>
                         </div>
                         {/* <div className='card col-sm-6'>
@@ -116,9 +114,9 @@ const SchoolSMSreport = () => {
                                 <th scope="col">School Name</th>
                                 <th scope="col">User</th>
                                 {type_id === '2' && <th scope="col">Class</th>}
-                                {type_id === '2' && <th scope="col">Section</th>}
+                                {type_id === '2' &&<th scope="col">Section</th>}
                                 {type_id === '2' && <th scope="col">Student ID</th>}
-                                {type_id === '2' && <th scope="col">Sector Name</th>}
+                                {type_id === '2' &&<th scope="col">Sector Name</th>}
                                 <th scope="col">Invoice No</th>
                                 <th scope="col">Transaction ID</th>
                                 <th scope="col">Amount</th>
@@ -135,7 +133,7 @@ const SchoolSMSreport = () => {
                                     {type_id === '2' && <td>{res.class_name}</td>}
                                     {type_id === '2' && <td>{res.section_default_name}</td>}
                                     {type_id === '2' && <td>{res.student_code}</td>}
-                                    {type_id === '2' && <td>{res.sector_name}</td>}
+                                    {type_id === '2' &&<td>{res.sector_name}</td>}
                                     <td>{res.invoice_no}</td>
                                     <td>{res.transaction_id}</td>
                                     <td>{res.amount}</td>

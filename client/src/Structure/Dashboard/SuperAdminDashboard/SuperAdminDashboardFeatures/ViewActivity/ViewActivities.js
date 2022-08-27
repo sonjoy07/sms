@@ -126,6 +126,7 @@ const ViewActivities = () => {
 
   const headers = [
     { label: "School Name", key: 'school_name' },
+    { label: "Topic", key: 'topic' },
     { label: "Shift", key: 'shift_name' },
     { label: "Class", key: 'class_name' },
     { label: "Section", key: 'section_default_name' },
@@ -135,7 +136,7 @@ const ViewActivities = () => {
     { label: "Submission Date", key: 'submission_time' },
     { label: "Short Answer", key: 'answer' },
     { label: "Mark", key: 'marks_obtained' },
-    // {label:"Beyond The School File",key:'attachment_link'},
+    {label:"Beyond The School File",key:'attachment_link'},
     { label: "Status", key: 'status' }
   ]
 

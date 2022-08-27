@@ -528,7 +528,7 @@ module.exports = (app) => {
     teacher.last_name) AS teacher_full_name, CONCAT(school_admin.first_name, ' ', 
     school_admin.middle_name, ' ', school_admin.last_name) AS school_admin_full_name,
      CONCAT(t.first_name, ' ', t.middle_name, ' ',
-    t.last_name) AS teacher_receiver_name,student_info.full_name AS student_receiver_name,class_name,section_default_name
+    t.last_name) AS teacher_receiver_name,student_info.full_name AS student_receiver_name,class_name,t.teacher_code ,student_info.student_code,section_default_name
    FROM smsReport
    LEFT JOIN teacher ON teacher.teacher_code = smsReport.user_id
    LEFT JOIN school_admin ON school_admin.admin_code = smsReport.user_id
