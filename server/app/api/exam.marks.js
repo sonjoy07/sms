@@ -5,9 +5,9 @@ module.exports = (app) => {
     const authenticateToken = require("../middleware/middleware");
     const query = util.promisify(con.query).bind(con);
     app.get('/api/student_mark', authenticateToken, (req, res) => {
-        let condition =req.query.section_id !== '' && req.query.section_id !== undefined?  ` and section_id = "${req.query.section_id}"`:''
-         condition +=req.query.session_id !== '' && req.query.session_id !== undefined?  ` and session_id = "${req.query.session_id}"`:''
-         condition +=req.query.class_id !== '' && req.query.class_id !== undefined?  ` and class.id = "${req.query.class_id}"`:''
+        let condition = req.query.section_id !== '' && req.query.section_id !== undefined ? ` and section_id = "${req.query.section_id}"` : ''
+        condition += req.query.session_id !== '' && req.query.session_id !== undefined ? ` and session_id = "${req.query.session_id}"` : ''
+        condition += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and class.id = "${req.query.class_id}"` : ''
         //  condition +=req.query.subject_id !== '' && req.query.subject_id !== undefined?  ` and class.id = "${req.query.subject_id}"`:''
         var sql = `SELECT student.student_code,section.section_default_name,concat(student.first_name," " ,student.middle_name," ",student.last_name) as name, session.session_year,student_present_status.student_id,student_present_status.class_id,student_present_status.session_id,class.class_name,student_present_status.shift_id,student_present_status.class_roll_no,student_present_status.school_info_id,(
             SELECT marks_obtained
@@ -133,21 +133,25 @@ module.exports = (app) => {
         var mark_update = req.body.mark_update;
         var teacher_id = req.body.teacher_id;
         var subjects = req.body.subjects;
+        let exist = mark_update.filter(res => res.mark_id === '')
+        if (exist.length !== 0) {
+            var sql = `INSERT INTO extra_curriculum_marks (activities_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
+            mark_update.filter(res => res.mark_id === '').map((sts) => {
 
-        var sql = `INSERT INTO extra_curriculum_marks (activities_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
-        mark_update.filter(res => res.mark_id === '').map((sts) => {
-            
-            if(subject_id === 'all'){
-                subjects.map(res=>{
-                    sql += ` ('${exam_info_id}','${res.id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
-                })
-            }else{
-                sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
-            }
-        });
-        sql = sql.slice(0, -1);
-        con.query(sql, function (err, result, fields) {
-            if (err) throw err;
+                if (subject_id === 'all') {
+                    subjects.map(res => {
+                        sql += ` ('${exam_info_id}','${res.id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+                    })
+                } else {
+                    sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
+                }
+            });
+            sql = sql.slice(0, -1);
+            con.query(sql, function (err, result, fields) {
+                if (err) throw err;
+                res.json({ status: "success" });
+            });
+        }else{
             mark_update.filter(res => res.mark_id !== '').map(res => {
                 var sql = `update extra_curriculum_marks set marks_obtained = ${res.mark_obtained} where  id = ${res.mark_id}`
                 con.query(sql, function (err, result, fields) {
@@ -155,7 +159,7 @@ module.exports = (app) => {
                 })
             })
             res.json({ status: "success" });
-        });
+        }
     });
     app.post("/api/teacher_extra_curriculum_marks", authenticateToken, (req, res) => {
         var exam_info_id = req.body.exam_info_id;
@@ -166,11 +170,11 @@ module.exports = (app) => {
 
         var sql = `INSERT INTO teacher_extra_curriculum_marks (activities_id,subject_id,student_id,marks_obtained,teacher_id) VALUES `
         mark_update.filter(res => res.mark_id === '').map((sts) => {
-            if(subject_id === 'all'){
-                subjects.map(res=>{
+            if (subject_id === 'all') {
+                subjects.map(res => {
                     sql += ` ('${exam_info_id}','${res.id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
                 })
-            }else{
+            } else {
                 sql += ` ('${exam_info_id}','${subject_id}','${sts.student_id}','${sts.mark_obtained}',"${teacher_id}"),`
             }
         });
@@ -224,7 +228,7 @@ module.exports = (app) => {
                 if (err) throw err;
                 res.json({ status: "success" });
             });
-        }else{
+        } else {
             var sql = `Insert into extra_curriculum_marks (student_id,subject_id,activities_id,teacher_id,marks_obtained) value ("${student_id}","${subject_id}","${index}","${teacher_id}","${updateData}")`
             console.log(sql);
             con.query(sql, function (err, result, fields) {

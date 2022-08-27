@@ -310,56 +310,60 @@ const AdminActivities = (props) => {
   };
 
   const handleSubmit = () => {
-    const formData = new FormData();
-    formData.append("file", attachment);
-    formData.append("fileName", attachment.name);
-    formData.append("school_info_id", school_info_id);
-    formData.append("school_type", school_type);
-    formData.append("class_id", class_id);
-    formData.append("section_id", section_id);
-    formData.append("subject_id", subject_id);
-    formData.append("teacher_id", teacher_id);
-    formData.append("questions", questions);
-    formData.append("session_id", session_id);
-    formData.append("topic", topic);
-    formData.append("details", details);
-    formData.append("issue_date", issue_date);
-    formData.append("due_date", due_date);
-    formData.append("sub_start_date", sub_start_date);
-    formData.append("sub_start_time", sub_start_time);
-    formData.append("id", id);
-    formData.name =
-      fetch(`${process.env.REACT_APP_NODE_API}/api/activities/teacher`, {
-        method: "POST",
-        headers: {
-          // "Content-Type": "application/json",
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          if (id) {
-            toast("Beyond The School updated successfully");
-          } else {
-            toast("Beyond The School submited successfully");
-          }
-          setId("");
-          setClass_id("");
-          setSchoolType("")
-          setSchool_info_id("")
-          setSection_id("");
-          setSubject_id("");
-          setSession_id("");
-          setIssue_date("");
-          setDue_date("");
-          setTopic("");
-          setDetails("");
-          setQuestions("")
-          setSub_start_date("")
-          setSub_start_time("")
+    if (sub_start_date !== '' && sub_start_date !== undefined && sub_start_time !== '' && sub_start_time !== undefined) {
+      const formData = new FormData();
+      formData.append("file", attachment);
+      formData.append("fileName", attachment.name);
+      formData.append("school_info_id", school_info_id);
+      formData.append("school_type", school_type);
+      formData.append("class_id", class_id);
+      formData.append("section_id", section_id);
+      formData.append("subject_id", subject_id);
+      formData.append("teacher_id", teacher_id);
+      formData.append("questions", questions);
+      formData.append("session_id", session_id);
+      formData.append("topic", topic);
+      formData.append("details", details);
+      formData.append("issue_date", issue_date);
+      formData.append("due_date", due_date);
+      formData.append("sub_start_date", sub_start_date);
+      formData.append("sub_start_time", sub_start_time);
+      formData.append("id", id);
+      formData.name =
+        fetch(`${process.env.REACT_APP_NODE_API}/api/activities/teacher`, {
+          method: "POST",
+          headers: {
+            // "Content-Type": "application/json",
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+          body: formData,
         })
-        .then(() => getHWList());
+          .then((res) => res.json())
+          .then((json) => {
+            if (id) {
+              toast("Beyond The School updated successfully");
+            } else {
+              toast("Beyond The School submited successfully");
+            }
+            setId("");
+            setClass_id("");
+            setSchoolType("")
+            setSchool_info_id("")
+            setSection_id("");
+            setSubject_id("");
+            setSession_id("");
+            setIssue_date("");
+            setDue_date("");
+            setTopic("");
+            setDetails("");
+            setQuestions("")
+            setSub_start_date("")
+            setSub_start_time("")
+          })
+          .then(() => getHWList());
+    } else {
+      toast('Please Enter Submission Start Date and Submission Start Time')
+    }
   };
 
   const resetForm = () => {

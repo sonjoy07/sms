@@ -210,19 +210,6 @@ const StudentActivitiesSubmit = (props) => {
                                 style={{ textAlign: "left", color: "black" }}
                               ></p>
                             </div>
-                            <div>
-                              <p
-                                className="pt-4"
-                                style={{
-                                  textAlign: "left",
-                                  color: "black",
-                                  fontSize: "24px",
-                                  fontWeight: "500",
-                                }}
-                              >
-                                {hw.details}
-                              </p>
-                            </div>
                             <div
                               style={{ border: "1px solid red" }}
                               className="mt-5"

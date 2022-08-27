@@ -308,7 +308,7 @@ const ExtraReport = () => {
           <thead>
             <tr>
               <th style={{ textAlign: "center" }} scope="col">
-                class
+                Class
               </th>
               <th style={{ textAlign: "center" }} scope="col">
                 Subject

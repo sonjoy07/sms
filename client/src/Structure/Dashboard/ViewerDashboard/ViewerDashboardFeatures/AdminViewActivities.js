@@ -267,7 +267,7 @@ const AdminViewActivities = () => {
       </div>
       <section className="container mt-5">
         <h2
-          style={{ color: "white", backgroundColor: "gray" }}
+          style={{ color: "white", backgroundColor: "#3498db" }}
           className="px-2 py-2"
         >
           Student Beyond The School
@@ -277,7 +277,7 @@ const AdminViewActivities = () => {
           <thead>
             <tr>
               <th style={{ textAlign: "center" }} scope="col">
-                class
+                Class
               </th>
               <th style={{ textAlign: "center" }} scope="col">
                 Subject

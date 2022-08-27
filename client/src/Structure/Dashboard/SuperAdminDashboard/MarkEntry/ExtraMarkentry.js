@@ -330,7 +330,8 @@ const ExtraMarkentry = () => {
 
         setClass_id('')
         setExam_id('')
-        setPresent_marks('')
+        setPresent_marks([])
+        setSchool_id([])
         setSection_id('')
         setSession_id('')
         setSubject_id('')

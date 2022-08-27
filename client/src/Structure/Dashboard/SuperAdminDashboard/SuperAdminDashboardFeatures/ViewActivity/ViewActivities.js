@@ -21,9 +21,9 @@ const ViewActivities = () => {
   const [reset, setReset] = useState(0);
   const [home_work_id] = useState(localStorage.getItem("activityid"))
 
-  const updateMarksData=(value,index)=>{
-    updateData[index]= value
-    setUpdateData({updateData})
+  const updateMarksData = (value, index) => {
+    updateData[index] = value
+    setUpdateData({ updateData })
   }
   useEffect(() => {
     axios
@@ -37,8 +37,8 @@ const ViewActivities = () => {
       )
       .then((response) => {
         setHomework(response.data);
-        response.data.map((res,index)=>{
-          updateData[index]= res.marks_obtained
+        response.data.map((res, index) => {
+          updateData[index] = res.marks_obtained
         })
         setUpdateData(updateData)
       });
@@ -91,7 +91,7 @@ const ViewActivities = () => {
     }
   }, [type_id]);
 
-  const updateMarks = (event, subject_id, student_id,key) => {
+  const updateMarks = (event, subject_id, student_id, key) => {
     if (event.key === 'Enter') {
       fetch(`${process.env.REACT_APP_NODE_API}/api/exam_curi_mark/insert`, {
         method: "POST",
@@ -156,24 +156,24 @@ const ViewActivities = () => {
       }
     }
   }
-   
-  const handleSearch =()=>{
+
+  const handleSearch = () => {
     axios
-    .get(
-      `${process.env.REACT_APP_NODE_API}/api/activities/admin/submitlist?home_work_id=${home_work_id}&&class_id=${class_id}&&section_id=${section_id}&&school_id=${school_id}`,
-      {
-        headers: {
-          authorization: "bearer " + localStorage.getItem("access_token"),
-        },
-      }
-    )
-    .then((response) => {
-      setHomework(response.data);
-      response.data.map((res,index)=>{
-        updateData[index]= res.marks_obtained
-      })
-      setUpdateData(updateData)
-    });
+      .get(
+        `${process.env.REACT_APP_NODE_API}/api/activities/admin/submitlist?home_work_id=${home_work_id}&&class_id=${class_id}&&section_id=${section_id}&&school_id=${school_id}`,
+        {
+          headers: {
+            authorization: "bearer " + localStorage.getItem("access_token"),
+          },
+        }
+      )
+      .then((response) => {
+        setHomework(response.data);
+        response.data.map((res, index) => {
+          updateData[index] = res.marks_obtained
+        })
+        setUpdateData(updateData)
+      });
   }
 
   return (<><SuperAdminHeader />
@@ -281,10 +281,10 @@ const ViewActivities = () => {
               </div>
             </div>
             <div class={"col-sm-2 p-2"}>
-                      <div className='pt-2 mx-auto'>
-                        <button style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5" onClick={handleSearch}>Search</button>
-                      </div>
-                    </div>
+              <div className='pt-2 mx-auto'>
+                <button style={{ color: 'white', fontSize: '20px' }} type="button" class="btn bg-secondary bg-gradient px-5" onClick={handleSearch}>Search</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -306,12 +306,11 @@ const ViewActivities = () => {
             <th scope="col">Beyond The School File</th>
             <th scope="col">Status</th>
             <th scope="col">Marks</th>
-            <th scope="col">Answer</th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          {homework.map((res,index) => {
+          {homework.map((res, index) => {
             return <tr key={index}>
               <td>{res.school_name}</td>
               <td>{res.topic}</td>
@@ -325,16 +324,15 @@ const ViewActivities = () => {
               <td>{res.answer}</td>
               <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
               <td>Submit</td>
-              <td>{ <input
+              <td>{<input
                 type="text"
                 name="mark"
                 value={updateData[index]}
                 onClick={() => setIndex(res.activities_id)}
-                onKeyDown={(e) => updateMarks(e, res.subject_id, res.student_id,index)
+                onKeyDown={(e) => updateMarks(e, res.subject_id, res.student_id, index)
                 }
-                onChange={(e) => updateMarksData(e.target.value,index)}
-              /> }</td>
-              <td>{res.answer}</td>
+                onChange={(e) => updateMarksData(e.target.value, index)}
+              />}</td>
               <td><button onClick={() => deleteSubmission(res.sub_id)} style={{ color: 'white', border: 'none' }} className='bg-danger p-1'>Delete</button></td>
             </tr>
           })}

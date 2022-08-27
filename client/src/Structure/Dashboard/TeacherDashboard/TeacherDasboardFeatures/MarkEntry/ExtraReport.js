@@ -277,7 +277,7 @@ const ExtraReport = () => {
       </div>
       <section className="container mt-5">
         <h2
-          style={{ color: "white", backgroundColor: "gray" }}
+          style={{ color: "white", backgroundColor: "#3498db" }}
           className="px-2 py-2"
         >
           Student Beyond The School
@@ -287,7 +287,7 @@ const ExtraReport = () => {
           <thead>
             <tr>
               <th style={{ textAlign: "center" }} scope="col">
-                class
+                Class
               </th>
               <th style={{ textAlign: "center" }} scope="col">
                 Subject
@@ -335,9 +335,6 @@ const ExtraReport = () => {
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.topic}
-                    </td>
-                    <td style={{ textAlign: "center" }}>
-                      {homeworkJSON.details}
                     </td>
                     <td style={{ textAlign: "center" }}>
                       {homeworkJSON.details}

@@ -47,6 +47,12 @@ const ViewerSubmissionDetails = () => {
               Student Name
             </th>
             <th style={{ textAlign: "center" }} scope="col">
+              Class
+            </th>
+            <th style={{ textAlign: "center" }} scope="col">
+              Section
+            </th>
+            <th style={{ textAlign: "center" }} scope="col">
               Answer
             </th>
             <th style={{ textAlign: "center" }} scope="col">
@@ -63,6 +69,12 @@ const ViewerSubmissionDetails = () => {
                 </td>
                 <td style={{ textAlign: "center" }}>
                   {homeworkJSON.full_name}
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  {homeworkJSON.class_name}
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  {homeworkJSON.section_default_name}
                 </td>
                 <td style={{ textAlign: "center" }}>
                   {homeworkJSON.answer}

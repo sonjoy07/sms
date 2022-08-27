@@ -37,9 +37,9 @@ module.exports = (app) => {
   });
   app.get("/api/activities/all/filter", authenticateToken, (req, res) => {
     let condition = req.query.school_info_id !== '' && req.query.school_info_id !== undefined ? ` and activities.school_info_id="${req.query.school_info_id}"` : ``
-    condition += req.query.section_id !== '' && req.query.section_id !== undefined ? req.query.section_id ==='all'?` and all_section =1`:` and activities.section_id="${req.query.section_id}"` : ``
-    condition += req.query.class_id !== '' && req.query.class_id !== undefined ? req.query.class_id ==='all'?` and all_class =1`:` and activities.class_id="${req.query.class_id}"` : ``
-    condition += req.query.subject_id !== '' && req.query.subject_id !== undefined ? req.query.subject_id ==='all'?` and all_subject =1`:` and activities.subject_id="${req.query.subject_id}"` : ``
+    condition += req.query.section_id !== '' && req.query.section_id !== undefined ? req.query.section_id === 'all' ? ` and all_section =1` : ` and activities.section_id="${req.query.section_id}"` : ``
+    condition += req.query.class_id !== '' && req.query.class_id !== undefined ? req.query.class_id === 'all' ? ` and all_class =1` : ` and activities.class_id="${req.query.class_id}"` : ``
+    condition += req.query.subject_id !== '' && req.query.subject_id !== undefined ? req.query.subject_id === 'all' ? ` and all_subject =1` : ` and activities.subject_id="${req.query.subject_id}"` : ``
     condition += req.query.date !== '' && req.query.date !== undefined ? ` and activities.issue_date="${req.query.date}"` : ``
     var sql = `select activity.id, class.class_name, subject.subject_name,questions, topic, details, issue_date, due_date, session.session_year,attachment_link,section.section_default_name,all_subject,subject_id,all_class,all_section,all_session
     from activities
@@ -65,8 +65,7 @@ module.exports = (app) => {
     left join section on activities.section_id=section.id
     left join subject on activities.subject_id=subject.id
     left join session on activities.session_id=session.id
-    where activities.teacher_id="${req.query.teacher_id}"
-    group by activity.id order by activities.id `;
+    group by activity.id order by activity.id desc`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
@@ -272,6 +271,7 @@ module.exports = (app) => {
     sql = sql.slice(0, -1);
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
+
     });
 
   }
@@ -339,7 +339,7 @@ module.exports = (app) => {
           if (err) throw err
         })
         sql = `UPDATE activity
-        SET questions="${questions}", all_class=${class_id === 'all' ? 1 : 0},all_school=${school_info_id === 'all' ? 1 : 0},all_section=${section_id === 'all' ? 1 : 0},all_session=${session_id === 'all' ? 1 : 0},all_subject=${subject_id === 'all' ? 1 : 0},all_teacher=${teacher_id === 'all' ? 1 : 0},topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date},sub_start_time="${sub_start_time}",sub_start_date="${sub_start_time}""${attachment}
+        SET questions="${questions}", all_class=${class_id === 'all' ? 1 : 0},all_school=${school_info_id === 'all' ? 1 : 0},all_section=${section_id === 'all' ? 1 : 0},all_session=${session_id === 'all' ? 1 : 0},all_subject=${subject_id === 'all' ? 1 : 0},all_teacher=${teacher_id === 'all' ? 1 : 0},topic="${topic}",details="${details}",issue_date="${issue_date}",due_date="${due_date}",sub_start_time="${sub_start_time}",sub_start_date="${sub_start_date}" ${attachment}
         WHERE id=${id}`
         con.query(sql, function (err, result, fields) {
           if (err) throw err;
@@ -355,6 +355,8 @@ module.exports = (app) => {
             school_info(school_type, school_info_id, class_id, section_id, session_id, subject_id, activityId, teacher_id)
           }
         })
+
+        res.json({ status: "success" });
       } else {
         const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
         con.query(`insert into activity (topic,details,questions,attachment_link,issue_date,due_date,all_school,all_class,all_section,all_session,all_subject,sub_start_time,sub_start_date) values ("${topic}","${details}","${questions}",${attachment},"${issue_date}","${due_date}",${school_info_id === 'all' ? 1 : 0},${class_id === 'all' ? 1 : 0},${section_id === 'all' ? 1 : 0},${session_id === 'all' ? 1 : 0},${subject_id === 'all' ? 1 : 0},"${sub_start_time}","${sub_start_date}")`, function (err, result, fields) {
@@ -490,8 +492,7 @@ module.exports = (app) => {
     and activities.class_id = "${req.query.class_id}"
     and activities.session_id = "${req.query.session_id}"
     and activities.school_info_id = "${req.query.school_info_id}"
-    and sub_start_date <=  "${moment().format('YYYY-MM-DD')}"
-    and TIME_FORMAT(sub_start_time, '%r') <=  "${moment().format('LTS')}"
+    and concat(sub_start_date,' ',TIME_FORMAT(sub_start_time, '%r')) <=  "${moment().format('YYYY-MM-DD h:mm:ss a')}"
     order by due_date desc;`;
     console.log(sql);
     con.query(sql, function (err, result, fields) {
@@ -620,16 +621,25 @@ module.exports = (app) => {
     });
   });
   app.delete("/api/activities/student/delete", authenticateToken, (req, res) => {
-    var sql = `delete from activities_submission where activities_id = ${req.query.id};`;
-    con.query(`delete from activities where activity_id = ${req.query.id}`)
-    con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      var sql = `delete from activity where id = ${req.query.id};`;
-      con.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        res.send(result);
-      });
-    });
+    con.query(`select * from activities where activity_id = ${req.query.id}`, async (err, result, fields) => {
+      if (result.length > 0) {
+        await Promise.all(result.map(resu => {
+          con.query(`delete from activities_submission where activities_id = ${resu.id};`)
+        }))
+        con.query(`delete from activities where activity_id = ${req.query.id}`)
+        var sql = `delete from activity where id = ${req.query.id};`;
+        con.query(sql, function (err, result, fields) {
+          if (err) throw err;
+          res.send(result);
+        });
+      } else {
+        var sql = `delete from activity where id = ${req.query.id};`;
+        con.query(sql, function (err, result, fields) {
+          if (err) throw err;
+          res.send(result);
+        });
+      }
+    })
   });
   app.delete("/api/subMission/delete", authenticateToken, (req, res) => {
     var sql = `delete from activities_submission where id = ${req.query.id};`;
