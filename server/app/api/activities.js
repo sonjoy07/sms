@@ -669,7 +669,7 @@ module.exports = (app) => {
     cond += req.query.section_id !== '' && req.query.section_id !== undefined ? ` and student_info.section_id = ${req.query.section_id}` : ''
     cond += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and student_info.class_id = ${req.query.class_id}` : ''
     cond += req.query.user_id !== '' && req.query.user_id !== undefined ? ` and student_info.id = ${req.query.user_id}` : ''
-    var sql = `select student_info.*,topic,activities_submission.submission_time, activities_submission.attachment_link,answer,activities_submission.id as sub_id,activities.subject_id,student_info.id as student_id,activities_submission.activities_id,(select marks_obtained from  extra_curriculum_marks where activities_submission.activities_id=extra_curriculum_marks.activities_id and student_info.id = extra_curriculum_marks.student_id order by extra_curriculum_marks.id desc limit 1) marks_obtained    
+    var sql = `select student_info.*,topic,activities_submission.submission_time, activities_submission.attachment_link,answer,activities_submission.attachment_link,activities_submission.id as sub_id,activities.subject_id,student_info.id as student_id,activities_submission.activities_id,(select marks_obtained from  extra_curriculum_marks where activities_submission.activities_id=extra_curriculum_marks.activities_id and student_info.id = extra_curriculum_marks.student_id order by extra_curriculum_marks.id desc limit 1) marks_obtained    
     from activities_submission
     left join student_info on activities_submission.student_present_status_id=student_info.student_present_status_id
     left join activities on activities.id=activities_submission.activities_id

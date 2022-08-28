@@ -74,7 +74,7 @@ const SchoolSMSreport = () => {
                 
                 <section className='py-5'>
                     <h2 style={{ color: 'white', fontSize: '30px', fontWeight: 'bold' }} className='px-3 py-2 bg-info bg-gradient'>SMS Details</h2>
-                    <h4 style={{ textAlign: 'center' }}>{total}</h4>
+                    {/* <h4 style={{ textAlign: 'center' }}>{total}</h4> */}
                     <div className='row mb-3 mt-4'>
                         {/* <div className='col-sm-4'>
                             <select onChange={(e) => setSchool_id(e.target.value)} className='form-control'>

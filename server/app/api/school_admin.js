@@ -523,8 +523,10 @@ module.exports = (app) => {
   });
 
   app.get('/api/sms/count', async (req, res) => {
-    const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
-    var sql = `SELECT smsReport.*, CONCAT(teacher.first_name, ' ', teacher.middle_name, ' ',
+    try {
+      const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')
+
+      var sql = `SELECT smsReport.*, CONCAT(teacher.first_name, ' ', teacher.middle_name, ' ',
     teacher.last_name) AS teacher_full_name, CONCAT(school_admin.first_name, ' ', 
     school_admin.middle_name, ' ', school_admin.last_name) AS school_admin_full_name,
      CONCAT(t.first_name, ' ', t.middle_name, ' ',
@@ -535,11 +537,14 @@ module.exports = (app) => {
    LEFT JOIN teacher t ON t.id = smsReport.receive_id
    LEFT JOIN student_info ON student_info.id = smsReport.receive_id
    WHERE smsReport.school_info_id = ${req.query.school_info_id} order by created_at desc`
-    con.query(sql, function (err, result, fields) {
-      if (err) throw err;
-      res.send({ result: result, data: test.data });
-    });
-    console.log(test.data)
+      con.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        res.send({ result: result, data: test.data });
+      });
+    } catch (err) {
+      res.send({ result: [], data: '' })
+    }
+
   })
   app.get('/api/sms/count_report', async (req, res) => {
     const test = await axios.get('http://isms.zaman-it.com/miscapi/C200164162b496a4b069b1.94693919/getBalance')

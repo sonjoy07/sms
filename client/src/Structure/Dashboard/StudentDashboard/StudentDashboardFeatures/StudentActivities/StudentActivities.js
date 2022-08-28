@@ -151,13 +151,13 @@ const StudentActivities = (props) => {
                         name="class"
                       >
                         <option value="">Select Subject</option>
-                        {subjects.map((subjectJSON) => {
+                        {/* {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
                               {subjectJSON.subject_name}
                             </option>
                           );
-                        })}
+                        })} */}
                         <option value="99999">Beyond The School</option>
                       </select>
                     </div>

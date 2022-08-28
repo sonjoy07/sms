@@ -255,7 +255,7 @@ const GradeSheetTeacher = () => {
                           <td style={{ textAlign: 'center' }}>{student.half / 2}</td>
                           <td style={{ textAlign: 'center' }}>{student.full / 2}</td>
                           <td style={{ textAlign: 'center' }}>{Math.round(activities)}</td>
-                          <td style={{ textAlign: 'center' }}>{total}</td>
+                          <td style={{ textAlign: 'center' }}>{Math.round(total)}</td>
                           <td style={{ textAlign: 'center' }}>{grade?.grade}</td>
                           <td style={{ textAlign: 'center' }}>{grade?.point}</td>
                         </tr>
@@ -278,7 +278,7 @@ const GradeSheetTeacher = () => {
                       <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Total Grade Point : {resultCalculation(grandTotal / info.length).point}</h5>
                     </div>
                     <div className='col-sm-3 p-2'>
-                      <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Grade Point Average : {grandTotal / info.length}%</h5>
+                      <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Grade Point Average : {Math.round(grandTotal / info.length)}%</h5>
                     </div>
                     <div className='col-sm-3 p-2'>
                       <h5 style={{ color: 'gray', fontSize: '25px', fontWeight: '500', textAlign: 'center' }}>Position in Section : {schoolInfo[0]?.position}</h5>
