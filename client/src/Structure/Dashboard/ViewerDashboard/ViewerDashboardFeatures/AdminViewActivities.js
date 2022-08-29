@@ -181,14 +181,14 @@ const AdminViewActivities = () => {
                         name="class"
                       >
                         <option value={''}>Select Subject</option>
-                        <option value={'all'}>All</option>
+                        {/* <option value={'all'}>All</option>
                         {subjects.map((subjectJSON) => {
                           return (
                             <option value={subjectJSON.id}>
                               {subjectJSON.subject_name}
                             </option>
                           );
-                        })}
+                        })} */}
                         <option value={'99999'}>Beyond the school</option>
                       </select>
                     </div>

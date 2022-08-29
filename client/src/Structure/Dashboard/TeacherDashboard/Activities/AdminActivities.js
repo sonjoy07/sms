@@ -392,7 +392,7 @@ const AdminActivities = (props) => {
     const check = window.confirm('Are you sure to delete?');
     if (check) {
       axios.defaults.headers.common['authorization'] = "bearer " + localStorage.getItem("access_token")
-      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/activities/student/delete?id=${id}`)
+      const result = await axios.delete(`${process.env.REACT_APP_NODE_API}/api/extra/student/delete?id=${id}`)
       if (result) {
         toast("Extra Curriculum deleted successfully");
         getHWList()

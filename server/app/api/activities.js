@@ -429,6 +429,7 @@ module.exports = (app) => {
             school_info_extra(school_type, school_info_id, class_id, section_id, session_id, subject_id, school_teacher_id, activityId, teacher_id)
           }
         })
+        res.json({ status: "success" });
       } else {
         const attachment = attachment_link !== 'undefined' ? `"${attachment_link}"` : `""`
         con.query(`insert into curriculam (topic,details,attachment_link,issue_date,due_date,all_school,all_class,all_section,all_session,all_subject) values ("${topic}","${details}",${attachment},"${issue_date}","${due_date}",${school_info_id === 'all' ? 1 : 0},${class_id === 'all' ? 1 : 0},${section_id === 'all' ? 1 : 0},${session_id === 'all' ? 1 : 0},${subject_id === 'all' ? 1 : 0})`, function (err, result, fields) {
@@ -639,6 +640,15 @@ module.exports = (app) => {
           res.send(result);
         });
       }
+    })
+  });
+  app.delete("/api/extra/student/delete", authenticateToken, (req, res) => {
+    con.query(`delete from teacher_extra_curriculum_marks where activities_id = ${req.query.id}`)
+    con.query(`delete from curriculam_child where activity_id = ${req.query.id}`)
+    var sql = `delete from curriculam where id = ${req.query.id};`;
+    con.query(sql, function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
     })
   });
   app.delete("/api/subMission/delete", authenticateToken, (req, res) => {
