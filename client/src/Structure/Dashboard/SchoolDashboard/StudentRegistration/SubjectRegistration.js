@@ -616,7 +616,7 @@ const SubjectRegistration = () => {
               <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Session</th>
-                <th scope="col">class</th>
+                <th scope="col">Class</th>
                 <th scope="col">Group</th>
                 <th scope="col">Section</th>
                 <th scope="col">Student Id</th>
@@ -676,7 +676,7 @@ const SubjectRegistration = () => {
               <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Session</th>
-                <th scope="col">class</th>
+                <th scope="col">Class</th>
                 <th scope="col">Group</th>
                 <th scope="col">Section</th>
                 <th scope="col">Student Id</th>

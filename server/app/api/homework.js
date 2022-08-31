@@ -92,6 +92,7 @@ module.exports = (app) => {
     var attachment_link = req.body.fileName;
     if (req.files !== null) {
       const file = req.files.file
+      console.log(file)
       var uploadPath = path.resolve(__dirname, '../../uploads/');
       file.mv(`${uploadPath}/${file.name}`, err => {
         if (err) {
@@ -201,7 +202,8 @@ module.exports = (app) => {
     condition+= session_id!== ''?` and home_work.session_id="${session_id}"`:``
     condition+= teacher_id!== ''?` and home_work.teacher_id="${teacher_id}"`:``
     condition+= issue_date!== ''?` and home_work.due_date BETWEEN "${issue_date}" AND "${due_date}"`:``
-    var sql = `select home_work.id, class.class_name, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission,section_default_name
+    condition+= issue_date!== ''?` and home_work.issue_date BETWEEN "${issue_date}" AND "${due_date}"`:``
+    var sql = `select home_work.id, class.class_name,home_work.subject_id,home_work.section_id,home_work.class_id,home_work.session_id,home_work.teacher_id, subject.subject_name, CONCAT( teacher.first_name, ' ',  teacher.middle_name, ' ',  teacher.last_name ) AS teacher_name, topic, details, issue_date, due_date, session.session_year,attachment_link,(SELECT count(*) from home_work_submission where home_work_id = home_work.id) submission,section_default_name
     from home_work
     join class on home_work.class_id=class.id 
     join section on home_work.section_id=section.id
@@ -210,7 +212,7 @@ module.exports = (app) => {
     join session on home_work.session_id=session.id
     where 1=1 ${condition}
     order by home_work.due_date;`;
-    console.log(req.query.issue_date === "")
+    console.log(sql)
     con.query(sql, function (err, result, fields) {
       if (err) throw err;
       res.send(result);

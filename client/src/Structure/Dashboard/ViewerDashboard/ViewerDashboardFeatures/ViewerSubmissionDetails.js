@@ -84,7 +84,7 @@ const ViewerSubmissionDetails = () => {
                     {homeworkJSON.answer}
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    <Link style={{ color: "blue" }} target="_blank" to={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
+                    <a style={{ color: "blue" }} target="_blank" href={`/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</a>
                   </td>
                   <td style={{ textAlign: "center" }}>Submitted</td>
                 </tr>

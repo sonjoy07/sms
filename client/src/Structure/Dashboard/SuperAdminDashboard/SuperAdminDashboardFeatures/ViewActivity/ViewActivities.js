@@ -323,7 +323,7 @@ const ViewActivities = () => {
               <td>{res.mobile_no}</td>
               <td>{moment(Date(res.submission_time)).format("DD-MM-YYYY h:mm a")}</td>
               <td>{res.answer}</td>
-              <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
+              <td style={{ color: 'blue' }}><a style={{ color: "blue" }} target="_blank" href={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</a></td>
               <td>Submit</td>
               <td>{<input
                 type="text"

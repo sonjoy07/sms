@@ -67,7 +67,7 @@ const ShowHomeWork = () => {
       .then((response) => {
         setClses(response.data);
       });
-      getHomework()
+    getHomework()
   }, []);
   useEffect(() => {
     axios
@@ -130,7 +130,7 @@ const ShowHomeWork = () => {
 
   return (
     <>
-    <ViewerHeader/>
+      <ViewerHeader />
       <div className="container">
         <div className="row">
           <div className="col-md-12">
@@ -252,7 +252,7 @@ const ShowHomeWork = () => {
                   <div class={"col-sm-6 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className="pb-2" for="exampleInputEmail1">
-                       Start Date :{" "}
+                        Start Date :{" "}
                       </label>
                       <input
                         style={{ border: "1px solid blue" }}
@@ -266,14 +266,14 @@ const ShowHomeWork = () => {
                   <div class={"col-sm-6 p-2 mx-auto"}>
                     <div class="form-group">
                       <label className="pb-2" for="exampleInputEmail1">
-                       End Date :{" "}
+                        End Date :{" "}
                       </label>
                       <input
                         style={{ border: "1px solid blue" }}
                         type="date"
                         class="form-control"
                         value={endDate}
-                        onChange={(e)=>setEndDate(e.target.value)}
+                        onChange={(e) => setEndDate(e.target.value)}
                       />
                     </div>
                   </div>
@@ -298,7 +298,7 @@ const ShowHomeWork = () => {
       </div>
       <section className="container mt-5">
         <h2
-          style={{ color: "white", backgroundColor: "gray" }}
+          style={{ color: "white", backgroundColor: "#3498db" }}
           className="px-2 py-2"
         >
           Student Home Sheet
@@ -308,7 +308,7 @@ const ShowHomeWork = () => {
           <thead>
             <tr>
               <th style={{ textAlign: "center" }} scope="col">
-                class
+                Class
               </th>
               <th style={{ textAlign: "center" }} scope="col">
                 Subject
@@ -369,7 +369,7 @@ const ShowHomeWork = () => {
                       {homeworkJSON.topic}
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
-                    <Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</Link>
+                      <a style={{ color: "blue" }} target="_blank" href={`${process.env.REACT_APP_NODE_API}/uploads/${homeworkJSON.attachment_link}`} download>{homeworkJSON.attachment_link}</a>
                     </td>
                     <td style={{ textAlign: "center", color: "blue" }}>
                       <a

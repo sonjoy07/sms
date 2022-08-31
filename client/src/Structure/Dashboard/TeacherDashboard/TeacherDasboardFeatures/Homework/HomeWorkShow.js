@@ -88,7 +88,7 @@ const HomeWorkShow = () => {
                   <td>{student.full_name}</td>
                   <td>Submit</td>
                   <td> {moment(student.submission_time).format("DD-MM-YYYY h:mm a")}</td>
-                  <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${student.attachment_link}`} download>{student.attachment_link}</Link></td>
+                  <td style={{ color: 'blue' }}><a style={{ color: "blue" }} target="_blank" href={`${process.env.REACT_APP_NODE_API}/uploads/${student.attachment_link}`} download>{student.attachment_link}</a></td>
                   <td>{<input type={'number'} value={updateData[index]}
                           onKeyDown={(e) => updateMarks(e,student.id,index)
                           }

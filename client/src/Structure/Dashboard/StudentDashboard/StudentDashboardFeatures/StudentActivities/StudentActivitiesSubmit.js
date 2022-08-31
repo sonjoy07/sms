@@ -177,7 +177,7 @@ const StudentActivitiesSubmit = (props) => {
                                 style={{ textAlign: "left", color: "black" }}
                                 className="py-3"
                               >
-                                <Link target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${hw.attachment_link}`} download>{hw.attachment_link}</Link>
+                                <a target="_blank" href={`${process.env.REACT_APP_NODE_API}/uploads/${hw.attachment_link}`} download>{hw.attachment_link}</a>
                               </p>
                             </div>
                             <div style={{ display: "flex", alignItem: "center" }}>
@@ -290,7 +290,7 @@ const StudentActivitiesSubmit = (props) => {
                                   <td>{res.student_code}</td>
                                   <td>{moment(res.submission_time).format("DD-MM-YYYY h:mm a")}</td>
                                   <td>Submit</td>
-                                  <td style={{ color: 'blue' }}><Link style={{ color: "blue" }} target="_blank" to={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</Link></td>
+                                  <td style={{ color: 'blue' }}><a style={{ color: "blue" }} target="_blank" href={`${process.env.REACT_APP_NODE_API}/uploads/${res.attachment_link}`} download>{res.attachment_link}</a></td>
                                   <td>{res.answer}</td>
                                 </tr>)
                               })}
