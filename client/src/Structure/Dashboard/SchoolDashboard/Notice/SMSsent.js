@@ -84,7 +84,7 @@ const SMSsent = (props) => {
   };
 
   const handleSearch = () => {
-    let link = option_id=== '2'?`${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${localStorage.getItem('school_id')}`:`${process.env.REACT_APP_NODE_API}/api/student/filter?class_id=${search_class_id}&&section_id=${search_section_id}&&session_id=${search_session_id}`
+    let link = option_id=== '2'?`${process.env.REACT_APP_NODE_API}/api/teacher/schoolWise?school_info_id=${localStorage.getItem('school_id')}`:`${process.env.REACT_APP_NODE_API}/api/student/filter?class_id=${search_class_id}&&section_id=${search_section_id}&&session_id=${search_session_id}&&school_id=${localStorage.getItem('school_id')}`
     axios.get(link,
       {
         headers: {
