@@ -536,7 +536,7 @@ console.log( `SELECT student.student_code, CONCAT( first_name, ' ', middle_name,
    LEFT JOIN teacher ON teacher.teacher_code = smsReport.user_id
    LEFT JOIN school_admin ON school_admin.admin_code = smsReport.user_id
    LEFT JOIN teacher t ON t.id = smsReport.receive_id
-   LEFT JOIN student_info ON student_info.id = smsReport.receive_id
+   LEFT JOIN student_info ON student_info.student_code = smsReport.receive_id
    WHERE smsReport.school_info_id = ${req.query.school_info_id} order by created_at desc`
       con.query(sql, function (err, result, fields) {
         if (err) throw err;
