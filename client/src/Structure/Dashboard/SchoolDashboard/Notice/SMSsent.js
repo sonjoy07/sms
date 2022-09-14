@@ -116,6 +116,7 @@ const SMSsent = (props) => {
 
       let items = [...absentList];
       absentList.forEach((res, index) => {
+        const student_id = option_id==='1'?res.student_code:res.id
         if (checked[index] === true) {
           let text = `Dear ${option_id==='1'?'Student':'Teacher'}, welcome to ePathshala, your ID is ${option_id==='1'?res.student_code:res.teacher_code}. Temporary password: 12345. Thank you`
           if(type_id === '1'){
@@ -135,7 +136,7 @@ const SMSsent = (props) => {
               user_id: localStorage.getItem('u_id'),
               purpose: type_id === '1'?3:1,
               school_info_id: localStorage.getItem('school_info_id'),
-              receive_id: res.id
+              receive_id: student_id
             }),
           })
             .then((res) => res.json())
