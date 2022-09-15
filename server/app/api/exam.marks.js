@@ -8,6 +8,7 @@ module.exports = (app) => {
         let condition = req.query.section_id !== '' && req.query.section_id !== undefined ? ` and section_id = "${req.query.section_id}"` : ''
         condition += req.query.session_id !== '' && req.query.session_id !== undefined ? ` and session_id = "${req.query.session_id}"` : ''
         condition += req.query.class_id !== '' && req.query.class_id !== undefined ? ` and class.id = "${req.query.class_id}"` : ''
+        condition += req.query.school_info_id !== '' && req.query.school_info_id !== undefined ? ` and student_present_status.school_info_id = "${req.query.school_info_id}"` : ''
         //  condition +=req.query.subject_id !== '' && req.query.subject_id !== undefined?  ` and class.id = "${req.query.subject_id}"`:''
         var sql = `SELECT student.student_code,section.section_default_name,concat(student.first_name," " ,student.middle_name," ",student.last_name) as name, session.session_year,student_present_status.student_id,student_present_status.class_id,student_present_status.session_id,class.class_name,student_present_status.shift_id,student_present_status.class_roll_no,student_present_status.school_info_id,(
             SELECT marks_obtained
@@ -110,6 +111,7 @@ module.exports = (app) => {
         var class_id = req.query.class_id;
         var section_id = req.query.section_id;
         var session_id = req.query.session_id;
+        var school_id = req.query.school_id;
 
         let condition = teacher_id !== '' && teacher_id !== undefined ? ` and teacher_id="${teacher_id}"` : ``
         condition += exam_info_id !== '' && exam_info_id !== undefined ? ` and activities_id="${exam_info_id}"` : ``
@@ -117,6 +119,7 @@ module.exports = (app) => {
         condition += section_id !== '' && section_id !== undefined ? ` and section_id="${section_id}"` : ``
         condition += class_id !== '' && class_id !== undefined ? ` and class_id="${class_id}"` : ``
         condition += session_id !== '' && session_id !== undefined ? ` and session_id="${session_id}"` : ``
+        condition += school_id !== '' && school_id !== undefined ? ` and school_info_id="${school_id}"` : ``
 
 
 

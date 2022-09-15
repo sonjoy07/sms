@@ -86,7 +86,7 @@ const ExtraMarkentry = () => {
         setInserted(false)
         axios
           .get(
-            `${process.env.REACT_APP_NODE_API}/api/teacher_extra_marks_exist?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&teacher_id=${user_code}&&exam_id=${exam_id}&&subject_id=${subject_id}`,
+            `${process.env.REACT_APP_NODE_API}/api/teacher_extra_marks_exist?section_id=${section_id}&&class_id=${class_id}&&session_id=${session_id}&&teacher_id=${user_code}&&exam_id=${exam_id}&&subject_id=${subject_id}&&school_id=${localStorage.getItem('school_id')}`,
             {
               headers: { authorization: "bearer " + access_token },
             }
